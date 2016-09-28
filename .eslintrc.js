@@ -5,8 +5,17 @@ module.exports = {
     'cleanjs'
   ],
   plugins: [
-    'babel'
+    'babel',
+    'react'
   ],
+  ecmaFeatures: {
+    jsx: true,
+  },
+  env: {
+    browser: true,
+    node: true
+  },
+  parser: 'babel-eslint',
   rules: {
     'arrow-parens': 0,
     'generator-star-spacing': 0,
@@ -25,5 +34,6 @@ module.exports = {
     "babel/flow-object-type": 1,
     "babel/func-params-comma-dangle": 1,
     "max-len": 1
-  }
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
 };
