@@ -8,7 +8,7 @@ const path = require('path');
 module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
+    'webpack/hot/dev-server',
     path.join(__dirname, 'src', 'index'),
   ],
   resolve: {
@@ -24,7 +24,6 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loaders: [
-          'react-hot-loader/webpack',
           'babel-loader'
         ]
       },
