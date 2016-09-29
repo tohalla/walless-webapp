@@ -21,6 +21,7 @@ module.exports = {
     'generator-star-spacing': 0,
     'fp/no-unused-expression': 0,
     'fp/no-class': 0,
+    'fp/no-this': 0,
     'fp/no-mutating-methods': 0,
     'better/no-new': 0,
     'better/no-ifs': 0,

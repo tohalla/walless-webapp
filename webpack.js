@@ -8,16 +8,16 @@ new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
   proxy: {
-    '/api/*': {
+    '/graphql/*': {
       secure: false,
       target: 'http://127.0.0.1:8080'
     }
-  }
+  },
+  historyApiFallback: true
 })
   .listen(3000, '127.0.0.1', err => {
     if (err) {
       return err;
     }
-    return console.log('Listening at http://127.0.0.1:3000/');
   }
 );

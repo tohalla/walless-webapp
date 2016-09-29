@@ -1,8 +1,12 @@
-html, body, .stretch{
+@import 'colors';
+@import 'material-design/_material-design-lite';
+@import 'navigation';
+
+html, body, .stretch {
   height: 100%;
   max-width: 100%;
 }
 
-* {
-  box-sizing: border-box;
+body {
+  background: $gallery;
 }

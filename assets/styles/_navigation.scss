@@ -1,0 +1,24 @@
+$navigation-link-color: $iron;
+$navigation-link-color-active: $carrara;
+$navigation-link-color-hover: $carrara;
+$navigation-link-background-color: none;
+$navigation-link-background-color-hover: $ebony-clay;
+
+.main-navigation__link {
+  display: inline-block;
+  background: $navigation-link-background-color;
+  color: $navigation-link-color;
+  text-decoration: none;
+  padding: 6px 12px;
+  &:hover {
+    background: $navigation-link-background-color-hover;
+    color: $navigation-link-color-hover;
+  }
+  &--active {
+    color: $carrara;
+    text-decoration: underline;
+    &:hover {
+      background: $navigation-link-background-color;
+    }
+  }
+}
