@@ -4,6 +4,10 @@ $navigation-link-color-hover: $carrara;
 $navigation-link-background-color: none;
 $navigation-link-background-color-hover: $ebony-clay;
 
+.main-navigation {
+  margin: 0 32px !important;
+}
+
 .main-navigation__link {
   display: inline-block;
   background: $navigation-link-background-color;

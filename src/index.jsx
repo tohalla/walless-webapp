@@ -14,6 +14,7 @@ import useRelay from 'react-router-relay';
 import Relay from 'react-relay';
 
 import Default from './containers/Default.component';
+import TabbedPage from './containers/TabbedPage.component';
 
 import {updateTranslations} from './internalization';
 
@@ -31,8 +32,9 @@ ReactDOM.render((
         path="/"
     >
       <Route path="home" />
-      <Route path="restaurant" />
-      <Route path="settings" />
+      <Route component={TabbedPage} path="restaurant" />
+      <Route component={TabbedPage} path="documentation" />
+      <Route path="contact" />
     </Route>
   </Router>
   ), document.getElementById('app')

@@ -11,16 +11,20 @@ export default class Default extends React.Component {
   }
   render() {
     return (
-      <div className="mdl-layout">
+      <div className="site mdl-layout mdl-js-layout">
         <div className="mdl-layout__header">
           <div className="mdl-layout__header-row">
+            <span className="mdl-layout-title">{'Ulkona'}</span>
             <MainNavigation />
+            <div className="mdl-layout-spacer" />
           </div>
         </div>
         <main className="mdl-layout__content">
+          <div className="flex">
             {this.props.children}
+          </div>
+          <footer className="mdl-mini-footer" />
         </main>
-        <footer className="mdl-mini-footer" />
       </div>
     );
   }

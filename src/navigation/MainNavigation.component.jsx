@@ -11,8 +11,12 @@ const menuItems = [
     label: 'My restaurant'
   },
   {
-    path: '/settings',
-    label: 'Settings'
+    path: '/documentation',
+    label: 'Documentation'
+  },
+  {
+    path: '/contact',
+    label: 'Contact us'
   }
 ];
 
@@ -22,7 +26,7 @@ export default class MainNavigation extends React.Component {
   }
   render() {
     return (
-      <nav className="mdl-navigation">
+      <nav className="mdl-navigation main-navigation">
         {
           menuItems.map((item, key) =>
             <Link

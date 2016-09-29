@@ -1,0 +1,30 @@
+$side-navigation-link-color: $light-gray;
+$side-navigation-link-color-active: $iron;
+$side-navigation-link-color-hover: $iron;
+$side-navigation-background-color: $dark-gray;
+$side-navigation-link-background-color: lighten($side-navigation-background-color, 5%);
+$side-navigation-link-background-color-hover: lighten($side-navigation-link-background-color, 5%);
+
+.side-container {
+  position: relative;
+  display: block;
+  width: 200px;
+  min-width: 200px;
+  background: $side-navigation-background-color;
+}
+.side-navigation {
+  display: block;
+  position: fixed;
+  width: inherit;
+}
+.side-navigation__link {
+  background: $side-navigation-link-background-color;
+  display: block;
+  color: $side-navigation-link-color;
+  padding: 7px 12px;
+  margin-bottom: 1px;
+  &:hover {
+    color: $side-navigation-link-color-hover;
+    background: $side-navigation-link-background-color-hover;
+  }
+}

@@ -1,12 +1,26 @@
 @import 'colors';
 @import 'material-design/_material-design-lite';
+@import 'mdl-custom';
 @import 'navigation';
+@import 'side';
 
 html, body, .stretch {
   height: 100%;
   max-width: 100%;
 }
 
+.flex {
+  display: flex;
+  flex: 1;
+}
+
 body {
   background: $gallery;
+}
+
+.page {
+  display: flex;
+}
+
+.page__content {
 }
