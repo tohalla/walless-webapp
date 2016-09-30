@@ -6,11 +6,17 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/dev-server',
-    path.join(__dirname, 'src', 'index'),
-  ],
+  entry: {
+    app: [
+      'webpack-dev-server/client?http://localhost:3000',
+      'webpack/hot/dev-server',
+      path.join(__dirname, 'src', 'index')
+    ],
+    vendor: [
+      'mdi/scss/materialdesignicons.scss',
+      'normalize.css/normalize.css'
+    ]
+  },
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
@@ -28,20 +34,20 @@ module.exports = {
         ]
       },
       {
+        test: /\.s?css$/,
+        loader: ExtractTextPlugin.extract('css!sass!postcss')
+      },
+      {
         test: /\.(png|svg)$/,
         loader: 'url-loader?limit=100000'
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.woff(2)?(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
         loader: 'url-loader?limit=10000&minetype=application/font-woff'
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(ttf|eot|svg)(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
         loader: 'file-loader'
-      },
-      {
-        test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract('css!sass!postcss')
       }
     ]
   },
@@ -60,7 +66,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
     }),
-    new ExtractTextPlugin('style.css', {
+    new ExtractTextPlugin('[name].css', {
       allChunks: true
     }),
     new HtmlWebpackPlugin({

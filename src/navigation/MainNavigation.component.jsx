@@ -1,14 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router';
+import {fromJS} from 'immutable';
 
-const menuItems = [
+const menuItems = fromJS([
   {
     path: '/home',
     label: 'Home'
   },
   {
     path: '/restaurant',
-    label: 'My restaurant'
+    label: 'My restaurant',
+    requireAuthentication: true
   },
   {
     path: '/documentation',
@@ -18,7 +20,7 @@ const menuItems = [
     path: '/contact',
     label: 'Contact us'
   }
-];
+]);
 
 export default class MainNavigation extends React.Component {
   static contextTypes = {
@@ -32,14 +34,14 @@ export default class MainNavigation extends React.Component {
             <Link
                 className={
                   'main-navigation__link mdl-navigation__link' + (
-                    this.context.router.isActive(item.path) ?
+                    this.context.router.isActive(item.get('path')) ?
                       ' main-navigation__link--active' : ''
                   )
                 }
                 key={key}
-                to={item.path}
+                to={item.get('path')}
             >
-              {item.label}
+              {item.get('label')}
             </Link>
           )
         }

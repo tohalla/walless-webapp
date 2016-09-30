@@ -13,6 +13,7 @@
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
     "material-design-lite": "^1.2.1",
+    "mdi": "^1.7.22",
     "node-polyglot": "github:airbnb/polyglot.js",
     "normalize.css": "^4.2.0",
     "react": "^15.3.2",
