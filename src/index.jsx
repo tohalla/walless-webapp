@@ -18,6 +18,10 @@ import TabbedPage from './containers/TabbedPage.component';
 
 import {updateTranslations} from './internalization';
 
+Relay.injectNetworkLayer(
+  new Relay.DefaultNetworkLayer('http://localhost:8080/graphql')
+);
+
 updateTranslations('en');
 
 ReactDOM.render((
