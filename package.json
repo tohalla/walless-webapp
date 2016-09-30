@@ -40,8 +40,6 @@
     "eslint-config-cleanjs": "^4.0.0",
     "eslint-config-google": "^0.6.0",
     "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-better": "^0.1.5",
-    "eslint-plugin-fp": "^2.2.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-react": "^6.3.0",
     "extract-text-webpack-plugin": "^1.0.1",

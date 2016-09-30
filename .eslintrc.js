@@ -1,12 +1,12 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: [
-    'google',
-    'cleanjs'
+    'google'
   ],
   plugins: [
     'babel',
-    'react'
+    'react',
+    'import'
   ],
   ecmaFeatures: {
     jsx: true,
@@ -17,14 +17,14 @@ module.exports = {
   },
   parser: 'babel-eslint',
   rules: {
+    'import/no-unresolved': [2, {commonjs: true, amd: true}],
+    'import/named': 2,
+    'import/no-commonjs': 2,
+    'import/namespace': 2,
+    'import/default': 2,
+    'import/export': 2,
     'arrow-parens': 0,
     'generator-star-spacing': 0,
-    'fp/no-unused-expression': 0,
-    'fp/no-class': 0,
-    'fp/no-this': 0,
-    'fp/no-mutating-methods': 0,
-    'better/no-new': 0,
-    'better/no-ifs': 0,
     'no-nested-ternary': 0,
     'operator-linebreak': 0,
     "babel/generator-star-spacing": 1,
