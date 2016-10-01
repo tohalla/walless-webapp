@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation */
+/* eslint-disable import/no-commonjs */
 const webpack = require('webpack');
 const rucksack = require('rucksack-css');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -14,7 +14,8 @@ module.exports = {
     ],
     vendor: [
       'mdi/scss/materialdesignicons.scss',
-      'normalize.css/normalize.css'
+      'normalize.css/normalize.css',
+      'material-design-lite/material'
     ]
   },
   resolve: {

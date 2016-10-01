@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation */
+/* eslint-disable import/no-commonjs */
 // const production = require('./webpack.production.config');
 const development = require('./webpack.development.config');
 

@@ -4,10 +4,15 @@
 @import 'mdl-custom';
 @import 'navigation';
 @import 'side';
+@import 'popup';
 
 html, body, .stretch {
   height: 100%;
   max-width: 100%;
+}
+
+* {
+  outline: none;
 }
 
 .flex {

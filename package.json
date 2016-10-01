@@ -17,6 +17,7 @@
     "node-polyglot": "github:airbnb/polyglot.js",
     "normalize.css": "^4.2.0",
     "react": "^15.3.2",
+    "react-click-outside": "github:tj/react-click-outside",
     "react-dom": "^15.3.2",
     "react-relay": "^0.9.3",
     "react-router": "^2.8.1",

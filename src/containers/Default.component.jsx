@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MainNavigation from '../navigation/MainNavigation.component';
+import UserNavigation from '../navigation/UserNavigation.component';
 
 export default class Default extends React.Component {
   static propTypes = {
@@ -9,23 +10,22 @@ export default class Default extends React.Component {
       React.PropTypes.node
     ])
   }
-  render() {
-    return (
-      <div className="site mdl-layout mdl-js-layout">
-        <div className="mdl-layout__header">
-          <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title">{'Ulkona'}</span>
-            <MainNavigation />
-            <div className="mdl-layout-spacer" />
-          </div>
+  render = () => (
+    <div className="site mdl-layout mdl-js-layout">
+      <div className="mdl-layout__header">
+        <div className="mdl-layout__header-row">
+          <span className="mdl-layout-title">{'Ulosko'}</span>
+          <MainNavigation />
+          <div className="mdl-layout-spacer" />
+          <UserNavigation />
         </div>
-        <main className="mdl-layout__content">
-          <div className="flex">
-            {this.props.children}
-          </div>
-          <footer className="mdl-mini-footer" />
-        </main>
       </div>
-    );
-  }
+      <main className="mdl-layout__content">
+        <div className="flex">
+          {this.props.children}
+        </div>
+        <footer className="mdl-mini-footer" />
+      </main>
+    </div>
+  );
 }

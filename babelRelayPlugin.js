@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation */
+/* eslint-disable import/no-commonjs */
 const babelRelayPlugin = require('babel-relay-plugin');
 const introspectionQuery = require('graphql/utilities').introspectionQuery;
 const request = require('sync-request');

@@ -44,6 +44,4 @@ ReactDOM.render((
   ), document.getElementById('app')
 );
 
-import 'material-design-lite/material';
-
 import '../assets/styles/main.scss';
