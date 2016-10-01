@@ -5,28 +5,30 @@ import {fromJS} from 'immutable';
 const menuItems = fromJS([
   {
     path: '/home',
-    label: 'Home'
+    translationKey: 'home'
   },
   {
     path: '/restaurant',
-    label: 'My restaurant',
+    translationKey: 'myRestaurant',
     requireAuthentication: true
   },
   {
     path: '/documentation',
-    label: 'Documentation'
+    translationKey: 'documentation'
   },
   {
     path: '/contact',
-    label: 'Contact us'
+    translationKey: 'contactUs'
   }
 ]);
 
 export default class MainNavigation extends React.Component {
   static contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    t: React.PropTypes.func
   }
   render() {
+    const {t, router} = this.context;
     return (
       <nav className="mdl-navigation main-navigation">
         {
@@ -34,14 +36,14 @@ export default class MainNavigation extends React.Component {
             <Link
                 className={
                   'main-navigation__link mdl-navigation__link' + (
-                    this.context.router.isActive(item.get('path')) ?
+                    router.isActive(item.get('path')) ?
                       ' main-navigation__link--active' : ''
                   )
                 }
                 key={key}
                 to={item.get('path')}
             >
-              {item.get('label')}
+              {t(item.get('translationKey'))}
             </Link>
           )
         }

@@ -9,7 +9,7 @@ export default class Default extends React.Component {
       React.PropTypes.arrayOf(React.PropTypes.node),
       React.PropTypes.node
     ])
-  }
+  };
   render = () => (
     <div className="site mdl-layout mdl-js-layout">
       <div className="mdl-layout__header">
