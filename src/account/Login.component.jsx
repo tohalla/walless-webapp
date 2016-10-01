@@ -29,7 +29,7 @@ export default class Login extends React.Component {
     const t = this.context.t;
     return this.state.showLogin ? (
       <div>
-        <button className="mdl-button mdl-button--disabled mdl-button--light popup-container">
+        <button className="mdl-button mdl-button--light--disabled popup-container">
           {t('authenticate')}
         </button>
         <ClickOutside onClickOutside={this.closeDialog}>

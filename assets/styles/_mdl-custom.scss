@@ -5,9 +5,14 @@
 
 .mdl-button--light {
   color: $carrara;
-}
-
-.mdl-button--disabled {
+  &--disabled {
+    color: unquote("rgba(#{$color-white}, 0.32)");
+    background-color: transparent;
+    cursor: default;
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
 
 .mdl-card__actions--spread {
