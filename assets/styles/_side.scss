@@ -12,7 +12,7 @@ $side-navigation-link-background-color-hover: lighten($side-navigation-link-back
   min-width: 200px;
   background: $side-navigation-background-color;
 }
-.side-navigation {
+.side-fixed {
   display: block;
   position: fixed;
   width: inherit;

@@ -10,6 +10,12 @@ export default class Default extends React.Component {
       React.PropTypes.node
     ])
   };
+  static childContextTypes = {
+    location: React.PropTypes.object
+  };
+  getChildContext() {
+    return {location: this.props.location};
+  }
   render = () => (
     <div className="site mdl-layout mdl-js-layout">
       <div className="mdl-layout__header">

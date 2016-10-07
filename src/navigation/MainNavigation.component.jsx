@@ -4,12 +4,12 @@ import {fromJS} from 'immutable';
 
 const menuItems = fromJS([
   {
-    path: '/home',
+    path: '/',
     translationKey: 'home'
   },
   {
     path: '/restaurant',
-    translationKey: 'myRestaurant',
+    translationKey: 'restaurant',
     requireAuthentication: true
   },
   {
@@ -25,10 +25,11 @@ const menuItems = fromJS([
 export default class MainNavigation extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired,
-    t: React.PropTypes.func
+    t: React.PropTypes.func,
+    location: React.PropTypes.any
   }
   render() {
-    const {t, router} = this.context;
+    const {t, router, location} = this.context;
     return (
       <nav className="mdl-navigation main-navigation">
         {
@@ -36,7 +37,8 @@ export default class MainNavigation extends React.Component {
             <Link
                 className={
                   'main-navigation__link mdl-navigation__link' + (
-                    router.isActive(item.get('path')) ?
+                    location.pathname === item.get('path') ||
+                    (item.get('path') !== '/' && router.isActive(item.get('path'))) ?
                       ' main-navigation__link--active' : ''
                   )
                 }

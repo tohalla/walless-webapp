@@ -5,16 +5,15 @@ import ReactDOM from 'react-dom';
 import {
   Router,
   Route,
-  // IndexRoute,
+  IndexRoute,
   browserHistory,
-  applyRouterMiddleware,
-  Redirect
+  applyRouterMiddleware
 } from 'react-router';
 import useRelay from 'react-router-relay';
 import Relay from 'react-relay';
 
 import Default from './containers/Default.component';
-import TabbedPage from './containers/TabbedPage.component';
+import Home from './pages/Home.component';
 import {updateTranslations} from './util/translation';
 import TranslationWrapper from './util/TranslationWrapper.component';
 
@@ -29,14 +28,13 @@ ReactDOM.render((
         history={browserHistory}
         render={applyRouterMiddleware(useRelay)}
     >
-      <Redirect from="/" to="/home" />
       <Route
           component={Default}
           path="/"
       >
-        <Route path="home" />
-        <Route component={TabbedPage} path="restaurant" />
-        <Route component={TabbedPage} path="documentation" />
+        <IndexRoute component={Home} />
+        <Route path="restaurant" />
+        <Route path="documentation" />
         <Route path="contact" />
       </Route>
     </Router>
