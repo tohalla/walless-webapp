@@ -12,13 +12,16 @@ import {
 import useRelay from 'react-router-relay';
 import Relay from 'react-relay';
 
-import Default from './containers/Default.component';
+import Root from './containers/Root.component';
 import Home from './pages/Home.component';
 import {updateTranslations} from './util/translation';
 import TranslationWrapper from './util/TranslationWrapper.component';
+import config from '../config';
 
 Relay.injectNetworkLayer(
-  new Relay.DefaultNetworkLayer('http://localhost:8080/graphql')
+  new Relay.DefaultNetworkLayer(
+    `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
+  )
 );
 
 ReactDOM.render((
@@ -29,7 +32,7 @@ ReactDOM.render((
         render={applyRouterMiddleware(useRelay)}
     >
       <Route
-          component={Default}
+          component={Root}
           path="/"
       >
         <IndexRoute component={Home} />

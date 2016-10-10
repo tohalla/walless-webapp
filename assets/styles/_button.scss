@@ -1,0 +1,10 @@
+.button--plain {
+  text-decoration: underline;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-transform: none;
+}
+.button--light {
+  color: $carrara;
+}

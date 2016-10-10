@@ -26,7 +26,9 @@ export default class TranslationWrapper extends React.Component {
   };
   getChildContext() {
     return {
-      t: (key: String) => this.state.polyglot ? this.state.polyglot.t(key) : ''
+      t: (key: string, interpolarisations: Object) =>
+        this.state.polyglot ?
+          this.state.polyglot.t(key, interpolarisations) : ''
     };
   }
   componentWillReceiveProps(nextProps: Object) {

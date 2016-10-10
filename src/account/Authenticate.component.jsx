@@ -1,57 +1,70 @@
 import React from 'react';
 import {Link} from 'react-router';
 import ClickOutside from 'react-click-outside';
+import {Map} from 'immutable';
 
 import Input from '../mdl/Input.component';
 
 export default class Login extends React.Component {
   static contextTypes = {
-    t: React.PropTypes.func
+    t: React.PropTypes.func,
+    account: React.PropTypes.object
   };
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
+  state = {
+    data: new Map({
+      password: '',
+      email: '',
       showLogin: false
-    };
-  }
+    })
+  };
+  // shouldComponentUpdate = (nextProps, nextState, nextContext) => !(
+  //   this.state === nextState &&
+  //   this.context.account.data === nextContext.account.data &&
+  // ); uncomment when react updates
   openDialog = () =>
-    this.setState({showLogin: true});
+    this.setState(({data}) => ({data: data.set('showLogin', true)}));
   closeDialog = () =>
-    this.setState({showLogin: false});
-  handleLogin = e => {
+    this.setState(({data}) => ({data: data.set('showLogin', false)}));
+  handleAuthentication = e => {
     e.preventDefault();
-    this.setState({showLogin: false});
+    this.context.account.authenticate(
+      this.state.data.get('email'),
+      this.state.data.get('password')
+    );
+    this.setState(({data}) => ({data: data.merge({
+      showLogin: false, email: '', password: ''
+    })}));
   }
   handleInputChange = e => {
-    this.setState({[e.target.name]: e.target.value});
-  }
+    const {id, value} = e.target;
+    this.setState(({data}) => ({data: data.set(id, value)}));
+  };
   render() {
     const t = this.context.t;
-    return this.state.showLogin ? (
+    const data = this.state.data;
+    return data.get('showLogin') ? (
       <div>
-        <button className="mdl-button mdl-button--light--disabled popup-container">
-          {t('authenticate')}
+        <button className="mdl-button button--light--disabled popup-container">
+          {t('account.authenticate')}
         </button>
         <ClickOutside onClickOutside={this.closeDialog}>
           <div className="mdl-card mdl-shadow--2dp popup">
-            <form onSubmit={this.handleLogin}>
+            <form onSubmit={this.handleAuthentication}>
               <div className="mdl-card__supporting-text">
                 <Input
                     id="email"
                     label={t('account.email')}
-                    name="email"
                     onChange={this.handleInputChange}
                     required
-                    value={this.state.value}
+                    value={data.get('email')}
                 />
                 <Input
                     id="password"
                     label={t('account.password')}
-                    name="password"
                     onChange={this.handleInputChange}
                     required
                     type="password"
-                    value={this.state.value}
+                    value={data.get('password')}
                 />
               </div>
               <div className="mdl-card__actions mdl-card__actions--spread">
@@ -59,7 +72,7 @@ export default class Login extends React.Component {
                   {t('account.passwordForgotten')}
                 </Link>
                 <button className="mdl-button mdl-js-button">
-                  {t('authenticate')}
+                  {t('account.authenticate')}
                 </button>
               </div>
             </form>
@@ -68,11 +81,11 @@ export default class Login extends React.Component {
       </div>
     ) : (
       <button
-          className="mdl-button mdl-js-button mdl-button--light"
+          className="mdl-button mdl-js-button button--light"
           onClick={this.openDialog}
           type="button"
       >
-        {t('authenticate')}
+        {t('account.authenticate')}
       </button>
     );
   }

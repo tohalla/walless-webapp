@@ -15,9 +15,10 @@ module.exports = {
     browser: true,
     node: true
   },
+  settings: {'import/resolver': {'node': {'extensions': ['.js', '.jsx']}}},
   parser: 'babel-eslint',
   rules: {
-    'import/no-unresolved': [2, {commonjs: true, amd: true}],
+    'import/no-unresolved': [2, {amd: true}],
     'import/named': 2,
     'import/no-commonjs': 2,
     'import/namespace': 2,
@@ -57,7 +58,7 @@ module.exports = {
     'react/no-did-update-set-state': 2,
     'react/no-direct-mutation-state': 2,
     'react/no-is-mounted': 2,
-    'react/no-multi-comp': 2,
+    'react/no-multi-comp': 0,
     'react/no-string-refs': 2,
     'react/no-unknown-property': 2,
     'react/prefer-es6-class': 2,
