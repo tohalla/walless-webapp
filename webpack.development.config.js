@@ -13,7 +13,7 @@ module.exports = {
       path.join(__dirname, 'src', 'index')
     ],
     vendor: [
-      'mdi/scss/materialdesignicons.scss',
+      'material-design-icons/iconfont/material-icons.css',
       'normalize.css/normalize.css',
       'material-design-lite/material'
     ]
