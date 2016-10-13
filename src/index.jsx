@@ -10,24 +10,19 @@ import {
   applyRouterMiddleware
 } from 'react-router';
 import useRelay from 'react-router-relay';
-import Relay from 'react-relay';
 
+import environment from './environment';
 import Root from './containers/Root.component';
 import Home from './pages/Home.component';
+import Restaurant from './pages/Restaurant.container';
+import restaurantQueries from './pages/restaurant.queries';
 import {updateTranslations} from './util/translation';
 import TranslationWrapper from './util/TranslationWrapper.component';
-import config from '../config';
-
-Relay.injectNetworkLayer(
-  new Relay.DefaultNetworkLayer(
-    `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
-  )
-);
 
 ReactDOM.render((
   <TranslationWrapper polyglot={updateTranslations('en')}>
     <Router
-        environment={Relay.Store}
+        environment={environment}
         history={browserHistory}
         render={applyRouterMiddleware(useRelay)}
     >
@@ -36,7 +31,11 @@ ReactDOM.render((
           path="/"
       >
         <IndexRoute component={Home} />
-        <Route path="restaurant" />
+        <Route
+            component={Restaurant}
+            path="restaurant"
+            queries={restaurantQueries}
+        />
         <Route path="documentation" />
         <Route path="contact" />
       </Route>

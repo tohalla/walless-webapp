@@ -26,3 +26,7 @@ $navigation-link-background-color-hover: $ebony-clay;
     }
   }
 }
+
+.mdl-layout__drawer .main-navigation {
+  margin: 0 !important;
+}

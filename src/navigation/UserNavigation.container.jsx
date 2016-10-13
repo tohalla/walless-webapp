@@ -11,7 +11,7 @@ export default class UserNavigation extends React.Component {
     const {t, account} = this.context;
     return (
       <nav className="mdl-navigation">
-        {this.context.account.data.get('authenticated') ?
+        {this.context.account.data.get('isAuthenticated') ?
           <div>
             <span>
               {t('account.authenticated', {
@@ -32,14 +32,3 @@ export default class UserNavigation extends React.Component {
     );
   }
 }
-
-// export default Relay.createContainer(UserNavigation, {
-//   fragments: {
-//     account: () => Relay.QL`
-//       fragment on Account {
-//         firstName,
-//         lastName
-//       }
-//     `
-//   }
-// });

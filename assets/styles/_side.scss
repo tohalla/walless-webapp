@@ -5,19 +5,26 @@ $side-navigation-background-color: $dark-gray;
 $side-navigation-link-background-color: lighten($side-navigation-background-color, 5%);
 $side-navigation-link-background-color-hover: lighten($side-navigation-link-background-color, 5%);
 
-.side-container {
+.side--container {
+  display: flex;
+  flex: 1;
+}
+.side--outer-container {
+  flex: 1 0 auto;
+}
+.side--side-container {
   position: relative;
   display: block;
   width: 200px;
   min-width: 200px;
   background: $side-navigation-background-color;
 }
-.side-fixed {
+.side--fixed-content {
   display: block;
   position: fixed;
   width: inherit;
 }
-.side-navigation__link {
+.side--navigation__link {
   background: $side-navigation-link-background-color;
   display: block;
   color: $side-navigation-link-color;

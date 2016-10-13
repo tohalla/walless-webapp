@@ -35,10 +35,12 @@ class Input extends React.Component {
     }
   }
   render = () => (
-    <div className={
-      'mdl-textfield mdl-js-textfield' +
-      (this.props.floatingLabel ? ' mdl-textfield--floating-label' : '')
-    }>
+    <div
+        className={
+          'mdl-textfield mdl-js-textfield' +
+          (this.props.floatingLabel ? ' mdl-textfield--floating-label' : '')
+        }
+    >
       <input
           className="mdl-textfield__input"
           disabled={this.props.disabled}
