@@ -1,6 +1,7 @@
 import React from 'react';
 import Cookie from 'js-cookie';
 import {Map} from 'immutable';
+import Relay from 'react-relay';
 
 import MainNavigation from '../navigation/MainNavigation.component';
 import UserNavigation from '../navigation/UserNavigation.container';
@@ -87,3 +88,4 @@ class Root extends React.Component {
 }
 
 export default mdl(Root);
+

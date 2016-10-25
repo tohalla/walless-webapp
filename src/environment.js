@@ -27,10 +27,10 @@ environment.injectNetworkLayer(
       token: () => Cookie.get('Authorization') || '',
       allowEmptyToken: true
     })
-  ].concat(process.env.NODE_ENV === 'production' ? [
+  ].concat(process.env.NODE_ENV === 'production' ? [] : [
     loggerMiddleware(),
     gqErrorsMiddleware()
-  ] : []), {disableBatchQuery: true})
+  ]), {disableBatchQuery: true})
 );
 
 export default environment;

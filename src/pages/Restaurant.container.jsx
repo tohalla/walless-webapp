@@ -5,11 +5,11 @@ import WithSideBar from '../containers/WithSideBar.component';
 
 class Restaurant extends React.Component {
   static propTypes = {
-    account: React.PropTypes.object,
+    me: React.PropTypes.object,
     relay: React.PropTypes.object.isRequired
   };
   render() {
-    console.log(this.props.account);
+    console.log(this.props.me);
     return (
       <WithSideBar>
         {'content'}
@@ -20,14 +20,14 @@ class Restaurant extends React.Component {
 
 export default Relay.createContainer(Restaurant, {
   fragments: {
-    account: () => Relay.QL`
+    me: () => Relay.QL`
       fragment on Account {
+        firstName
+        lastName
         restaurantAccountNodesByAccount(first: 10) {
           edges {
             node {
-              restaurantByRestaurant {
-                name
-              }
+              restaurantByRestaurant
             }
           }
         }
