@@ -1,5 +1,8 @@
 module.exports = {
-  parser: 'babel-eslint',
+  settings: {
+    'import/parser': 'babel-eslint',
+    'import/resolver': {webpack: {config: 'webpack.development.config.js'}}
+  },
   extends: [
     'google'
   ],
@@ -21,12 +24,12 @@ module.exports = {
     'no-invalid-this': 0,
     'require-jsdoc': 0,
     'comma-dangle': [2, 'never'],
-    'import/no-unresolved': [2, {amd: true}],
     'import/named': 2,
     'import/no-commonjs': 2,
     'import/namespace': 2,
     'import/default': 2,
     'import/export': 2,
+    'import/extensions': [2, {jsx: 'never', js: 'never'}],
     'arrow-parens': 0,
     'generator-star-spacing': 0,
     'no-nested-ternary': 0,
@@ -66,10 +69,9 @@ module.exports = {
     'react/no-unknown-property': 2,
     'react/prefer-es6-class': 2,
     'react/react-in-jsx-scope': 2,
-    'react/require-extension': 2,
     'react/self-closing-comp': 2,
     'react/sort-comp': 2,
     'react/prop-types': 0,
-    'react/wrap-multilines': 2
+    'react/jsx-wrap-multilines': 2
   }
 };

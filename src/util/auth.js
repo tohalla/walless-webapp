@@ -1,5 +1,5 @@
 // @flow
-import config from '../../config';
+import config from 'config';
 
 export const authenticate = async (email: string, password: string) => {
   const response = await fetch(

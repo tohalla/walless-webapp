@@ -10,7 +10,7 @@ module.exports = {
     app: [
       'webpack-dev-server/client?http://localhost:3000',
       'webpack/hot/dev-server',
-      path.join(__dirname, 'src', 'index')
+      path.resolve(__dirname, 'src', 'index')
     ],
     vendor: [
       'material-design-icons/iconfont/material-icons.css',
@@ -19,10 +19,11 @@ module.exports = {
     ]
   },
   resolve: {
+    root: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'assets')],
     extensions: ['', '.js', '.jsx']
   },
   output: {
-    path: path.join(__dirname, 'dist', 'assets'),
+    path: path.resolve(__dirname, 'dist', 'assets'),
     filename: '[name].js'
   },
   module: {
@@ -59,7 +60,7 @@ module.exports = {
   ],
   devtool: 'eval',
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.resolve(__dirname, 'dist'),
     hot: true
   },
   plugins: [
@@ -71,7 +72,7 @@ module.exports = {
       allChunks: true
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'html', 'default.html'),
+      template: path.resolve(__dirname, 'html', 'default.html'),
       inject: 'body',
       filename: './index.html'
     })

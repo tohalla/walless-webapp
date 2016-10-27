@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Authenticate from '../account/Authenticate.component';
+import Authenticate from 'account/Authenticate.component';
 
 export default class UserNavigation extends React.Component {
   static contextTypes = {

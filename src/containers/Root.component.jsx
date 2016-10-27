@@ -2,10 +2,10 @@ import React from 'react';
 import Cookie from 'js-cookie';
 import {Map} from 'immutable';
 
-import MainNavigation from '../navigation/MainNavigation.component';
-import UserNavigation from '../navigation/UserNavigation.container';
-import mdl from '../mdl/mdl';
-import {authenticate, getActiveAccount} from '../util/auth';
+import MainNavigation from 'navigation/MainNavigation.component';
+import UserNavigation from 'navigation/UserNavigation.container';
+import mdl from 'mdl/mdl';
+import {authenticate, getActiveAccount} from 'util/auth';
 
 class Root extends React.Component {
   static propTypes = {

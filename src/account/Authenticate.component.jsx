@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import ClickOutside from 'react-click-outside';
 import {Map} from 'immutable';
 
-import Input from '../mdl/Input.component';
+import Input from 'mdl/Input.component';
 
 export default class Login extends React.Component {
   static contextTypes = {

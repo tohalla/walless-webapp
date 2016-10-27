@@ -11,12 +11,12 @@ import {
 import ApolloClient, {createNetworkInterface} from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
 
-import Root from './containers/Root.component';
-import Home from './pages/Home.component';
-import Restaurant from './pages/Restaurant.container';
-import {updateTranslations} from './util/translation';
-import TranslationWrapper from './util/TranslationWrapper.component';
-import config from '../config';
+import Root from 'containers/Root.component';
+import Home from 'pages/Home.component';
+import Restaurant from 'pages/Restaurant.container';
+import {updateTranslations} from 'util/translation';
+import TranslationWrapper from 'util/TranslationWrapper.component';
+import config from 'config';
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
@@ -46,4 +46,4 @@ ReactDOM.render((
   ), document.getElementById('app')
 );
 
-import '../assets/styles/main.scss';
+import 'styles/main.scss';
