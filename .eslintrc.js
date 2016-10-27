@@ -18,6 +18,9 @@ module.exports = {
   settings: {'import/resolver': {'node': {'extensions': ['.js', '.jsx']}}},
   parser: 'babel-eslint',
   rules: {
+    'no-invalid-this': 0,
+    'require-jsdoc': 0,
+    'comma-dangle': [2, 'never'],
     'import/no-unresolved': [2, {amd: true}],
     'import/named': 2,
     'import/no-commonjs': 2,

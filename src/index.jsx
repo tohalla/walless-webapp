@@ -6,26 +6,28 @@ import {
   Router,
   Route,
   IndexRoute,
-  browserHistory,
-  applyRouterMiddleware
+  browserHistory
 } from 'react-router';
-import useRelay from 'react-router-relay';
+import ApolloClient, {createNetworkInterface} from 'apollo-client';
+import {ApolloProvider} from 'react-apollo';
 
-import environment from './environment';
 import Root from './containers/Root.component';
 import Home from './pages/Home.component';
 import Restaurant from './pages/Restaurant.container';
-import restaurantQueries from './pages/restaurant.queries';
 import {updateTranslations} from './util/translation';
 import TranslationWrapper from './util/TranslationWrapper.component';
+import config from '../config';
+
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
+  })
+});
 
 ReactDOM.render((
   <TranslationWrapper polyglot={updateTranslations('en')}>
-    <Router
-        environment={environment}
-        history={browserHistory}
-        render={applyRouterMiddleware(useRelay)}
-    >
+    <ApolloProvider client={client}>
+    <Router history={browserHistory}>
       <Route
           component={Root}
           path="/"
@@ -34,12 +36,12 @@ ReactDOM.render((
         <Route
             component={Restaurant}
             path="restaurant"
-            queries={restaurantQueries}
         />
         <Route path="documentation" />
         <Route path="contact" />
       </Route>
     </Router>
+    </ApolloProvider>
   </TranslationWrapper>
   ), document.getElementById('app')
 );
