@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {fromJS} from 'immutable';
+import {map} from 'lodash/fp';
 
-const menuItems = fromJS([
+const menuItems = [
   {
     path: '/',
     translationKey: 'home'
@@ -20,7 +20,7 @@ const menuItems = fromJS([
     path: '/contact',
     translationKey: 'contactUs'
   }
-]);
+];
 
 export default class MainNavigation extends React.Component {
   static contextTypes = {
@@ -33,21 +33,21 @@ export default class MainNavigation extends React.Component {
     return (
       <nav className="mdl-navigation main-navigation">
         {
-          menuItems.map((item, key) =>
+          map(item =>
             <Link
                 className={
                   'main-navigation__link mdl-navigation__link' + (
-                    location.pathname === item.get('path') ||
-                    (item.get('path') !== '/' && router.isActive(item.get('path'))) ?
+                    location.pathname === item.path ||
+                    (item.path !== '/' && router.isActive(item.path)) ?
                       ' main-navigation__link--active' : ''
                   )
                 }
-                key={key}
-                to={item.get('path')}
+                key={menuItems.indexOf(item)}
+                to={item.path}
             >
-              {t(item.get('translationKey'))}
+              {t(item.translationKey)}
             </Link>
-          )
+          )(menuItems)
         }
       </nav>
     );

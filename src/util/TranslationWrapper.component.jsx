@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import {fromJS} from 'immutable';
 
 export default class TranslationWrapper extends React.Component {
   static childContextTypes = {
@@ -17,7 +16,7 @@ export default class TranslationWrapper extends React.Component {
     super(props, context);
     if (props.polyglot.then) {
       props.polyglot.then(polyglot =>
-        this.setState({polyglot: fromJS(polyglot)})
+        this.setState({polyglot})
       );
     }
   }
@@ -35,7 +34,7 @@ export default class TranslationWrapper extends React.Component {
     if (nextProps.polyglot !== this.props.polyglot) {
       if (nextProps.polyglot.then) {
         nextProps.polyglot.then(polyglot =>
-          this.setState({polyglot: fromJS(polyglot)})
+          this.setState({polyglot})
         );
       }
     }

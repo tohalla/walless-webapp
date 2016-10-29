@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
 import ClickOutside from 'react-click-outside';
-import {Map} from 'immutable';
 
 import Input from 'mdl/Input.component';
 
@@ -11,34 +10,32 @@ export default class Login extends React.Component {
     authenticationHandler: React.PropTypes.object
   };
   state = {
-    data: new Map({
-      password: '',
-      email: '',
-      showLogin: false
-    })
+    password: '',
+    email: '',
+    showLogin: false
   };
   openDialog = () =>
-    this.setState(({data}) => ({data: data.set('showLogin', true)}));
+    this.setState({showLogin: true});
   closeDialog = () =>
-    this.setState(({data}) => ({data: data.set('showLogin', false)}));
+    this.setState({showLogin: false});
   handleAuthentication = e => {
     e.preventDefault();
     this.context.authenticationHandler.authenticate(
-      this.state.data.get('email'),
-      this.state.data.get('password')
+      this.state.email,
+      this.state.password
     );
-    this.setState(({data}) => ({data: data.merge({
+    this.setState({
       showLogin: false, email: '', password: ''
-    })}));
+    });
   }
   handleInputChange = e => {
     const {id, value} = e.target;
-    this.setState(({data}) => ({data: data.set(id, value)}));
+    this.setState({[id]: value});
   };
   render() {
     const t = this.context.t;
-    const data = this.state.data;
-    return data.get('showLogin') ? (
+    const {email, password, showLogin} = this.state;
+    return showLogin ? (
       <div>
         <button className="mdl-button button--light--disabled popup-container">
           {t('account.authenticate')}
@@ -52,7 +49,7 @@ export default class Login extends React.Component {
                     label={t('account.email')}
                     onChange={this.handleInputChange}
                     required
-                    value={data.get('email')}
+                    value={email}
                 />
                 <Input
                     id="password"
@@ -60,7 +57,7 @@ export default class Login extends React.Component {
                     onChange={this.handleInputChange}
                     required
                     type="password"
-                    value={data.get('password')}
+                    value={password}
                 />
               </div>
               <div className="mdl-card__actions mdl-card__actions--spread">
