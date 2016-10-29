@@ -22,6 +22,7 @@ module.exports = {
   parser: 'babel-eslint',
   rules: {
     'no-invalid-this': 0,
+    'no-undef': 2,
     'require-jsdoc': 0,
     'comma-dangle': [2, 'never'],
     'import/named': 2,

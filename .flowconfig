@@ -1,9 +1,10 @@
 [ignore]
 
 [include]
-assets
-src
 
 [libs]
 
 [options]
+module.system.node.resolve_dirname=assets
+module.system.node.resolve_dirname=src
+module.system.node.resolve_dirname=node_modules

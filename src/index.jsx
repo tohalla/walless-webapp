@@ -8,7 +8,6 @@ import {
   IndexRoute,
   browserHistory
 } from 'react-router';
-import ApolloClient, {createNetworkInterface} from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
 
 import Root from 'containers/Root.component';
@@ -16,17 +15,11 @@ import Home from 'pages/Home.component';
 import Restaurant from 'pages/Restaurant.container';
 import {updateTranslations} from 'util/translation';
 import TranslationWrapper from 'util/TranslationWrapper.component';
-import config from 'config';
-
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
-  })
-});
+import apolloClient from 'apolloClient';
 
 ReactDOM.render((
   <TranslationWrapper polyglot={updateTranslations('en')}>
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
     <Router history={browserHistory}>
       <Route
           component={Root}

@@ -1,26 +1,32 @@
 import React from 'react';
+import {compose} from 'react-apollo';
 
+import {getActiveAccount} from 'queries/account.queries';
 import Authenticate from 'account/Authenticate.component';
 
-export default class UserNavigation extends React.Component {
+class UserNavigation extends React.Component {
   static contextTypes = {
     t: React.PropTypes.func,
-    account: React.PropTypes.object
+    authenticationHandler: React.PropTypes.object
   };
+  static propTypes = {
+    me: React.PropTypes.object
+  }
   render() {
-    const {t, account} = this.context;
+    const {t, authenticationHandler} = this.context;
+    const {me} = this.props;
     return (
       <nav className="mdl-navigation">
-        {this.context.account.data.get('isAuthenticated') ?
+        {me ?
           <div>
             <span>
               {t('account.authenticated', {
-                name: account.data.getIn(['account', 'firstName'])
+                name: me.firstName
               })}
             </span>
             <button
                 className="button--plain button--light"
-                onClick={account.logout}
+                onClick={authenticationHandler.logout}
                 type="button"
             >
               {t('account.signOut')}
@@ -32,3 +38,7 @@ export default class UserNavigation extends React.Component {
     );
   }
 }
+
+export default compose(
+  getActiveAccount
+)(UserNavigation);

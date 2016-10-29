@@ -8,7 +8,7 @@ import Input from 'mdl/Input.component';
 export default class Login extends React.Component {
   static contextTypes = {
     t: React.PropTypes.func,
-    account: React.PropTypes.object
+    authenticationHandler: React.PropTypes.object
   };
   state = {
     data: new Map({
@@ -17,17 +17,13 @@ export default class Login extends React.Component {
       showLogin: false
     })
   };
-  // shouldComponentUpdate = (nextProps, nextState, nextContext) => !(
-  //   this.state === nextState &&
-  //   this.context.account.data === nextContext.account.data &&
-  // ); uncomment when react updates
   openDialog = () =>
     this.setState(({data}) => ({data: data.set('showLogin', true)}));
   closeDialog = () =>
     this.setState(({data}) => ({data: data.set('showLogin', false)}));
   handleAuthentication = e => {
     e.preventDefault();
-    this.context.account.authenticate(
+    this.context.authenticationHandler.authenticate(
       this.state.data.get('email'),
       this.state.data.get('password')
     );
