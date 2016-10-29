@@ -15,7 +15,8 @@ module.exports = {
     vendor: [
       'material-design-icons/iconfont/material-icons.css',
       'normalize.css/normalize.css',
-      'material-design-lite/material'
+      'material-design-lite/material',
+      'react-select/dist/react-select.css'
     ]
   },
   resolve: {
@@ -24,6 +25,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist', 'assets'),
+    publicPath: '/',
     filename: '[name].js'
   },
   module: {

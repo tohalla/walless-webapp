@@ -1,0 +1,36 @@
+.Select-control {
+  border-radius: none;
+}
+
+.Select--no-border {
+  .Select-control {
+    border: none;
+  }
+}
+
+.Select--dark {
+  .Select-control {
+    background: $gray;
+  }
+  &.has-value.Select--single > .Select-control .Select-value .Select-value-label,
+  .Select-input > input {
+    color: $iron;
+  }
+  .Select-menu-outer {
+    @include shadow-2dp();
+    background: lighten($dark-gray, 5%);
+    border: 1px solid $dark-gray;
+  }
+  .Select-option {
+    color: $light-gray;
+    background: none;
+  }
+  .Select-option:hover {
+    color: $iron;
+  }
+  .Select-option.is-selected,  {
+    background: none;
+    text-decoration: underline;
+  }
+}
+

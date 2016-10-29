@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {map} from 'lodash/fp';
 
 const menuItems = [
   {
@@ -25,29 +24,28 @@ const menuItems = [
 export default class MainNavigation extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired,
-    t: React.PropTypes.func,
-    location: React.PropTypes.any
+    t: React.PropTypes.func
   }
   render() {
-    const {t, router, location} = this.context;
+    const {t, router: {location}} = this.context;
     return (
       <nav className="mdl-navigation main-navigation">
         {
-          map(item =>
+          menuItems.map((item, index) =>
             <Link
                 className={
                   'main-navigation__link mdl-navigation__link' + (
-                    location.pathname === item.path ||
-                    (item.path !== '/' && router.isActive(item.path)) ?
+                    location.pathname.indexOf(item.path) === 0 &&
+                    (item.path !== '/' || location.pathname === '/') ?
                       ' main-navigation__link--active' : ''
                   )
                 }
-                key={menuItems.indexOf(item)}
+                key={index}
                 to={item.path}
             >
               {t(item.translationKey)}
             </Link>
-          )(menuItems)
+          )
         }
       </nav>
     );

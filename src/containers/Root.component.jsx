@@ -13,11 +13,9 @@ class Root extends React.Component {
     ])
   };
   static childContextTypes = {
-    authenticationHandler: React.PropTypes.object,
-    location: React.PropTypes.object
+    authenticationHandler: React.PropTypes.object
   };
   getChildContext = () => ({
-    location: this.props.location,
     authenticationHandler
   });
   render = () => (

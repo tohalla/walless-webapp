@@ -12,6 +12,7 @@ export const getMyRestaurants = graphql(
           edges {
             node {
               restaurantByRestaurant {
+                id
                 name
               }
             }

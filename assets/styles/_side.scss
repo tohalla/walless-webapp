@@ -24,14 +24,23 @@ $side-navigation-link-background-color-hover: lighten($side-navigation-link-back
   position: fixed;
   width: inherit;
 }
-.side--navigation__link {
+.side-navigation {
+  flex-direction: column;
+}
+.side-navigation__link {
   background: $side-navigation-link-background-color;
   display: block;
+  flex: 1;
   color: $side-navigation-link-color;
   padding: 7px 12px;
-  margin-bottom: 1px;
   &:hover {
     color: $side-navigation-link-color-hover;
     background: $side-navigation-link-background-color-hover;
+  }
+  &.side-navigation__link--active {
+    color: $side-navigation-link-color-active;
+    &:hover {
+      background: $side-navigation-link-background-color;
+    }
   }
 }

@@ -28,8 +28,10 @@ ReactDOM.render((
         <IndexRoute component={Home} />
         <Route
             component={Restaurant}
-            path="restaurant"
-        />
+            path="restaurant(/:restaurant)"
+        >
+          <Route path="settings" />
+        </Route>
         <Route path="documentation" />
         <Route path="contact" />
       </Route>
