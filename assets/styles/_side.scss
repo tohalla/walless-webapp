@@ -5,40 +5,41 @@ $side-navigation-background-color: $dark-gray;
 $side-navigation-link-background-color: lighten($side-navigation-background-color, 5%);
 $side-navigation-link-background-color-hover: lighten($side-navigation-link-background-color, 5%);
 
-.side--container {
+.side {
   display: flex;
   flex: 1;
 }
 .side--outer-container {
   flex: 1 0 auto;
 }
-.side--side-container {
+.side__side-container {
   position: relative;
   display: block;
-  width: 200px;
-  min-width: 200px;
+  width: 15rem;
+  min-width: 15rem;
   background: $side-navigation-background-color;
 }
-.side--fixed-content {
+.side__fixed-content {
   display: block;
   position: fixed;
   width: inherit;
 }
-.side-navigation {
+.side__navigation {
   flex-direction: column;
 }
-.side-navigation__link {
+.side__navigation__link {
   background: $side-navigation-link-background-color;
   display: block;
   flex: 1;
   color: $side-navigation-link-color;
-  padding: 7px 12px;
+  padding: 0.5rem 0.75rem;
   &:hover {
     color: $side-navigation-link-color-hover;
     background: $side-navigation-link-background-color-hover;
   }
-  &.side-navigation__link--active {
+  &.side__navigation__link--active {
     color: $side-navigation-link-color-active;
+    text-decoration: underline;
     &:hover {
       background: $side-navigation-link-background-color;
     }

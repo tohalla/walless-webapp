@@ -140,14 +140,14 @@ $button-active-color: unquote("rgba(#{$palette-grey-500}, 0.40)") !default;
 $button-focus-color: unquote("rgba(#{$color-black}, 0.12)") !default;
 
 // Colored button colors.
-$button-primary-color-alt: unquote("rgb(#{$color-primary})") !default;
-$button-secondary-color-alt: unquote("rgb(#{$color-primary-contrast})") !default;
-$button-hover-color-alt: unquote("rgb(#{$color-primary})") !default;
-$button-active-color-alt: unquote("rgb(#{$color-primary})") !default;
+$button-primary-color-alt: unquote("rgb(#{$palette-teal-A700})") !default;
+$button-secondary-color-alt: unquote("rgb(#{$palette-grey-50})") !default;
+$button-hover-color-alt: unquote("rgb(#{$palette-teal-A700})") !default;
+$button-active-color-alt: unquote("rgb(#{$palette-teal-A700})") !default;
 $button-focus-color-alt: $button-focus-color !default;
 
 // Ripple color for colored raised buttons.
-$button-ripple-color-alt: unquote("rgb(#{$color-primary-contrast})") !default;
+$button-ripple-color-alt: unquote("rgb(#{$palette-grey-50})") !default;
 
 // Disabled button colors.
 $button-primary-color-disabled: unquote("rgba(#{$color-black}, 0.12)") !default;
@@ -516,9 +516,9 @@ $badge-overlap: 12px !default;
 
 /* SHADOWS */
 
-$shadow-key-umbra-opacity: 0.2 !default;
-$shadow-key-penumbra-opacity: 0.14 !default;
-$shadow-ambient-shadow-opacity: 0.12 !default;
+$shadow-key-umbra-opacity: 0.14 !default;
+$shadow-key-penumbra-opacity: 0.11 !default;
+$shadow-ambient-shadow-opacity: 0.1 !default;
 
 /* GRID */
 

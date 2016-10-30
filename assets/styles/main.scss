@@ -1,6 +1,7 @@
 @import 'colors';
 @import 'material-design/_material-design-lite';
 @import 'mdi';
+@import 'containers';
 @import 'mdl-custom';
 @import 'navigation';
 @import 'side';
@@ -15,6 +16,7 @@ html, body, .stretch {
 
 * {
   outline: none;
+  box-sizing: border-box;
 }
 
 .flex {
@@ -29,7 +31,4 @@ body {
 .page {
   display: flex;
   align-content: stretch;
-}
-
-.page__content {
 }

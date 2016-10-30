@@ -25,3 +25,7 @@
   margin: 0;
   background: $carrara;
 }
+
+.mdl-button + .mdl-button {
+  margin-left: 2rem;
+}

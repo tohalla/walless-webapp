@@ -42,15 +42,15 @@ class Restaurant extends React.Component {
     const menuItems = [
       {
         path: 'menus',
-        translationKey: 'restaurant.menu'
+        translationKey: 'restaurant.menus'
       },
       {
         path: 'menuitems',
-        translationKey: 'restaurant.menuItem'
+        translationKey: 'restaurant.menuItems'
       },
       {
         path: 'users',
-        translationKey: 'restaurant.user'
+        translationKey: 'restaurant.users'
       },
       {
         path: 'settings',
@@ -82,16 +82,16 @@ class Restaurant extends React.Component {
                     resetValue={restaurant}
                     value={restaurant}
                 />
-                <nav className="side-navigation mdl-navigation">
+                <nav className="side__navigation mdl-navigation">
                   {
                     menuItems.map((item, index) => (
                       <Link
                           className={
-                            'side-navigation__link mdl-navigation__link'
+                            'side__navigation__link mdl-navigation__link'
                             + (
                               location.pathname.indexOf(
                                 `/restaurant/${restaurant}/${item.path}`
-                              ) === 0 ? ' side-navigation__link--active' : ''
+                              ) === 0 ? ' side__navigation__link--active' : ''
                             )
                           }
                           key={index}

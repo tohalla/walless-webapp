@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MainNavigation from 'navigation/MainNavigation.component';
+import MainNavigation from 'navigation/MainNavigation.container';
 import UserNavigation from 'navigation/UserNavigation.container';
 import mdl from 'mdl/mdl';
 import authenticationHandler from 'util/auth';
@@ -45,4 +45,3 @@ class Root extends React.Component {
 }
 
 export default mdl(Root);
-

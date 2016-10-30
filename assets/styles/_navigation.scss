@@ -5,7 +5,7 @@ $navigation-link-background-color: none;
 $navigation-link-background-color-hover: $ebony-clay;
 
 .main-navigation {
-  margin: 0 32px !important;
+  margin: 0 1.8rem !important;
 }
 
 .main-navigation__link {
@@ -13,7 +13,7 @@ $navigation-link-background-color-hover: $ebony-clay;
   background: $navigation-link-background-color;
   color: $navigation-link-color;
   text-decoration: none;
-  padding: 6px 12px;
+  padding: 0.5rem 0.7rem;
   &:hover {
     background: $navigation-link-background-color-hover;
     color: $navigation-link-color-hover;
