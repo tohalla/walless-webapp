@@ -17,10 +17,11 @@ import RestaurantMenus from 'restaurant/RestaurantMenus.container';
 import {updateTranslations} from 'util/translation';
 import TranslationWrapper from 'util/TranslationWrapper.component';
 import apolloClient from 'apolloClient';
+import store from 'store';
 
 ReactDOM.render((
   <TranslationWrapper polyglot={updateTranslations('en')}>
-    <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={apolloClient} store={store}>
     <Router history={browserHistory}>
       <Route component={Root} path="/">
         <IndexRoute component={Home} />

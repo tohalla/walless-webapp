@@ -4,6 +4,7 @@ import MainNavigation from 'navigation/MainNavigation.container';
 import UserNavigation from 'navigation/UserNavigation.container';
 import mdl from 'mdl/mdl';
 import authenticationHandler from 'util/auth';
+import DevTools from 'DevTools';
 
 class Root extends React.Component {
   static propTypes = {
@@ -40,6 +41,7 @@ class Root extends React.Component {
         </div>
         <footer className="mdl-mini-footer" />
       </main>
+      {process.env.NODE_ENV === 'production' ? null : <DevTools />}
     </div>
   );
 }
