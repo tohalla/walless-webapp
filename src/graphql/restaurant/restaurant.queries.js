@@ -4,7 +4,9 @@ import {hasIn} from 'lodash/fp';
 
 import authenticationHandler from 'util/auth';
 
-export const getMyRestaurants = graphql(
+export {getMyRestaurants};
+
+const getMyRestaurants = graphql(
   gql`
     query {
       getActiveAccount {

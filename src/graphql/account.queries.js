@@ -4,7 +4,9 @@ import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
 
-export const accountFragment = createFragment(gql`
+export {accountFragment, roleRightsFragment, getActiveAccount};
+
+const accountFragment = createFragment(gql`
   fragment accountInformation on Account {
     id
     firstName
@@ -15,7 +17,7 @@ export const accountFragment = createFragment(gql`
   }
 `);
 
-export const roleRightsFragment = createFragment(gql`
+const roleRightsFragment = createFragment(gql`
   fragment roleRights on RestaurantRoleRight {
     id
     allowAddPromotion
@@ -34,7 +36,7 @@ export const roleRightsFragment = createFragment(gql`
   }
 `);
 
-export const getActiveAccount = graphql(
+const getActiveAccount = graphql(
   gql`
     query {
       getActiveAccount {

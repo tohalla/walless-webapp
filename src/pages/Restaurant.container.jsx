@@ -4,7 +4,7 @@ import Select from 'react-select';
 import {Link} from 'react-router';
 
 import WithSideBar from 'containers/WithSideBar.component';
-import {getMyRestaurants} from 'queries/restaurant.queries';
+import {getMyRestaurants} from 'graphql/restaurant/restaurant.queries';
 
 
 class Restaurant extends React.Component {

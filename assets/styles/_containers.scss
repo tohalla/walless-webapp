@@ -1,7 +1,10 @@
 .container {
   @include shadow-2dp();
   background: $carrara;
-  padding: 2rem 3rem;
+  padding: 1em;
   border: 1px solid $iron;
   display: block;
+  & + .container {
+    margin-top: 1rem;
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 
-import {getActiveAccount} from 'queries/account.queries';
+import {getActiveAccount} from 'graphql/account.queries';
 import Authenticate from 'account/Authenticate.component';
 
 class UserNavigation extends React.Component {

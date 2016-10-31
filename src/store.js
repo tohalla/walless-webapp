@@ -9,9 +9,9 @@ const store = createStore(
   }),
   {},
   compose(
-      applyMiddleware(apolloClient.middleware()),
-      process.env.NODE_ENV === 'production' ?
-        f => f : DevTools.instrument()
+    applyMiddleware(apolloClient.middleware()),
+    process.env.NODE_ENV === 'production' ?
+      f => f : DevTools.instrument()
   )
 );
 

@@ -2,7 +2,9 @@ import React from 'react';
 import {Link} from 'react-router';
 import {compose} from 'react-apollo';
 
-import {getActiveAccount} from 'queries/account.queries';
+import {getActiveAccount} from 'graphql/account.queries';
+
+console.log(getActiveAccount);
 
 const menuItems = [
   {

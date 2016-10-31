@@ -12,16 +12,19 @@ class Input extends React.Component {
     label: React.PropTypes.string.isRequired,
     id: React.PropTypes.string.isRequired,
     type: React.PropTypes.string,
+    className: React.PropTypes.string,
     onChange: React.PropTypes.func.isRequired,
     floatingLabel: React.PropTypes.bool,
     disabled: React.PropTypes.bool,
-    required: React.PropTypes.bool
+    required: React.PropTypes.bool,
+    rows: React.PropTypes.number
   };
   static defaultProps = {
     floatingLabel: false,
     type: 'text',
     required: false,
-    disabled: false
+    disabled: false,
+    rows: 1
   };
   componentDidUpdate(prevProps) {
     if (this.props.disabled !== prevProps.disabled) {
@@ -34,27 +37,41 @@ class Input extends React.Component {
       findDOMNode(this).MaterialTextfield.change(this.props.value);
     }
   }
-  render = () => (
-    <div
-        className={
-          'mdl-textfield mdl-js-textfield' +
-          (this.props.floatingLabel ? ' mdl-textfield--floating-label' : '')
+  render() {
+    const {
+      floatingLabel,
+      label,
+      rows,
+      id,
+      className,
+      ...props
+    } = this.props;
+    return (
+      <div
+          className={
+            'mdl-textfield mdl-js-textfield' +
+            (floatingLabel ? ' mdl-textfield--floating-label' : '') +
+            (className ? ` ${className}` : '')
+          }
+      >
+        {rows > 1 ?
+          <textarea
+              className="mdl-textfield__input"
+              id={id}
+              {...props}
+          /> :
+          <input
+              className="mdl-textfield__input"
+              id={id}
+              {...props}
+          />
         }
-    >
-      <input
-          className="mdl-textfield__input"
-          disabled={this.props.disabled}
-          id={this.props.id}
-          onChange={this.props.onChange}
-          required={this.props.required}
-          type={this.props.type}
-          value={this.props.value}
-      />
-      <label className="mdl-textfield__label" htmlFor={this.props.id}>
-        {this.props.label}
-      </label>
-    </div>
-  );
+        <label className="mdl-textfield__label" htmlFor={id}>
+          {label}
+        </label>
+      </div>
+    );
+  }
 }
 
 export default mdl(Input);
