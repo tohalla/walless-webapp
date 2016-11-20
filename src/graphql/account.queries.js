@@ -4,8 +4,6 @@ import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
 
-export {accountFragment, roleRightsFragment, getActiveAccount};
-
 const accountFragment = createFragment(gql`
   fragment accountInformation on Account {
     id
@@ -59,3 +57,5 @@ const getActiveAccount = graphql(
     }
   }
 );
+
+export {accountFragment, roleRightsFragment, getActiveAccount};

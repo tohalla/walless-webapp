@@ -1,10 +1,16 @@
 import {graphql} from 'react-apollo';
+import {createFragment} from 'apollo-client';
 import gql from 'graphql-tag';
 import {hasIn} from 'lodash/fp';
 
 import authenticationHandler from 'util/auth';
 
-export {getMyRestaurants};
+const restaurantFragment = createFragment(gql`
+  fragment restaurantInfo on Restaurant {
+    id
+    name
+  }
+`);
 
 const getMyRestaurants = graphql(
   gql`
@@ -14,8 +20,7 @@ const getMyRestaurants = graphql(
           edges {
             node {
               restaurantByRestaurant {
-                id
-                name
+                ...restaurantInfo
               }
             }
           }
@@ -25,9 +30,9 @@ const getMyRestaurants = graphql(
   `,
   {
     skip: (ownProps) => !authenticationHandler.isAuthenticated,
-    // options: {
-    //   fragments: [roleRightsFragment]
-    // },
+    options: {
+      fragments: [restaurantFragment]
+    },
     props: ({ownProps, data: {getActiveAccount}}) => {
       if (!hasIn(
         [
@@ -47,3 +52,5 @@ const getMyRestaurants = graphql(
     }
   }
 );
+
+export {getMyRestaurants, restaurantFragment};

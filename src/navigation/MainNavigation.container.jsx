@@ -4,8 +4,6 @@ import {compose} from 'react-apollo';
 
 import {getActiveAccount} from 'graphql/account.queries';
 
-console.log(getActiveAccount);
-
 const menuItems = [
   {
     path: '/',

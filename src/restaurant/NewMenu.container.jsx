@@ -46,10 +46,10 @@ export default class NewMenu extends React.Component {
             value={description}
         />
         <div>
-          <Button colored type="submit">
+          <Button colored raised type="submit">
             {t('restaurant.menus.creation.create')}
           </Button>
-          <Button accent type="reset">
+          <Button accent raised type="reset">
             {t('restaurant.menus.creation.cancel')}
           </Button>
         </div>
