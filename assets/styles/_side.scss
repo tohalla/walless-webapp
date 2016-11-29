@@ -7,7 +7,7 @@ $side-navigation-link-background-color-hover: lighten($side-navigation-link-back
 
 .side {
   display: flex;
-  flex: 1;
+  flex: 1 0 auto;
 }
 .side--outer-container {
   flex: 1 0 auto;

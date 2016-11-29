@@ -1,15 +1,19 @@
 import React from 'react';
+import {compose} from 'react-apollo';
 
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
+import {createMenu} from 'graphql/restaurant/menu.mutations';
+import {getActiveAccount} from 'graphql/account.queries';
 
-export default class NewMenu extends React.Component {
+class NewMenu extends React.Component {
   static contextTypes = {
     t: React.PropTypes.func
   };
   static propTypes = {
-    onSubmit: React.PropTypes.func,
-    onCancel: React.PropTypes.func
+    onMenuCreated: React.PropTypes.func.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
+    createMenu: React.PropTypes.func.isRequired
   };
   state = {
     name: '',
@@ -21,7 +25,17 @@ export default class NewMenu extends React.Component {
   }
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit;
+    const {createMenu, me, onMenuCreated} = this.props;
+    createMenu(Object.assign(
+      {},
+      this.state,
+      {createdBy: me.id}
+    ))
+    .then(() => onMenuCreated());
+  }
+  handleCancel = e => {
+    e.preventDefault();
+    this.props.onCancel();
   }
   render() {
     const {t} = this.context;
@@ -46,10 +60,10 @@ export default class NewMenu extends React.Component {
             value={description}
         />
         <div>
-          <Button colored raised type="submit">
+          <Button colored onClick={this.handleSubmit} raised type="submit">
             {t('restaurant.menus.creation.create')}
           </Button>
-          <Button accent raised type="reset">
+          <Button accent onClick={this.handleCancel} raised type="reset">
             {t('restaurant.menus.creation.cancel')}
           </Button>
         </div>
@@ -57,3 +71,8 @@ export default class NewMenu extends React.Component {
     );
   }
 }
+
+export default compose(
+  createMenu,
+  getActiveAccount
+)(NewMenu);

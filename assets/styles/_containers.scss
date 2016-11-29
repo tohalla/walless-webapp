@@ -8,3 +8,20 @@
     margin-top: 1rem;
   }
 }
+
+.container__item {
+  display: flex;
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  & + .container__item {
+    border-top: 1px solid $iron;
+  }
+  &__content {
+    flex: 1 0 auto;
+  }
+  &__actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-end;
+  }
+}

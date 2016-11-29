@@ -49,7 +49,7 @@ module.exports = {
     'react/jsx-curly-spacing': 2,
     'react/jsx-indent-props': 2,
     'react/jsx-key': 2,
-    'react/jsx-max-props-per-line': [2, {maximum: 3}],
+    'react/jsx-max-props-per-line': [2, {maximum: 5}],
     'react/jsx-no-bind': 2,
     'react/jsx-no-duplicate-props': 2,
     'react/jsx-no-literals': 2,

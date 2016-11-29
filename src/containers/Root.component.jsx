@@ -36,7 +36,7 @@ class Root extends React.Component {
         <UserNavigation />
       </div>
       <main className="mdl-layout__content">
-        <div className="flex">
+        <div className="page-content">
           {this.props.children}
         </div>
         <footer className="mdl-mini-footer" />

@@ -1,17 +1,22 @@
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 
-export {createMenu};
-
 const createMenu = graphql(
   gql`
-    mutation createMenu {
-
+  mutation createMenu($menu: CreateMenuInput!) {
+    createMenu(input: $menu) {
+      menu {
+        name
+        description
+        id
+      }
     }
+  }
   `, {
     props: ({mutate}) => ({
-      submit: (name, description) => mutate({variables: {name, description}})
+      createMenu: menu => mutate({variables: {menu: {menu}}})
     })
   }
 );
 
+export {createMenu};
