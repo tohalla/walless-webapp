@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import Select from 'react-select';
 import {Link} from 'react-router';
+import {find} from 'lodash/fp';
 
 import WithSideBar from 'containers/WithSideBar.component';
 import {getMyRestaurants} from 'graphql/restaurant/restaurant.queries';
@@ -38,7 +39,9 @@ class Restaurant extends React.Component {
       children,
       router: {location}
     } = this.props;
-    const restaurant = Number(routeParams.restaurant);
+    const restaurant = find(restaurant =>
+      restaurant.id === Number(routeParams.restaurant)
+    )(myRestaurants);
     const menuItems = [
       {
         path: 'menus',
@@ -79,8 +82,8 @@ class Restaurant extends React.Component {
                         label: value.name
                       }))
                     }
-                    resetValue={restaurant}
-                    value={restaurant}
+                    resetValue={restaurant.id}
+                    value={restaurant.id}
                 />
                 <nav className="side__navigation mdl-navigation">
                   {
@@ -90,12 +93,12 @@ class Restaurant extends React.Component {
                             'side__navigation__link mdl-navigation__link'
                             + (
                               location.pathname.indexOf(
-                                `/restaurant/${restaurant}/${item.path}`
+                                `/restaurant/${restaurant.id}/${item.path}`
                               ) === 0 ? ' side__navigation__link--active' : ''
                             )
                           }
                           key={index}
-                          to={`/restaurant/${restaurant}/${item.path}`}
+                          to={`/restaurant/${restaurant.id}/${item.path}`}
                       >
                         {t(item.translationKey)}
                       </Link>
@@ -105,7 +108,9 @@ class Restaurant extends React.Component {
               </div>
             }
         >
-          {children}
+          {React.Children.map(children, child =>
+            React.cloneElement(child, {restaurant})
+          )}
         </WithSideBar>
       );
     }

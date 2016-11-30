@@ -1,20 +1,15 @@
 import React from 'react';
-import {compose} from 'react-apollo';
 
-import {getActiveAccount} from 'graphql/account.queries';
 import Authenticate from 'account/Authenticate.component';
 
-class UserNavigation extends React.Component {
+export default class UserNavigation extends React.Component {
   static contextTypes = {
     t: React.PropTypes.func,
-    authenticationHandler: React.PropTypes.object
-  };
-  static propTypes = {
+    authenticationHandler: React.PropTypes.object,
     me: React.PropTypes.object
-  }
+  };
   render() {
-    const {t, authenticationHandler} = this.context;
-    const {me} = this.props;
+    const {t, authenticationHandler, me} = this.context;
     return (
       <nav className="mdl-navigation">
         {me ?
@@ -38,7 +33,3 @@ class UserNavigation extends React.Component {
     );
   }
 }
-
-export default compose(
-  getActiveAccount
-)(UserNavigation);

@@ -5,22 +5,22 @@ import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
 
-const menuFragment = createFragment(gql`
-  fragment menuInfo on Menu {
+const menuItemFragment = createFragment(gql`
+  fragment menuItemInfo on MenuItem {
     id
     name
     description
   }
 `);
 
-const getMenus = graphql(
+const getMenuItems = graphql(
   gql`
     query restaurantById($id: Int!) {
       restaurantById(id: $id) {
-        menusByRestaurant {
+        menuItemsByRestaurant {
           edges {
             node {
-              ...menuInfo
+              ...menuItemInfo
             }
           }
         }
@@ -32,20 +32,20 @@ const getMenus = graphql(
       variables: {
         id: ownProps.restaurant.id
       },
-      fragments: [menuFragment]
+      fragments: [menuItemFragment]
     }),
     props: ({ownProps, data}) => {
       const {restaurantById, ...rest} = data;
       if (!hasIn(
         [
-          'menusByRestaurant',
+          'menuItemsByRestaurant',
           'edges'
         ])(restaurantById)
       ) {
         return {data: rest};
       }
       return {
-        menus: restaurantById.menusByRestaurant.edges
+        menus: restaurantById.menuItemsByRestaurant.edges
           .map(edge => edge.node),
         data: rest
       };
@@ -53,4 +53,4 @@ const getMenus = graphql(
   }
 );
 
-export {menuFragment, getMenus};
+export {menuItemFragment, getMenuItems};

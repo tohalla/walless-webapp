@@ -1,10 +1,12 @@
 import React from 'react';
+import {compose} from 'react-apollo';
 
 import MainNavigation from 'navigation/MainNavigation.container';
 import UserNavigation from 'navigation/UserNavigation.container';
 import mdl from 'mdl/mdl';
 import authenticationHandler from 'util/auth';
 import DevTools from 'DevTools';
+import {getActiveAccount} from 'graphql/account.queries';
 
 class Root extends React.Component {
   static propTypes = {
@@ -14,10 +16,12 @@ class Root extends React.Component {
     ])
   };
   static childContextTypes = {
-    authenticationHandler: React.PropTypes.object
+    authenticationHandler: React.PropTypes.object,
+    me: React.PropTypes.object
   };
   getChildContext = () => ({
-    authenticationHandler
+    authenticationHandler,
+    me: this.props.me
   });
   render = () => (
     <div className="site mdl-layout mdl-js-layout mdl-layout--no-desktop-drawer-button">
@@ -46,4 +50,6 @@ class Root extends React.Component {
   );
 }
 
-export default mdl(Root);
+export default compose(
+  getActiveAccount
+)(mdl(Root));

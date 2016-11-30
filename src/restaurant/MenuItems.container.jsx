@@ -1,17 +1,17 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 
-import NewMenu from 'restaurant/NewMenu.container';
+import NewMenuItem from 'restaurant/NewMenuItem.container';
 import Button from 'mdl/Button.component';
-import {getMenus} from 'graphql/restaurant/menu.queries';
-import Menu from 'restaurant/Menu.component';
+import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
 
-class RestaurantMenus extends React.Component {
+class MenuItems extends React.Component {
   static contextTypes = {
     t: React.PropTypes.func
   };
   static PropTypes = {
-    menus: React.PropTypes.arrayOf(React.PropTypes.object)
+    menuItems: React.PropTypes.arrayOf(React.PropTypes.object),
+    restaurant: React.PropTypes.object.isRequired
   }
   state = {
     action: null
@@ -19,15 +19,15 @@ class RestaurantMenus extends React.Component {
   handleActionChange = e => {
     this.setState({action: e.target.id});
   }
-  resetAction = e => {
+  resetAction = () => {
     this.setState({action: null});
   }
-  handleMenuCreated = () => {
+  handleMenuItemCreated = () => {
     this.setState({action: null});
     this.props.data.refetch();
   }
   render() {
-    const {menus} = this.props;
+    const {menuItems, restaurant} = this.props;
     const {action} = this.state;
     const returnButton = (
       <Button
@@ -43,15 +43,16 @@ class RestaurantMenus extends React.Component {
       <div>
         <div className="container">
           {
-            action === 'newMenu' ?
+            action === 'new' ?
               <div>
                 {returnButton}
-                <NewMenu
+                <NewMenuItem
                     onCancel={this.resetAction}
-                    onMenuCreated={this.handleMenuCreated}
+                    onCreated={this.handleMenuCreated}
+                    restaurant={restaurant}
                 />
               </div>
-            : action === 'filterMenus' ?
+            : action === 'filter' ?
               <div>
                 {returnButton}
               </div>
@@ -59,28 +60,29 @@ class RestaurantMenus extends React.Component {
               <div>
                 <Button
                     colored
-                    id="newMenu"
+                    id="new"
                     onClick={this.handleActionChange}
                     type="button"
                 >
-                  {'Create new menu'}
+                  {'Create new item'}
                 </Button>
                 <Button
                     colored
-                    id="filterMenus"
+                    id="filter"
                     onClick={this.handleActionChange}
                     type="button"
                 >
-                  {'Filter menus'}
+                  {'Filter items'}
                 </Button>
               </div>
           }
         </div>
         <div className="container">
-          {menus && menus.length ?
-            menus.map((menu, index) =>
-              <Menu key={index} menu={menu} />
-            ) : 'no menus'
+          {menuItems && menuItems.length ?
+            menuItems.map((menuItem, index) =>
+              // <menuItem key={index} menuItem={menuItem} />
+              'item'
+            ) : 'no menu items'
           }
         </div>
       </div>
@@ -89,5 +91,5 @@ class RestaurantMenus extends React.Component {
 }
 
 export default compose(
-  getMenus
-)(RestaurantMenus);
+  getMenuItems
+)(MenuItems);
