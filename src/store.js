@@ -2,10 +2,12 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 
 import apolloClient from 'apolloClient';
 import DevTools from 'DevTools';
+import notifications from 'notifications/notification';
 
 const store = createStore(
   combineReducers({
-    apollo: apolloClient.reducer()
+    apollo: apolloClient.reducer(),
+    notifications
   }),
   {},
   compose(

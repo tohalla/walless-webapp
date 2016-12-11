@@ -26,11 +26,6 @@ class NewMenu extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const {createMenu, restaurant, onCreated} = this.props;
-    console.log(Object.assign(
-      {},
-      this.state,
-      {restaurant: restaurant.id}
-    ));
     createMenu(Object.assign(
       {},
       this.state,

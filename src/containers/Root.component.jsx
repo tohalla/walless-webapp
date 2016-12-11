@@ -3,6 +3,7 @@ import {compose} from 'react-apollo';
 
 import MainNavigation from 'navigation/MainNavigation.container';
 import UserNavigation from 'navigation/UserNavigation.container';
+import Notifications from 'notifications/Notifications.component';
 import mdl from 'mdl/mdl';
 import authenticationHandler from 'util/auth';
 import DevTools from 'DevTools';
@@ -25,6 +26,7 @@ class Root extends React.Component {
   });
   render = () => (
     <div className="site mdl-layout mdl-js-layout mdl-layout--no-desktop-drawer-button">
+      <Notifications />
       <div className="mdl-layout__header">
         <div className="mdl-layout__header-row">
           <span className="mdl-layout-title">{'Ulosko'}</span>

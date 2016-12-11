@@ -1,0 +1,30 @@
+$alert: unquote('rgb(#{$palette-red-600})');
+$success: unquote('rgb(#{$palette-green-600})');
+$warning: unquote('rgb(#{$palette-orange-600})');
+
+.notifications__container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: $z-index-notifications;
+}
+.notification {
+  float: right;
+  color: $white;
+  padding: 0.5rem 1.5rem;
+  .notification__content, .notification__actions {
+    display: inline-block;
+    & + * {
+      margin-left: 0.5rem;
+    }
+  }
+  &--success {
+    background: $success;
+  }
+  &--alert {
+    background: $alert;
+  }
+  &--warning {
+    background: $warning;
+  }
+}

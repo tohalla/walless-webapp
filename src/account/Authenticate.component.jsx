@@ -1,10 +1,12 @@
 import React from 'react';
 import {Link} from 'react-router';
+import {connect} from 'react-redux';
 import ClickOutside from 'react-click-outside';
 
 import Input from 'mdl/Input.component';
+import {addNotification} from 'notifications/notification';
 
-export default class Login extends React.Component {
+class Authenticate extends React.Component {
   static contextTypes = {
     t: React.PropTypes.func,
     authenticationHandler: React.PropTypes.object
@@ -23,10 +25,12 @@ export default class Login extends React.Component {
     this.context.authenticationHandler.authenticate(
       this.state.email,
       this.state.password
-    );
-    this.setState({
-      showLogin: false, email: '', password: ''
-    });
+    )
+      .then(r => console.log(r))
+      .catch(() => this.props.addNotification({
+        type: 'alert',
+        content: 'login failed'
+      }));
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -83,3 +87,8 @@ export default class Login extends React.Component {
     );
   }
 }
+
+export default connect(
+  null, {addNotification}
+)(Authenticate);
+
