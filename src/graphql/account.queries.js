@@ -1,10 +1,9 @@
 import {graphql} from 'react-apollo';
-import {createFragment} from 'apollo-client';
 import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
 
-const accountFragment = createFragment(gql`
+const accountFragment = gql`
   fragment accountInformation on Account {
     id
     firstName
@@ -13,9 +12,9 @@ const accountFragment = createFragment(gql`
       email
     }
   }
-`);
+`;
 
-const roleRightsFragment = createFragment(gql`
+const roleRightsFragment = gql`
   fragment roleRights on RestaurantRoleRight {
     id
     allowAddPromotion
@@ -32,7 +31,7 @@ const roleRightsFragment = createFragment(gql`
     allowAlterRestaurantRoles
     allowMapRoles
   }
-`);
+`;
 
 const getActiveAccount = graphql(
   gql`
@@ -41,12 +40,10 @@ const getActiveAccount = graphql(
         ...accountInformation
       }
     }
+    ${accountFragment}
   `,
   {
     skip: (ownProps) => !authenticationHandler.isAuthenticated,
-    options: {
-      fragments: [accountFragment]
-    },
     props: ({ownProps, data: {getActiveAccount}}) => {
       if (!getActiveAccount)
         return null;

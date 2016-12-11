@@ -1,16 +1,15 @@
 import {graphql} from 'react-apollo';
-import {createFragment} from 'apollo-client';
 import gql from 'graphql-tag';
 import {hasIn} from 'lodash/fp';
 
 import authenticationHandler from 'util/auth';
 
-const restaurantFragment = createFragment(gql`
+const restaurantFragment = gql`
   fragment restaurantInfo on Restaurant {
     id
     name
   }
-`);
+`;
 
 const getMyRestaurants = graphql(
   gql`
@@ -27,12 +26,10 @@ const getMyRestaurants = graphql(
         }
       }
     }
+    ${restaurantFragment}
   `,
   {
     skip: (ownProps) => !authenticationHandler.isAuthenticated,
-    options: {
-      fragments: [restaurantFragment]
-    },
     props: ({ownProps, data: {getActiveAccount}}) => {
       if (!hasIn(
         [
