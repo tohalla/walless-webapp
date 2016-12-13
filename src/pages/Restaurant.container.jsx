@@ -65,7 +65,7 @@ class Restaurant extends React.Component {
     const restaurant = find(restaurant =>
       restaurant.id === Number(routeParams.restaurant)
     )(myRestaurants);
-    if (myRestaurants && myRestaurants.length) {
+    if (restaurant && myRestaurants && myRestaurants.length) {
       return (
         <WithSideBar
             sideContent={

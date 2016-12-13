@@ -20,7 +20,7 @@ export const authenticate = async (email: string, password: string) => {
   if (response.status === 200) {
     return (await response.json()).token;
   }
-  return new Error(await response.json());
+  throw new Error(await response.json());
 };
 
 function AuthenticationHandler() {
@@ -28,9 +28,6 @@ function AuthenticationHandler() {
   this.authenticate = async (email: string, password: string) => {
     Cookie.remove('Authorization');
     const token = await authenticate(email, password);
-    if (token instanceof Error) {
-      return token;
-    }
     Cookie.set('Authorization', token);
     window.location.reload();
   };

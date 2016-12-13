@@ -27,7 +27,6 @@ class Authenticate extends React.Component {
       this.state.email,
       this.state.password
     )
-      .then(r => console.log(r))
       .catch(() => this.props.addNotification({
         type: 'alert',
         content: 'login failed'

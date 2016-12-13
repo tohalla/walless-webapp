@@ -48,7 +48,7 @@ class MenuItems extends React.Component {
                 {returnButton}
                 <NewMenuItem
                     onCancel={this.resetAction}
-                    onCreated={this.handleMenuCreated}
+                    onCreated={this.handleMenuItemCreated}
                     restaurant={restaurant}
                 />
               </div>
