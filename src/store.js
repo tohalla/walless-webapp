@@ -1,5 +1,6 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
+import {routerReducer} from 'react-router-redux';
 
 import apolloClient from 'apolloClient';
 import DevTools from 'DevTools';
@@ -7,7 +8,8 @@ import notifications from 'notifications/notification';
 import translation from 'util/translation';
 
 const util = combineReducers({
-  translation
+  translation,
+  routing: routerReducer
 });
 
 const store = createStore(

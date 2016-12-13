@@ -1,6 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
+import {compose} from 'react-apollo';
+
+import {getActiveAccount} from 'graphql/account.queries';
 
 const menuItems = [
   {
@@ -27,16 +30,21 @@ const menuItems = [
   }
 ];
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  t: state.util.translation.t,
+  routing: state.util.routing
+});
 
 class MainNavigation extends React.Component {
   static contextTypes = {
-    router: React.PropTypes.object.isRequired,
-    me: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
+  }
+  shouldComponentUpdate() {
+    return true;
   }
   render() {
-    const {router: {location}, me} = this.context;
-    const {t} = this.props;
+    const {router: {location}} = this.context;
+    const {t, me} = this.props;
     return (
       <nav className="mdl-navigation main-navigation">
         {
@@ -63,4 +71,6 @@ class MainNavigation extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, {})(MainNavigation);
+export default compose(
+  getActiveAccount
+)(connect(mapStateToProps, {})(MainNavigation));

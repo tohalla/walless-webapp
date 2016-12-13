@@ -1,5 +1,4 @@
 import React from 'react';
-import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 
 import MainNavigation from 'navigation/MainNavigation.component';
@@ -8,7 +7,6 @@ import Notifications from 'notifications/Notifications.component';
 import mdl from 'mdl/mdl';
 import authenticationHandler from 'util/auth';
 import DevTools from 'DevTools';
-import {getActiveAccount} from 'graphql/account.queries';
 import {setLanguage} from 'util/translation';
 
 class Root extends React.Component {
@@ -19,16 +17,14 @@ class Root extends React.Component {
     ])
   };
   static childContextTypes = {
-    authenticationHandler: React.PropTypes.object,
-    me: React.PropTypes.object
+    authenticationHandler: React.PropTypes.object
   };
   constructor(props, context) {
     super(props, context);
     props.setLanguage('en');
   }
   getChildContext = () => ({
-    authenticationHandler,
-    me: this.props.me
+    authenticationHandler
   });
   render = () => (
     <div className="site mdl-layout mdl-js-layout mdl-layout--no-desktop-drawer-button">
@@ -58,8 +54,4 @@ class Root extends React.Component {
   );
 }
 
-export default compose(
-  getActiveAccount
-)(mdl(
-  connect(null, {setLanguage})(Root)
-));
+export default connect(null, {setLanguage})(mdl(Root));

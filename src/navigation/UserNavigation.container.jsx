@@ -1,18 +1,19 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {compose} from 'react-apollo';
 
 import Authenticate from 'account/Authenticate.component';
+import {getActiveAccount} from 'graphql/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class UserNavigation extends React.Component {
   static contextTypes = {
-    authenticationHandler: React.PropTypes.object,
-    me: React.PropTypes.object
+    authenticationHandler: React.PropTypes.object
   };
   render() {
-    const {authenticationHandler, me} = this.context;
-    const {t} = this.props;
+    const {authenticationHandler} = this.context;
+    const {t, me} = this.props;
     return (
       <nav className="mdl-navigation">
         {me ?
@@ -37,4 +38,6 @@ class UserNavigation extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, {})(UserNavigation);
+export default compose(
+  getActiveAccount
+)(connect(mapStateToProps, {})(UserNavigation));

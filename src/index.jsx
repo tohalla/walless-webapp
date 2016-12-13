@@ -1,4 +1,3 @@
-// @flow
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -9,6 +8,7 @@ import {
   browserHistory
 } from 'react-router';
 import {ApolloProvider} from 'react-apollo';
+import {syncHistoryWithStore} from 'react-router-redux';
 
 import Root from 'containers/Root.component';
 import Home from 'pages/Home.component';
@@ -18,9 +18,15 @@ import MenuItems from 'restaurant/MenuItems.container';
 import apolloClient from 'apolloClient';
 import store from 'store';
 
+const history = syncHistoryWithStore(
+  browserHistory,
+  store,
+  {selectLocationState: state => state.util.routing}
+);
+
 ReactDOM.render((
   <ApolloProvider client={apolloClient} store={store}>
-    <Router history={browserHistory}>
+    <Router history={history}>
       <Route component={Root} path="/">
         <IndexRoute component={Home} />
         <Route component={Restaurant} path="restaurant(/:restaurant)">
