@@ -1,15 +1,18 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import Authenticate from 'account/Authenticate.component';
 
-export default class UserNavigation extends React.Component {
+const mapStateToProps = state => ({t: state.util.translation.t});
+
+class UserNavigation extends React.Component {
   static contextTypes = {
-    t: React.PropTypes.func,
     authenticationHandler: React.PropTypes.object,
     me: React.PropTypes.object
   };
   render() {
-    const {t, authenticationHandler, me} = this.context;
+    const {authenticationHandler, me} = this.context;
+    const {t} = this.props;
     return (
       <nav className="mdl-navigation">
         {me ?
@@ -33,3 +36,5 @@ export default class UserNavigation extends React.Component {
     );
   }
 }
+
+export default connect(mapStateToProps, {})(UserNavigation);

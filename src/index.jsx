@@ -15,14 +15,11 @@ import Home from 'pages/Home.component';
 import Restaurant from 'pages/Restaurant.container';
 import Menus from 'restaurant/Menus.container';
 import MenuItems from 'restaurant/MenuItems.container';
-import {updateTranslations} from 'util/translation';
-import TranslationWrapper from 'util/TranslationWrapper.component';
 import apolloClient from 'apolloClient';
 import store from 'store';
 
 ReactDOM.render((
-  <TranslationWrapper polyglot={updateTranslations('en')}>
-    <ApolloProvider client={apolloClient} store={store}>
+  <ApolloProvider client={apolloClient} store={store}>
     <Router history={browserHistory}>
       <Route component={Root} path="/">
         <IndexRoute component={Home} />
@@ -38,8 +35,7 @@ ReactDOM.render((
         <Route path="settings" />
       </Route>
     </Router>
-    </ApolloProvider>
-  </TranslationWrapper>
+  </ApolloProvider>
   ), document.getElementById('app')
 );
 

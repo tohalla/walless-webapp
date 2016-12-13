@@ -12,11 +12,12 @@ module.exports = {
     'import'
   ],
   ecmaFeatures: {
-    jsx: true,
+    jsx: true
   },
   env: {
     browser: true,
-    node: true
+    node: true,
+    es6: true
   },
   settings: {'import/resolver': {'node': {'extensions': ['.js', '.jsx']}}},
   parser: 'babel-eslint',

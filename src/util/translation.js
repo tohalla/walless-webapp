@@ -10,12 +10,31 @@ export const languages = getLanguages();
 
 const polyglot = new Polyglot();
 
-export const updateTranslations = async (language: string) => {
+const FETCH_TRANSLATIONS = 'FETCH_TRANSLATIONS';
+const SET_TRANSLATIONS = 'SET_TRANSLATIONS';
+
+export default (state: Object = {t: () => polyglot.t}, action: Object) =>
+  action.type === FETCH_TRANSLATIONS ? {
+    isFetching: true,
+    t: () => ''
+  }
+  : action.type === SET_TRANSLATIONS ? {
+    t: action.payload.t
+  }
+  : state;
+
+export const setLanguage = (langCode: string) => async (dispatch: Function) => {
+  dispatch({
+    type: FETCH_TRANSLATIONS
+  });
   const translations = await (
-    await fetch(`${translationsUrl}/${language}`)
+    await fetch(`${translationsUrl}/${langCode}`)
   ).json();
   polyglot.replace(translations);
-  return polyglot;
+  dispatch({
+    type: SET_TRANSLATIONS,
+    payload: {
+      t: (key, interpolarisations) => polyglot.t(key, interpolarisations)
+    }
+  });
 };
-
-export default polyglot;

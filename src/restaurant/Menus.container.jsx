@@ -7,9 +7,6 @@ import {getMenus} from 'graphql/restaurant/menu.queries';
 import Menu from 'restaurant/Menu.component';
 
 class Menus extends React.Component {
-  static contextTypes = {
-    t: React.PropTypes.func
-  };
   static PropTypes = {
     menus: React.PropTypes.arrayOf(React.PropTypes.object),
     restaurant: React.PropTypes.object.isRequired

@@ -1,14 +1,14 @@
 import React from 'react';
 import {compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {createMenu} from 'graphql/restaurant/menu.mutations';
 
-class NewMenu extends React.Component {
-  static contextTypes = {
-    t: React.PropTypes.func
-  };
+const mapStateToProps = state => ({t: state.util.translation.t});
+
+class NewMenuItem extends React.Component {
   static propTypes = {
     onCreated: React.PropTypes.func.isRequired,
     onCancel: React.PropTypes.func.isRequired,
@@ -38,7 +38,7 @@ class NewMenu extends React.Component {
     this.props.onCancel();
   }
   render() {
-    const {t} = this.context;
+    const {t} = this.props;
     const {description, name} = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
@@ -74,4 +74,4 @@ class NewMenu extends React.Component {
 
 export default compose(
   createMenu
-)(NewMenu);
+)(connect(mapStateToProps, {})(NewMenuItem));

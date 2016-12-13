@@ -3,15 +3,37 @@ import {compose} from 'react-apollo';
 import Select from 'react-select';
 import {Link} from 'react-router';
 import {find} from 'lodash/fp';
+import {connect} from 'react-redux';
 
 import WithSideBar from 'containers/WithSideBar.component';
 import {getMyRestaurants} from 'graphql/restaurant/restaurant.queries';
 
+const mapStateToProps = state => ({t: state.util.translation.t});
+
+const menuItems = [
+  {
+    path: 'menus',
+    translationKey: 'restaurant.menus'
+  },
+  {
+    path: 'menuitems',
+    translationKey: 'restaurant.menuItems'
+  },
+  {
+    path: 'users',
+    translationKey: 'restaurant.users'
+  },
+  {
+    path: 'settings',
+    translationKey: 'restaurant.settings'
+  },
+  {
+    path: 'dashboard',
+    translationKey: 'restaurant.dashboard'
+  }
+];
 
 class Restaurant extends React.Component {
-  static contextTypes = {
-    t: React.PropTypes.func
-  };
   static propTypes = {
     me: React.PropTypes.object,
     children: React.PropTypes.oneOfType([
@@ -37,34 +59,12 @@ class Restaurant extends React.Component {
       myRestaurants,
       routeParams,
       children,
+      t,
       router: {location}
     } = this.props;
     const restaurant = find(restaurant =>
       restaurant.id === Number(routeParams.restaurant)
     )(myRestaurants);
-    const menuItems = [
-      {
-        path: 'menus',
-        translationKey: 'restaurant.menus'
-      },
-      {
-        path: 'menuitems',
-        translationKey: 'restaurant.menuItems'
-      },
-      {
-        path: 'users',
-        translationKey: 'restaurant.users'
-      },
-      {
-        path: 'settings',
-        translationKey: 'restaurant.settings'
-      },
-      {
-        path: 'dashboard',
-        translationKey: 'restaurant.dashboard'
-      }
-    ];
-    const {t} = this.context;
     if (myRestaurants && myRestaurants.length) {
       return (
         <WithSideBar
@@ -120,4 +120,4 @@ class Restaurant extends React.Component {
 
 export default compose(
   getMyRestaurants
-)(Restaurant);
+)(connect(mapStateToProps, {})(Restaurant));

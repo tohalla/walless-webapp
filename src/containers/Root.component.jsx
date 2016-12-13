@@ -1,5 +1,6 @@
 import React from 'react';
 import {compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import MainNavigation from 'navigation/MainNavigation.component';
 import UserNavigation from 'navigation/UserNavigation.container';
@@ -8,6 +9,7 @@ import mdl from 'mdl/mdl';
 import authenticationHandler from 'util/auth';
 import DevTools from 'DevTools';
 import {getActiveAccount} from 'graphql/account.queries';
+import {setLanguage} from 'util/translation';
 
 class Root extends React.Component {
   static propTypes = {
@@ -20,6 +22,10 @@ class Root extends React.Component {
     authenticationHandler: React.PropTypes.object,
     me: React.PropTypes.object
   };
+  constructor(props, context) {
+    super(props, context);
+    props.setLanguage('en');
+  }
   getChildContext = () => ({
     authenticationHandler,
     me: this.props.me
@@ -54,4 +60,6 @@ class Root extends React.Component {
 
 export default compose(
   getActiveAccount
-)(mdl(Root));
+)(mdl(
+  connect(null, {setLanguage})(Root)
+));

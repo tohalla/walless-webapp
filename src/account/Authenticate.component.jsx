@@ -6,9 +6,10 @@ import ClickOutside from 'react-click-outside';
 import Input from 'mdl/Input.component';
 import {addNotification} from 'notifications/notification';
 
+const mapStateToProps = state => ({t: state.util.translation.t});
+
 class Authenticate extends React.Component {
   static contextTypes = {
-    t: React.PropTypes.func,
     authenticationHandler: React.PropTypes.object
   };
   state = {
@@ -37,7 +38,7 @@ class Authenticate extends React.Component {
     this.setState({[id]: value});
   };
   render() {
-    const t = this.context.t;
+    const {t} = this.props;
     const {email, password, showLogin} = this.state;
     return showLogin ? (
       <div>
@@ -89,6 +90,6 @@ class Authenticate extends React.Component {
 }
 
 export default connect(
-  null, {addNotification}
+  mapStateToProps, {addNotification}
 )(Authenticate);
 

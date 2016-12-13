@@ -1,14 +1,14 @@
 import React from 'react';
 import {compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import NewMenuItem from 'restaurant/NewMenuItem.container';
 import Button from 'mdl/Button.component';
 import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
 
+const mapStateToProps = state => ({t: state.util.translation.t});
+
 class MenuItems extends React.Component {
-  static contextTypes = {
-    t: React.PropTypes.func
-  };
   static PropTypes = {
     menuItems: React.PropTypes.arrayOf(React.PropTypes.object),
     restaurant: React.PropTypes.object.isRequired
@@ -92,4 +92,4 @@ class MenuItems extends React.Component {
 
 export default compose(
   getMenuItems
-)(MenuItems);
+)(connect(mapStateToProps, {})(MenuItems));

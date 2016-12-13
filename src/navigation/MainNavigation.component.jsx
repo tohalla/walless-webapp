@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import {connect} from 'react-redux';
 
 const menuItems = [
   {
@@ -26,14 +27,16 @@ const menuItems = [
   }
 ];
 
-export default class MainNavigation extends React.Component {
+const mapStateToProps = state => ({t: state.util.translation.t});
+
+class MainNavigation extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired,
-    me: React.PropTypes.object,
-    t: React.PropTypes.func
+    me: React.PropTypes.object
   }
   render() {
-    const {t, router: {location}, me} = this.context;
+    const {router: {location}, me} = this.context;
+    const {t} = this.props;
     return (
       <nav className="mdl-navigation main-navigation">
         {
@@ -60,3 +63,4 @@ export default class MainNavigation extends React.Component {
   }
 }
 
+export default connect(mapStateToProps, {})(MainNavigation);
