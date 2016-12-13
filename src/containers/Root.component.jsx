@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 
-import MainNavigation from 'navigation/MainNavigation.container';
+import MainNavigation from 'navigation/MainNavigation.component';
 import UserNavigation from 'navigation/UserNavigation.container';
 import Notifications from 'notifications/Notifications.component';
 import mdl from 'mdl/mdl';
