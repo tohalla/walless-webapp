@@ -9,6 +9,11 @@ const menuItemFragment = gql`
     id
     name
     description
+    restaurant
+    createdAt
+    createdBy
+    category
+    type
   }
 `;
 
@@ -44,7 +49,7 @@ const getMenuItems = graphql(
         return {data: rest};
       }
       return {
-        menus: restaurantById.menuItemsByRestaurant.edges
+        menuItems: restaurantById.menuItemsByRestaurant.edges
           .map(edge => edge.node),
         data: rest
       };

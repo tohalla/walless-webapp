@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 
+import {getActiveAccount} from 'graphql/account.queries';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {createMenu} from 'graphql/restaurant/menu.mutations';
@@ -25,11 +26,14 @@ class NewMenu extends React.Component {
   }
   handleSubmit = e => {
     e.preventDefault();
-    const {createMenu, restaurant, onCreated} = this.props;
+    const {createMenu, restaurant, onCreated, me} = this.props;
     createMenu(Object.assign(
       {},
       this.state,
-      {restaurant: restaurant.id}
+      {
+        restaurant: restaurant.id,
+        createdBy: me.id
+      }
     ))
     .then(() => onCreated());
   }
@@ -73,5 +77,6 @@ class NewMenu extends React.Component {
 }
 
 export default compose(
-  createMenu
+  createMenu,
+  getActiveAccount
 )(connect(mapStateToProps, {})(NewMenu));

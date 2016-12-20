@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
-import {createMenu} from 'graphql/restaurant/menu.mutations';
+import {createMenuItem} from 'graphql/restaurant/menuItem.mutations';
+import {getActiveAccount} from 'graphql/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -13,11 +14,14 @@ class NewMenuItem extends React.Component {
     onCreated: React.PropTypes.func.isRequired,
     onCancel: React.PropTypes.func.isRequired,
     createMenu: React.PropTypes.func.isRequired,
-    restaurant: React.PropTypes.object.isRequired
+    restaurant: React.PropTypes.object.isRequired,
+    me: React.PropTypes.object.isRequired
   };
   state = {
     name: '',
-    description: ''
+    description: '',
+    type: null,
+    category: null
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -25,11 +29,14 @@ class NewMenuItem extends React.Component {
   }
   handleSubmit = e => {
     e.preventDefault();
-    const {createMenu, restaurant, onCreated} = this.props;
+    const {createMenu, me, restaurant, onCreated} = this.props;
     createMenu(Object.assign(
       {},
       this.state,
-      {restaurant: restaurant.id}
+      {
+        restaurant: restaurant.id,
+        createdBy: me.id
+      }
     ))
     .then(() => onCreated());
   }
@@ -73,5 +80,6 @@ class NewMenuItem extends React.Component {
 }
 
 export default compose(
-  createMenu
+  createMenuItem,
+  getActiveAccount
 )(connect(mapStateToProps, {})(NewMenuItem));
