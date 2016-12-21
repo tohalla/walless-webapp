@@ -1,17 +1,25 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
+import {hasIn} from 'lodash/fp';
 
 import NewMenuItem from 'restaurant/NewMenuItem.container';
 import Button from 'mdl/Button.component';
 import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
+import MenuItem from 'restaurant/MenuItem.component';
+import FilterMenuItems from 'restaurant/FilterMenuItems.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  t: state.util.translation.t,
+  filter: hasIn(['form', 'menuItemFilter', 'values'])(state) ?
+    state.form.menuItemFilter.values : {}
+});
 
 class MenuItems extends React.Component {
   static PropTypes = {
     menuItems: React.PropTypes.arrayOf(React.PropTypes.object),
-    restaurant: React.PropTypes.object.isRequired
+    restaurant: React.PropTypes.object.isRequired,
+    action: React.PropTypes.string
   }
   state = {
     action: null
@@ -27,9 +35,14 @@ class MenuItems extends React.Component {
     this.props.data.refetch();
   }
   render() {
-    const {menuItems, restaurant} = this.props;
+    const {
+      menuItems,
+      restaurant,
+      action: forceAction,
+      filter
+    } = this.props;
     const {action} = this.state;
-    const returnButton = (
+    const returnButton = forceAction ? null : (
       <Button
           className="block"
           colored
@@ -55,7 +68,10 @@ class MenuItems extends React.Component {
             : action === 'filter' ?
               <div>
                 {returnButton}
+                <FilterMenuItems />
               </div>
+            : forceAction ?
+              null
             :
               <div>
                 <Button
@@ -79,10 +95,13 @@ class MenuItems extends React.Component {
         </div>
         <div className="container">
           {menuItems && menuItems.length ?
-            menuItems.map((menuItem, index) =>
-              // <menuItem key={index} menuItem={menuItem} />
-              'item'
-            ) : 'no menu items'
+            menuItems
+              .filter(menuItem =>
+                !filter.name || menuItem.name.indexOf(filter.name) > -1
+              )
+              .map((menuItem, index) =>
+                <MenuItem key={index} menuItem={menuItem} />
+              ) : 'no menu items'
           }
         </div>
       </div>

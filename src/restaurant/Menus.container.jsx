@@ -50,10 +50,6 @@ class Menus extends React.Component {
                     restaurant={restaurant}
                 />
               </div>
-            : action === 'filter' ?
-              <div>
-                {returnButton}
-              </div>
             :
               <div>
                 <Button
@@ -63,14 +59,6 @@ class Menus extends React.Component {
                     type="button"
                 >
                   {'Create new menu'}
-                </Button>
-                <Button
-                    colored
-                    id="filter"
-                    onClick={this.handleActionChange}
-                    type="button"
-                >
-                  {'Filter menus'}
                 </Button>
               </div>
           }

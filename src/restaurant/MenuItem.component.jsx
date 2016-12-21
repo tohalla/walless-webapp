@@ -2,12 +2,12 @@ import React from 'react';
 
 import MdlMenu from 'mdl/MdlMenu.component';
 
-export default class Menu extends React.Component {
+export default class MenuItem extends React.Component {
   static PropTypes = {
-    menu: React.PropTypes.object.isRequired
+    menuItem: React.PropTypes.object.isRequired
   }
   render() {
-    const {menu: {name, description, id}} = this.props;
+    const {menuItem: {name, description, id}} = this.props;
     return (
       <div className="container__item">
         <div className="container__item__content">
@@ -21,11 +21,11 @@ export default class Menu extends React.Component {
         <div className="container__item__actions">
           <button
               className="mdl-button mdl-js-button mdl-button--icon"
-              id={`menu-actions-${id}`}
+              id={`menu-item-actions-${id}`}
           >
             <i className="material-icons">{'more_vert'}</i>
           </button>
-          <MdlMenu htmlFor={`menu-actions-${id}`}>
+          <MdlMenu htmlFor={`menu-item-actions-${id}`}>
             <li className="mdl-menu__item">{'Delete'}</li>
           </MdlMenu>
         </div>
