@@ -3,16 +3,13 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 
 import Authenticate from 'account/Authenticate.component';
+import authenticationHandler from 'util/auth';
 import {getActiveAccount} from 'graphql/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class UserNavigation extends React.Component {
-  static contextTypes = {
-    authenticationHandler: React.PropTypes.object
-  };
   render() {
-    const {authenticationHandler} = this.context;
     const {t, me} = this.props;
     return (
       <nav className="mdl-navigation">

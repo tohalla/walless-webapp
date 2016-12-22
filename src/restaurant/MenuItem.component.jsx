@@ -7,9 +7,9 @@ export default class MenuItem extends React.Component {
     menuItem: React.PropTypes.object.isRequired
   }
   render() {
-    const {menuItem: {name, description, id}} = this.props;
+    const {menuItem: {name, description, id}, className} = this.props;
     return (
-      <div className="container__item">
+      <div className={className ? className + ' container__item' : 'container__item'}>
         <div className="container__item__content">
           <div>
             {name}

@@ -3,40 +3,53 @@ import Cookie from 'js-cookie';
 
 import config from 'config';
 
-export const authenticate = async (email: string, password: string) => {
+export const authenticate = async (payload: Object) => {
   const response = await fetch(
-    `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.authentication.endpoint}`,
+    `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.authentication.endpoint}/${payload.token ? 'renewToken' : ''}`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       },
-      body: JSON.stringify({
-        email,
-        password
-      })
+      body: JSON.stringify(payload)
     }
   );
   if (response.status === 200) {
-    return (await response.json()).token;
+    return (await response.json());
   }
   throw new Error(await response.json());
 };
 
-function AuthenticationHandler() {
-  this.isAuthenticated = Boolean(Cookie.get('Authorization'));
-  this.authenticate = async (email: string, password: string) => {
+const authenticationHandler = {
+  isAuthenticated: Boolean(Cookie.get('Authorization')),
+  authenticate: async (email: string, password: string) => {
     Cookie.remove('Authorization');
-    const token = await authenticate(email, password);
-    Cookie.set('Authorization', token);
+    Cookie.remove('Expiration');
+    const authorization = await authenticate({email, password});
+    Cookie.set('Authorization', authorization.token);
+    Cookie.set('Expiration', authorization.expiresAt);
     window.location.reload();
-  };
-  this.logout = async () => {
+  },
+  renew: async (token: string) => {
+    const authorization = await authenticate({token});
+    Cookie.set('Authorization', authorization.token);
+    Cookie.set('Expiration', authorization.expiresAt);
+  },
+  logout: async () => {
     Cookie.remove('Authorization');
+    Cookie.remove('Expiration');
     window.location.reload();
-  };
+  }
 };
 
-const authenticationHandler = new AuthenticationHandler();
+setInterval(() => {
+  if (
+    Cookie.get('Expiration') &&
+    Cookie.get('Authorization') &&
+    Cookie.get('Expiration') - Date.now() / 1000 < 600
+  ) {
+    authenticationHandler.renew(Cookie.get('Authorization'));
+  }
+}, 20000); // checks if authorization token should be renewed
 
 export default authenticationHandler;

@@ -8,6 +8,7 @@ import Button from 'mdl/Button.component';
 import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
 import MenuItem from 'restaurant/MenuItem.component';
 import FilterMenuItems from 'restaurant/FilterMenuItems.component';
+import Checkbox from 'mdl/Checkbox.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -19,7 +20,8 @@ class MenuItems extends React.Component {
   static PropTypes = {
     menuItems: React.PropTypes.arrayOf(React.PropTypes.object),
     restaurant: React.PropTypes.object.isRequired,
-    action: React.PropTypes.string
+    action: React.PropTypes.string,
+    selectable: React.PropTypes.bool
   }
   state = {
     action: null
@@ -39,7 +41,8 @@ class MenuItems extends React.Component {
       menuItems,
       restaurant,
       action: forceAction,
-      filter
+      filter,
+      selectable
     } = this.props;
     const {action} = this.state;
     const returnButton = forceAction ? null : (
@@ -100,7 +103,18 @@ class MenuItems extends React.Component {
                 !filter.name || menuItem.name.indexOf(filter.name) > -1
               )
               .map((menuItem, index) =>
-                <MenuItem key={index} menuItem={menuItem} />
+                selectable ?
+                  <div className="container__item" key={index}>
+                    <div className="container__item__actions">
+                      <Checkbox id={`select-${menuItem.id}`} />
+                    </div>
+                    <MenuItem className="container__item__content" menuItem={menuItem} />
+                  </div>
+                : <MenuItem
+                    className="container__item__content"
+                    key={index}
+                    menuItem={menuItem}
+                  />
               ) : 'no menu items'
           }
         </div>

@@ -5,13 +5,11 @@ import ClickOutside from 'react-click-outside';
 
 import Input from 'mdl/Input.component';
 import {addNotification} from 'notifications/notification';
+import authenticationHandler from 'util/auth';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class Authenticate extends React.Component {
-  static contextTypes = {
-    authenticationHandler: React.PropTypes.object
-  };
   state = {
     password: '',
     email: '',
@@ -23,7 +21,7 @@ class Authenticate extends React.Component {
     this.setState({showLogin: false});
   handleAuthentication = e => {
     e.preventDefault();
-    this.context.authenticationHandler.authenticate(
+    authenticationHandler.authenticate(
       this.state.email,
       this.state.password
     )
