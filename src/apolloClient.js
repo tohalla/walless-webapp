@@ -1,6 +1,7 @@
 import ApolloClient, {createNetworkInterface} from 'apollo-client';
 import Cookie from 'js-cookie';
 
+import authenticationHandler from 'util/auth';
 import config from 'config';
 
 const networkInterface = createNetworkInterface({
@@ -9,12 +10,16 @@ const networkInterface = createNetworkInterface({
 
 networkInterface.use([{
   applyMiddleware(req, next) {
-    if (!req.options.headers) {
-      req.options.headers = {};
-    }
-    const token = Cookie.get('Authorization');
-    if (token) {
-      req.options.headers.Authorization = `Bearer ${token}`;
+    if (Cookie.get('expiresAt') < Date.now() / 1000) {
+      authenticationHandler.logout;
+    } else {
+      if (!req.options.headers) {
+        req.options.headers = {};
+      }
+      const token = Cookie.get('Authorization');
+      if (token) {
+        req.options.headers.Authorization = `Bearer ${token}`;
+      }
     }
     next();
   }

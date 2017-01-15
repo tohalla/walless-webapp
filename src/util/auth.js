@@ -45,10 +45,14 @@ const authenticationHandler = {
 setInterval(() => {
   if (
     Cookie.get('Expiration') &&
-    Cookie.get('Authorization') &&
-    Cookie.get('Expiration') - Date.now() / 1000 < 600
+    Cookie.get('Authorization')
   ) {
-    authenticationHandler.renew(Cookie.get('Authorization'));
+    const age = Cookie.get('Expiration') - Date.now() / 1000;
+    if (age < 0) {
+      authenticationHandler.logout();
+    } else if (age < 600) {
+      authenticationHandler.renew(Cookie.get('Authorization'));
+    }
   }
 }, 20000); // checks if authorization token should be renewed
 
