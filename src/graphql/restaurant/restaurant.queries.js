@@ -30,7 +30,7 @@ const getMyRestaurants = graphql(
   `,
   {
     skip: (ownProps) => !authenticationHandler.isAuthenticated,
-    props: ({ownProps, data: {getActiveAccount}}) => {
+    props: ({ownProps, data: {getActiveAccount, ...rest}}) => {
       if (!hasIn(
         [
           'restaurantAccountsByAccount',
@@ -44,7 +44,8 @@ const getMyRestaurants = graphql(
       }
       return {
         myRestaurants: getActiveAccount.restaurantAccountsByAccount.edges
-          .map(edge => edge.node.restaurantByRestaurant)
+          .map(edge => edge.node.restaurantByRestaurant),
+        ...rest
       };
     }
   }

@@ -13,19 +13,18 @@ const filterByName = ({input, label, meta, ...rest}) => (
 
 class FilterMenuItems extends React.Component {
   render() {
-    const {handleSubmit} = this.props;
+    // const {handleSubmit} = this.props;
     return (
-      <form onSubmit={handleSubmit}>
-        <div>
-          <Field
-              component={filterByName}
-              id="filter-by-name"
-              label="Type text to filter"
-              name="name"
-              type="text"
-          />
-        </div>
-      </form>
+      <div>
+        <Field
+            autoComplete="off"
+            component={filterByName}
+            id="filter-by-name"
+            label="Type text to filter"
+            name="name"
+            type="text"
+        />
+      </div>
     );
   }
 }

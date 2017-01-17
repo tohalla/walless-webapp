@@ -21,8 +21,13 @@ class MenuItems extends React.Component {
     menuItems: React.PropTypes.arrayOf(React.PropTypes.object),
     restaurant: React.PropTypes.object.isRequired,
     action: React.PropTypes.string,
-    selectable: React.PropTypes.bool
-  }
+    allowActions: React.PropTypes.bool,
+    selectable: React.PropTypes.bool,
+    plain: React.PropTypes.bool
+  };
+  static defaultProps = {
+    allowActions: true
+  };
   state = {
     action: null
   };
@@ -38,13 +43,15 @@ class MenuItems extends React.Component {
   }
   render() {
     const {
+      allowActions,
       menuItems,
       restaurant,
       action: forceAction,
       filter,
+      plain,
       selectable
     } = this.props;
-    const {action} = this.state;
+    const action = forceAction || this.state.action;
     const returnButton = forceAction ? null : (
       <Button
           className="block"
@@ -57,7 +64,7 @@ class MenuItems extends React.Component {
     );
     return (
       <div>
-        <div className="container">
+        <div className={`container${plain ? '' : ' container--distinct'}`}>
           {
             action === 'new' ?
               <div>
@@ -73,8 +80,6 @@ class MenuItems extends React.Component {
                 {returnButton}
                 <FilterMenuItems />
               </div>
-            : forceAction ?
-              null
             :
               <div>
                 <Button
@@ -96,7 +101,7 @@ class MenuItems extends React.Component {
               </div>
           }
         </div>
-        <div className="container">
+        <div className={`container${plain ? '' : ' container--distinct'}`}>
           {menuItems && menuItems.length ?
             menuItems
               .filter(menuItem =>
@@ -111,6 +116,7 @@ class MenuItems extends React.Component {
                     <MenuItem className="container__item__content" menuItem={menuItem} />
                   </div>
                 : <MenuItem
+                    allowActions={allowActions}
                     className="container__item__content"
                     key={index}
                     menuItem={menuItem}

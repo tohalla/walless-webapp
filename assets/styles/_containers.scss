@@ -1,13 +1,16 @@
 .container {
-  @include shadow-2dp();
-  background: $carrara;
-  padding: 1em;
-  border: 1px solid $iron;
+  padding: 1rem;
   display: block;
-  & + .container {
-    margin-top: 1rem;
+  &--distinct {
+    @include shadow-2dp();
+    background: $carrara;
+    border: 1px solid $iron;
+    & + .container--distinct {
+      margin-top: 1rem;
+    }
   }
 }
+
 
 .container__item {
   display: flex;

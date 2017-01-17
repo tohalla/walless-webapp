@@ -27,23 +27,12 @@ class Menus extends React.Component {
   render() {
     const {menus, restaurant} = this.props;
     const {action} = this.state;
-    const returnButton = (
-      <Button
-          className="block"
-          colored
-          onClick={this.resetAction}
-          type="button"
-      >
-        {'Return'}
-      </Button>
-    );
     return (
       <div>
-        <div className="container">
+        <div className="container container--distinct">
           {
             action === 'new' ?
               <div>
-                {returnButton}
                 <NewMenu
                     onCancel={this.resetAction}
                     onCreated={this.handleMenuCreated}
@@ -63,13 +52,15 @@ class Menus extends React.Component {
               </div>
           }
         </div>
-        <div className="container">
-          {menus && menus.length ?
-            menus.map((menu, index) =>
-              <Menu key={index} menu={menu} />
-            ) : 'no menus'
-          }
-        </div>
+        {action !== 'new' ? (
+          <div className="container container--distinct">
+            {menus && menus.length ?
+              menus.map((menu, index) =>
+                <Menu key={index} menu={menu} />
+              ) : 'no menus'
+            }
+          </div>
+        ) : null}
       </div>
     );
   }

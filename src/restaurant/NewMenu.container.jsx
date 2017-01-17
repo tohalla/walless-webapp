@@ -6,6 +6,7 @@ import {getActiveAccount} from 'graphql/account.queries';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {createMenu} from 'graphql/restaurant/menu.mutations';
+import MenuItems from 'restaurant/MenuItems.container';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -18,7 +19,8 @@ class NewMenu extends React.Component {
   };
   state = {
     name: '',
-    description: ''
+    description: '',
+    manageMenuItems: false
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -27,9 +29,10 @@ class NewMenu extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const {createMenu, restaurant, onCreated, me} = this.props;
+    const {manageMenuItems, ...menu} = this.state; // eslint-disable-line
     createMenu(Object.assign(
       {},
-      this.state,
+      menu,
       {
         restaurant: restaurant.id,
         createdBy: me.id
@@ -37,13 +40,16 @@ class NewMenu extends React.Component {
     ))
     .then(() => onCreated());
   }
+  handleToggle = e => {
+    this.setState({[e.target.id]: !this.state[e.target.id]});
+  }
   handleCancel = e => {
     e.preventDefault();
     this.props.onCancel();
   }
   render() {
-    const {t} = this.props;
-    const {description, name} = this.state;
+    const {restaurant, t} = this.props;
+    const {description, name, manageMenuItems} = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <Input
@@ -63,6 +69,21 @@ class NewMenu extends React.Component {
             type="text"
             value={description}
         />
+        <div className="container">
+          {manageMenuItems ?
+            <MenuItems
+                action="filter"
+                allowActions={false}
+                plain
+                restaurant={restaurant}
+                selectable
+            />
+            :
+            <Button colored id="manageMenuItems" onClick={this.handleToggle}>
+              {t('restaurant.menus.manageMenuItems')}
+            </Button>
+          }
+        </div>
         <div>
           <Button colored onClick={this.handleSubmit} raised type="submit">
             {t('restaurant.menus.creation.create')}

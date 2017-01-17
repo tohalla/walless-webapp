@@ -13,6 +13,9 @@ class Button extends React.Component {
     ]),
     type: React.PropTypes.string
   };
+  static defaultProps = {
+    type: 'button'
+  }
   render() {
     const {raised, colored, accent, children, className, ...props} = this.props;
     return (

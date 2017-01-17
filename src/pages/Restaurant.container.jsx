@@ -65,7 +65,7 @@ class Restaurant extends React.Component {
     const restaurant = find(restaurant =>
       restaurant.id === Number(routeParams.restaurant)
     )(myRestaurants);
-    if (restaurant && myRestaurants && myRestaurants.length) {
+    if (restaurant && myRestaurants.length) {
       return (
         <WithSideBar
             sideContent={
@@ -114,7 +114,7 @@ class Restaurant extends React.Component {
         </WithSideBar>
       );
     }
-    return null;
+    return <div>{'placeholder message. No restaurants linked to this account'}</div>;
   }
 }
 
