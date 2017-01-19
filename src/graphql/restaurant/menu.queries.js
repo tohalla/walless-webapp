@@ -12,6 +12,31 @@ const menuFragment = gql`
   }
 `;
 
+const getMenu = graphql(
+  gql`
+    query menuById($id: Int!) {
+      menuById(id: $id) {
+        ...menuInfo
+      }
+    }
+    ${menuFragment}
+  `, {
+    skip: ownProps => typeof ownProps.menu === 'object',
+    options: ownProps => ({
+      variables: {
+        id: typeof ownProps.menu === 'object' ? null : ownProps.menu
+      }
+    }),
+    props: ({ownProps, data}) => {
+      const {menuById, ...rest} = data;
+      return {
+        menu: menuById,
+        data: rest
+      };
+    }
+  }
+);
+
 const getMenus = graphql(
   gql`
     query restaurantById($id: Int!) {
@@ -52,4 +77,4 @@ const getMenus = graphql(
   }
 );
 
-export {menuFragment, getMenus};
+export {menuFragment, getMenus, getMenu};

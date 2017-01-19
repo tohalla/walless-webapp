@@ -1,17 +1,44 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {compose} from 'react-apollo';
 
 import MdlMenu from 'mdl/MdlMenu.component';
+import {getMenu} from 'graphql/restaurant/menu.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class Menu extends React.Component {
   static PropTypes = {
-    menu: React.PropTypes.object.isRequired
-  }
+    menu: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.number
+    ]).isRequired,
+    expand: React.PropTypes.bool
+  };
+  static defaultProps = {
+    expand: false
+  };
   render() {
-    const {menu: {name, description, id}, t} = this.props;
-    return (
+    if (typeof this.props.menu !== 'object') {
+      return null;
+    }
+    const {menu: {name, description, id}, t, expand} = this.props;
+    return expand ? (
+      <div className="container container--distinct">
+        <table>
+          <tbody>
+            <tr>
+              <th>{t('restaurant.menus.creation.name')}</th>
+              <td>{name}</td>
+            </tr>
+            <tr>
+              <th>{t('restaurant.menus.creation.description')}</th>
+              <td>{description}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    ) : (
       <div className="container__item">
         <div className="container__item__content">
           <div>
@@ -38,4 +65,6 @@ class Menu extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, {})(Menu);
+export default compose(
+  getMenu
+)(connect(mapStateToProps, {})(Menu));
