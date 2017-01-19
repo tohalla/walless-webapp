@@ -21,7 +21,7 @@ const getMenu = graphql(
     }
     ${menuFragment}
   `, {
-    skip: ownProps => typeof ownProps.menu === 'object',
+    skip: ownProps => typeof ownProps.menu === 'object' || !ownProps.menu,
     options: ownProps => ({
       variables: {
         id: typeof ownProps.menu === 'object' ? null : ownProps.menu

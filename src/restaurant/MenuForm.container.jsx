@@ -5,22 +5,41 @@ import {connect} from 'react-redux';
 import {getActiveAccount} from 'graphql/account.queries';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
-import {createMenu} from 'graphql/restaurant/menu.mutations';
+import {createMenu, updateMenu} from 'graphql/restaurant/menu.mutations';
+import {getMenu} from 'graphql/restaurant/menu.queries';
 import MenuItems from 'restaurant/MenuItems.container';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
-class NewMenu extends React.Component {
+class MenuForm extends React.Component {
   static propTypes = {
-    onCreated: React.PropTypes.func.isRequired,
+    onSubmit: React.PropTypes.func.isRequired,
     onCancel: React.PropTypes.func.isRequired,
     createMenu: React.PropTypes.func.isRequired,
-    restaurant: React.PropTypes.object.isRequired
+    updateMenu: React.PropTypes.func.isRequired,
+    restaurant: React.PropTypes.object.isRequired,
+    menu: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.number
+    ])
   };
-  state = {
-    name: '',
-    description: '',
-    manageMenuItems: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: props.menu.name || '',
+      description: props.menu.description || '',
+      manageMenuItems: false
+    };
+  }
+  componentWillReceiveProps(newProps) {
+    if (typeof this.props.menu !== typeof newProps.menu) {
+      // should reset inputs when menu information fetched with given id
+      const {name, description} = newProps;
+      this.setState({
+        name,
+        description
+      });
+    }
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -28,17 +47,15 @@ class NewMenu extends React.Component {
   }
   handleSubmit = e => {
     e.preventDefault();
-    const {createMenu, restaurant, onCreated, me} = this.props;
-    const {manageMenuItems, ...menu} = this.state; // eslint-disable-line
-    createMenu(Object.assign(
-      {},
-      menu,
-      {
-        restaurant: restaurant.id,
-        createdBy: me.id
-      }
-    ))
-    .then(() => onCreated());
+    const {createMenu, updateMenu, restaurant, onSubmit, me, menu} = this.props;
+    const {manageMenuItems, ...menuOptions} = this.state; // eslint-disable-line
+    const finalMenu = Object.assign({}, menuOptions, {
+      id: menu ? menu.id : null,
+      restaurant: restaurant.id,
+      createdBy: me.id
+    });
+    (menu && menu.id ? updateMenu(finalMenu) : createMenu(finalMenu))
+      .then(() => onSubmit());
   }
   handleToggle = e => {
     this.setState({[e.target.id]: !this.state[e.target.id]});
@@ -86,10 +103,10 @@ class NewMenu extends React.Component {
         </div>
         <div>
           <Button colored onClick={this.handleSubmit} raised type="submit">
-            {t('restaurant.menus.creation.create')}
+            {t('submit')}
           </Button>
           <Button accent onClick={this.handleCancel} raised type="reset">
-            {t('restaurant.menus.creation.cancel')}
+            {t('cancel')}
           </Button>
         </div>
       </form>
@@ -99,5 +116,7 @@ class NewMenu extends React.Component {
 
 export default compose(
   createMenu,
-  getActiveAccount
-)(connect(mapStateToProps, {})(NewMenu));
+  updateMenu,
+  getActiveAccount,
+  getMenu
+)(connect(mapStateToProps, {})(MenuForm));

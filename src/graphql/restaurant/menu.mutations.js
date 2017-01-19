@@ -5,8 +5,8 @@ import {menuFragment} from 'graphql/restaurant/menu.queries';
 
 const createMenu = graphql(
   gql`
-  mutation createMenu($menu: CreateMenuInput!) {
-    createMenu(input: $menu) {
+  mutation createMenu($input: CreateMenuInput!) {
+    createMenu(input: $input) {
       menu {
         ...menuInfo
       }
@@ -15,9 +15,33 @@ const createMenu = graphql(
   ${menuFragment}
   `, {
     props: ({mutate}) => ({
-      createMenu: menu => mutate({variables: {menu: {menu}}})
+      createMenu: menu => mutate({variables: {input: {menu}}})
     })
   }
 );
 
-export {createMenu};
+const updateMenu = graphql(
+  gql`
+  mutation updateMenuById($input: UpdateMenuByIdInput!) {
+    updateMenuById(input: $input) {
+      menu {
+        ...menuInfo
+      }
+    }
+  }
+  ${menuFragment}
+  `, {
+    props: ({mutate}) => ({
+      updateMenu: menu => mutate({
+        variables: {
+          input: {
+            id: menu.id,
+            menuPatch: menu
+          }
+        }
+      })
+    })
+  }
+);
+
+export {createMenu, updateMenu};
