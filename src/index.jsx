@@ -14,6 +14,7 @@ import Root from 'containers/Root.component';
 import Home from 'pages/Home.component';
 import Restaurant from 'pages/Restaurant.container';
 import Menu from 'restaurant/Menu.component';
+import MenuItem from 'restaurant/MenuItem.component';
 import Menus from 'restaurant/Menus.container';
 import MenuItems from 'restaurant/MenuItems.container';
 import apolloClient from 'apolloClient';
@@ -44,7 +45,15 @@ ReactDOM.render((
                 path=":menu"
             />
           </Route>
-          <Route component={MenuItems} path="menuitems" />
+          <Route path="menuitems">
+            <IndexRoute component={MenuItems} />
+            <Route
+                component={
+                  routeParamWrapper(MenuItem, ['menuItem'], {expand: true})
+                }
+                path=":menuItem"
+            />
+          </Route>
           <Route path="settings" />
           <Route path="users" />
           <Route path="dashboard" />
