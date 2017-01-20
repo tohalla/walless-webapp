@@ -57,3 +57,9 @@ setInterval(() => {
 }, 20000); // checks if authorization token should be renewed
 
 export default authenticationHandler;
+
+export const requireAuthentication = (nextState: Object, replace: Function) => {
+  if (!Cookie.get('Authorization')) {
+    replace('/');
+  }
+};

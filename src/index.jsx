@@ -19,6 +19,7 @@ import MenuItems from 'restaurant/MenuItems.container';
 import apolloClient from 'apolloClient';
 import store from 'store';
 import routeParamWrapper from 'util/routeParamWrapper';
+import {requireAuthentication} from 'util/auth';
 
 const history = syncHistoryWithStore(
   browserHistory,
@@ -31,7 +32,11 @@ ReactDOM.render((
     <Router history={history}>
       <Route component={Root} path="/">
         <IndexRoute component={Home} />
-        <Route component={Restaurant} path="restaurant(/:restaurant)">
+        <Route
+            component={Restaurant}
+            onEnter={requireAuthentication}
+            path="restaurant(/:restaurant)"
+        >
           <Route path="menus">
             <IndexRoute component={Menus} />
             <Route
