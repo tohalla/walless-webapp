@@ -43,7 +43,7 @@ const getActiveAccount = graphql(
     ${accountFragment}
   `,
   {
-    skip: (ownProps) => !authenticationHandler.isAuthenticated,
+    skip: () => !authenticationHandler.isAuthenticated,
     props: ({ownProps, data: {getActiveAccount}}) => {
       if (!getActiveAccount)
         return null;

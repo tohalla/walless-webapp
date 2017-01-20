@@ -2,10 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 
-import MenuForm from 'restaurant/MenuForm.container';
+import MenuForm from 'restaurant/menu/MenuForm.container';
 import Button from 'mdl/Button.component';
 import {getMenus} from 'graphql/restaurant/menu.queries';
-import Menu from 'restaurant/Menu.component';
+import Menu from 'restaurant/menu/Menu.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -44,7 +44,7 @@ class Menus extends React.Component {
                   })}
                   type="button"
               >
-                {t('restaurant.menus.creation.create')}
+                {t('restaurant.menus.create')}
               </Button>
             </div>
         }
@@ -62,7 +62,7 @@ class Menus extends React.Component {
                 <Menu
                     actions={[
                       {
-                        text: t('restaurant.menus.edit'),
+                        text: t('edit'),
                         onClick: this.handleActionChange({
                           name: 'edit',
                           hideSelection: true,

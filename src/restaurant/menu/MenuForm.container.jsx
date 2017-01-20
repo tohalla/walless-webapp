@@ -7,7 +7,7 @@ import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {createMenu, updateMenu} from 'graphql/restaurant/menu.mutations';
 import {getMenu} from 'graphql/restaurant/menu.queries';
-import MenuItems from 'restaurant/MenuItems.container';
+import MenuItems from 'restaurant/menu-item/MenuItems.container';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -25,9 +25,10 @@ class MenuForm extends React.Component {
   };
   constructor(props) {
     super(props);
+    const menu = props.menu || {};
     this.state = {
-      name: props.menu.name || '',
-      description: props.menu.description || '',
+      name: menu.name || '',
+      description: menu.description || '',
       manageMenuItems: false
     };
   }
@@ -72,7 +73,7 @@ class MenuForm extends React.Component {
         <Input
             className="block"
             id="name"
-            label={t('restaurant.menus.creation.name')}
+            label={t('restaurant.menus.name')}
             onChange={this.handleInputChange}
             type="text"
             value={name}
@@ -80,7 +81,7 @@ class MenuForm extends React.Component {
         <Input
             className="block"
             id="description"
-            label={t('restaurant.menus.creation.description')}
+            label={t('restaurant.menus.description')}
             onChange={this.handleInputChange}
             rows={3}
             type="text"
@@ -89,8 +90,12 @@ class MenuForm extends React.Component {
         <div className="container">
           {manageMenuItems ?
             <MenuItems
-                action="filter"
-                allowActions={false}
+                action={{
+                  name: 'filter',
+                  hideItems: false,
+                  hideSelection: true,
+                  hideReturn: true
+                }}
                 plain
                 restaurant={restaurant}
                 selectable

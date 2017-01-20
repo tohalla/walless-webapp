@@ -32,11 +32,11 @@ class Menu extends React.Component {
         <table>
           <tbody>
             <tr>
-              <th>{t('restaurant.menus.creation.name')}</th>
+              <th>{t('restaurant.menus.name')}</th>
               <td>{name}</td>
             </tr>
             <tr>
-              <th>{t('restaurant.menus.creation.description')}</th>
+              <th>{t('restaurant.menus.description')}</th>
               <td>{description}</td>
             </tr>
           </tbody>

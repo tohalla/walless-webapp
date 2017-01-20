@@ -6,7 +6,10 @@ import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 
 class MenuItem extends React.Component {
   static PropTypes = {
-    allowActions: React.PropTypes.bool,
+    actions: React.PropTypes.arrayOf(React.PropTypes.shape({
+      text: React.PropTypes.object.isRequired,
+      onClick: React.PropTypes.func.isRequired
+    })),
     menuItem: React.PropTypes.object.isRequired
   }
   render() {
@@ -16,7 +19,7 @@ class MenuItem extends React.Component {
     const {
       menuItem: {name, description, id},
       className,
-      allowActions
+      actions
     } = this.props;
     return (
       <div className={className ? className + ' container__item' : 'container__item'}>
@@ -28,7 +31,7 @@ class MenuItem extends React.Component {
             {description}
           </div>
         </div>
-        {allowActions ?
+        {actions && actions.length ?
           <div className="container__item__actions">
             <button
                 className="mdl-button mdl-js-button mdl-button--icon"
@@ -37,7 +40,15 @@ class MenuItem extends React.Component {
               <i className="material-icons">{'more_vert'}</i>
             </button>
             <MdlMenu htmlFor={`menu-item-actions-${id}`}>
-              <li className="mdl-menu__item">{'Delete'}</li>
+              {actions.map((action, index) =>
+                <li
+                    className="mdl-menu__item"
+                    key={index}
+                    onClick={action.onClick}
+                >
+                  {action.text}
+                </li>
+              )}
             </MdlMenu>
           </div>
         : null}

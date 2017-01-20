@@ -28,7 +28,7 @@ class MenuItemForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    const {menuItem} = props;
+    const menuItem = props.menuItem || {};
     this.state = {
       name: menuItem.name || '',
       description: menuItem.description || '',
@@ -84,7 +84,7 @@ class MenuItemForm extends React.Component {
         <Input
             className="block"
             id="name"
-            label={t('restaurant.menus.creation.name')}
+            label={t('restaurant.menus.name')}
             onChange={this.handleInputChange}
             type="text"
             value={name}
@@ -92,7 +92,7 @@ class MenuItemForm extends React.Component {
         <Input
             className="block"
             id="description"
-            label={t('restaurant.menus.creation.description')}
+            label={t('restaurant.menus.description')}
             onChange={this.handleInputChange}
             rows={3}
             type="text"

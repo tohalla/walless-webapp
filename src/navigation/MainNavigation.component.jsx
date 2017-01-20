@@ -39,9 +39,6 @@ class MainNavigation extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
-  shouldComponentUpdate() {
-    return true;
-  }
   render() {
     const {router: {location}} = this.context;
     const {t, me} = this.props;

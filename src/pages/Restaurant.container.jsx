@@ -21,7 +21,7 @@ const menuItems = [
   },
   {
     path: 'users',
-    translationKey: 'restaurant.users'
+    translationKey: 'restaurant.userManagement'
   },
   {
     path: 'settings',
