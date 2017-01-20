@@ -17,6 +17,32 @@ const menuItemFragment = gql`
   }
 `;
 
+const getMenuItem = graphql(
+  gql`
+    query menuItemById($id: Int!) {
+      menuItemById(id: $id) {
+        ...menuItemInfo
+      }
+    }
+    ${menuItemFragment}
+  `, {
+    skip: ownProps =>
+      typeof ownProps.menuItem === 'object' || !ownProps.menuItem,
+    options: ownProps => ({
+      variables: {
+        id: typeof ownProps.menuItem === 'object' ? null : ownProps.menuItem
+      }
+    }),
+    props: ({ownProps, data}) => {
+      const {menuItemById, ...rest} = data;
+      return {
+        menuItem: menuItemById,
+        data: rest
+      };
+    }
+  }
+);
+
 const getMenuItems = graphql(
   gql`
     query restaurantById($id: Int!) {
@@ -57,4 +83,4 @@ const getMenuItems = graphql(
   }
 );
 
-export {menuItemFragment, getMenuItems};
+export {menuItemFragment, getMenuItem, getMenuItems};
