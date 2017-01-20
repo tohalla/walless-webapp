@@ -15,7 +15,7 @@ const createMenuItem = graphql(
   ${menuItemFragment}
   `, {
     props: ({mutate}) => ({
-      createMenu: menuItem => mutate({variables: {menuItem: {menuItem}}})
+      createMenuItem: menuItem => mutate({variables: {menuItem: {menuItem}}})
     })
   }
 );

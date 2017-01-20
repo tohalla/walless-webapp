@@ -3,7 +3,7 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {hasIn} from 'lodash/fp';
 
-import NewMenuItem from 'restaurant/NewMenuItem.container';
+import MenuItemForm from 'restaurant/MenuItemForm.container';
 import Button from 'mdl/Button.component';
 import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
 import MenuItem from 'restaurant/MenuItem.component';
@@ -69,9 +69,9 @@ class MenuItems extends React.Component {
             action === 'new' ?
               <div>
                 {returnButton}
-                <NewMenuItem
+                <MenuItemForm
                     onCancel={this.resetAction}
-                    onCreated={this.handleMenuItemCreated}
+                    onSubmit={this.handleMenuItemCreated}
                     restaurant={restaurant}
                 />
               </div>
