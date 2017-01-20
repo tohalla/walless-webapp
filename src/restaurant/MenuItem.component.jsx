@@ -1,13 +1,18 @@
 import React from 'react';
+import {compose} from 'react-apollo';
 
 import MdlMenu from 'mdl/MdlMenu.component';
+import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 
-export default class MenuItem extends React.Component {
+class MenuItem extends React.Component {
   static PropTypes = {
     allowActions: React.PropTypes.bool,
     menuItem: React.PropTypes.object.isRequired
   }
   render() {
+    if (typeof this.props.menuItem !== 'object') {
+      return null;
+    }
     const {
       menuItem: {name, description, id},
       className,
@@ -40,3 +45,7 @@ export default class MenuItem extends React.Component {
     );
   }
 }
+
+export default compose(
+  getMenuItem
+)(MenuItem);
