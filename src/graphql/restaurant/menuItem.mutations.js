@@ -20,4 +20,28 @@ const createMenuItem = graphql(
   }
 );
 
-export {createMenuItem};
+const updateMenuItem = graphql(
+  gql`
+  mutation updateMenuItemById($input: UpdateMenuItemByIdInput!) {
+    updateMenuItemById(input: $input) {
+      menuItem {
+        ...menuItemInfo
+      }
+    }
+  }
+  ${menuItemFragment}
+  `, {
+    props: ({mutate}) => ({
+      updateMenuItem: menuItem => mutate({
+        variables: {
+          input: {
+            id: menuItem.id,
+            menuItemPatch: menuItem
+          }
+        }
+      })
+    })
+  }
+);
+
+export {createMenuItem, updateMenuItem};
