@@ -1,3 +1,7 @@
 td, th {
   text-align: left;
 }
+
+th + td {
+  padding-left: 3rem;
+}
