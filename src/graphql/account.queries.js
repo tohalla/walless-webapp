@@ -9,6 +9,7 @@ const accountFragment = gql`
     firstName
     lastName
     emailByEmail {
+      id
       email
     }
   }

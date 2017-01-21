@@ -25,9 +25,14 @@ networkInterface.use([{
   }
 }]);
 
+const dataIdFromObject = result =>
+  result.id && result.__typename ?
+    result.__typename + result.id : null;
+
 const apolloClient = new ApolloClient({
   networkInterface,
-  shouldBatch: true
+  shouldBatch: true,
+  dataIdFromObject
 });
 
 export default apolloClient;

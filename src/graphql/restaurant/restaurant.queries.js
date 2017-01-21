@@ -11,10 +11,37 @@ const restaurantFragment = gql`
   }
 `;
 
+const getRestaurant = graphql(
+  gql`
+    query restaurantById($id: Int!) {
+      restaurantById(id: $id) {
+        ...restaurantInfo
+      }
+    }
+    ${restaurantFragment}
+  `, {
+    skip: ownProps =>
+      typeof ownProps.restaurant === 'object' || !ownProps.restaurant,
+    options: ownProps => ({
+      variables: {
+        id: typeof ownProps.restaurant === 'object' ? null : ownProps.restaurant
+      }
+    }),
+    props: ({ownProps, data}) => {
+      const {restaurantById, ...rest} = data;
+      return {
+        restaurant: restaurantById,
+        data: rest
+      };
+    }
+  }
+);
+
 const getMyRestaurants = graphql(
   gql`
     query {
       getActiveAccount {
+        id
         restaurantAccountsByAccount {
           edges {
             node {
@@ -51,4 +78,4 @@ const getMyRestaurants = graphql(
   }
 );
 
-export {getMyRestaurants, restaurantFragment};
+export {getMyRestaurants, restaurantFragment, getRestaurant};
