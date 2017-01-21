@@ -12,11 +12,12 @@ import {syncHistoryWithStore} from 'react-router-redux';
 
 import Root from 'containers/Root.component';
 import Home from 'pages/Home.component';
-import Restaurant from 'pages/Restaurant.container';
+import RestaurantPage from 'pages/Restaurant.component';
 import Menu from 'restaurant/menu/Menu.component';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
-import Menus from 'restaurant/menu/Menus.container';
-import MenuItems from 'restaurant/menu-item/MenuItems.container';
+import Menus from 'restaurant/menu/Menus.component';
+import MenuItems from 'restaurant/menu-item/MenuItems.component';
+import Restaurant from 'restaurant/Restaurant.component';
 import apolloClient from 'apolloClient';
 import store from 'store';
 import routeParamWrapper from 'util/routeParamWrapper';
@@ -34,10 +35,11 @@ ReactDOM.render((
       <Route component={Root} path="/">
         <IndexRoute component={Home} />
         <Route
-            component={Restaurant}
+            component={RestaurantPage}
             onEnter={requireAuthentication}
             path="restaurant(/:restaurant)"
         >
+          <IndexRoute component={Restaurant} />
           <Route path="menus">
             <IndexRoute component={Menus} />
             <Route
@@ -54,7 +56,6 @@ ReactDOM.render((
                 path=":menuItem"
             />
           </Route>
-          <Route path="settings" />
           <Route path="users" />
           <Route path="dashboard" />
         </Route>

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 
-import MenuForm from 'restaurant/menu/MenuForm.container';
+import MenuForm from 'restaurant/menu/MenuForm.component';
 import Button from 'mdl/Button.component';
 import {getMenus} from 'graphql/restaurant/menu.queries';
 import Menu from 'restaurant/menu/Menu.component';

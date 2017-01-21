@@ -7,7 +7,7 @@ import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {createMenu, updateMenu} from 'graphql/restaurant/menu.mutations';
 import {getMenu} from 'graphql/restaurant/menu.queries';
-import MenuItems from 'restaurant/menu-item/MenuItems.container';
+import MenuItems from 'restaurant/menu-item/MenuItems.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 

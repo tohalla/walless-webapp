@@ -12,6 +12,10 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 const menuItems = [
   {
+    path: '',
+    translationKey: 'restaurant'
+  },
+  {
     path: 'menus',
     translationKey: 'restaurant.menus'
   },
@@ -22,10 +26,6 @@ const menuItems = [
   {
     path: 'users',
     translationKey: 'restaurant.userManagement'
-  },
-  {
-    path: 'settings',
-    translationKey: 'restaurant.settings'
   },
   {
     path: 'dashboard',
@@ -92,9 +92,15 @@ class Restaurant extends React.Component {
                           className={
                             'side__navigation__link mdl-navigation__link'
                             + (
-                              location.pathname.indexOf(
-                                `/restaurant/${restaurant.id}/${item.path}`
-                              ) === 0 ? ' side__navigation__link--active' : ''
+                                item.path &&
+                                location.pathname.indexOf(
+                                  `/restaurant/${restaurant.id}/${item.path}`
+                              ) === 0 ||
+                              (
+                                !item.path &&
+                                location.pathname === `/restaurant/${restaurant.id}/`
+                              ) ?
+                                ' side__navigation__link--active' : ''
                             )
                           }
                           key={index}

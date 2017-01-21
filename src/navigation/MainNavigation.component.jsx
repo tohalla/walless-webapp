@@ -8,25 +8,25 @@ import {getActiveAccount} from 'graphql/account.queries';
 const menuItems = [
   {
     path: '/',
-    translationKey: 'home'
+    translationKey: 'navigation.home'
   },
   {
     path: '/restaurant',
-    translationKey: 'restaurant',
+    translationKey: 'navigation.restaurant',
     requireAuthentication: true
   },
   {
     path: '/documentation',
-    translationKey: 'documentation'
+    translationKey: 'navigation.documentation'
   },
   {
     path: '/settings',
-    translationKey: 'settings',
+    translationKey: 'navigation.settings',
     requireAuthentication: true
   },
   {
     path: '/contact',
-    translationKey: 'contactUs'
+    translationKey: 'navigation.contactUs'
   }
 ];
 

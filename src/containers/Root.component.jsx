@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import MainNavigation from 'navigation/MainNavigation.component';
-import UserNavigation from 'navigation/UserNavigation.container';
+import UserNavigation from 'navigation/UserNavigation.component';
 import Notifications from 'notifications/Notifications.component';
 import mdl from 'mdl/mdl';
 import DevTools from 'DevTools';

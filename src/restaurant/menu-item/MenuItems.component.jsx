@@ -3,7 +3,7 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {hasIn} from 'lodash/fp';
 
-import MenuItemForm from 'restaurant/menu-item/MenuItemForm.container';
+import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
 import Button from 'mdl/Button.component';
 import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
