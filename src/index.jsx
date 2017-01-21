@@ -39,7 +39,9 @@ ReactDOM.render((
             onEnter={requireAuthentication}
             path="restaurant(/:restaurant)"
         >
-          <IndexRoute component={Restaurant} />
+          <IndexRoute
+              component={routeParamWrapper(Restaurant, ['restaurant'])}
+          />
           <Route path="menus">
             <IndexRoute component={Menus} />
             <Route

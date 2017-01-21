@@ -75,7 +75,7 @@ class MenuItems extends React.Component {
                     })}
                     type="button"
                 >
-                  {'Create new item'}
+                  {t('restaurant.menuItems.create')}
                 </Button>
                 <Button
                     colored
@@ -86,7 +86,7 @@ class MenuItems extends React.Component {
                     })}
                     type="button"
                 >
-                  {'Filter items'}
+                  {t('restaurant.menuItems.filter')}
                 </Button>
               </div>
             </div>
