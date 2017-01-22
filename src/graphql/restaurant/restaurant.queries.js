@@ -67,7 +67,7 @@ const getMyRestaurants = graphql(
           'restaurantByRestaurant'
         ])(getActiveAccount)
       ) {
-        return null;
+        return rest;
       }
       return {
         myRestaurants: getActiveAccount.restaurantAccountsByAccount.edges

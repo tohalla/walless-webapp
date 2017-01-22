@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import {find} from 'lodash/fp';
 import {connect} from 'react-redux';
 
+import Spinner from 'mdl/Spinner.component';
 import WithSideBar from 'containers/WithSideBar.component';
 import {getMyRestaurants} from 'graphql/restaurant/restaurant.queries';
 
@@ -60,7 +61,8 @@ class Restaurant extends React.Component {
       routeParams,
       children,
       t,
-      router: {location}
+      router: {location},
+      loading
     } = this.props;
     const restaurant = find(restaurant =>
       restaurant.id === Number(routeParams.restaurant)
@@ -120,7 +122,9 @@ class Restaurant extends React.Component {
         </WithSideBar>
       );
     }
-    return <div>{'placeholder message. No restaurants linked to this account'}</div>;
+    return loading ?
+      <Spinner /> :
+      <div>{'placeholder message. No restaurants linked to this account'}</div>;
   }
 }
 
