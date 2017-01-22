@@ -8,6 +8,8 @@ const restaurantFragment = gql`
   fragment restaurantInfo on Restaurant {
     id
     name
+    description
+    created_by
   }
 `;
 
