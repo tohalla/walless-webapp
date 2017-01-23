@@ -50,11 +50,13 @@ class MenuForm extends React.Component {
     e.preventDefault();
     const {createMenu, updateMenu, restaurant, onSubmit, me, menu} = this.props;
     const {manageMenuItems, ...menuOptions} = this.state; // eslint-disable-line
-    const finalMenu = Object.assign({}, menuOptions, {
-      id: menu ? menu.id : null,
-      restaurant: restaurant.id,
-      createdBy: me.id
-    });
+    const finalMenu = Object.assign({}, menuOptions,
+      menu ? {id: menu.id} : null,
+      {
+        restaurant: restaurant.id,
+        createdBy: me.id
+      }
+    );
     (menu && menu.id ? updateMenu(finalMenu) : createMenu(finalMenu))
       .then(() => onSubmit());
   }

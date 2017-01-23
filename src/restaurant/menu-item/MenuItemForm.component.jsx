@@ -62,11 +62,13 @@ class MenuItemForm extends React.Component {
       me,
       menuItem
     } = this.props;
-    const finalMenuItem = Object.assign({}, this.state, {
-      id: menuItem ? menuItem.id : null,
-      restaurant: restaurant.id,
-      createdBy: me.id
-    });
+    const finalMenuItem = Object.assign({}, this.state,
+      menuItem ? {id: menuItem.id} : null,
+      {
+        restaurant: restaurant.id,
+        createdBy: me.id
+      }
+    );
     (menuItem && menuItem.id ?
       updateMenuItem(finalMenuItem) : createMenuItem(finalMenuItem)
     )

@@ -9,7 +9,7 @@ const restaurantFragment = gql`
     id
     name
     description
-    created_by
+    createdBy
   }
 `;
 

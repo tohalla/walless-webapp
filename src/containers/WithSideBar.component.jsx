@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Padded from 'containers/Padded.component';
+
 export default class WithSideBar extends React.Component {
   static propTypes = {
     children: React.PropTypes.oneOfType([
@@ -22,13 +24,9 @@ export default class WithSideBar extends React.Component {
           </div>
         </div>
         <div className="side--outer-container">
-          <div className="mdl-grid">
-            <div className="mdl-cell mdl-cell--1-col"/>
-            <div className="mdl-cell mdl-cell--10-col">
-              {this.props.children}
-            </div>
-            <div className="mdl-cell mdl-cell--1-col"/>
-          </div>
+          <Padded>
+            {this.props.children}
+          </Padded>
         </div>
       </div>
     );

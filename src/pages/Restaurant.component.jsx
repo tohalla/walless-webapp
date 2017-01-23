@@ -7,7 +7,9 @@ import {connect} from 'react-redux';
 
 import Spinner from 'mdl/Spinner.component';
 import WithSideBar from 'containers/WithSideBar.component';
+import Padded from 'containers/Padded.component';
 import {getMyRestaurants} from 'graphql/restaurant/restaurant.queries';
+import RestaurantForm from 'restaurant/RestaurantForm.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -54,7 +56,10 @@ class Restaurant extends React.Component {
   }
   handleRestaurantChange = value => {
     this.props.router.push(`/restaurant/${value.value}`);
-  }
+  };
+  handleRestaurantCreation = () => {
+    this.props.refetch();
+  };
   render() {
     const {
       myRestaurants,
@@ -124,7 +129,11 @@ class Restaurant extends React.Component {
     }
     return loading ?
       <Spinner /> :
-      <div>{'placeholder message. No restaurants linked to this account'}</div>;
+      <Padded>
+        <div className="container container--distinct">
+          <RestaurantForm onSubmit={this.handleRestaurantCreation} />
+        </div>
+      </Padded>;
   }
 }
 
