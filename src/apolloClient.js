@@ -32,7 +32,8 @@ const dataIdFromObject = result =>
 const apolloClient = new ApolloClient({
   networkInterface,
   shouldBatch: true,
-  dataIdFromObject
+  dataIdFromObject,
+  queryDeduplication: true
 });
 
 export default apolloClient;
