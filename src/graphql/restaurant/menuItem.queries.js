@@ -2,7 +2,6 @@ import {graphql} from 'react-apollo';
 import {hasIn} from 'lodash/fp';
 import gql from 'graphql-tag';
 
-import authenticationHandler from 'util/auth';
 import {fileFragment} from 'graphql/file.queries';
 
 const menuItemFragment = gql`
@@ -28,7 +27,7 @@ const menuItemFragment = gql`
   ${fileFragment}
 `;
 
-const formatMenuItem = menuItem => {
+const formatMenuItem = (menuItem = {}) => {
   const {menuItemFilesByMenuItem, ...rest} = menuItem;
   let files = [];
   if (hasIn(['menuItemFilesByMenuItem', 'edges'])(menuItem)) {

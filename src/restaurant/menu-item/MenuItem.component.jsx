@@ -17,12 +17,15 @@ class MenuItem extends React.Component {
       return null;
     }
     const {
-      menuItem: {name, description, id},
+      menuItem: {name, description, id, files},
       className,
       actions
     } = this.props;
     return (
       <div className={className ? className + ' container__item' : 'container__item'}>
+        <div className="container__item__thumbnail">
+          {files.length ? <img src={files[0].uri} /> : null}
+        </div>
         <div className="container__item__content">
           <div>
             {name}

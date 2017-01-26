@@ -135,7 +135,6 @@ class MenuItems extends React.Component {
                             })
                           }
                         ]}
-                        className="container__item__content"
                         key={index}
                         menuItem={menuItem}
                     />
