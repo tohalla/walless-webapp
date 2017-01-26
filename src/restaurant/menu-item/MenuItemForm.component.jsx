@@ -1,12 +1,18 @@
+// @flow
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
+import Dropzone from 'react-dropzone';
+import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
 
+import config from 'config';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {
   createMenuItem,
-  updateMenuItem
+  updateMenuItem,
+  updateMenuItemFiles
 } from 'graphql/restaurant/menuItem.mutations';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 import {getActiveAccount} from 'graphql/account.queries';
@@ -33,9 +39,11 @@ class MenuItemForm extends React.Component {
       name: menuItem.name || '',
       description: menuItem.description || '',
       type: menuItem.type || null,
+      images: [],
       category: menuItem.category || null
     };
   }
+  state: Object = {};
   componentWillReceiveProps(newProps) {
     if (typeof this.props.menuItem !== typeof newProps.menuItem) {
       // should reset inputs when menu information fetched with given id
@@ -51,55 +59,113 @@ class MenuItemForm extends React.Component {
   handleInputChange = e => {
     const {id, value} = e.target;
     this.setState({[id]: value});
-  }
+  };
   handleSubmit = e => {
     e.preventDefault();
     const {
       createMenuItem,
       updateMenuItem,
+      updateMenuItemFiles,
       restaurant,
       onSubmit,
+      onFailure,
       me,
       menuItem
     } = this.props;
-    const finalMenuItem = Object.assign({}, this.state,
-      menuItem ? {id: menuItem.id} : null,
-      {
-        restaurant: restaurant.id,
-        createdBy: me.id
+    const {images, ...menuItemOptions} = this.state;
+    let files = [];
+    (async () => {
+      if (images && images.length) {
+        const formData = new FormData();
+        formData.append('restaurant', restaurant.id);
+        files = await (await fetch(
+          `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
+          {
+            method: 'POST',
+            body: images.reduce(
+              (prev, curr, index) => {
+                prev.append(index, curr);
+                return prev;
+              },
+              formData
+            ),
+            headers: {
+              'authorization': Cookie.get('Authorization')
+            }
+          }
+        )).json();
       }
-    );
-    (menuItem && menuItem.id ?
-      updateMenuItem(finalMenuItem) : createMenuItem(finalMenuItem)
-    )
-      .then(() => onSubmit());
-  }
+      const menuItemPayload = Object.assign({}, menuItemOptions,
+        menuItem ? {id: menuItem.id} : null,
+        {
+          restaurant: restaurant.id,
+          createdBy: me.id
+        }
+      );
+      try {
+        const finalMenuItem = menuItem && menuItem.id ?
+          (await updateMenuItem(menuItemPayload)).data.updateMenuItem.menuItem :
+          (await createMenuItem(menuItemPayload)).data.createMenuItem.menuItem;
+        await updateMenuItemFiles(finalMenuItem.id, files);
+        if(onSubmit) {
+          onSubmit();
+        }
+        onSubmit();
+      } catch (err) {
+        if (onFailure) {
+          onFailure();
+        }
+      }
+    })();
+  };
+  handleDrop = accepted => {
+    this.setState({images: accepted});
+  };
   handleCancel = e => {
     e.preventDefault();
     this.props.onCancel();
-  }
+  };
   render() {
     const {t} = this.props;
     const {description, name} = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-            className="block"
-            id="name"
-            label={t('restaurant.menus.name')}
-            onChange={this.handleInputChange}
-            type="text"
-            value={name}
-        />
-        <Input
-            className="block"
-            id="description"
-            label={t('restaurant.menus.description')}
-            onChange={this.handleInputChange}
-            rows={3}
-            type="text"
-            value={description}
-        />
+        <div>
+          <Input
+              className="block"
+              id="name"
+              label={t('restaurant.menus.name')}
+              onChange={this.handleInputChange}
+              type="text"
+              value={name}
+          />
+          <Input
+              className="block"
+              id="description"
+              label={t('restaurant.menus.description')}
+              onChange={this.handleInputChange}
+              rows={3}
+              type="text"
+              value={description}
+          />
+          <div className="container">
+            <Dropzone
+                accept="image/*"
+                className="dropzone"
+                onDrop={this.handleDrop}
+            >
+              {this.state.images && this.state.images.length ?
+                this.state.images.map((image, index) =>
+                  <img
+                      className="dropzone__image-preview"
+                      key={index}
+                      src={image.preview}
+                  />
+                ) : 'placeholder'
+              }
+            </Dropzone>
+          </div>
+        </div>
         <div>
           <Button colored onClick={this.handleSubmit} raised type="submit">
             {t('submit')}
@@ -116,6 +182,7 @@ class MenuItemForm extends React.Component {
 export default compose(
   createMenuItem,
   updateMenuItem,
+  updateMenuItemFiles,
   getMenuItem,
   getActiveAccount
 )(connect(mapStateToProps, {})(MenuItemForm));

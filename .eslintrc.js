@@ -4,12 +4,14 @@ module.exports = {
     'import/resolver': {webpack: {config: 'webpack.development.config.js'}}
   },
   extends: [
-    'google'
+    'google',
+    'plugin:flowtype/recommended'
   ],
   plugins: [
     'babel',
     'react',
-    'import'
+    'import',
+    'flowtype'
   ],
   ecmaFeatures: {
     jsx: true
@@ -36,15 +38,14 @@ module.exports = {
     'generator-star-spacing': 0,
     'no-nested-ternary': 0,
     'operator-linebreak': 0,
-    "babel/generator-star-spacing": 1,
-    "babel/new-cap": 1,
-    "babel/array-bracket-spacing": 1,
-    "babel/object-curly-spacing": 1,
-    "babel/object-shorthand": 1,
-    "babel/no-await-in-loop": 1,
-    "babel/flow-object-type": 1,
-    "babel/func-params-comma-dangle": 1,
-    "max-len": 1,
+    'generator-star-spacing': 1,
+    'babel/new-cap': 1,
+    'array-bracket-spacing': 1,
+    'babel/object-curly-spacing': 1,
+    'object-shorthand': 1,
+    'babel/no-await-in-loop': 1,
+    'comma-dangle': ['error', 'never'],
+    'max-len': 1,
     'react/jsx-boolean-value': 2,
     'react/jsx-closing-bracket-location': 2,
     'react/jsx-curly-spacing': 2,

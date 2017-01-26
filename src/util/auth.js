@@ -1,5 +1,6 @@
 // @flow
 import Cookie from 'js-cookie';
+import fetch from 'isomorphic-fetch';
 
 import config from 'config';
 
@@ -9,9 +10,10 @@ export const authenticate = async (payload: Object) => {
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        'authorization': payload.token
       },
-      body: JSON.stringify(payload)
+      body: payload.token ? null : JSON.stringify(payload)
     }
   );
   if (response.status === 200) {

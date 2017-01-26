@@ -3,6 +3,7 @@ import {hasIn} from 'lodash/fp';
 import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
+import {fileFragment} from 'graphql/file.queries';
 
 const menuItemFragment = gql`
   fragment menuItemInfo on MenuItem {
@@ -14,8 +15,28 @@ const menuItemFragment = gql`
     createdBy
     category
     type
+    menuItemFilesByMenuItem {
+      edges {
+        node {
+          fileByFile {
+            ...fileInfo
+          }
+        }
+      }
+    }
   }
+  ${fileFragment}
 `;
+
+const formatMenuItem = menuItem => {
+  const {menuItemFilesByMenuItem, ...rest} = menuItem;
+  let files = [];
+  if (hasIn(['menuItemFilesByMenuItem', 'edges'])(menuItem)) {
+    files = menuItemFilesByMenuItem.edges
+      .map(edge => edge.node.fileByFile);
+  }
+  return Object.assign({}, rest, {files});
+};
 
 const getMenuItem = graphql(
   gql`
@@ -36,51 +57,15 @@ const getMenuItem = graphql(
     props: ({ownProps, data}) => {
       const {menuItemById, ...rest} = data;
       return {
-        menuItem: menuItemById,
+        menuItem: formatMenuItem(menuItemById),
         data: rest
       };
     }
   }
 );
 
-const getMenuItems = graphql(
-  gql`
-    query restaurantById($id: Int!) {
-      restaurantById(id: $id) {
-        menuItemsByRestaurant {
-          edges {
-            node {
-              ...menuItemInfo
-            }
-          }
-        }
-      }
-    }
-    ${menuItemFragment}
-  `, {
-    skip: ownProps => !authenticationHandler.isAuthenticated,
-    options: ownProps => ({
-      variables: {
-        id: ownProps.restaurant.id
-      }
-    }),
-    props: ({ownProps, data}) => {
-      const {restaurantById, ...rest} = data;
-      if (!hasIn(
-        [
-          'menuItemsByRestaurant',
-          'edges'
-        ])(restaurantById)
-      ) {
-        return {data: rest};
-      }
-      return {
-        menuItems: restaurantById.menuItemsByRestaurant.edges
-          .map(edge => edge.node),
-        data: rest
-      };
-    }
-  }
-);
-
-export {menuItemFragment, getMenuItem, getMenuItems};
+export {
+  menuItemFragment,
+  getMenuItem,
+  formatMenuItem
+};

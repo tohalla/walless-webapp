@@ -5,7 +5,7 @@ const ADD_NOTIFICATION = 'ADD_NOTIFICATION';
 const DELETE_NOTIFICATION = 'DELETE_NOTIFICATION';
 const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
 
-export default (state: List<Map<string, *> > = new List(), action: Object) =>
+export default (state: List<Map<string, *>> = new List(), action: Object) =>
   action.type === ADD_NOTIFICATION ? state.push(action.payload)
   : action.type === DELETE_NOTIFICATION ?
     state.filterNot((notification: Map<string, *> ) =>

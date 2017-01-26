@@ -1,3 +1,4 @@
+// @flow
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -14,8 +15,10 @@ const createMenuItem = graphql(
   }
   ${menuItemFragment}
   `, {
-    props: ({mutate}) => ({
-      createMenuItem: menuItem => mutate({variables: {menuItem: {menuItem}}})
+    props: ({mutate, data}) => ({
+      createMenuItem: menuItem => mutate({
+        variables: {menuItem: {menuItem}}
+      })
     })
   }
 );
@@ -32,7 +35,7 @@ const updateMenuItem = graphql(
   ${menuItemFragment}
   `, {
     props: ({mutate}) => ({
-      updateMenuItem: menuItem => mutate({
+      updateMenuItem: (menuItem: {id: Number}) => mutate({
         variables: {
           input: {
             id: menuItem.id,
@@ -44,4 +47,22 @@ const updateMenuItem = graphql(
   }
 );
 
-export {createMenuItem, updateMenuItem};
+const updateMenuItemFiles = graphql(
+  gql`
+  mutation updateMenuItemFiles($input: UpdateMenuItemFilesInput!) {
+    updateMenuItemFiles(input: $input) {
+      clientMutationId
+    }
+  }
+  `, {
+    props: ({mutate}) => ({
+      updateMenuItemFiles: (menuItem: Number, files: Number[]) => mutate({
+        variables: {
+          input: {menuItem, files}
+        }
+      })
+    })
+  }
+);
+
+export {createMenuItem, updateMenuItem, updateMenuItemFiles};

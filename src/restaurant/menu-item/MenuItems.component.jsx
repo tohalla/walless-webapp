@@ -5,7 +5,7 @@ import {hasIn} from 'lodash/fp';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
 import Button from 'mdl/Button.component';
-import {getMenuItems} from 'graphql/restaurant/menuItem.queries';
+import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
 import Checkbox from 'mdl/Checkbox.component';
@@ -159,5 +159,5 @@ class MenuItems extends React.Component {
 }
 
 export default compose(
-  getMenuItems
+  getMenuItemsByRestaurant
 )(connect(mapStateToProps, {})(MenuItems));

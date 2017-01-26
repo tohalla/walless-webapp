@@ -8,6 +8,9 @@ export default {
     },
     authentication: {
       endpoint: 'auth'
+    },
+    upload: {
+      endpoint: 'upload'
     }
   }
 };
