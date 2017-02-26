@@ -24,14 +24,14 @@ class Root extends React.Component {
       <Notifications />
       <div className="mdl-layout__header">
         <div className="mdl-layout__header-row">
-          <span className="mdl-layout-title">{'Ulosko'}</span>
+          <span className="mdl-layout-title">{'Walless'}</span>
           <MainNavigation />
           <div className="mdl-layout-spacer" />
           <UserNavigation />
         </div>
       </div>
       <div className="mdl-layout__drawer">
-        <span className="mdl-layout-title">{'Ulosko'}</span>
+        <span className="mdl-layout-title">{'Walless'}</span>
         <MainNavigation />
         <div className="mdl-layout-spacer" />
         <UserNavigation />

@@ -1,3 +1,4 @@
+// @flow
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -44,4 +45,22 @@ const updateMenu = graphql(
   }
 );
 
-export {createMenu, updateMenu};
+const updateMenuItems = graphql(
+  gql`
+  mutation updateMenuItems($input: UpdateMenuItemsInput!) {
+    updateMenuItems(input: $input) {
+      clientMutationId
+    }
+  }
+  `, {
+    props: ({mutate}) => ({
+      updateMenuItems: (menu: Number, menuItems: Number[]) => mutate({
+        variables: {
+          input: {menu, menuItems}
+        }
+      })
+    })
+  }
+);
+
+export {createMenu, updateMenu, updateMenuItems};

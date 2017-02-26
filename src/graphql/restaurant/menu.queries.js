@@ -3,13 +3,24 @@ import {hasIn} from 'lodash/fp';
 import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
+import {menuItemFragment} from 'graphql/restaurant/menuItem.queries';
 
 const menuFragment = gql`
   fragment menuInfo on Menu {
     id
     name
     description
+    menuMenuItemsByMenu {
+      edges {
+        node {
+          menuItemByMenuItem {
+            ...menuItemInfo
+          }
+        }
+      }
+    }
   }
+  ${menuItemFragment}
 `;
 
 const getMenu = graphql(

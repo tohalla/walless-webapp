@@ -16,6 +16,12 @@
   display: flex;
   width: 100%;
   align-items: stretch;
+  &--trigger {
+    &:hover {
+      background: $iron;
+      cursor: pointer;
+    }
+  }
   &__thumbnail {
     display: flex;
     align-items: center;

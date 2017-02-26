@@ -39,6 +39,7 @@ class MenuItem extends React.Component {
             <button
                 className="mdl-button mdl-js-button mdl-button--icon"
                 id={`menu-item-actions-${id}`}
+                type="button"
             >
               <i className="material-icons">{'more_vert'}</i>
             </button>

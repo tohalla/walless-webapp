@@ -22,8 +22,13 @@ class MenuItems extends React.Component {
     restaurant: React.PropTypes.object.isRequired,
     action: React.PropTypes.object,
     selectable: React.PropTypes.bool,
+    selectedItems: React.PropTypes.object,
+    onToggle: React.PropTypes.func,
     plain: React.PropTypes.bool
   };
+  static defaultProps = {
+    selectedItems: new Set()
+  }
   state = {
     action: null
   };
@@ -38,10 +43,14 @@ class MenuItems extends React.Component {
     this.setState({action: null});
     this.props.data.refetch();
   }
+  handleToggle = e => {
+    this.props.onToggle(Number(e.target.value));
+  }
   render() {
     const {
       menuItems,
       restaurant,
+      selectedItems,
       action: forceAction,
       filter,
       plain,
@@ -113,7 +122,7 @@ class MenuItems extends React.Component {
             }
           </div> : null
         }
-        {action.hideItems ? null :
+        {action.hideItems || !selectedItems instanceof Set ? null :
           <div className={`container${plain ? '' : ' container--distinct'}`}>
             {menuItems && menuItems.length ?
               menuItems
@@ -142,7 +151,12 @@ class MenuItems extends React.Component {
                   return selectable ?
                     <div className="container__item" key={index}>
                       <div className="container__item__actions">
-                        <Checkbox id={`select-${menuItem.id}`} />
+                        <Checkbox
+                            checked={selectedItems.has(menuItem.id)}
+                            id={`select-${menuItem.id}`}
+                            onChange={this.handleToggle}
+                            value={menuItem.id}
+                        />
                       </div>
                       {menuItemElement}
                     </div>
