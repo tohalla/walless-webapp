@@ -20,8 +20,12 @@ module.exports = {
     ]
   },
   resolve: {
-    root: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'assets')],
-    extensions: ['', '.js', '.jsx']
+    modules: [
+      path.resolve(__dirname, 'src'),
+      path.resolve(__dirname, 'assets'),
+      'node_modules'
+    ],
+    extensions: ['.js', '.jsx']
   },
   output: {
     path: path.resolve(__dirname, 'dist', 'assets'),
@@ -29,25 +33,43 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: [
-          'babel-loader'
-        ]
+        loader: 'babel-loader'
       },
       {
         test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract('css!sass!postcss')
+        use: ExtractTextPlugin.extract({
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: rucksack({
+                  autoprefixer: true
+                })
+              }
+            },
+            'sass-loader'
+          ]
+        })
       },
       {
         test: /\.(png|svg)$/,
-        loader: 'url-loader?limit=100000'
+        loader: 'url-loader',
+        options: {
+          limit: 100000
+        }
       },
       {
         test: /\.woff(2)?(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
-        loader: 'url-loader?limit=10000&minetype=application/font-woff'
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          minetype: 'application/font-woff'
+        }
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
@@ -55,11 +77,6 @@ module.exports = {
       }
     ]
   },
-  postcss: [
-    rucksack({
-      autoprefixer: true
-    })
-  ],
   devtool: 'eval',
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
@@ -70,7 +87,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
     }),
-    new ExtractTextPlugin('[name].css', {
+    new ExtractTextPlugin({
+      filename: '[name].css',
+      disable: false,
       allChunks: true
     }),
     new HtmlWebpackPlugin({
