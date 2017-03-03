@@ -15,7 +15,7 @@ import {
   updateMenuItemFiles
 } from 'graphql/restaurant/menuItem.mutations';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
-import {getActiveAccount} from 'graphql/account.queries';
+import {getActiveAccount} from 'graphql/account/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 

@@ -4,20 +4,20 @@ import {compose} from 'react-apollo';
 
 import Authenticate from 'account/Authenticate.component';
 import authenticationHandler from 'util/auth';
-import {getActiveAccount} from 'graphql/account.queries';
+import {getActiveAccount} from 'graphql/account/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class UserNavigation extends React.Component {
   render() {
-    const {t, me} = this.props;
+    const {t, activeAccount} = this.props;
     return (
       <nav className="mdl-navigation">
-        {me ?
+        {activeAccount ?
           <div>
             <span>
               {t('account.authenticated', {
-                name: me.firstName
+                name: activeAccount.firstName
               })}
             </span>
             <button

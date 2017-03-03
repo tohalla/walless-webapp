@@ -2,6 +2,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 
 import authenticationHandler from 'util/auth';
+import {restaurantFragment} from 'graphql/restaurant/restaurant.queries';
 
 const accountFragment = gql`
   fragment accountInformation on Account {
@@ -39,9 +40,19 @@ const getActiveAccount = graphql(
     query {
       getActiveAccount {
         ...accountInformation
+        restaurantAccountsByAccount {
+          edges {
+            node {
+              restaurantByRestaurant {
+                ...restaurantInfo
+              }
+            }
+          }
+        }
       }
     }
     ${accountFragment}
+    ${restaurantFragment}
   `,
   {
     skip: () => !authenticationHandler.isAuthenticated,
@@ -50,7 +61,7 @@ const getActiveAccount = graphql(
         return null;
       const {emailByEmail: {email}, ...rest} = getActiveAccount;
       return {
-        me: Object.assign({}, rest, {email})
+        activeAccount: Object.assign({}, rest, {email})
       };
     }
   }

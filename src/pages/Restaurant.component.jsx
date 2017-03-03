@@ -4,11 +4,12 @@ import Select from 'react-select';
 import {Link} from 'react-router';
 import {find} from 'lodash/fp';
 import {connect} from 'react-redux';
+import {hasIn} from 'lodash/fp';
 
 import Spinner from 'mdl/Spinner.component';
 import WithSideBar from 'containers/WithSideBar.component';
 import Padded from 'containers/Padded.component';
-import {getMyRestaurants} from 'graphql/restaurant/restaurant.queries';
+import {getActiveAccount} from 'graphql/account/account.queries';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -38,7 +39,6 @@ const menuItems = [
 
 class Restaurant extends React.Component {
   static propTypes = {
-    me: React.PropTypes.object,
     children: React.PropTypes.oneOfType([
       React.PropTypes.arrayOf(React.PropTypes.node),
       React.PropTypes.node
@@ -62,17 +62,27 @@ class Restaurant extends React.Component {
   };
   render() {
     const {
-      myRestaurants,
+      activeAccount,
       routeParams,
       children,
       t,
       router: {location},
       loading
     } = this.props;
+    const restaurants = hasIn([
+      'restaurantAccountsByAccount',
+      'edges',
+      0,
+      'node',
+      'restaurantByRestaurant'
+    ])(activeAccount) ?
+      activeAccount.restaurantAccountsByAccount.edges
+        .map(edge => edge.node.restaurantByRestaurant) :
+      [];
     const restaurant = find(restaurant =>
       restaurant.id === Number(routeParams.restaurant)
-    )(myRestaurants);
-    if (restaurant && myRestaurants.length) {
+    )(restaurants);
+    if (restaurant && restaurants.length) {
       return (
         <WithSideBar
             sideContent={
@@ -84,7 +94,7 @@ class Restaurant extends React.Component {
                     name="activeRestaurant"
                     onChange={this.handleRestaurantChange}
                     options={
-                      myRestaurants.map(value => ({
+                      restaurants.map(value => ({
                         value: value.id,
                         label: value.name
                       }))
@@ -138,5 +148,5 @@ class Restaurant extends React.Component {
 }
 
 export default compose(
-  getMyRestaurants
+  getActiveAccount
 )(connect(mapStateToProps, {})(Restaurant));

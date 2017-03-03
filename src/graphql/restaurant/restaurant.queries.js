@@ -43,47 +43,6 @@ const getRestaurant = graphql(
   }
 );
 
-const getMyRestaurants = graphql(
-  gql`
-    query {
-      getActiveAccount {
-        id
-        restaurantAccountsByAccount {
-          edges {
-            node {
-              restaurantByRestaurant {
-                ...restaurantInfo
-              }
-            }
-          }
-        }
-      }
-    }
-    ${restaurantFragment}
-  `,
-  {
-    skip: (ownProps) => !authenticationHandler.isAuthenticated,
-    props: ({ownProps, data: {getActiveAccount, ...rest}}) => {
-      if (!hasIn(
-        [
-          'restaurantAccountsByAccount',
-          'edges',
-          0,
-          'node',
-          'restaurantByRestaurant'
-        ])(getActiveAccount)
-      ) {
-        return rest;
-      }
-      return {
-        myRestaurants: getActiveAccount.restaurantAccountsByAccount.edges
-          .map(edge => edge.node.restaurantByRestaurant),
-        ...rest
-      };
-    }
-  }
-);
-
 const getMenuItemsByRestaurant = graphql(
   gql`
     query restaurantById($id: Int!) {
@@ -126,7 +85,6 @@ const getMenuItemsByRestaurant = graphql(
 
 
 export {
-  getMyRestaurants,
   restaurantFragment,
   getRestaurant,
   getMenuItemsByRestaurant

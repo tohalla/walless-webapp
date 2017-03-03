@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 
-import {getActiveAccount} from 'graphql/account.queries';
+import {getActiveAccount} from 'graphql/account/account.queries';
 
 const menuItems = [
   {
@@ -41,12 +41,12 @@ class MainNavigation extends React.Component {
   }
   render() {
     const {router: {location}} = this.context;
-    const {t, me} = this.props;
+    const {t, activeAccount} = this.props;
     return (
       <nav className="mdl-navigation main-navigation">
         {
           menuItems
-            .filter(item => !item.requireAuthentication || me)
+            .filter(item => !item.requireAuthentication || activeAccount)
             .map((item, index) =>
               <Link
                   className={

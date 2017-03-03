@@ -3,7 +3,7 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {hasIn} from 'lodash/fp';
 
-import {getActiveAccount} from 'graphql/account.queries';
+import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {
