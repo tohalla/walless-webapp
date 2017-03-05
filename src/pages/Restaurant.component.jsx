@@ -45,13 +45,23 @@ class Restaurant extends React.Component {
     ])
   };
   componentWillReceiveProps(newProps) {
-    const {myRestaurants} = newProps;
+    const {activeAccount} = newProps;
     if (
-      myRestaurants &&
-      myRestaurants.length &&
-      !newProps.routeParams.restaurant
+      !newProps.routeParams.restaurant &&
+      hasIn([
+        'restaurantAccountsByAccount',
+        'edges',
+        0,
+        'node',
+        'restaurantByRestaurant'
+      ])(activeAccount) &&
+      activeAccount.restaurantAccountsByAccount.edges.length
     ) {
-      this.props.router.push(`/restaurant/${myRestaurants[0].id}`);
+      this.props.router.push(
+        '/restaurant/' +
+        activeAccount.restaurantAccountsByAccount.edges[0]
+          .node.restaurantByRestaurant.id
+      );
     }
   }
   handleRestaurantChange = value => {

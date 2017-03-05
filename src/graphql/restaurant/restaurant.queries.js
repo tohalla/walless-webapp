@@ -27,10 +27,10 @@ const getRestaurant = graphql(
     ${restaurantFragment}
   `, {
     skip: ownProps =>
-      typeof ownProps.restaurant === 'object' || !ownProps.restaurant,
+      typeof ownProps.restaurant !== 'string',
     options: ownProps => ({
       variables: {
-        id: typeof ownProps.restaurant === 'object' ? null : ownProps.restaurant
+        id: typeof ownProps.restaurant === 'string' ? ownProps.restaurant : null
       }
     }),
     props: ({ownProps, data}) => {

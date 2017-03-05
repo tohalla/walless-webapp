@@ -15,9 +15,8 @@ class Root extends React.Component {
       React.PropTypes.node
     ])
   };
-  constructor(props, context) {
-    super(props, context);
-    props.setLanguage('en');
+  componentWillMount() {
+    this.props.setLanguage('en');
   }
   render = () => (
     <div className="site mdl-layout mdl-js-layout mdl-layout--no-desktop-drawer-button">
