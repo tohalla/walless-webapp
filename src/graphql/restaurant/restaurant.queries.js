@@ -58,7 +58,6 @@ const getMenuItemsByRestaurant = graphql(
     }
     ${menuItemFragment}
   `, {
-    skip: ownProps => !authenticationHandler.isAuthenticated,
     options: ownProps => ({
       variables: {
         id: ownProps.restaurant.id
@@ -83,9 +82,76 @@ const getMenuItemsByRestaurant = graphql(
   }
 );
 
+const getAccountsByRestaurant = graphql(
+  gql`
+    query accountsByRestaurant($id: Int!) {
+      restaurantById(id: $id) {
+        restaurantAccountsByRestaurant {
+          edges {
+            node {
+              accountRoleByRole {
+                name
+              }
+              accountByAccount {
+                id
+                firstName
+                lastName
+              }
+            }
+          }
+        }
+      }
+    }
+  `, {
+    skip: ownProps => !authenticationHandler.isAuthenticated,
+    options: ownProps => ({
+      variables: {
+        id: ownProps.restaurant.id
+      }
+    }),
+    props: ({ownProps, data}) => {
+      const {restaurantById, ...rest} = data;
+      const accountsByRestaurant = rest;
+      if (!hasIn(
+        [
+          'restaurantAccountsByRestaurant',
+          'edges'
+        ])(restaurantById)
+      ) {
+        return {accountsByRestaurant};
+      }
+      return {
+        accountsByRestaurant: Object.assign({
+          accounts: restaurantById.restaurantAccountsByRestaurant.edges
+            .map(edge => formatMenuItem(edge.node))
+        }, accountsByRestaurant)
+      };
+    }
+  }
+);
+
+const getRolesByRestaurant = graphql(
+  gql`
+    query rolesByRestaurant($restaurant: Int!) {
+      rolesByRestaurant(restaurant: $restaurant) {
+        id
+        name
+        description
+      }
+    }
+  `, {
+    options: ownProps => ({
+      variables: {
+        restaurant: ownProps.restaurant.id
+      }
+    })
+  }
+);
 
 export {
   restaurantFragment,
   getRestaurant,
-  getMenuItemsByRestaurant
+  getMenuItemsByRestaurant,
+  getAccountsByRestaurant,
+  getRolesByRestaurant
 };

@@ -67,4 +67,8 @@ const getActiveAccount = graphql(
   }
 );
 
-export {accountFragment, roleRightsFragment, getActiveAccount};
+export {
+  accountFragment,
+  roleRightsFragment,
+  getActiveAccount
+};
