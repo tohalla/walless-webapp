@@ -49,6 +49,7 @@ const getMenuItemsByRestaurant = graphql(
   gql`
     query restaurantById($id: Int!) {
       restaurantById(id: $id) {
+        id
         menuItemsByRestaurant {
           edges {
             node {
@@ -90,6 +91,7 @@ const getAccountsByRestaurant = graphql(
   gql`
     query accountsByRestaurant($id: Int!) {
       restaurantById(id: $id) {
+        id
         restaurantAccountsByRestaurant {
           edges {
             node {
@@ -163,6 +165,7 @@ const getMenusByRestaurant = graphql(
   gql`
     query restaurantById($id: Int!) {
       restaurantById(id: $id) {
+        id
         menusByRestaurant {
           edges {
             node {
