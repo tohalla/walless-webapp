@@ -41,12 +41,12 @@ class MainNavigation extends React.Component {
   }
   render() {
     const {router: {location}} = this.context;
-    const {t, activeAccount} = this.props;
+    const {t, getActiveAccount} = this.props;
     return (
       <nav className="mdl-navigation main-navigation">
         {
           menuItems
-            .filter(item => !item.requireAuthentication || activeAccount)
+            .filter(item => !item.requireAuthentication || getActiveAccount)
             .map((item, index) =>
               <Link
                   className={

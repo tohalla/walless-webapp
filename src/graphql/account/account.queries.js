@@ -56,12 +56,9 @@ const getActiveAccount = graphql(
   `,
   {
     skip: () => !authenticationHandler.isAuthenticated,
-    props: ({ownProps, data: {getActiveAccount}}) => {
-      if (!getActiveAccount)
-        return null;
-      const {emailByEmail: {email}, ...rest} = getActiveAccount;
+    props: ({ownProps, data: {getActiveAccount: account, ...rest}}) => {
       return {
-        activeAccount: Object.assign({}, rest, {email})
+        getActiveAccount: {account, data: rest}
       };
     }
   }

@@ -10,14 +10,14 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class UserNavigation extends React.Component {
   render() {
-    const {t, activeAccount} = this.props;
+    const {t, getActiveAccount: {account} = {}} = this.props;
     return (
       <nav className="mdl-navigation">
-        {activeAccount ?
+        {account ?
           <div>
             <span>
               {t('account.authenticated', {
-                name: activeAccount.firstName
+                name: account.firstName
               })}
             </span>
             <button

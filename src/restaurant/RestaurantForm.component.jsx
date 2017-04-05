@@ -52,15 +52,12 @@ class RestaurantForm extends React.Component {
       createRestaurant,
       updateRestaurant,
       onSubmit,
-      me,
-      restaurant
+      getActiveAccount: {account} = {},
+      getRestaurant: {restaurant}
     } = this.props;
     const finalRestaurant = Object.assign({}, this.state,
       restaurant ? {id: restaurant.id} : null,
-      {
-        restaurant: restaurant,
-        createdBy: me.id
-      }
+      {createdBy: account.id}
     );
     (restaurant && restaurant.id ?
       updateRestaurant(finalRestaurant) : createRestaurant(finalRestaurant)

@@ -14,23 +14,23 @@ class Restaurant extends React.Component {
     ])
   };
   render() {
-    if (typeof this.props.restaurant !== 'object') {
-      return null;
+    if (this.props.getRestaurant && typeof this.props.getRestaurant.restaurant === 'object') {
+      const {getRestaurant: {restaurant: {name, description}}, t} = this.props;
+      return (
+        <div className="container container--distinct">
+          <h2>{name}</h2>
+          <table>
+            <tbody>
+              <tr>
+                <th>{t('restaurant.description')}</th>
+                <td>{description}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      );
     }
-    const {restaurant: {name, description}, t} = this.props;
-    return (
-      <div className="container container--distinct">
-        <h2>{name}</h2>
-        <table>
-          <tbody>
-            <tr>
-              <th>{t('restaurant.description')}</th>
-              <td>{description}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
+    return null;
   }
 }
 

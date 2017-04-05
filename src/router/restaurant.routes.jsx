@@ -21,21 +21,28 @@ export default (
       path="restaurant(/:restaurant)"
   >
     <IndexRoute
-        component={routeParamWrapper(Restaurant, ['restaurant'])}
+        component={routeParamWrapper(Restaurant, [{
+          key: 'restaurant',
+          transform: value => Number(value)
+        }])}
     />
     <Route path="menus">
       <IndexRoute component={Menus} />
       <Route
-          component={routeParamWrapper(Menu, ['menu'], {expand: true})}
+          component={routeParamWrapper(Menu, [{
+            key: 'menu',
+            transform: value => Number(value)
+          }], {expand: true})}
           path=":menu"
       />
     </Route>
     <Route path="menuitems">
       <IndexRoute component={MenuItems} />
       <Route
-          component={
-            routeParamWrapper(MenuItem, ['menuItem'], {expand: true})
-          }
+          component={routeParamWrapper(MenuItem, [{
+            key: 'menuItem',
+            transform: value => Number(value)
+          }], {expand: true})}
           path=":menuItem"
       />
     </Route>

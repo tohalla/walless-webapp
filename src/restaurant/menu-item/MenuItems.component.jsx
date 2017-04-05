@@ -18,7 +18,6 @@ const mapStateToProps = state => ({
 
 class MenuItems extends React.Component {
   static PropTypes = {
-    menuItems: React.PropTypes.arrayOf(React.PropTypes.object),
     restaurant: React.PropTypes.object.isRequired,
     action: React.PropTypes.object,
     selectable: React.PropTypes.bool,
@@ -41,14 +40,14 @@ class MenuItems extends React.Component {
   }
   handleMenuItemCreated = () => {
     this.setState({action: null});
-    this.props.data.refetch();
+    this.props.getMenuItemsByRestaurant.data.refetch();
   }
   handleToggle = e => {
     this.props.onToggle(Number(e.target.value));
   }
   render() {
     const {
-      menuItems,
+      getMenuItemsByRestaurant: {menuItems} = {},
       restaurant,
       selectedItems,
       action: forceAction,

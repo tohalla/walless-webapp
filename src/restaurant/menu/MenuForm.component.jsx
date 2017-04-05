@@ -30,7 +30,11 @@ class MenuForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    const menu = props.menu || {};
+    const {
+      getMenu: {
+        menu = typeof props.menu === 'object' ? props.menu : {}
+      } = {}
+    } = props;
     this.state = {
       name: menu.name || '',
       description: menu.description || '',
@@ -43,7 +47,15 @@ class MenuForm extends React.Component {
   componentWillReceiveProps(newProps) {
     if (typeof this.props.menu !== typeof newProps.menu) {
       // should reset inputs when menu information fetched with given id
-      const {name, description, menuMenuItemsByMenu} = newProps.menu;
+      const {
+        getMenu: {
+          menu: {
+            name,
+            description,
+            menuMenuItemsByMenu
+          } = typeof newProps.menu === 'object' ? newProps.menu : {}
+        } = {}
+      } = newProps;
       this.setState({
         name,
         description,
@@ -66,8 +78,10 @@ class MenuForm extends React.Component {
       updateMenu,
       restaurant,
       onSubmit,
-      me,
-      menu,
+      getActiveAccount: {account} = {},
+      getMenu: {
+        menu = typeof this.props.menu === 'object' ? this.props.menu : {}
+      } = {},
       updateMenuItems
     } = this.props;
     const {manageMenuItems, menuItems, ...menuOptions} = this.state; // eslint-disable-line
@@ -75,7 +89,7 @@ class MenuForm extends React.Component {
       menu ? {id: menu.id} : null,
       {
         restaurant: restaurant.id,
-        createdBy: me.id
+        createdBy: account.id
       }
     );
     (menu && menu.id ? updateMenu(finalMenu) : createMenu(finalMenu))

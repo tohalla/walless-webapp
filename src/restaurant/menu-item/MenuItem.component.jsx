@@ -10,14 +10,21 @@ class MenuItem extends React.Component {
       text: React.PropTypes.object.isRequired,
       onClick: React.PropTypes.func.isRequired
     })),
-    menuItem: React.PropTypes.object.isRequired
+    menuItem: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.number
+    ]).isRequired
   }
   render() {
-    if (typeof this.props.menuItem !== 'object') {
-      return null;
-    }
     const {
-      menuItem: {name, description, id, files},
+      getMenuItem: {
+        menuItem: {
+          name,
+          description,
+          id,
+          files
+        } = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
+      } = {},
       className,
       actions
     } = this.props;

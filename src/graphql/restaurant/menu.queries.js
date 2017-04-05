@@ -1,8 +1,6 @@
 import {graphql} from 'react-apollo';
-import {hasIn} from 'lodash/fp';
 import gql from 'graphql-tag';
 
-import authenticationHandler from 'util/auth';
 import {menuItemFragment} from 'graphql/restaurant/menuItem.queries';
 
 const menuFragment = gql`
@@ -32,60 +30,20 @@ const getMenu = graphql(
     }
     ${menuFragment}
   `, {
-    skip: ownProps => typeof ownProps.menu === 'object' || !ownProps.menu,
+    skip: ownProps => typeof ownProps.menu !== 'number',
     options: ownProps => ({
       variables: {
-        id: typeof ownProps.menu === 'object' ? null : ownProps.menu
+        id: typeof ownProps.menu === 'number' ? ownProps.menu : null
       }
     }),
     props: ({ownProps, data}) => {
-      const {menuById, ...rest} = data;
-      return {
-        menu: menuById,
+      const {menuById: menu, ...rest} = data;
+      return {getMenu: {
+        menu,
         data: rest
-      };
+      }};
     }
   }
 );
 
-const getMenus = graphql(
-  gql`
-    query restaurantById($id: Int!) {
-      restaurantById(id: $id) {
-        menusByRestaurant {
-          edges {
-            node {
-              ...menuInfo
-            }
-          }
-        }
-      }
-    }
-    ${menuFragment}
-  `, {
-    skip: ownProps => !authenticationHandler.isAuthenticated,
-    options: ownProps => ({
-      variables: {
-        id: ownProps.restaurant.id
-      }
-    }),
-    props: ({ownProps, data}) => {
-      const {restaurantById, ...rest} = data;
-      if (!hasIn(
-        [
-          'menusByRestaurant',
-          'edges'
-        ])(restaurantById)
-      ) {
-        return {data: rest};
-      }
-      return {
-        menus: restaurantById.menusByRestaurant.edges
-          .map(edge => edge.node),
-        data: rest
-      };
-    }
-  }
-);
-
-export {menuFragment, getMenus, getMenu};
+export {menuFragment, getMenu};

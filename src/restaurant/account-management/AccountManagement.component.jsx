@@ -11,7 +11,7 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class AccountManagement extends React.Component {
   render() {
-    const {accountsByRestaurant: {accounts}} = this.props;
+    const {getAccountsByRestaurant: {accounts}} = this.props;
     return (
       <div className={`container container--distinct`}>
         <table>

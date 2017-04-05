@@ -46,19 +46,18 @@ const getMenuItem = graphql(
     }
     ${menuItemFragment}
   `, {
-    skip: ownProps =>
-      typeof ownProps.menuItem === 'object' || !ownProps.menuItem,
+    skip: ownProps => typeof ownProps.menuItem !== 'number',
     options: ownProps => ({
       variables: {
-        id: typeof ownProps.menuItem === 'object' ? null : ownProps.menuItem
+        id: typeof ownProps.menuItem === 'number' ? ownProps.menuItem : null
       }
     }),
     props: ({ownProps, data}) => {
       const {menuItemById, ...rest} = data;
-      return {
+      return {getMenuItem: {
         menuItem: formatMenuItem(menuItemById),
         data: rest
-      };
+      }};
     }
   }
 );

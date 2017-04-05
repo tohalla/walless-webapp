@@ -15,10 +15,11 @@
 .container__item {
   display: flex;
   width: 100%;
+  background: $carrara;
   align-items: stretch;
   &--trigger {
     &:hover {
-      background: $iron;
+      background: darken($carrara, 5%);
       cursor: pointer;
     }
   }

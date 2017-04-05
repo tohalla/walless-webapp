@@ -23,10 +23,18 @@ class Menu extends React.Component {
     expand: false
   };
   render() {
-    if (typeof this.props.menu !== 'object') {
-      return null;
-    }
-    const {menu: {name, description, id}, t, expand, actions} = this.props;
+    const {
+      getMenu: {
+        menu: {
+          name,
+          description,
+          id
+        } = typeof this.props.menu === 'object' ? this.props.menu : {}
+      } = {},
+      t,
+      expand,
+      actions
+    } = this.props;
     return expand ? (
       <div className="container container--distinct">
         <table>

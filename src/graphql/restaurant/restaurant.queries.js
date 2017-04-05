@@ -7,6 +7,9 @@ import {
   formatMenuItem,
   menuItemFragment
 } from 'graphql/restaurant/menuItem.queries';
+import {
+  menuFragment
+} from 'graphql/restaurant/menu.queries';
 
 const restaurantFragment = gql`
   fragment restaurantInfo on Restaurant {
@@ -27,17 +30,16 @@ const getRestaurant = graphql(
     ${restaurantFragment}
   `, {
     skip: ownProps =>
-      typeof ownProps.restaurant !== 'string',
+      typeof ownProps.restaurant !== 'number',
     options: ownProps => ({
       variables: {
-        id: typeof ownProps.restaurant === 'string' ? ownProps.restaurant : null
+        id: typeof ownProps.restaurant === 'number' ? ownProps.restaurant : null
       }
     }),
     props: ({ownProps, data}) => {
       const {restaurantById, ...rest} = data;
       return {
-        restaurant: restaurantById,
-        data: rest
+        getRestaurant: {restaurant: restaurantById, data: rest}
       };
     }
   }
@@ -74,9 +76,11 @@ const getMenuItemsByRestaurant = graphql(
         return {data: rest};
       }
       return {
-        menuItems: restaurantById.menuItemsByRestaurant.edges
-          .map(edge => formatMenuItem(edge.node)),
-        data: rest
+        getMenuItemsByRestaurant: {
+          menuItems: restaurantById.menuItemsByRestaurant.edges
+            .map(edge => formatMenuItem(edge.node)),
+          data: rest
+        }
       };
     }
   }
@@ -111,20 +115,13 @@ const getAccountsByRestaurant = graphql(
     }),
     props: ({ownProps, data}) => {
       const {restaurantById, ...rest} = data;
-      const accountsByRestaurant = rest;
-      if (!hasIn(
-        [
-          'restaurantAccountsByRestaurant',
-          'edges'
-        ])(restaurantById)
-      ) {
-        return {accountsByRestaurant};
-      }
       return {
-        accountsByRestaurant: Object.assign({
-          accounts: restaurantById.restaurantAccountsByRestaurant.edges
-            .map(edge => formatMenuItem(edge.node))
-        }, accountsByRestaurant)
+        getAccountsByRestaurant: {
+          accounts: hasIn(['restaurantAccountsByRestaurant', 'edges'])(restaurantById) ?
+            restaurantById.restaurantAccountsByRestaurant.edges
+              .map(edge => formatMenuItem(edge.node)) : [],
+          data: rest
+        }
       };
     }
   }
@@ -134,9 +131,13 @@ const getRolesByRestaurant = graphql(
   gql`
     query rolesByRestaurant($restaurant: Int!) {
       rolesByRestaurant(restaurant: $restaurant) {
-        id
-        name
-        description
+        edges {
+          node {
+            id
+            name
+            description
+          }
+        }
       }
     }
   `, {
@@ -144,7 +145,56 @@ const getRolesByRestaurant = graphql(
       variables: {
         restaurant: ownProps.restaurant.id
       }
-    })
+    }),
+    props: ({ownProps, data}) => {
+      const {rolesByRestaurant, ...rest} = data;
+      return {
+        getRolesByRestaurant: {
+          roles: hasIn(['edges'])(rolesByRestaurant) ?
+            rolesByRestaurant.edges.map(edge => edge.node) : [],
+          data: rest
+        }
+      };
+    }
+  }
+);
+
+const getMenusByRestaurant = graphql(
+  gql`
+    query restaurantById($id: Int!) {
+      restaurantById(id: $id) {
+        menusByRestaurant {
+          edges {
+            node {
+              ...menuInfo
+            }
+          }
+        }
+      }
+    }
+    ${menuFragment}
+  `, {
+    options: ownProps => ({
+      variables: {
+        id: ownProps.restaurant.id
+      }
+    }),
+    props: ({ownProps, data}) => {
+      const {restaurantById, ...rest} = data;
+      if (!hasIn(
+        [
+          'menusByRestaurant',
+          'edges'
+        ])(restaurantById)
+      ) {
+        return {data: rest};
+      }
+      return {getMenusByRestaurant: {
+        menus: restaurantById.menusByRestaurant.edges
+          .map(edge => edge.node),
+        data: rest
+      }};
+    }
   }
 );
 
@@ -153,5 +203,6 @@ export {
   getRestaurant,
   getMenuItemsByRestaurant,
   getAccountsByRestaurant,
+  getMenusByRestaurant,
   getRolesByRestaurant
 };

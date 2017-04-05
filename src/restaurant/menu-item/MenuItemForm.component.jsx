@@ -26,7 +26,6 @@ class MenuItemForm extends React.Component {
     createMenuItem: React.PropTypes.func.isRequired,
     updateMenuItem: React.PropTypes.func.isRequired,
     restaurant: React.PropTypes.object.isRequired,
-    me: React.PropTypes.object.isRequired,
     menuItem: React.PropTypes.oneOfType([
       React.PropTypes.object,
       React.PropTypes.number
@@ -34,7 +33,11 @@ class MenuItemForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    const menuItem = props.menuItem || {};
+    const {
+      getMenuItem: {
+        menuItem = typeof props.menuItem === 'object' ? props.menuItem : {}
+      } = {}
+    } = props;
     this.state = {
       name: menuItem.name || '',
       description: menuItem.description || '',
@@ -47,7 +50,16 @@ class MenuItemForm extends React.Component {
   componentWillReceiveProps(newProps) {
     if (typeof this.props.menuItem !== typeof newProps.menuItem) {
       // should reset inputs when menu information fetched with given id
-      const {name, description, type, category} = newProps;
+      const {
+        getMenuItem: {
+          menuItem: {
+            name,
+            description,
+            type,
+            category
+          } = typeof newProps.menuItem === 'object' ? newProps.menuItem : {}
+        } = {}
+      } = newProps;
       this.setState({
         name,
         description,
@@ -69,8 +81,11 @@ class MenuItemForm extends React.Component {
       restaurant,
       onSubmit,
       onFailure,
-      me,
-      menuItem
+      getActiveAccount: {account} = {},
+      getMenuItem: {
+        menuItem = typeof this.props.menuItem === 'object' ?
+          this.props.menuItem : {}
+      } = {}
     } = this.props;
     const {images, ...menuItemOptions} = this.state;
     let files = [];
@@ -99,12 +114,12 @@ class MenuItemForm extends React.Component {
         menuItem ? {id: menuItem.id} : null,
         {
           restaurant: restaurant.id,
-          createdBy: me.id
+          createdBy: account.id
         }
       );
       try {
         const finalMenuItem = menuItem && menuItem.id ?
-          (await updateMenuItem(menuItemPayload)).data.updateMenuItem.menuItem :
+          (await updateMenuItem(menuItemPayload)).data.updateMenuItemById.menuItem :
           (await createMenuItem(menuItemPayload)).data.createMenuItem.menuItem;
         await updateMenuItemFiles(finalMenuItem.id, files);
         if(onSubmit) {

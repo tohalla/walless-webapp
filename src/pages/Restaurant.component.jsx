@@ -45,7 +45,7 @@ class Restaurant extends React.Component {
     ])
   };
   componentWillReceiveProps(newProps) {
-    const {activeAccount} = newProps;
+    const {getActiveAccount: {account}} = newProps;
     if (
       !newProps.routeParams.restaurant &&
       hasIn([
@@ -54,12 +54,12 @@ class Restaurant extends React.Component {
         0,
         'node',
         'restaurantByRestaurant'
-      ])(activeAccount) &&
-      activeAccount.restaurantAccountsByAccount.edges.length
+      ])(account) &&
+      account.restaurantAccountsByAccount.edges.length
     ) {
       this.props.router.push(
         '/restaurant/' +
-        activeAccount.restaurantAccountsByAccount.edges[0]
+        account.restaurantAccountsByAccount.edges[0]
           .node.restaurantByRestaurant.id
       );
     }
@@ -72,12 +72,11 @@ class Restaurant extends React.Component {
   };
   render() {
     const {
-      activeAccount,
+      getActiveAccount: {account, data: {loading}},
       routeParams,
       children,
       t,
-      router: {location},
-      loading
+      router: {location}
     } = this.props;
     const restaurants = hasIn([
       'restaurantAccountsByAccount',
@@ -85,13 +84,15 @@ class Restaurant extends React.Component {
       0,
       'node',
       'restaurantByRestaurant'
-    ])(activeAccount) ?
-      activeAccount.restaurantAccountsByAccount.edges
+    ])(account) ?
+      account.restaurantAccountsByAccount.edges
         .map(edge => edge.node.restaurantByRestaurant) :
       [];
-    const restaurant = find(restaurant =>
-      restaurant.id === Number(routeParams.restaurant)
-    )(restaurants);
+    const restaurant = routeParams.restaurant ?
+      find(restaurant =>
+        restaurant.id === Number(routeParams.restaurant)
+      )(restaurants) :
+      restaurants[0];
     if (restaurant && restaurants.length) {
       return (
         <WithSideBar

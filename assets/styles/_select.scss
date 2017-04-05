@@ -10,7 +10,7 @@
 
 .Select--dark {
   .Select-control {
-    background: $gray;
+    background: $gray !important;;
   }
   &.has-value.Select--single > .Select-control .Select-value .Select-value-label,
   .Select-input > input {
@@ -22,7 +22,7 @@
     border: 1px solid $dark-gray;
   }
   .Select-option {
-    color: $light-gray;
+    color: $light-gray !important;
     background: none;
   }
   .Select-option:hover {

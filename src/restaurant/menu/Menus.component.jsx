@@ -4,14 +4,13 @@ import {compose} from 'react-apollo';
 
 import MenuForm from 'restaurant/menu/MenuForm.component';
 import Button from 'mdl/Button.component';
-import {getMenus} from 'graphql/restaurant/menu.queries';
+import {getMenusByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import Menu from 'restaurant/menu/Menu.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class Menus extends React.Component {
   static PropTypes = {
-    menus: React.PropTypes.arrayOf(React.PropTypes.object),
     restaurant: React.PropTypes.object.isRequired
   }
   state = {
@@ -26,10 +25,10 @@ class Menus extends React.Component {
   }
   handleMenuSubmit = () => {
     this.setState({action: null});
-    this.props.data.refetch();
+    this.props.getMenusByRestaurant.data.refetch();
   }
   render() {
-    const {menus, restaurant, t} = this.props;
+    const {getMenusByRestaurant: {menus} = {}, restaurant, t} = this.props;
     const action = this.state.action ? this.state.action : {};
     return (
       <div>
@@ -83,5 +82,5 @@ class Menus extends React.Component {
 }
 
 export default compose(
-  getMenus
+  getMenusByRestaurant
 )(connect(mapStateToProps)(Menus));
