@@ -7,6 +7,7 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 
 import config from 'config';
+import Deletable from 'util/Deletable.component';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {
