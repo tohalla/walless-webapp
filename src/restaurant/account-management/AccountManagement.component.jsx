@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {
   getAccountsByRestaurant,
-  getRolesByRestaurant
+  getAccountRolesForRestaurant
 } from 'graphql/restaurant/restaurant.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -44,5 +44,5 @@ class AccountManagement extends React.Component {
 };
 
 export default compose(
-  getAccountsByRestaurant, getRolesByRestaurant
+  getAccountsByRestaurant, getAccountRolesForRestaurant
 )(connect(mapStateToProps, {})(AccountManagement));

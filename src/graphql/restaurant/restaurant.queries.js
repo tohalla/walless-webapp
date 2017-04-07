@@ -10,6 +10,7 @@ import {
 import {
   menuFragment
 } from 'graphql/restaurant/menu.queries';
+import {fileFragment} from 'graphql/file.queries';
 
 const restaurantFragment = gql`
   fragment restaurantInfo on Restaurant {
@@ -129,15 +130,18 @@ const getAccountsByRestaurant = graphql(
   }
 );
 
-const getRolesByRestaurant = graphql(
+const getAccountRolesForRestaurant = graphql(
   gql`
-    query rolesByRestaurant($restaurant: Int!) {
-      rolesByRestaurant(restaurant: $restaurant) {
-        edges {
-          node {
-            id
-            name
-            description
+    query restaurantById($id: Int!) {
+      restaurantById(id: $id) {
+        id
+        accountRolesForRestaurant {
+          edges {
+            node {
+              id
+              name
+              description
+            }
           }
         }
       }
@@ -145,15 +149,15 @@ const getRolesByRestaurant = graphql(
   `, {
     options: ownProps => ({
       variables: {
-        restaurant: ownProps.restaurant.id
+        id: ownProps.restaurant.id
       }
     }),
     props: ({ownProps, data}) => {
-      const {rolesByRestaurant, ...rest} = data;
+      const {restaurantById, ...rest} = data;
       return {
-        getRolesByRestaurant: {
-          roles: hasIn(['edges'])(rolesByRestaurant) ?
-            rolesByRestaurant.edges.map(edge => edge.node) : [],
+        getAccountRolesForRestaurant: {
+          roles: hasIn(['accountRolesForRestaurant', 'edges'])(restaurantById) ?
+            restaurantById.accountRolesForRestaurant.edges.map(edge => edge.node) : [],
           data: rest
         }
       };
@@ -201,11 +205,47 @@ const getMenusByRestaurant = graphql(
   }
 );
 
+const getFilesForRestaurant = graphql(
+  gql`
+    query restaurantById($id: Int!) {
+      restaurantById(id: $id) {
+        id
+        filesForRestaurant {
+          edges {
+            node {
+              ...fileInfo
+            }
+          }
+        }
+      }
+    }
+    ${fileFragment}
+  `, {
+    options: ownProps => ({
+      variables: {
+        id: ownProps.restaurant.id
+      }
+    }),
+    props: ({ownProps, data}) => {
+      const {restaurantById, ...rest} = data;
+      return {
+        getFilesForRestaurant: {
+          files: hasIn(['getFilesForRestaurant', 'edges'])(restaurantById) ?
+            restaurantById.getFilesForRestaurant.edges.map(edge => edge.node) : [],
+          data: rest
+        }
+      };
+    }
+  }
+);
+
+
 export {
   restaurantFragment,
   getRestaurant,
   getMenuItemsByRestaurant,
   getAccountsByRestaurant,
   getMenusByRestaurant,
-  getRolesByRestaurant
+  getAccountRolesForRestaurant,
+  getFilesForRestaurant
 };

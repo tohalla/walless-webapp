@@ -15,6 +15,7 @@ import {
   updateMenuItemFiles
 } from 'graphql/restaurant/menuItem.mutations';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
+import {getFilesForRestaurant} from 'graphql/restaurant/restaurant.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -43,6 +44,7 @@ class MenuItemForm extends React.Component {
       description: menuItem.description || '',
       type: menuItem.type || null,
       images: [],
+      files: menuItem.files || [],
       category: menuItem.category || null
     };
   }
@@ -56,7 +58,8 @@ class MenuItemForm extends React.Component {
             name,
             description,
             type,
-            category
+            category,
+            files = []
           } = typeof newProps.menuItem === 'object' ? newProps.menuItem : {}
         } = {}
       } = newProps;
@@ -64,7 +67,8 @@ class MenuItemForm extends React.Component {
         name,
         description,
         type,
-        category
+        category,
+        files
       });
     }
   }
@@ -87,28 +91,30 @@ class MenuItemForm extends React.Component {
           this.props.menuItem : {}
       } = {}
     } = this.props;
-    const {images, ...menuItemOptions} = this.state;
-    let files = [];
+    const {images, files: menuItemFiles, ...menuItemOptions} = this.state;
+    let files = menuItemFiles
+      .map(file => typeof file === 'object' ? file.id : file);
     (async () => {
       if (images && images.length) {
         const formData = new FormData();
         formData.append('restaurant', restaurant.id);
-        files = await (await fetch(
-          `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
-          {
-            method: 'POST',
-            body: images.reduce(
-              (prev, curr, index) => {
-                prev.append(index, curr);
-                return prev;
-              },
-              formData
-            ),
-            headers: {
-              'authorization': Cookie.get('Authorization')
+        files = files
+          .concat(await (await fetch(
+            `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
+            {
+              method: 'POST',
+              body: images.reduce(
+                (prev, curr, index) => {
+                  prev.append(index, curr);
+                  return prev;
+                },
+                formData
+              ),
+              headers: {
+                'authorization': Cookie.get('Authorization')
+              }
             }
-          }
-        )).json();
+          )).json());
       }
       const menuItemPayload = Object.assign({}, menuItemOptions,
         menuItem ? {id: menuItem.id} : null,
@@ -133,8 +139,18 @@ class MenuItemForm extends React.Component {
       }
     })();
   };
+  deleteImage = image => () => {
+    this.setState({
+      images: this.state.images.filter(i => i.preview !== image.preview)
+    });
+  };
+  deleteFile = file => () => {
+    this.setState({
+      files: this.state.files.filter(f => f.id !== file.id)
+    });
+  };
   handleDrop = accepted => {
-    this.setState({images: accepted});
+    this.setState({images: this.state.images.concat(accepted)});
   };
   handleCancel = e => {
     e.preventDefault();
@@ -142,7 +158,7 @@ class MenuItemForm extends React.Component {
   };
   render() {
     const {t} = this.props;
-    const {description, name} = this.state;
+    const {description, name, files = [], images = []} = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -164,21 +180,22 @@ class MenuItemForm extends React.Component {
               value={description}
           />
           <div className="container">
+            {
+              [].concat(
+                images.map(image => ({src: image.preview, handleDelete: this.deleteImage(image)})),
+                files.map(file => ({src: file.uri, handleDelete: this.deleteFile(file)}))
+              )
+                .map((image, index) =>
+                  <Deletable key={index} onDelete={image.handleDelete}>
+                    <img className="dropzone__image-preview" src={image.src}/>
+                  </Deletable>
+                )
+            }
             <Dropzone
                 accept="image/*"
                 className="dropzone"
                 onDrop={this.handleDrop}
-            >
-              {this.state.images && this.state.images.length ?
-                this.state.images.map((image, index) =>
-                  <img
-                      className="dropzone__image-preview"
-                      key={index}
-                      src={image.preview}
-                  />
-                ) : 'placeholder'
-              }
-            </Dropzone>
+            />
           </div>
         </div>
         <div>
@@ -199,5 +216,6 @@ export default compose(
   updateMenuItem,
   updateMenuItemFiles,
   getMenuItem,
-  getActiveAccount
+  getActiveAccount,
+  getFilesForRestaurant
 )(connect(mapStateToProps, {})(MenuItemForm));
