@@ -44,7 +44,6 @@ module.exports = {
     'babel/object-curly-spacing': 1,
     'object-shorthand': 1,
     'babel/no-await-in-loop': 1,
-    'comma-dangle': ['error', 'never'],
     'max-len': 1,
     'react/jsx-boolean-value': 2,
     'react/jsx-closing-bracket-location': 2,
