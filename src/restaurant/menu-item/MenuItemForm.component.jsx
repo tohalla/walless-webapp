@@ -94,7 +94,12 @@ class MenuItemForm extends React.Component {
     } = this.props;
     const {images, files: menuItemFiles, ...menuItemOptions} = this.state;
     let files = menuItemFiles
-      .map(file => typeof file === 'object' ? file.id : file);
+      .reduce(
+        (prev, curr) => curr._delete ?
+          prev :
+          prev.concat(typeof curr === 'object' ? curr.id : curr),
+        []
+      );
     (async () => {
       if (images && images.length) {
         const formData = new FormData();
@@ -145,9 +150,11 @@ class MenuItemForm extends React.Component {
       images: this.state.images.filter(i => i.preview !== image.preview)
     });
   };
-  deleteFile = file => () => {
+  toggleDeleteFile = file => () => {
     this.setState({
-      files: this.state.files.filter(f => f.id !== file.id)
+      files: this.state.files.map(f => f.id === file.id ?
+        Object.assign({}, f, {_delete: !f._delete}) : f
+      )
     });
   };
   handleDrop = accepted => {
@@ -183,11 +190,26 @@ class MenuItemForm extends React.Component {
           <div className="container">
             {
               [].concat(
-                images.map(image => ({src: image.preview, handleDelete: this.deleteImage(image)})),
-                files.map(file => ({src: file.uri, handleDelete: this.deleteFile(file)}))
+                images.map(image => ({
+                  src: image.preview,
+                  delete: false,
+                  handleDelete: this.deleteImage(image)
+                })),
+                files.map(file => ({
+                  src: file.uri,
+                  delete: file._delete,
+                  handleDelete: this.toggleDeleteFile(file)
+                }))
               )
                 .map((image, index) =>
-                  <Deletable key={index} onDelete={image.handleDelete}>
+                  <Deletable
+                      deleteText={image.delete ?
+                        t('cancel') :
+                        <i className="material-icons">{'delete'}</i>
+                      }
+                      key={index}
+                      onDelete={image.handleDelete}
+                  >
                     <img className="dropzone__image-preview" src={image.src}/>
                   </Deletable>
                 )

@@ -22,6 +22,13 @@ class Menu extends React.Component {
   static defaultProps = {
     expand: false
   };
+  constructor(props) {
+    super(props);
+    const {expand} = props;
+    this.state = {
+      expand
+    };
+  }
   render() {
     const {
       getMenu: {
@@ -32,9 +39,9 @@ class Menu extends React.Component {
         } = typeof this.props.menu === 'object' ? this.props.menu : {}
       } = {},
       t,
-      expand,
       actions
     } = this.props;
+    const {expand} = this.state;
     return expand ? (
       <div className="container container--distinct">
         <table>

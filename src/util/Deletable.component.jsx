@@ -2,10 +2,17 @@ import React from 'react';
 
 export default class Deletable extends React.Component {
   static propTypes = {
+    deleteText: React.PropTypes.oneOfType([
+      React.PropTypes.node,
+      React.PropTypes.string
+    ]),
     onDelete: React.PropTypes.func.isRequired
   };
-  handleDelete = e => {
-    e.stopPropagation();
+  static defaultProps = {
+    deleteText: <i className="material-icons">{'delete'}</i>
+  };
+  handleDelete = event => {
+    event.stopPropagation();
     this.props.onDelete();
   };
   render = () => (
@@ -21,7 +28,7 @@ export default class Deletable extends React.Component {
           }}
           type="button"
       >
-        <i className="material-icons">{'delete'}</i>
+        {this.props.deleteText}
       </button>
       {this.props.children}
     </div>
