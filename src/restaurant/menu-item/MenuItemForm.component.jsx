@@ -2,7 +2,6 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import Dropzone from 'react-dropzone';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 
@@ -10,6 +9,7 @@ import config from 'config';
 import Deletable from 'util/Deletable.component';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
+import SelectImages from 'util/SelectImages.component';
 import {
   createMenuItem,
   updateMenuItem,
@@ -37,16 +37,22 @@ class MenuItemForm extends React.Component {
     super(props);
     const {
       getMenuItem: {
-        menuItem = typeof props.menuItem === 'object' ? props.menuItem : {}
-      } = {}
+        menuItem: {
+          name,
+          description,
+          type,
+          category,
+          files = []
+        }
+      } = {menuItem: typeof props.menuItem === 'object' ? props.menuItem : {}}
     } = props;
     this.state = {
-      name: menuItem.name || '',
-      description: menuItem.description || '',
-      type: menuItem.type || null,
-      images: [],
-      files: menuItem.files || [],
-      category: menuItem.category || null
+      name: name || '',
+      description: description || '',
+      type: type || null,
+      newImages: [],
+      files: files || [],
+      category: category || null
     };
   }
   state: Object = {};
@@ -61,8 +67,8 @@ class MenuItemForm extends React.Component {
             type,
             category,
             files = []
-          } = typeof newProps.menuItem === 'object' ? newProps.menuItem : {}
-        } = {}
+          }
+        } = {menuItem: typeof newProps.menuItem === 'object' ? newProps.menuItem : {}}
       } = newProps;
       this.setState({
         name,
@@ -92,7 +98,7 @@ class MenuItemForm extends React.Component {
           this.props.menuItem : {}
       } = {}
     } = this.props;
-    const {images, files: menuItemFiles, ...menuItemOptions} = this.state;
+    const {newImages, files: menuItemFiles, ...menuItemOptions} = this.state;
     let files = menuItemFiles
       .reduce(
         (prev, curr) => curr._delete ?
@@ -101,7 +107,7 @@ class MenuItemForm extends React.Component {
         []
       );
     (async () => {
-      if (images && images.length) {
+      if (newImages && newImages.length) {
         const formData = new FormData();
         formData.append('restaurant', restaurant.id);
         files = files
@@ -109,7 +115,7 @@ class MenuItemForm extends React.Component {
             `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
             {
               method: 'POST',
-              body: images.reduce(
+              body: newImages.reduce(
                 (prev, curr, index) => {
                   prev.append(index, curr);
                   return prev;
@@ -147,7 +153,7 @@ class MenuItemForm extends React.Component {
   };
   deleteImage = image => () => {
     this.setState({
-      images: this.state.images.filter(i => i.preview !== image.preview)
+      newImages: this.state.newImages.filter(i => i.preview !== image.preview)
     });
   };
   toggleDeleteFile = file => () => {
@@ -158,15 +164,21 @@ class MenuItemForm extends React.Component {
     });
   };
   handleDrop = accepted => {
-    this.setState({images: this.state.images.concat(accepted)});
+    this.setState({newImages: this.state.newImages.concat(accepted)});
   };
   handleCancel = e => {
     e.preventDefault();
     this.props.onCancel();
   };
+  handleImagesSelected = images => {
+    this.setState({files: images});
+  };
   render() {
-    const {t} = this.props;
-    const {description, name, files = [], images = []} = this.state;
+    const {
+      t,
+      getFilesForRestaurant = {}
+    } = this.props;
+    const {description, name, files = [], newImages = []} = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -190,7 +202,7 @@ class MenuItemForm extends React.Component {
           <div className="container">
             {
               [].concat(
-                images.map(image => ({
+                newImages.map(image => ({
                   src: image.preview,
                   delete: false,
                   handleDelete: this.deleteImage(image)
@@ -210,14 +222,17 @@ class MenuItemForm extends React.Component {
                       key={index}
                       onDelete={image.handleDelete}
                   >
-                    <img className="dropzone__image-preview" src={image.src}/>
+                    <img className="image-preview" src={image.src}/>
                   </Deletable>
                 )
             }
-            <Dropzone
-                accept="image/*"
-                className="dropzone"
-                onDrop={this.handleDrop}
+            <SelectImages
+                dropzone={{onSubmit: this.handleDrop}}
+                select={{
+                  images: getFilesForRestaurant.files,
+                  selected: files,
+                  onImagesSelected: this.handleImagesSelected
+                }}
             />
           </div>
         </div>

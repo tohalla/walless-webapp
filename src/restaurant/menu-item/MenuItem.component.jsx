@@ -13,8 +13,21 @@ class MenuItem extends React.Component {
     menuItem: React.PropTypes.oneOfType([
       React.PropTypes.object,
       React.PropTypes.number
-    ]).isRequired
-  }
+    ]).isRequired,
+    onClick: React.PropTypes.func,
+    className: React.PropTypes.string
+  };
+  handleClick = () => {
+    const {
+      getMenuItem: {
+        menuItem
+      } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}},
+      onClick
+    } = this.props;
+    if (typeof onClick === 'function') {
+      return onClick(menuItem);
+    }
+  };
   render() {
     const {
       getMenuItem: {
@@ -23,13 +36,16 @@ class MenuItem extends React.Component {
           description,
           id,
           files
-        } = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
-      } = {},
+        }
+      } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}},
       className,
       actions
     } = this.props;
     return (
-      <div className={className ? className + ' container__item' : 'container__item'}>
+      <div
+          className={className ? className + ' container__item' : 'container__item'}
+          onClick={this.handleClick}
+      >
         <div className="container__item__thumbnail">
           {files.length ? <img src={files[0].uri} /> : null}
         </div>

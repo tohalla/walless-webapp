@@ -8,7 +8,6 @@ import Button from 'mdl/Button.component';
 import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
-import Checkbox from 'mdl/Checkbox.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -20,31 +19,29 @@ class MenuItems extends React.Component {
   static PropTypes = {
     restaurant: React.PropTypes.object.isRequired,
     action: React.PropTypes.object,
-    selectable: React.PropTypes.bool,
     selectedItems: React.PropTypes.object,
-    onToggle: React.PropTypes.func,
+    menuItem: React.PropTypes.shape({
+      onClick: React.PropTypes.func
+    }),
     plain: React.PropTypes.bool
   };
   static defaultProps = {
     selectedItems: new Set()
-  }
+  };
   state = {
     action: null
   };
   handleActionChange = action => e => {
     e.preventDefault();
     this.setState({action});
-  }
+  };
   resetAction = () => {
     this.setState({action: null});
-  }
+  };
   handleMenuItemCreated = () => {
     this.setState({action: null});
     this.props.getMenuItemsByRestaurant.data.refetch();
-  }
-  handleToggle = e => {
-    this.props.onToggle(Number(e.target.value));
-  }
+  };
   render() {
     const {
       getMenuItemsByRestaurant: {menuItems} = {},
@@ -53,7 +50,6 @@ class MenuItems extends React.Component {
       action: forceAction,
       filter,
       plain,
-      selectable,
       t
     } = this.props;
     const action = forceAction || this.state.action || {};
@@ -128,40 +124,26 @@ class MenuItems extends React.Component {
                 .filter(menuItem =>
                   !filter.name || menuItem.name.indexOf(filter.name) > -1
                 )
-                .map((menuItem, index) => {
-                  const menuItemElement = (
-                    <MenuItem
-                        actions={[
-                          {
-                            text: t('edit'),
-                            onClick: this.handleActionChange({
-                              name: 'edit',
-                              hideItems: true,
-                              hideSelection: true,
-                              hideReturn: true,
-                              menuItem
-                            })
-                          }
-                        ]}
-                        key={index}
-                        menuItem={menuItem}
-                    />
-                  );
-                  return selectable ?
-                    <div className="container__item" key={index}>
-                      <div className="container__item__actions">
-                        <Checkbox
-                            checked={selectedItems.has(menuItem.id)}
-                            id={`select-${menuItem.id}`}
-                            onChange={this.handleToggle}
-                            value={menuItem.id}
-                        />
-                      </div>
-                      {menuItemElement}
-                    </div>
-                  : menuItemElement;
-                }
-                ) : 'no menu items'
+                .map((menuItem, index) => (
+                  <MenuItem
+                      actions={plain ? [] : [
+                        {
+                          text: t('edit'),
+                          onClick: this.handleActionChange({
+                            name: 'edit',
+                            hideItems: true,
+                            hideSelection: true,
+                            hideReturn: true,
+                            menuItem
+                          })
+                        }
+                      ]}
+                      className={selectedItems.has(menuItem.id) ? 'container__item--selected' : null}
+                      key={index}
+                      menuItem={menuItem}
+                      {...this.props.menuItem}
+                  />
+                )) : 'no menu items'
             }
           </div>
         }

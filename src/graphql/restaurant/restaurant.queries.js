@@ -230,8 +230,11 @@ const getFilesForRestaurant = graphql(
       const {restaurantById, ...rest} = data;
       return {
         getFilesForRestaurant: {
-          files: hasIn(['getFilesForRestaurant', 'edges'])(restaurantById) ?
-            restaurantById.getFilesForRestaurant.edges.map(edge => edge.node) : [],
+          files: hasIn([
+            'filesForRestaurant',
+            'edges']
+          )(restaurantById) ?
+            restaurantById.filesForRestaurant.edges.map(edge => edge.node) : [],
           data: rest
         }
       };

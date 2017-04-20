@@ -32,8 +32,8 @@ class MenuForm extends React.Component {
     super(props);
     const {
       getMenu: {
-        menu = typeof props.menu === 'object' ? props.menu : {}
-      } = {}
+        menu
+      } = {menu: typeof props.menu === 'object' ? props.menu : {}}
     } = props;
     this.state = {
       name: menu.name || '',
@@ -53,8 +53,8 @@ class MenuForm extends React.Component {
             name,
             description,
             menuMenuItemsByMenu
-          } = typeof newProps.menu === 'object' ? newProps.menu : {}
-        } = {}
+          }
+        } = {menu: typeof newProps.menu === 'object' ? newProps.menu : {}}
       } = newProps;
       this.setState({
         name,
@@ -105,10 +105,10 @@ class MenuForm extends React.Component {
   };
   handleMenuItemSelect = item => {
     const menuItems = new Set([...this.state.menuItems]);
-    if (menuItems.has(item)) {
-      menuItems.delete(item);
+    if (menuItems.has(item.id)) {
+      menuItems.delete(item.id);
     } else {
-      menuItems.add(item);
+      menuItems.add(item.id);
     }
     this.setState({menuItems});
   }
@@ -143,10 +143,9 @@ class MenuForm extends React.Component {
                   hideSelection: true,
                   hideReturn: true
                 }}
-                onToggle={this.handleMenuItemSelect}
+                menuItem={{onClick: this.handleMenuItemSelect}}
                 plain
                 restaurant={restaurant}
-                selectable
                 selectedItems={menuItems}
             />
             :

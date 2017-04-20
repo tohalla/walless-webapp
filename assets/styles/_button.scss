@@ -7,4 +7,12 @@
 }
 .button--light {
   color: $carrara;
+  &--disabled {
+    color: unquote("rgba(#{$color-white}, 0.32)");
+    background-color: transparent;
+    cursor: default;
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
