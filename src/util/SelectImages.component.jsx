@@ -105,7 +105,7 @@ class SelectImages extends React.Component {
           type="button"
           value="dropzone"
       >
-        {'placeholder for translation'}
+        {t('uploadImages')}
       </Button>
     );
     const selectImagesButton = (
@@ -114,7 +114,7 @@ class SelectImages extends React.Component {
           type="button"
           value="selectImages"
       >
-        {'placeholder for translation'}
+        {t('selectImages')}
       </Button>
     );
     const selectImagesModal = (
