@@ -15,6 +15,7 @@
 
 .container__item {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   background: $carrara;
   align-items: stretch;
@@ -23,7 +24,7 @@
   }
   &--trigger {
     &:hover {
-      background: darken($carrara, 5%);
+      background: lighten($carrara, 5%);
       cursor: pointer;
     }
   }
@@ -46,6 +47,10 @@
     align-items: center;
     flex: 1 0 auto;
     padding: 0.5rem 0.7rem;
+  }
+  &__content--full-width {
+    flex: 1 0 100%;
+    width: 100%;
   }
   &__actions {
     position: relative;

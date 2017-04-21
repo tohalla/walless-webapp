@@ -9,15 +9,32 @@ class Button extends React.Component {
     raised: React.PropTypes.bool,
     children: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.number
+      React.PropTypes.number,
+      React.PropTypes.element
     ]),
+    onClick: React.PropTypes.func,
     type: React.PropTypes.string
   };
   static defaultProps = {
     type: 'button'
   }
+  handleClick = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    if(typeof this.props.onClick === 'function') {
+      this.props.onClick(event);
+    }
+  }
   render() {
-    const {raised, colored, accent, children, className, ...props} = this.props;
+    const {
+      raised,
+      colored,
+      accent,
+      children,
+      className,
+      onClick, // eslint-disable-line
+      ...props
+    } = this.props;
     return (
       <button
           className={
@@ -29,6 +46,7 @@ class Button extends React.Component {
               : ''
             ) + (className ? ` ${className}` : '')
           }
+          onClick={this.handleClick}
           {...props}
       >
         {children}

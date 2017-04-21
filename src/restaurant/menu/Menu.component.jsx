@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 
 import MdlMenu from 'mdl/MdlMenu.component';
+import Button from 'mdl/Button.component';
 import {getMenu} from 'graphql/restaurant/menu.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -29,6 +30,9 @@ class Menu extends React.Component {
       expand
     };
   }
+  toggleExpand = () => {
+    this.setState({expand: !this.state.expand});
+  };
   render() {
     const {
       getMenu: {
@@ -38,27 +42,14 @@ class Menu extends React.Component {
           id
         } = typeof this.props.menu === 'object' ? this.props.menu : {}
       } = {},
-      t,
       actions
     } = this.props;
     const {expand} = this.state;
-    return expand ? (
-      <div className="container container--distinct">
-        <table>
-          <tbody>
-            <tr>
-              <th>{t('restaurant.menus.name')}</th>
-              <td>{name}</td>
-            </tr>
-            <tr>
-              <th>{t('restaurant.menus.description')}</th>
-              <td>{description}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    ) : (
-      <div className="container__item">
+    return (
+      <div
+          className="container__item container__item--trigger"
+          onClick={this.toggleExpand}
+      >
         <div className="container__item__content">
           <div>
             {name}
@@ -70,12 +61,13 @@ class Menu extends React.Component {
         {
           actions && actions.length ?
             <div className="container__item__actions">
-              <button
+              <Button
                   className="mdl-button mdl-js-button mdl-button--icon"
                   id={`menu-actions-${id}`}
+                  type="button"
               >
                 <i className="material-icons">{'more_vert'}</i>
-              </button>
+              </Button>
               <MdlMenu htmlFor={`menu-actions-${id}`}>
                 {actions.map((action, index) =>
                   <li
@@ -87,6 +79,12 @@ class Menu extends React.Component {
                   </li>
                 )}
               </MdlMenu>
+            </div>
+          : null
+        } {
+          expand ?
+            <div className="container__item__content container__item__content--full-width">
+              {'preview'}
             </div>
           : null
         }

@@ -16,8 +16,9 @@ class Menus extends React.Component {
   state = {
     action: null
   };
-  handleActionChange = action => e => {
-    e.preventDefault();
+  handleActionChange = action => event => {
+    event.preventDefault();
+    event.stopPropagation();
     this.setState({action});
   }
   resetAction = () => {
