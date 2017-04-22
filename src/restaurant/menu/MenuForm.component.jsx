@@ -39,8 +39,8 @@ class MenuForm extends React.Component {
       name: menu.name || '',
       description: menu.description || '',
       manageMenuItems: false,
-      menuItems: hasIn(['menuMenuItemsByMenu', 'edges'])(menu) ? new Set(
-        menu.menuMenuItemsByMenu.edges.map(edge => edge.node.menuItemByMenuItem.id)
+      menuItems: menu.menuItems ? new Set(
+        menu.menuItems.map(item => item.id)
       ) : new Set()
     };
   }
@@ -52,17 +52,15 @@ class MenuForm extends React.Component {
           menu: {
             name,
             description,
-            menuMenuItemsByMenu
+            menuItems
           }
         } = {menu: typeof newProps.menu === 'object' ? newProps.menu : {}}
       } = newProps;
       this.setState({
         name,
         description,
-        menuItems:
-          menuMenuItemsByMenu &&
-          hasIn(['menuMenuItemsByMenu'])(menuMenuItemsByMenu) ? new Set(
-            menuMenuItemsByMenu.edges.map(edge => edge.node.menuItemByMenuItem.id)
+        menuItems: menuItems ? new Set(
+          menuItems.map(item => item.id)
         ) : new Set()
       });
     }
