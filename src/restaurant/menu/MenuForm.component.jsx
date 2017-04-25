@@ -1,7 +1,6 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import {hasIn} from 'lodash/fp';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'mdl/Input.component';
@@ -78,8 +77,8 @@ class MenuForm extends React.Component {
       onSubmit,
       getActiveAccount: {account} = {},
       getMenu: {
-        menu = typeof this.props.menu === 'object' ? this.props.menu : {}
-      } = {},
+        menu
+      } = {menu: typeof this.props.menu === 'object' ? this.props.menu : {}},
       updateMenuItems
     } = this.props;
     const {manageMenuItems, menuItems, ...menuOptions} = this.state; // eslint-disable-line

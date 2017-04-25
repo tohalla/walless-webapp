@@ -11,6 +11,7 @@ import Menu from 'restaurant/menu/Menu.component';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import Menus from 'restaurant/menu/Menus.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
+import ServingLocations from 'restaurant/serving-location/ServingLocations.component';
 import AccountManagement from 'restaurant/account-management/AccountManagement.component';
 import Restaurant from 'restaurant/Restaurant.component';
 
@@ -45,6 +46,9 @@ export default (
           }], {expand: true})}
           path=":menuItem"
       />
+    </Route>
+    <Route path="servinglocations">
+      <IndexRoute component={ServingLocations} />
     </Route>
     <Route component={AccountManagement} path="users" />
   </Route>

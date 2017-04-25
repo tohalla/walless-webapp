@@ -24,16 +24,16 @@ const menuItems = [
     translationKey: 'restaurant.menus'
   },
   {
-    path: 'servinglocations',
-    translationKey: 'restaurant.servingLocations'
-  },
-  {
     path: 'menuitems',
     translationKey: 'restaurant.menuItems'
   },
   {
     path: 'users',
     translationKey: 'restaurant.userManagement'
+  },
+  {
+    path: 'servinglocations',
+    translationKey: 'restaurant.servingLocations'
   },
   {
     path: 'dashboard',

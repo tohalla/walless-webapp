@@ -94,9 +94,8 @@ class MenuItemForm extends React.Component {
       onFailure,
       getActiveAccount: {account} = {},
       getMenuItem: {
-        menuItem = typeof this.props.menuItem === 'object' ?
-          this.props.menuItem : {}
-      } = {}
+        menuItem
+      } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}}
     } = this.props;
     const {newImages, files: menuItemFiles, ...menuItemOptions} = this.state;
     let files = menuItemFiles
