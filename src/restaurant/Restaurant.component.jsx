@@ -15,7 +15,10 @@ class Restaurant extends React.Component {
   };
   render() {
     if (this.props.getRestaurant && typeof this.props.getRestaurant.restaurant === 'object') {
-      const {getRestaurant: {restaurant: {name, description}}, t} = this.props;
+      const {
+        getRestaurant: {restaurant: {name, description}} = {restaurant: this.props.restaurant},
+        t
+      } = this.props;
       return (
         <div className="container container--distinct">
           <h2>{name}</h2>
