@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Padded from 'containers/Padded.component';
 
 export default class WithSideBar extends React.Component {
   static propTypes = {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.arrayOf(React.PropTypes.node),
-      React.PropTypes.node
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
     ]),
-    sideContent: React.PropTypes.element,
-    fixedSideContent: React.PropTypes.bool
+    sideContent: PropTypes.element,
+    fixedSideContent: PropTypes.bool
   };
   static defaultProps = {
     fixedSideContent: true

@@ -1,11 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {deleteNotification} from 'notifications/notification';
 
 class Notification extends React.Component {
   static propTypes = {
-    notification: React.PropTypes.object.isRequired
+    notification: PropTypes.object.isRequired
   };
   handleDelete = e => {
     e.preventDefault();

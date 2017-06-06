@@ -1,6 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'mdl/Input.component';
@@ -15,13 +16,13 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class RestaurantForm extends React.Component {
   static propTypes = {
-    onSubmit: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func,
-    createRestaurant: React.PropTypes.func.isRequired,
-    updateRestaurant: React.PropTypes.func.isRequired,
-    restaurant: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.number
+    onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
+    createRestaurant: PropTypes.func.isRequired,
+    updateRestaurant: PropTypes.func.isRequired,
+    restaurant: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
     ])
   };
   constructor(props) {

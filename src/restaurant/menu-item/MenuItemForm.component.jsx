@@ -4,6 +4,7 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import PropTypes from 'prop-types';
 
 import config from 'config';
 import Deletable from 'util/Deletable.component';
@@ -23,14 +24,14 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class MenuItemForm extends React.Component {
   static propTypes = {
-    onSubmit: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
-    createMenuItem: React.PropTypes.func.isRequired,
-    updateMenuItem: React.PropTypes.func.isRequired,
-    restaurant: React.PropTypes.object.isRequired,
-    menuItem: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.number
+    onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    createMenuItem: PropTypes.func.isRequired,
+    updateMenuItem: PropTypes.func.isRequired,
+    restaurant: PropTypes.object.isRequired,
+    menuItem: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
     ])
   };
   constructor(props) {
@@ -139,7 +140,7 @@ class MenuItemForm extends React.Component {
           (await updateMenuItem(menuItemPayload)).data.updateMenuItemById.menuItem :
           (await createMenuItem(menuItemPayload)).data.createMenuItem.menuItem;
         await updateMenuItemFiles(finalMenuItem.id, files);
-        if(onSubmit) {
+        if (onSubmit) {
           onSubmit();
         }
         onSubmit();
@@ -212,7 +213,7 @@ class MenuItemForm extends React.Component {
                   handleDelete: this.toggleDeleteFile(file)
                 }))
               )
-                .map((image, index) =>
+                .map((image, index) => (
                   <Deletable
                       deleteText={image.delete ?
                         t('cancel') :
@@ -223,7 +224,7 @@ class MenuItemForm extends React.Component {
                   >
                     <img className="image-preview" src={image.src}/>
                   </Deletable>
-                )
+                ))
             }
             <SelectImages
                 dropzone={{onSubmit: this.handleDrop}}

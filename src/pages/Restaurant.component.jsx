@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import {find} from 'lodash/fp';
 import {connect} from 'react-redux';
 import {hasIn} from 'lodash/fp';
+import PropTypes from 'prop-types';
 
 import Spinner from 'mdl/Spinner.component';
 import WithSideBar from 'containers/WithSideBar.component';
@@ -17,7 +18,7 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 const menuItems = [
   {
     path: '',
-    translationKey: 'restaurant'
+    translationKey: 'restaurant.restaurant'
   },
   {
     path: 'menus',
@@ -43,9 +44,9 @@ const menuItems = [
 
 class Restaurant extends React.Component {
   static propTypes = {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.arrayOf(React.PropTypes.node),
-      React.PropTypes.node
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
     ])
   };
   componentWillReceiveProps(newProps) {

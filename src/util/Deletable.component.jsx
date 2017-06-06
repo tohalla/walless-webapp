@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Deletable extends React.Component {
   static propTypes = {
-    deleteText: React.PropTypes.oneOfType([
-      React.PropTypes.node,
-      React.PropTypes.string
+    deleteText: PropTypes.oneOfType([
+      PropTypes.node,
+      PropTypes.string
     ]),
-    onDelete: React.PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired
   };
   static defaultProps = {
     deleteText: <i className="material-icons">{'delete'}</i>

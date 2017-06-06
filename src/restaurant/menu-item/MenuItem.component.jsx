@@ -1,21 +1,22 @@
 import React from 'react';
 import {compose} from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import MdlMenu from 'mdl/MdlMenu.component';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 
 class MenuItem extends React.Component {
   static PropTypes = {
-    actions: React.PropTypes.arrayOf(React.PropTypes.shape({
-      text: React.PropTypes.object.isRequired,
-      onClick: React.PropTypes.func.isRequired
+    actions: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.object.isRequired,
+      onClick: PropTypes.func.isRequired
     })),
-    menuItem: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.number
+    menuItem: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
     ]).isRequired,
-    onClick: React.PropTypes.func,
-    className: React.PropTypes.string
+    onClick: PropTypes.func,
+    className: PropTypes.string
   };
   handleClick = () => {
     const {
@@ -67,7 +68,7 @@ class MenuItem extends React.Component {
               <i className="material-icons">{'more_vert'}</i>
             </button>
             <MdlMenu htmlFor={`menu-item-actions-${id}`}>
-              {actions.map((action, index) =>
+              {actions.map((action, index) => (
                 <li
                     className="mdl-menu__item"
                     key={index}
@@ -75,7 +76,7 @@ class MenuItem extends React.Component {
                 >
                   {action.text}
                 </li>
-              )}
+              ))}
             </MdlMenu>
           </div>
         : null}

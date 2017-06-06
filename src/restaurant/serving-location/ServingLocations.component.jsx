@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import {
   getServingLocationsByRestaurant
@@ -11,7 +12,7 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class ServingLocations extends React.Component {
   static PropTypes = {
-    restaurant: React.PropTypes.object.isRequired
+    restaurant: PropTypes.object.isRequired
   }
   render() {
     const {
@@ -20,12 +21,12 @@ class ServingLocations extends React.Component {
     return (
       <div className="container container--distinct">
         {servingLocations && servingLocations.length ?
-           servingLocations.map((servingLocation, index) =>
+           servingLocations.map((servingLocation, index) => (
             <ServingLocation
                 key={index}
                 servingLocation={servingLocation}
             />
-          )
+          ))
           : ''
         }
       </div>

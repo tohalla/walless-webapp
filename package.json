@@ -26,6 +26,7 @@
     "material-design-lite": "^1.2.1",
     "node-polyglot": "^2.2.2",
     "normalize.css": "^7.0.0",
+    "prop-types": "^15.5.10",
     "react": "^15.3.2",
     "react-apollo": "^1.0.0",
     "react-click-outside": "github:tj/react-click-outside",

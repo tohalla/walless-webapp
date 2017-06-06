@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 
@@ -37,7 +38,7 @@ const mapStateToProps = state => ({
 
 class MainNavigation extends React.Component {
   static contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   }
   render() {
     const {router: {location}} = this.context;

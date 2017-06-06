@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import MainNavigation from 'navigation/MainNavigation.component';
 import UserNavigation from 'navigation/UserNavigation.component';
@@ -10,9 +11,9 @@ import {setLanguage} from 'util/translation';
 
 class Root extends React.Component {
   static propTypes = {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.arrayOf(React.PropTypes.node),
-      React.PropTypes.node
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
     ])
   };
   componentWillMount() {

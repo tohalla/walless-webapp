@@ -1,19 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import mdl from 'mdl/mdl';
 
 class Button extends React.Component {
   static propTypes = {
-    colored: React.PropTypes.bool,
-    accent: React.PropTypes.bool,
-    raised: React.PropTypes.bool,
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-      React.PropTypes.element
+    colored: PropTypes.bool,
+    accent: PropTypes.bool,
+    raised: PropTypes.bool,
+    children: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.element
     ]),
-    onClick: React.PropTypes.func,
-    type: React.PropTypes.string
+    onClick: PropTypes.func,
+    type: PropTypes.string
   };
   static defaultProps = {
     type: 'button'

@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {hasIn} from 'lodash/fp';
+import PropTypes from 'prop-types';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
 import Button from 'mdl/Button.component';
@@ -17,13 +18,13 @@ const mapStateToProps = state => ({
 
 class MenuItems extends React.Component {
   static PropTypes = {
-    restaurant: React.PropTypes.object.isRequired,
-    action: React.PropTypes.object,
-    selectedItems: React.PropTypes.object,
-    menuItem: React.PropTypes.shape({
-      onClick: React.PropTypes.func
+    restaurant: PropTypes.object.isRequired,
+    action: PropTypes.object,
+    selectedItems: PropTypes.object,
+    menuItem: PropTypes.shape({
+      onClick: PropTypes.func
     }),
-    plain: React.PropTypes.bool
+    plain: PropTypes.bool
   };
   static defaultProps = {
     selectedItems: new Set()

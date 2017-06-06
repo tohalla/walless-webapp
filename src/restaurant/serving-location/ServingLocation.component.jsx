@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import {getServingLocation} from 'graphql/restaurant/servingLocation.queries';
 
@@ -8,9 +9,9 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class ServingLocation extends React.Component {
   static PropTypes = {
-    servingLocation: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.number
+    servingLocation: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
     ]).isRequired
   };
   toggleExpand = () => {

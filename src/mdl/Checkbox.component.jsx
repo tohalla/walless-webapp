@@ -1,19 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import mdl from 'mdl/mdl';
 
 class CheckBox extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string.isRequired,
-    checked: React.PropTypes.bool,
-    inputClass: React.PropTypes.string,
-    label: React.PropTypes.oneOfType([
-      React.PropTypes.node,
-      React.PropTypes.string
+    id: PropTypes.string.isRequired,
+    checked: PropTypes.bool,
+    inputClass: PropTypes.string,
+    label: PropTypes.oneOfType([
+      PropTypes.node,
+      PropTypes.string
     ]),
-    ripple: React.PropTypes.bool,
-    onChange: React.PropTypes.func,
-    value: React.PropTypes.any
+    ripple: PropTypes.bool,
+    onChange: PropTypes.func,
+    value: PropTypes.any
   };
   render() {
     const {

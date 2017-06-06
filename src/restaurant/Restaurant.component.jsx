@@ -1,6 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
 
@@ -8,9 +9,9 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class Restaurant extends React.Component {
   static propTypes = {
-    restaurant: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.object
+    restaurant: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.object
     ])
   };
   render() {

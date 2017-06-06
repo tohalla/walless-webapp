@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import MdlMenu from 'mdl/MdlMenu.component';
 import Button from 'mdl/Button.component';
@@ -10,15 +11,15 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class Menu extends React.Component {
   static PropTypes = {
-    menu: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.number
+    menu: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
     ]).isRequired,
-    actions: React.PropTypes.arrayOf(React.PropTypes.shape({
-      text: React.PropTypes.object.isRequired,
-      onClick: React.PropTypes.func.isRequired
+    actions: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.object.isRequired,
+      onClick: PropTypes.func.isRequired
     })),
-    expand: React.PropTypes.bool
+    expand: PropTypes.bool
   };
   static defaultProps = {
     expand: false
@@ -69,7 +70,7 @@ class Menu extends React.Component {
                 <i className="material-icons">{'more_vert'}</i>
               </Button>
               <MdlMenu htmlFor={`menu-actions-${id}`}>
-                {actions.map((action, index) =>
+                {actions.map((action, index) => (
                   <li
                       className="mdl-menu__item"
                       key={index}
@@ -77,7 +78,7 @@ class Menu extends React.Component {
                   >
                     {action.text}
                   </li>
-                )}
+                ))}
               </MdlMenu>
             </div>
           : null

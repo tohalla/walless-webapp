@@ -1,23 +1,24 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
+import PropTypes from 'prop-types';
 
 import mdl from 'mdl/mdl';
 
 class Input extends React.Component {
   static propTypes = {
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
     ]),
-    label: React.PropTypes.string.isRequired,
-    id: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string,
-    className: React.PropTypes.string,
-    onChange: React.PropTypes.func.isRequired,
-    floatingLabel: React.PropTypes.bool,
-    disabled: React.PropTypes.bool,
-    required: React.PropTypes.bool,
-    rows: React.PropTypes.number
+    label: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    className: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    floatingLabel: PropTypes.bool,
+    disabled: PropTypes.bool,
+    required: PropTypes.bool,
+    rows: PropTypes.number
   };
   static defaultProps = {
     floatingLabel: false,

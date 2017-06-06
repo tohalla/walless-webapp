@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import {isEqual, omit} from 'lodash/fp';
 import Modal from 'react-modal';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Button from 'mdl/Button.component';
 import Deletable from 'util/Deletable.component';
@@ -11,13 +12,13 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class SelectImages extends React.Component {
   static propTypes = {
-    select: React.PropTypes.shape({
-      images: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-      selected: React.PropTypes.arrayOf(React.PropTypes.object),
-      onImagesSelected: React.PropTypes.func.isRequired
+    select: PropTypes.shape({
+      images: PropTypes.arrayOf(PropTypes.object).isRequired,
+      selected: PropTypes.arrayOf(PropTypes.object),
+      onImagesSelected: PropTypes.func.isRequired
     }),
-    dropzone: React.PropTypes.shape({
-      onSubmit: React.PropTypes.func.isRequired
+    dropzone: PropTypes.shape({
+      onSubmit: PropTypes.func.isRequired
     })
   };
   constructor(props) {
@@ -90,7 +91,7 @@ class SelectImages extends React.Component {
   render() {
     const {dropzone, t} = this.props;
     const {action, dropzoneImages} = this.state;
-    const images = this.state.images.map((image, index) =>
+    const images = this.state.images.map((image, index) => (
       <img
           className="image-preview"
           key={index}
@@ -98,7 +99,7 @@ class SelectImages extends React.Component {
           src={image.src || image.uri}
           style={{opacity: image._selected ? 1 : .6}}
       />
-    );
+    ));
     const dropzoneButton = (
       <Button
           onClick={this.handleButtonClick}
@@ -169,14 +170,14 @@ class SelectImages extends React.Component {
                 className="dropzone"
                 onDrop={this.handleDrop}
             >
-              {dropzoneImages.map((image, index) =>
+              {dropzoneImages.map((image, index) => (
                 <Deletable
                     key={index}
                     onDelete={this.deleteImage(image)}
                 >
                   <img className="image-preview" src={image.preview}/>
                 </Deletable>
-              )}
+              ))}
             </Dropzone>
           </div>
           <div className="modal__spacer" />

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import MenuForm from 'restaurant/menu/MenuForm.component';
 import Button from 'mdl/Button.component';
@@ -11,7 +12,7 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 
 class Menus extends React.Component {
   static PropTypes = {
-    restaurant: React.PropTypes.object.isRequired
+    restaurant: PropTypes.object.isRequired
   }
   state = {
     action: null
@@ -58,7 +59,7 @@ class Menus extends React.Component {
                   restaurant={restaurant}
               />
             : menus && menus.length ?
-              menus.map((menu, index) =>
+              menus.map((menu, index) => (
                 <Menu
                     actions={[
                       {
@@ -73,7 +74,7 @@ class Menus extends React.Component {
                     key={index}
                     menu={menu}
                 />
-              )
+              ))
             : 'no menus'
           }
         </div>
