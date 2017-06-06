@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'mdl/Input.component';
+import {equals} from 'lodash/fp';
 import Button from 'mdl/Button.component';
 import {
   createMenu,
@@ -32,20 +33,27 @@ class MenuForm extends React.Component {
     super(props);
     const {
       getMenu: {
-        menu
-      } = {menu: typeof props.menu === 'object' ? props.menu : {}}
+        menu: {
+          name,
+          description,
+          menuItems
+        }
+      } = {menu: typeof props.menu === 'object' && props.menu ? props.menu : {}}
     } = props;
     this.state = {
-      name: menu.name || '',
-      description: menu.description || '',
+      name: name || '',
+      description: description || '',
       manageMenuItems: false,
-      menuItems: menu.menuItems ? new Set(
-        menu.menuItems.map(item => item.id)
+      menuItems: menuItems ? new Set(
+        menuItems.map(item => item.id)
       ) : new Set()
     };
   }
   componentWillReceiveProps(newProps) {
-    if (typeof this.props.menu !== typeof newProps.menu) {
+    if (
+      typeof this.props.menu !== typeof newProps.menu ||
+      !equals(this.props.getMenu)(newProps.getMenu)
+    ) {
       // should reset inputs when menu information fetched with given id
       const {
         getMenu: {
@@ -54,7 +62,7 @@ class MenuForm extends React.Component {
             description,
             menuItems
           }
-        } = {menu: typeof newProps.menu === 'object' ? newProps.menu : {}}
+        } = {menu: typeof newProps.menu === 'object' && newProps.menu ? newProps.menu : {}}
       } = newProps;
       this.setState({
         name,

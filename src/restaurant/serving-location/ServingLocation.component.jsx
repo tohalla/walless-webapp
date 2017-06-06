@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import MdlMenu from 'mdl/MdlMenu.component';
+import Button from 'mdl/Button.component';
 import {getServingLocation} from 'graphql/restaurant/servingLocation.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -12,29 +14,56 @@ class ServingLocation extends React.Component {
     servingLocation: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number
-    ]).isRequired
-  };
-  toggleExpand = () => {
-    this.setState({expand: !this.state.expand});
+    ]).isRequired,
+    actions: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.object.isRequired,
+      onClick: PropTypes.func.isRequired
+    }))
   };
   render() {
     const {
       getServingLocation: {
         servingLocation: {
+          id,
           name
-        } = typeof this.props.servingLocation === 'object' ? this.props.srevingLocation : {}
-      } = {}
+        }
+      } = {servingLocation:
+        typeof this.props.servingLocation === 'object' && this.props.servingLocation ?
+          this.props.servingLocation : {}
+      },
+      actions
     } = this.props;
     return (
-      <div
-          className="container__item container__item--trigger"
-          onClick={this.toggleExpand}
-      >
+      <div className="container__item">
         <div className="container__item__content">
           <div>
             {name}
           </div>
         </div>
+        {
+          actions && actions.length ?
+            <div className="container__item__actions">
+              <Button
+                  className="mdl-button mdl-js-button mdl-button--icon"
+                  id={`serving-location-actions-${id}`}
+                  type="button"
+              >
+                <i className="material-icons">{'more_vert'}</i>
+              </Button>
+              <MdlMenu htmlFor={`serving-location-actions-${id}`}>
+                {actions.map((action, index) => (
+                  <li
+                      className="mdl-menu__item"
+                      key={index}
+                      onClick={action.onClick}
+                  >
+                    {action.text}
+                  </li>
+                ))}
+              </MdlMenu>
+            </div>
+          : null
+        }
       </div>
     );
   }

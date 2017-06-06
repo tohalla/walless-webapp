@@ -22,7 +22,7 @@ class MenuItem extends React.Component {
     const {
       getMenuItem: {
         menuItem
-      } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}},
+      } = {menuItem: typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {}},
       onClick
     } = this.props;
     if (typeof onClick === 'function') {
@@ -38,7 +38,7 @@ class MenuItem extends React.Component {
           id,
           files
         }
-      } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}},
+      } = {menuItem: typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {}},
       className,
       actions
     } = this.props;

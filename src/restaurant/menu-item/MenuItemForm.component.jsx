@@ -4,6 +4,7 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import {equals} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import config from 'config';
@@ -45,7 +46,7 @@ class MenuItemForm extends React.Component {
           category,
           files = []
         }
-      } = {menuItem: typeof props.menuItem === 'object' ? props.menuItem : {}}
+      } = {menuItem: typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}}
     } = props;
     this.state = {
       name: name || '',
@@ -58,7 +59,10 @@ class MenuItemForm extends React.Component {
   }
   state: Object = {};
   componentWillReceiveProps(newProps) {
-    if (typeof this.props.menuItem !== typeof newProps.menuItem) {
+    if (
+      typeof this.props.menuItem !== typeof newProps.menuItem ||
+      !equals(this.props.getMenuItem)(newProps.getMenuItem)
+    ) {
       // should reset inputs when menu information fetched with given id
       const {
         getMenuItem: {
@@ -69,7 +73,10 @@ class MenuItemForm extends React.Component {
             category,
             files = []
           }
-        } = {menuItem: typeof newProps.menuItem === 'object' ? newProps.menuItem : {}}
+        } = {
+          menuItem: typeof newProps.menuItem === 'object' && newProps.menuItem ?
+            newProps.menuItem : {}
+        }
       } = newProps;
       this.setState({
         name,

@@ -41,8 +41,10 @@ class Menu extends React.Component {
           name,
           description,
           id
-        } = typeof this.props.menu === 'object' ? this.props.menu : {}
-      } = {},
+        }
+      } = {menu:
+        typeof this.props.menu === 'object' && this.props.menu ? this.props.menu : {}
+      },
       actions
     } = this.props;
     const {expand} = this.state;

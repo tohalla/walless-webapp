@@ -2,14 +2,14 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {equals} from 'lodash/fp';
 
-import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'mdl/Input.component';
 import Button from 'mdl/Button.component';
 import {
   createServingLocation,
   updateServingLocation
-} from 'graphql/restaurant/servingLocationn.mutations';
+} from 'graphql/restaurant/servingLocation.mutations';
 import {getServingLocation} from 'graphql/restaurant/servingLocation.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -31,21 +31,30 @@ class ServingLocationForm extends React.Component {
     const {
       getServingLocation: {
         servingLocation
-      } = {servingLocation: typeof props.servingLocation === 'object' ? props.servingLocation : {}}
+      } = {
+        servingLocation: typeof props.servingLocation === 'object' && props.servingLocation ?
+          props.servingLocation : {}
+      }
     } = props;
     this.state = {
       name: servingLocation.name || ''
     };
   }
   componentWillReceiveProps(newProps) {
-    if (typeof this.props.servingLocation !== typeof newProps.servingLocation) {
+    if (
+      typeof this.props.servingLocation !== typeof newProps.servingLocation ||
+      !equals(this.props.getServingLocation)(newProps.getServingLocation)
+    ) {
       // should reset inputs when servingLocation information fetched with given id
       const {
         getServingLocation: {
           servingLocation: {
             name
           }
-        } = {servingLocation: typeof newProps.servingLocation === 'object' ? newProps.servingLocation : {}}
+        } = {
+          servingLocation: typeof newProps.servingLocation === 'object' && newProps.servingLocation ?
+            newProps.servingLocation : {}
+        }
       } = newProps;
       this.setState({
         name
@@ -63,7 +72,6 @@ class ServingLocationForm extends React.Component {
       updateServingLocation,
       restaurant,
       onSubmit,
-      getActiveAccount: {account} = {},
       getServingLocation: {
         servingLocation = typeof this.props.servingLocation === 'object' ? this.props.servingLocation : {}
       } = {}
@@ -72,7 +80,6 @@ class ServingLocationForm extends React.Component {
       servingLocation ? {id: servingLocation.id} : null,
       {
         restaurant: restaurant.id,
-        createdBy: account.id
       }
     );
     (servingLocation && servingLocation.id ?
@@ -117,6 +124,5 @@ class ServingLocationForm extends React.Component {
 export default compose(
   createServingLocation,
   updateServingLocation,
-  getActiveAccount,
   getServingLocation
 )(connect(mapStateToProps, {})(ServingLocationForm));
