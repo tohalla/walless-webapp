@@ -6,11 +6,12 @@ $side-navigation-link-background-color: lighten($side-navigation-background-colo
 $side-navigation-link-background-color-hover: lighten($side-navigation-link-background-color, 5%);
 
 .side {
+  max-width: 100%;
   display: flex;
   flex: 1 0 auto;
 }
 .side--outer-container {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
 }
 .side__side-container {
   position: relative;

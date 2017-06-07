@@ -13,7 +13,7 @@
 
 .container__item {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
   width: 100%;
   background: $carrara;
   align-items: stretch;
@@ -42,8 +42,10 @@
   }
   &__content {
     display: flex;
-    align-items: center;
-    flex: 1 0 auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex: 1 1 auto;
     padding: 0.5rem 0.7rem;
   }
   &__content--full-width {
