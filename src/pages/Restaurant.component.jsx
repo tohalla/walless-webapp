@@ -72,7 +72,7 @@ class Restaurant extends React.Component {
   handleRestaurantChange = value => {
     this.props.router.push(`/restaurant/${value.value}`);
   };
-  handleRestaurantCreation = () => {
+  handleRestaurantSubmit = () => {
     this.props.refetch();
   };
   render() {
@@ -159,7 +159,7 @@ class Restaurant extends React.Component {
       <Spinner /> :
       <Padded>
         <div className="container container--distinct">
-          <RestaurantForm onSubmit={this.handleRestaurantCreation} />
+          <RestaurantForm onSubmit={this.handleRestaurantSubmit} />
         </div>
       </Padded>;
   }

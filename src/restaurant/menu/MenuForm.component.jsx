@@ -31,23 +31,7 @@ class MenuForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    const {
-      getMenu: {
-        menu: {
-          name,
-          description,
-          menuItems
-        }
-      } = {menu: typeof props.menu === 'object' && props.menu ? props.menu : {}}
-    } = props;
-    this.state = {
-      name: name || '',
-      description: description || '',
-      manageMenuItems: false,
-      menuItems: menuItems ? new Set(
-        menuItems.map(item => item.id)
-      ) : new Set()
-    };
+    this.resetForm(props, state => this.state = state);
   }
   componentWillReceiveProps(newProps) {
     if (
@@ -55,23 +39,27 @@ class MenuForm extends React.Component {
       !equals(this.props.getMenu)(newProps.getMenu)
     ) {
       // should reset inputs when menu information fetched with given id
-      const {
-        getMenu: {
-          menu: {
-            name,
-            description,
-            menuItems
-          }
-        } = {menu: typeof newProps.menu === 'object' && newProps.menu ? newProps.menu : {}}
-      } = newProps;
-      this.setState({
-        name,
-        description,
-        menuItems: menuItems ? new Set(
-          menuItems.map(item => item.id)
-        ) : new Set()
-      });
+      this.resetForm(newProps);
     }
+  }
+  resetForm = (props, updateState = this.setState) => {
+    const {
+      getMenu: {
+        menu: {
+          name = '',
+          description = '',
+          menuItems
+        }
+      } = {menu: typeof props.menu === 'object' && props.menu ? props.menu : {}}
+    } = props;
+    updateState({
+      name,
+      description,
+      manageMenuItems: false,
+      menuItems: menuItems ? new Set(
+        menuItems.map(item => item.id)
+      ) : new Set()
+    });
   }
   handleInputChange = e => {
     const {id, value} = e.target;

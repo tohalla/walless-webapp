@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import WithActions from 'util/WithActions.component'
+import WithActions from 'util/WithActions.component';
 
 export default class ListItems extends React.Component {
   static propTypes = {
@@ -48,13 +48,11 @@ export default class ListItems extends React.Component {
           forceDefaultAction={forceDefaultAction}
           onActionChange={onActionChange}
       >
-        <div className={containerClass}>
-          {
-            (typeof filterItems === 'function'
-              ? items.filter(filterItems) : items
-            ).map((item, key) => renderItem(item, {key}))
-          }
-        </div>
+        {
+          (typeof filterItems === 'function'
+            ? items.filter(filterItems) : items
+          ).map((item, key) => renderItem(item, {key}))
+        }
       </WithActions>
     );
   }

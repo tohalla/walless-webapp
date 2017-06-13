@@ -21,8 +21,9 @@ class WithActions extends React.Component {
     })}),
     containerClass: PropTypes.string,
     defaultAction: PropTypes.string,
+    hideActions: PropTypes.bool,
     forceDefaultAction: PropTypes.bool,
-    onActionChange: PropTypes.func,
+    onActionChange: PropTypes.func.isRequired,
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
@@ -38,7 +39,8 @@ class WithActions extends React.Component {
       forceDefaultAction,
       t,
       action,
-      onActionChange
+      onActionChange,
+      hideActions
     } = this.props;
     return (
       <div>
@@ -56,7 +58,7 @@ class WithActions extends React.Component {
             )}
             {actions[action].render()}
           </div>
-        ) : typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
+        ) : !hideActions && typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
             <div className={containerClass}>
               <div>
                 {Object.keys(actions)
@@ -73,11 +75,12 @@ class WithActions extends React.Component {
                   ))
                 }
               </div>
-
             </div>
           : null
         }
-        {get([action, 'hideItems'])(actions) ? null : this.props.children}
+        {get([action, 'hideItems'])(actions) ? null :
+          <div className={containerClass}>{this.props.children}</div>
+        }
       </div>
     );
   }

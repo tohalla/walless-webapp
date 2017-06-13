@@ -28,38 +28,27 @@ class ServingLocationForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    const {
-      getServingLocation: {
-        servingLocation
-      } = {
-        servingLocation: typeof props.servingLocation === 'object' && props.servingLocation ?
-          props.servingLocation : {}
-      }
-    } = props;
-    this.state = {
-      name: servingLocation.name || ''
-    };
+    this.resetForm(props, state => this.state = state);
   }
   componentWillReceiveProps(newProps) {
     if (
       typeof this.props.servingLocation !== typeof newProps.servingLocation ||
       !equals(this.props.getServingLocation)(newProps.getServingLocation)
     ) {
-      // should reset inputs when servingLocation information fetched with given id
-      const {
-        getServingLocation: {
-          servingLocation: {
-            name
-          }
-        } = {
-          servingLocation: typeof newProps.servingLocation === 'object' && newProps.servingLocation ?
-            newProps.servingLocation : {}
-        }
-      } = newProps;
-      this.setState({
-        name
-      });
+      this.resetForm(newProps);
     }
+  }
+  resetForm = (props, updateState = this.setState) => {
+    const {
+      getServingLocation: {
+        servingLocation: {
+          name = ''
+        }
+      } = {servingLocation: typeof props.servingLocation === 'object' && props.servingLocation ? props.servingLocation : {}}
+    } = props;
+    updateState({
+      name
+    });
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -79,7 +68,7 @@ class ServingLocationForm extends React.Component {
     const finalServingLocation = Object.assign({}, this.state,
       servingLocation ? {id: servingLocation.id} : null,
       {
-        restaurant: restaurant.id,
+        restaurant: restaurant.id
       }
     );
     (servingLocation && servingLocation.id ?

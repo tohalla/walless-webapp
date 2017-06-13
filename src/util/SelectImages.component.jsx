@@ -1,6 +1,6 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
-import {isEqual, omit} from 'lodash/fp';
+import {equals, omit} from 'lodash/fp';
 import Modal from 'react-modal';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -30,7 +30,7 @@ class SelectImages extends React.Component {
           {},
           image,
           {_selected: Boolean(
-            props.select.selected && props.select.selected.find(i => isEqual(i)(image))
+            props.select.selected && props.select.selected.find(i => equals(i)(image))
           )}
         )
       ) : [],
@@ -44,7 +44,7 @@ class SelectImages extends React.Component {
           {},
           image,
           {_selected: Boolean(
-            props.select.selected && props.select.selected.find(i => isEqual(i)(image))
+            props.select.selected && props.select.selected.find(i => equals(i)(image))
           )}
         )
       ) : []
@@ -83,7 +83,7 @@ class SelectImages extends React.Component {
     event.stopPropagation();
     this.setState({
       images: this.state.images.map(i =>
-        isEqual(image)(i) ?
+        equals(image)(i) ?
           Object.assign({}, i, {_selected: !i._selected}) : i
       )
     });

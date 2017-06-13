@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
@@ -37,55 +36,36 @@ class MenuItemForm extends React.Component {
   };
   constructor(props) {
     super(props);
+    this.resetForm(props, state => this.state = state);
+  }
+  componentWillReceiveProps(newProps) {
+    if (
+      typeof this.props.menuItem !== typeof newProps.menuItem ||
+      !equals(this.props.getMenuItem)(newProps.getMenuItem)
+    ) {
+      this.resetForm(newProps);
+    }
+  }
+  resetForm = (props, updateState = this.setState) => {
     const {
       getMenuItem: {
         menuItem: {
-          name,
-          description,
+          name = '',
+          description = '',
           type,
           category,
           files = []
         }
       } = {menuItem: typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}}
     } = props;
-    this.state = {
-      name: name || '',
-      description: description || '',
-      type: type || null,
+    updateState({
+      name,
+      description,
+      type,
       newImages: [],
-      files: files || [],
-      category: category || null
-    };
-  }
-  state: Object = {};
-  componentWillReceiveProps(newProps) {
-    if (
-      typeof this.props.menuItem !== typeof newProps.menuItem ||
-      !equals(this.props.getMenuItem)(newProps.getMenuItem)
-    ) {
-      // should reset inputs when menu information fetched with given id
-      const {
-        getMenuItem: {
-          menuItem: {
-            name,
-            description,
-            type,
-            category,
-            files = []
-          }
-        } = {
-          menuItem: typeof newProps.menuItem === 'object' && newProps.menuItem ?
-            newProps.menuItem : {}
-        }
-      } = newProps;
-      this.setState({
-        name,
-        description,
-        type,
-        category,
-        files
-      });
-    }
+      files,
+      category
+    });
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -113,7 +93,7 @@ class MenuItemForm extends React.Component {
           prev.concat(typeof curr === 'object' ? curr.id : curr),
         []
       );
-    (async () => {
+    (async() => {
       if (newImages && newImages.length) {
         const formData = new FormData();
         formData.append('restaurant', restaurant.id);

@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {equals} from 'lodash/fp';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'mdl/Input.component';
@@ -27,21 +28,29 @@ class RestaurantForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    const restaurant = props.restaurant || {};
-    this.state = {
-      name: restaurant.name || '',
-      description: restaurant.description || ''
-    };
+    this.resetForm(props, state => this.state = state);
   }
   componentWillReceiveProps(newProps) {
-    if (typeof this.props.restaurant !== typeof newProps.restaurant) {
-      // should reset inputs when restaurant information fetched with given id
-      const {name, description} = newProps;
-      this.setState({
-        name,
-        description
-      });
+    if (
+      typeof this.props.restaurant !== typeof newProps.restaurant ||
+      !equals(this.props.getRestaurant)(newProps.getRestaurant)
+    ) {
+      this.resetForm(newProps);
     }
+  }
+  resetForm = (props, updateState = this.setState) => {
+    const {
+      getRestaurant: {
+        restaurant: {
+          name = '',
+          description = ''
+        }
+      } = {restaurant: typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}}
+    } = props;
+    updateState({
+      name,
+      description
+    });
   }
   handleInputChange = e => {
     const {id, value} = e.target;
@@ -54,7 +63,9 @@ class RestaurantForm extends React.Component {
       updateRestaurant,
       onSubmit,
       getActiveAccount: {account} = {},
-      getRestaurant: {restaurant}
+      getRestaurant: {
+        restaurant = typeof this.props.restaurant === 'object' ? this.props.restaurant : {}
+      } = {}
     } = this.props;
     const finalRestaurant = Object.assign({}, this.state,
       restaurant ? {id: restaurant.id} : null,
