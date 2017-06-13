@@ -143,12 +143,7 @@ class MenuForm extends React.Component {
         <div className="container">
           {manageMenuItems ?
             <MenuItems
-                action={{
-                  name: 'filter',
-                  hideItems: false,
-                  hideSelection: true,
-                  hideReturn: true
-                }}
+                action={'filter'}
                 menuItem={{onClick: this.handleMenuItemSelect}}
                 plain
                 restaurant={restaurant}

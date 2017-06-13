@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch';
 
 const translationsUrl = 'http://127.0.0.1:8080/translation';
 
-const getLanguages = async () => await (await fetch(translationsUrl)).json();
+const getLanguages = async() => await (await fetch(translationsUrl)).json();
 
 export const languages = getLanguages();
 
@@ -23,7 +23,7 @@ export default (state: Object = {t: () => polyglot.t}, action: Object) =>
   }
   : state;
 
-export const setLanguage = (langCode: string) => async (dispatch: Function) => {
+export const setLanguage = (langCode: string) => async(dispatch: Function) => {
   dispatch({
     type: FETCH_TRANSLATIONS
   });

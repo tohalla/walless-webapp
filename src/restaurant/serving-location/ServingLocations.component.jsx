@@ -4,7 +4,7 @@ import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 import {hasIn} from 'lodash/fp';
 
-import Button from 'mdl/Button.component';
+import ListItems from 'util/ListItems.component';
 import {
   getServingLocationsByRestaurant
 } from 'graphql/restaurant/restaurant.queries';
@@ -22,129 +22,103 @@ const mapStateToProps = state => ({
 
 class ServingLocations extends React.Component {
   static PropTypes = {
-    action: PropTypes.object,
-    selectedItems: PropTypes.object,
+    action: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      item: PropTypes.object
+    }),
+    selectedItems: PropTypes.instanceOf(Set),
     restaurant: PropTypes.object.isRequired
-  }
+  };
   static defaultProps = {
     selectedItems: new Set()
   };
-  state = {
-    action: null
-  };
-  handleActionChange = action => e => {
-    e.preventDefault();
+  constructor(props) {
+    super(props);
+    this.state = {
+      action: props.action
+    };
+  }
+  handleActionChange = action => event => {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     this.setState({action});
   };
-  resetAction = () => {
-    this.setState({action: null});
-  };
-  handleServingLocationCreated = () => {
+  renderServingLocation = (servingLocation, props) => (
+    <ServingLocation
+        actions={this.props.plain ? [] : [
+          {
+            label: this.props.t('edit'),
+            onClick: this.handleActionChange({name: 'edit', servingLocation})
+          }
+        ]}
+        className={this.props.selectedItems.has(servingLocation.id) ?
+          'container__row selected' : null
+        }
+        servingLocation={servingLocation}
+        {...props}
+    />
+  );
+  handleServingLocationSubmit = () => {
     this.setState({action: null});
     this.props.getServingLocationsByRestaurant.data.refetch();
   };
+  filterItems = item =>
+    !this.props.filter.name || item.name.indexOf(this.props.filter.name) > -1;
   render() {
     const {
       getServingLocationsByRestaurant: {servingLocations} = {},
       restaurant,
-      action: forceAction,
-      filter,
       selectedItems,
       plain,
       t
     } = this.props;
-    const action = forceAction || this.state.action || {};
-    const returnButton = forceAction || action.hideReturn ? null : (
-      <Button
-          className="block"
-          colored
-          onClick={this.resetAction}
-          type="button"
-      >
-        {t('return')}
-      </Button>
-    );
+    const {action} = this.state;
+    const actions = {
+      filter: {
+        label: t('restaurant.servingLocations.filter'),
+        render: () => (
+          <div />
+        )
+      },
+      edit: {
+        hide: true,
+        hideReturn: true,
+        hideItems: true,
+        render: () => (
+          <ServingLocationForm
+              onCancel={this.handleActionChange()}
+              onSubmit={this.handleServingLocationSubmit}
+              restaurant={restaurant}
+              servingLocation={action ? action.servingLocation : null}
+          />
+        )
+      },
+      new: {
+        label: t('restaurant.servingLocations.create'),
+        hideReturn: true,
+        hideItems: true,
+        render: () => (
+          <ServingLocationForm
+              onCancel={this.handleActionChange()}
+              onSubmit={this.handleServingLocationSubmit}
+              restaurant={restaurant}
+          />
+        )
+      }
+    };
     return (
-      <div>
-        {
-          action.hideSelection ? null :
-            <div className={`container${plain ? '' : ' container--distinct'}`}>
-              <div>
-                <Button
-                    colored
-                    onClick={this.handleActionChange({
-                      name: 'new',
-                      hideItems: true,
-                      hideReturn: true
-                    })}
-                    type="button"
-                >
-                  {t('restaurant.servingLocations.create')}
-                </Button>
-                <Button
-                    colored
-                    onClick={this.handleActionChange({
-                      name: 'filter',
-                      hideItems: false
-                    })}
-                    type="button"
-                >
-                  {t('restaurant.servingLocations.filter')}
-                </Button>
-              </div>
-            </div>
-        }
-        {action.name ?
-          <div className={`container${plain ? '' : ' container--distinct'}`}>
-            {
-              action.name === 'new' || action.name === 'edit' ?
-                <div>
-                  {returnButton}
-                  <ServingLocationForm
-                      onCancel={this.resetAction}
-                      onSubmit={this.handleServingLocationCreated}
-                      restaurant={restaurant}
-                      servingLocation={action.name === 'edit' ? action.servingLocation : null}
-                  />
-                </div>
-              : action.name === 'filter' ?
-                <div>
-                  {returnButton}
-                </div>
-              : null
-            }
-          </div> : null
-        }
-        {action.hideItems || !selectedItems instanceof Set ? null :
-          <div className={`container${plain ? '' : ' container--distinct'}`}>
-            {servingLocations && servingLocations.length ?
-              servingLocations
-                .filter(servingLocation =>
-                  !filter.name || servingLocation.name.indexOf(filter.name) > -1
-                )
-                .map((servingLocation, index) => (
-                  <ServingLocation
-                      actions={plain ? [] : [
-                        {
-                          text: t('edit'),
-                          onClick: this.handleActionChange({
-                            name: 'edit',
-                            hideItems: true,
-                            hideSelection: true,
-                            hideReturn: true,
-                            servingLocation
-                          })
-                        }
-                      ]}
-                      className={selectedItems.has(servingLocation.id) ? 'container__item--selected' : null}
-                      key={index}
-                      servingLocation={servingLocation}
-                  />
-                )) : 'no serving locations'
-            }
-          </div>
-        }
-      </div>
+      <ListItems
+          action={action ? action.name : null}
+          actions={actions}
+          containerClass={plain ? 'container' : 'container container--distinct'}
+          filterItems={this.filterItems}
+          items={servingLocations}
+          onActionChange={this.handleActionChange}
+          renderItem={this.renderServingLocation}
+          selectedItems={selectedItems}
+      />
     );
   }
 }

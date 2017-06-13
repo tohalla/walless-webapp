@@ -50,44 +50,49 @@ class Menu extends React.Component {
     const {expand} = this.state;
     return (
       <div
-          className="container__item container__item--trigger"
+          className="trigger"
           onClick={this.toggleExpand}
       >
-        <div className="container__item__content">
-          <div>
-            {name}
+        <div className="container__row">
+          <div className="container__item container__item__content">
+            <h6>
+              {name}
+            </h6>
+            <div>
+              {description}
+            </div>
           </div>
-          <div>
-            {description}
-          </div>
+          {
+            actions && actions.length ?
+              <div className="container__item">
+                <Button
+                    className="mdl-button mdl-js-button mdl-button--icon"
+                    id={`menu-actions-${id}`}
+                    type="button"
+                >
+                  <i className="material-icons">{'more_vert'}</i>
+                </Button>
+                <MdlMenu htmlFor={`menu-actions-${id}`}>
+                  {actions.map((action, index) => (
+                    <li
+                        className="mdl-menu__item"
+                        key={index}
+                        onClick={action.onClick}
+                    >
+                      {action.label}
+                    </li>
+                  ))}
+                </MdlMenu>
+              </div>
+            : null
+          }
         </div>
         {
-          actions && actions.length ?
-            <div className="container__item__actions">
-              <Button
-                  className="mdl-button mdl-js-button mdl-button--icon"
-                  id={`menu-actions-${id}`}
-                  type="button"
-              >
-                <i className="material-icons">{'more_vert'}</i>
-              </Button>
-              <MdlMenu htmlFor={`menu-actions-${id}`}>
-                {actions.map((action, index) => (
-                  <li
-                      className="mdl-menu__item"
-                      key={index}
-                      onClick={action.onClick}
-                  >
-                    {action.text}
-                  </li>
-                ))}
-              </MdlMenu>
-            </div>
-          : null
-        } {
           expand ?
-            <div className="container__item__content container__item__content--full-width">
-              {'preview'}
+            <div className="container__row">
+              <div className="container__item container__item__content">
+                {'preview'}
+              </div>
             </div>
           : null
         }

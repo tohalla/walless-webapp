@@ -44,22 +44,23 @@ class MenuItem extends React.Component {
     } = this.props;
     return (
       <div
-          className={className ? className + ' container__item' : 'container__item'}
+          className={(className || 'container__row') + (this.props.onClick ? ' trigger' : '')}
           onClick={this.handleClick}
+
       >
-        <div className="container__item__thumbnail">
+        <div className="container__item container__item__thumbnail">
           {files.length ? <img src={files[0].uri} /> : null}
         </div>
-        <div className="container__item__content">
-          <div>
+        <div className="container__item container__item__content">
+          <h6>
             {name}
-          </div>
+          </h6>
           <div>
             {description}
           </div>
         </div>
         {actions && actions.length ?
-          <div className="container__item__actions">
+          <div className="container__item">
             <button
                 className="mdl-button mdl-js-button mdl-button--icon"
                 id={`menu-item-actions-${id}`}
@@ -74,7 +75,7 @@ class MenuItem extends React.Component {
                     key={index}
                     onClick={action.onClick}
                 >
-                  {action.text}
+                  {action.label}
                 </li>
               ))}
             </MdlMenu>

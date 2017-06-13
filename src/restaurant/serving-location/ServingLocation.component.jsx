@@ -34,15 +34,15 @@ class ServingLocation extends React.Component {
       actions
     } = this.props;
     return (
-      <div className="container__item">
-        <div className="container__item__content">
+      <div className="container__row">
+        <div className="container__item container__item__content">
           <div>
             {name}
           </div>
         </div>
         {
           actions && actions.length ?
-            <div className="container__item__actions">
+            <div className="container__item">
               <Button
                   className="mdl-button mdl-js-button mdl-button--icon"
                   id={`serving-location-actions-${id}`}
@@ -57,7 +57,7 @@ class ServingLocation extends React.Component {
                       key={index}
                       onClick={action.onClick}
                   >
-                    {action.text}
+                    {action.label}
                   </li>
                 ))}
               </MdlMenu>

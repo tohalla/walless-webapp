@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch';
 
 import config from 'config';
 
-export const authenticate = async (payload: Object) => {
+export const authenticate = async(payload: Object) => {
   const response = await fetch(
     `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.authentication.endpoint}/${payload.token ? 'renewToken' : ''}`,
     {
@@ -24,7 +24,7 @@ export const authenticate = async (payload: Object) => {
 
 const authenticationHandler = {
   isAuthenticated: Boolean(Cookie.get('Authorization')),
-  authenticate: async (email: string, password: string) => {
+  authenticate: async(email: string, password: string) => {
     Cookie.remove('Authorization');
     Cookie.remove('Expiration');
     const authorization = await authenticate({email, password});
@@ -32,12 +32,12 @@ const authenticationHandler = {
     Cookie.set('Expiration', authorization.expiresAt);
     window.location.reload();
   },
-  renew: async (token: string) => {
+  renew: async(token: string) => {
     const authorization = await authenticate({token});
     Cookie.set('Authorization', authorization.token);
     Cookie.set('Expiration', authorization.expiresAt);
   },
-  logout: async () => {
+  logout: async() => {
     Cookie.remove('Authorization');
     Cookie.remove('Expiration');
     window.location.reload();

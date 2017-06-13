@@ -130,8 +130,10 @@ class Restaurant extends React.Component {
                                   `/restaurant/${restaurant.id}/${item.path}`
                               ) === 0 ||
                               (
-                                !item.path &&
-                                location.pathname === `/restaurant/${restaurant.id}/`
+                                !item.path && (
+                                  location.pathname === `/restaurant/${restaurant.id}/` ||
+                                  location.pathname === `/restaurant/${restaurant.id}`
+                                )
                               ) ?
                                 ' side__navigation__link--active' : ''
                             )

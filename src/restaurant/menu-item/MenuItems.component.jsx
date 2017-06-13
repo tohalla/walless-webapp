@@ -5,10 +5,10 @@ import {hasIn} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
-import Button from 'mdl/Button.component';
 import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
+import ListItems from 'util/ListItems.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -19,8 +19,11 @@ const mapStateToProps = state => ({
 class MenuItems extends React.Component {
   static PropTypes = {
     restaurant: PropTypes.object.isRequired,
-    action: PropTypes.object,
-    selectedItems: PropTypes.object,
+    action: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      item: PropTypes.object
+    }),
+    selectedItems: PropTypes.instanceOf(Set),
     menuItem: PropTypes.shape({
       onClick: PropTypes.func
     }),
@@ -29,126 +32,94 @@ class MenuItems extends React.Component {
   static defaultProps = {
     selectedItems: new Set()
   };
-  state = {
-    action: null
-  };
-  handleActionChange = action => e => {
-    e.preventDefault();
+  constructor(props) {
+    super(props);
+    this.state = {
+      action: props.action
+    };
+  }
+  handleActionChange = action => event => {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     this.setState({action});
   };
-  resetAction = () => {
-    this.setState({action: null});
-  };
-  handleMenuItemCreated = () => {
+  renderMenuItem = (menuItem, props) => (
+    <MenuItem
+        actions={this.props.plain ? [] : [
+          {
+            label: this.props.t('edit'),
+            onClick: this.handleActionChange({name: 'edit', menuItem})
+          }
+        ]}
+        className={this.props.selectedItems.has(menuItem.id) ?
+          'container__row selected' : null
+        }
+        menuItem={menuItem}
+        {...this.props.menuItem}
+        {...props}
+    />
+  );
+  handleMenuItemSubmit = () => {
     this.setState({action: null});
     this.props.getMenuItemsByRestaurant.data.refetch();
   };
+  filterItems = item =>
+    !this.props.filter.name || item.name.indexOf(this.props.filter.name) > -1;
   render() {
     const {
       getMenuItemsByRestaurant: {menuItems} = {},
       restaurant,
       selectedItems,
-      action: forceAction,
-      filter,
       plain,
       t
     } = this.props;
-    const action = forceAction || this.state.action || {};
-    const returnButton = forceAction || action.hideReturn ? null : (
-      <Button
-          className="block"
-          colored
-          onClick={this.resetAction}
-          type="button"
-      >
-        {t('return')}
-      </Button>
-    );
+    const {action} = this.state;
+    const actions = {
+      filter: {
+        label: t('restaurant.menuItems.filter'),
+        render: () => (
+          <FilterMenuItems />
+        )
+      },
+      edit: {
+        hide: true,
+        hideReturn: true,
+        hideItems: true,
+        render: () => (
+          <MenuItemForm
+              menuItem={action ? action.menuItem : null}
+              onCancel={this.handleActionChange()}
+              onSubmit={this.handleMenuItemSubmit}
+              restaurant={restaurant}
+          />
+        )
+      },
+      new: {
+        label: t('restaurant.menuItems.create'),
+        hideReturn: true,
+        hideItems: true,
+        render: () => (
+          <MenuItemForm
+              onCancel={this.handleActionChange()}
+              onSubmit={this.handleMenuItemSubmit}
+              restaurant={restaurant}
+          />
+        )
+      }
+    };
     return (
-      <div>
-        {
-          action.hideSelection ? null :
-            <div className={`container${plain ? '' : ' container--distinct'}`}>
-              <div>
-                <Button
-                    colored
-                    onClick={this.handleActionChange({
-                      name: 'new',
-                      hideItems: true,
-                      hideSelection: true,
-                      hideReturn: true
-                    })}
-                    type="button"
-                >
-                  {t('restaurant.menuItems.create')}
-                </Button>
-                <Button
-                    colored
-                    onClick={this.handleActionChange({
-                      name: 'filter',
-                      hideItems: false,
-                      hideSelection: true
-                    })}
-                    type="button"
-                >
-                  {t('restaurant.menuItems.filter')}
-                </Button>
-              </div>
-            </div>
-        }
-        {action.name ?
-          <div className={`container${plain ? '' : ' container--distinct'}`}>
-            {
-              action.name === 'new' || action.name === 'edit' ?
-                <div>
-                  {returnButton}
-                  <MenuItemForm
-                      menuItem={action.name === 'edit' ? action.menuItem : null}
-                      onCancel={this.resetAction}
-                      onSubmit={this.handleMenuItemCreated}
-                      restaurant={restaurant}
-                  />
-                </div>
-              : action.name === 'filter' ?
-                  <div>
-                    {returnButton}
-                    <FilterMenuItems />
-                  </div>
-              : null
-            }
-          </div> : null
-        }
-        {action.hideItems || !selectedItems instanceof Set ? null :
-          <div className={`container${plain ? '' : ' container--distinct'}`}>
-            {menuItems && menuItems.length ?
-              menuItems
-                .filter(menuItem =>
-                  !filter.name || menuItem.name.indexOf(filter.name) > -1
-                )
-                .map((menuItem, index) => (
-                  <MenuItem
-                      actions={plain ? [] : [
-                        {
-                          text: t('edit'),
-                          onClick: this.handleActionChange({
-                            name: 'edit',
-                            hideItems: true,
-                            hideSelection: true,
-                            hideReturn: true,
-                            menuItem
-                          })
-                        }
-                      ]}
-                      className={selectedItems.has(menuItem.id) ? 'container__item--selected' : null}
-                      key={index}
-                      menuItem={menuItem}
-                      {...this.props.menuItem}
-                  />
-                )) : 'no menu items'
-            }
-          </div>
-        }
-      </div>
+      <ListItems
+          action={action ? action.name : null}
+          actions={actions}
+          containerClass={plain ? 'container' : 'container container--distinct'}
+          filterItems={this.filterItems}
+          items={menuItems}
+          onActionChange={this.handleActionChange}
+          renderItem={this.renderMenuItem}
+          selectedItems={selectedItems}
+      />
     );
   }
 }

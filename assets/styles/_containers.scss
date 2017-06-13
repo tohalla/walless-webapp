@@ -23,9 +23,6 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  &--selected {
-    background: $white;
-  }
   &__thumbnail {
     align-items: center;
     img {

@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
 
 class ListItems extends React.Component {
   static propTypes = {
+    action: PropTypes.string,
     actions: PropTypes.shape({action: PropTypes.shape({
       label: PropTypes.string,
       hide: PropTypes.bool,
@@ -20,6 +21,8 @@ class ListItems extends React.Component {
     })}),
     containerClass: PropTypes.string,
     defaultAction: PropTypes.string,
+    forceDefaultAction: PropTypes.bool,
+    onActionChange: PropTypes.func,
     renderItem: PropTypes.func,
     items: PropTypes.arrayOf(PropTypes.object),
     filterItems: PropTypes.func,
@@ -32,37 +35,36 @@ class ListItems extends React.Component {
     containerClass: 'container container--distinct',
     selectedItems: new Set()
   };
-  constructor(props) {
-    super(props),
-    this.state = {
-      action: props.actions && props.actions.hasOwnProperty(props.defaultAction) ?
-        props.defaultAction : null
-    };
-  }
-  state = {
-    action: null
-  };
-  handleActionChange = action => e => {
-    e.preventDefault();
-    this.setState({action});
-  };
-  resetAction = () => {
-    this.setState({action: null});
-  };
   render() {
     const {
       containerClass,
       renderItem,
       items,
       actions,
+      forceDefaultAction,
       filterItems,
-      t
+      t,
+      action,
+      onActionChange
     } = this.props;
-    const {action} = this.state;
     return (
       <div>
-        {
-          actions && Object.keys(actions).length && !action ?
+        {action ? (
+          <div className={containerClass}>
+            {forceDefaultAction ? null : (
+              <Button
+                  className="block"
+                  colored
+                  onClick={onActionChange()}
+                  type="button"
+              >
+                {t('return')}
+              </Button>
+            )}
+            {actions[action].render()}
+          </div>
+        )
+          : typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
             <div className={containerClass}>
               <div>
                 {Object.keys(actions)
@@ -71,7 +73,7 @@ class ListItems extends React.Component {
                     <Button
                         colored
                         key={key}
-                        onClick={this.handleActionChange(action)}
+                        onClick={onActionChange({name: action})}
                         type="button"
                     >
                       {actions[action].label}
@@ -81,30 +83,14 @@ class ListItems extends React.Component {
               </div>
 
             </div>
-          : action ? (
-            <div className={containerClass}>
-              <Button
-                  className="block"
-                  colored
-                  onClick={this.resetAction}
-                  type="button"
-              >
-                {t('return')}
-              </Button>
-              {actions[action].render()}
-            </div>
-          ) : null
+          : null
         }
         {get([action, 'hideItems'])(actions) ? null :
           <div className={containerClass}>
             {
               (typeof filterItems === 'function'
                 ? items.filter(filterItems) : items
-              ).map((item, key) => (
-                <div key={key}>
-                  {renderItem(item)}
-                </div>
-              ))
+              ).map((item, key) => renderItem(item, {key}))
             }
           </div>
         }
