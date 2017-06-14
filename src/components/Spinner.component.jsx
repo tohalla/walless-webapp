@@ -1,6 +1,6 @@
 import React from 'react';
 
-import mdl from 'mdl/mdl';
+import mdl from 'components/mdl';
 
 export default mdl(() =>
   <div

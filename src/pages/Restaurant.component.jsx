@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {hasIn} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
-import Spinner from 'mdl/Spinner.component';
+import Spinner from 'components/Spinner.component';
 import WithSideBar from 'containers/WithSideBar.component';
 import Padded from 'containers/Padded.component';
 import {getActiveAccount} from 'graphql/account/account.queries';

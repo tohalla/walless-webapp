@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
-import Input from 'mdl/Input.component';
+import Input from 'components/Input.component';
 import {equals} from 'lodash/fp';
-import Button from 'mdl/Button.component';
+import Button from 'components/Button.component';
 import {
   createMenu,
   updateMenu,

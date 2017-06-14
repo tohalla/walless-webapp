@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 
 import config from 'config';
 import Deletable from 'util/Deletable.component';
-import Input from 'mdl/Input.component';
-import Button from 'mdl/Button.component';
+import Input from 'components/Input.component';
+import Button from 'components/Button.component';
 import SelectImages from 'util/SelectImages.component';
 import {
   createMenuItem,

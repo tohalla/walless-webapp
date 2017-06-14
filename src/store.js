@@ -6,7 +6,7 @@ import {reducer as form} from 'redux-form';
 import apolloClient from 'apolloClient';
 import DevTools from 'DevTools';
 import notifications from 'notifications/notification';
-import translation from 'util/translation';
+import translation, {fetchLanguages} from 'util/translation';
 
 const util = combineReducers({
   translation,
@@ -28,5 +28,6 @@ const store = createStore(
   )
 );
 
+store.dispatch(fetchLanguages);
 
 export default store;

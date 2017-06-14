@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import {equals} from 'lodash/fp';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
-import Input from 'mdl/Input.component';
-import Button from 'mdl/Button.component';
+import Input from 'components/Input.component';
+import Button from 'components/Button.component';
 import {
   createRestaurant,
   updateRestaurant

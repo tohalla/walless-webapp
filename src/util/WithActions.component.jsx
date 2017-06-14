@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {get} from 'lodash/fp';
 import {connect} from 'react-redux';
 
-import Button from 'mdl/Button.component';
+import Button from 'components/Button.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t

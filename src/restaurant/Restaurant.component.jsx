@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
-import MdlMenu from 'mdl/MdlMenu.component';
-import Button from 'mdl/Button.component';
+import MdlMenu from 'components/MdlMenu.component';
+import Button from 'components/Button.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'util/WithActions.component';
 

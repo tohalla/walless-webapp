@@ -2,31 +2,23 @@
 import Polyglot from 'node-polyglot';
 import fetch from 'isomorphic-fetch';
 
-const translationsUrl = 'http://127.0.0.1:8080/translation';
+import config from 'config';
 
-const getLanguages = async() => await (await fetch(translationsUrl)).json();
+const {api: {protocol, port, url, translation: {endpoint}}} = config;
 
-export const languages = getLanguages();
+const translationsUrl = `${protocol}://${url}:${port}/${endpoint}`;
 
 const polyglot = new Polyglot();
 
-const FETCH_TRANSLATIONS = 'FETCH_TRANSLATIONS';
 const SET_TRANSLATIONS = 'SET_TRANSLATIONS';
+const SET_LANGUAGES = 'SET_LANGUAGES';
 
 export default (state: Object = {t: () => polyglot.t}, action: Object) =>
-  action.type === FETCH_TRANSLATIONS ? {
-    isFetching: true,
-    t: () => ''
-  }
-  : action.type === SET_TRANSLATIONS ? {
-    t: action.payload.t
-  }
+  action.type === SET_TRANSLATIONS || action.type === SET_LANGUAGES ?
+    Object.assign({}, state, action.payload)
   : state;
 
 export const setLanguage = (langCode: string) => async(dispatch: Function) => {
-  dispatch({
-    type: FETCH_TRANSLATIONS
-  });
   const translations = await (
     await fetch(`${translationsUrl}/${langCode}`)
   ).json();
@@ -36,5 +28,13 @@ export const setLanguage = (langCode: string) => async(dispatch: Function) => {
     payload: {
       t: (key, interpolarisations) => polyglot.t(key, interpolarisations)
     }
+  });
+};
+
+export const fetchLanguages = async(dispatch: Function) => {
+  const languages = await (await fetch(translationsUrl)).json();
+  dispatch({
+    type: SET_LANGUAGES,
+    payload: {languages}
   });
 };

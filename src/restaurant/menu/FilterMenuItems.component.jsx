@@ -1,7 +1,7 @@
 import React from 'react';
 import {reduxForm, Field} from 'redux-form';
 
-import Input from 'mdl/Input.component';
+import Input from 'components/Input.component';
 
 const filterByName = ({input, label, meta, ...rest}) => (
   <Input

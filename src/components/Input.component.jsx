@@ -2,7 +2,7 @@ import React from 'react';
 import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 
-import mdl from 'mdl/mdl';
+import mdl from 'components/mdl';
 
 class Input extends React.Component {
   static propTypes = {

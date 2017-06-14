@@ -2,7 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import MdlMenu from 'mdl/MdlMenu.component';
+import MdlMenu from 'components/MdlMenu.component';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 
 class MenuItem extends React.Component {

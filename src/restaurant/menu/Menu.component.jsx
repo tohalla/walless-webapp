@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import MdlMenu from 'mdl/MdlMenu.component';
-import Button from 'mdl/Button.component';
+import MdlMenu from 'components/MdlMenu.component';
+import Button from 'components/Button.component';
 import {getMenu} from 'graphql/restaurant/menu.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});

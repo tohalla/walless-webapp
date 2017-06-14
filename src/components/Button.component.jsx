@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import mdl from 'mdl/mdl';
+import mdl from 'components/mdl';
 
 class Button extends React.Component {
   static propTypes = {

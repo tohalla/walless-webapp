@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import MainNavigation from 'navigation/MainNavigation.component';
 import UserNavigation from 'navigation/UserNavigation.component';
 import Notifications from 'notifications/Notifications.component';
-import mdl from 'mdl/mdl';
+import mdl from 'components/mdl';
 import DevTools from 'DevTools';
 import {setLanguage} from 'util/translation';
 

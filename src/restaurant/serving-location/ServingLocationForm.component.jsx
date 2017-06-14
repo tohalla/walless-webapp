@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {equals} from 'lodash/fp';
 
-import Input from 'mdl/Input.component';
-import Button from 'mdl/Button.component';
+import Input from 'components/Input.component';
+import Button from 'components/Button.component';
 import {
   createServingLocation,
   updateServingLocation

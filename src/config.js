@@ -6,6 +6,9 @@ export default {
     graphQL: {
       endpoint: 'graphql'
     },
+    translation: {
+      endpoint: 'translation'
+    },
     authentication: {
       endpoint: 'auth'
     },

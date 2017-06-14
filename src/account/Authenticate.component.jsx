@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import ClickOutside from 'react-click-outside';
 
-import Input from 'mdl/Input.component';
+import Input from 'components/Input.component';
 import {addNotification} from 'notifications/notification';
 import authenticationHandler from 'util/auth';
 
