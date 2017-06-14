@@ -7,7 +7,7 @@ import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
 import MdlMenu from 'components/MdlMenu.component';
 import Button from 'components/Button.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
-import WithActions from 'util/WithActions.component';
+import WithActions from 'components/WithActions.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 

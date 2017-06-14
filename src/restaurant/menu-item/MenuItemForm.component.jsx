@@ -7,10 +7,10 @@ import {equals} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import config from 'config';
-import Deletable from 'util/Deletable.component';
+import Deletable from 'components/Deletable.component';
 import Input from 'components/Input.component';
 import Button from 'components/Button.component';
-import SelectImages from 'util/SelectImages.component';
+import SelectImages from 'components/SelectImages.component';
 import {
   createMenuItem,
   updateMenuItem,

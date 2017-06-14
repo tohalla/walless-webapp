@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import MenuForm from 'restaurant/menu/MenuForm.component';
 import {getMenusByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import Menu from 'restaurant/menu/Menu.component';
-import ListItems from 'util/ListItems.component';
+import ListItems from 'components/ListItems.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 

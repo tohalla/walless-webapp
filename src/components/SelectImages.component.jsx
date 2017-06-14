@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Button from 'components/Button.component';
-import Deletable from 'util/Deletable.component';
+import Deletable from 'components/Deletable.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 

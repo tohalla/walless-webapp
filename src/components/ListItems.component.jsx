@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import WithActions from 'util/WithActions.component';
+import WithActions from 'components/WithActions.component';
 
 export default class ListItems extends React.Component {
   static propTypes = {

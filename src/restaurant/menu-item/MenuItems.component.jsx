@@ -8,7 +8,7 @@ import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
 import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
-import ListItems from 'util/ListItems.component';
+import ListItems from 'components/ListItems.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,

@@ -4,7 +4,7 @@ import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 import {hasIn} from 'lodash/fp';
 
-import ListItems from 'util/ListItems.component';
+import ListItems from 'components/ListItems.component';
 import {
   getServingLocationsByRestaurant
 } from 'graphql/restaurant/restaurant.queries';
