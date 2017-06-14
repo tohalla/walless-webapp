@@ -20,11 +20,6 @@ module.exports = {
     ]
   },
   resolve: {
-    modules: [
-      path.resolve(__dirname, 'src'),
-      path.resolve(__dirname, 'assets'),
-      'node_modules'
-    ],
     extensions: ['.js', '.jsx']
   },
   output: {

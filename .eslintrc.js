@@ -1,7 +1,7 @@
 module.exports = {
   settings: {
     'import/parser': 'babel-eslint',
-    'import/resolver': {webpack: {config: 'webpack.development.config.js'}}
+    'import/resolver': {"babel-module": {}}
   },
   extends: [
     'google',

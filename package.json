@@ -45,6 +45,7 @@
     "babel-core": "^6.14.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^7.0.0",
+    "babel-plugin-module-resolver": "^2.7.1",
     "babel-plugin-syntax-class-properties": "^6.13.0",
     "babel-plugin-syntax-decorators": "^6.13.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
@@ -56,6 +57,7 @@
     "css-loader": "^0.28.0",
     "eslint": "^4.0.0",
     "eslint-config-google": "^0.8.0",
+    "eslint-import-resolver-babel-module": "^3.0.0",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-import": "^2.0.1",
@@ -93,7 +95,19 @@
       "syntax-decorators",
       "syntax-object-rest-spread",
       "transform-class-properties",
-      "transform-object-rest-spread"
+      "transform-object-rest-spread",
+      [
+        "module-resolver",
+        {
+          "root": [
+            "./src",
+            "./assets"
+          ],
+          "alias": {
+            "walless-graphql": "./src/graphql"
+          }
+        }
+      ]
     ]
   }
 }
