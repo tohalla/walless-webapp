@@ -1,6 +1,36 @@
+.tab-container {
+  &__content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border-color;
+  }
+  &__tabs {
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  &__tab {
+    font-size: 0.9rem;
+    padding: 0.2rem 0.7rem;
+    margin: 0 0.1rem;
+    cursor: pointer;
+    color: $dark-gray;
+    background: $iron;
+    &--active {
+      text-decoration: underline;
+      border: none;
+    }
+    &:hover {
+    }
+  }
+}
+
 .container {
   padding: 1rem;
-  display: block;
+  display: flex;
+  flex-direction: column;
   &--distinct {
     @include shadow-2dp();
     background: $carrara;

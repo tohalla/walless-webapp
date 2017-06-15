@@ -2,6 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {reduce, set, get} from 'lodash/fp';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'components/Input.component';
@@ -10,16 +11,23 @@ import Button from 'components/Button.component';
 import {
   createMenu,
   updateMenu,
-  updateMenuItems
+  updateMenuItems,
+  createMenuInformation,
+  updateMenuInformation
 } from 'graphql/restaurant/menu.mutations';
 import {getMenu} from 'graphql/restaurant/menu.queries';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
+import Tabbed from 'components/Tabbed.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  languages: state.util.translation.languages,
+  t: state.util.translation.t
+});
 
 class MenuForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onError: PropTypes.func,
     onCancel: PropTypes.func.isRequired,
     createMenu: PropTypes.func.isRequired,
     updateMenu: PropTypes.func.isRequired,
@@ -46,49 +54,75 @@ class MenuForm extends React.Component {
     const {
       getMenu: {
         menu: {
-          name = '',
-          description = '',
+          information,
           menuItems
         }
       } = {menu: typeof props.menu === 'object' && props.menu ? props.menu : {}}
     } = props;
     updateState({
-      name,
-      description,
+      activeLanguage: 'en',
       manageMenuItems: false,
+      information,
       menuItems: menuItems ? new Set(
         menuItems.map(item => item.id)
       ) : new Set()
     });
   }
-  handleInputChange = e => {
-    const {id, value} = e.target;
-    this.setState({[id]: value});
+  handleInputChange = path => event => {
+    const {value} = event.target;
+    this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = async event => {
+    event.preventDefault();
     const {
       createMenu,
       updateMenu,
       restaurant,
       onSubmit,
+      onError,
+      createMenuInformation,
+      updateMenuInformation,
       getActiveAccount: {account} = {},
       getMenu: {
-        menu
+        menu: originalMenu
       } = {menu: typeof this.props.menu === 'object' ? this.props.menu : {}},
       updateMenuItems
     } = this.props;
-    const {manageMenuItems, menuItems, ...menuOptions} = this.state; // eslint-disable-line
+    const {
+      activeLanguage, // eslint-disable-line
+      information,
+      manageMenuItems, // eslint-disable-line
+      menuItems,
+      ...menuOptions
+    } = this.state;
     const finalMenu = Object.assign({}, menuOptions,
-      menu ? {id: menu.id} : null,
+      originalMenu ? {id: originalMenu.id} : null,
       {
         restaurant: restaurant.id,
         createdBy: account.id
       }
     );
-    (menu && menu.id ? updateMenu(finalMenu) : createMenu(finalMenu))
-      .then(({data}) => updateMenuItems(data[Object.keys(data)[0]].menu.id, menuItems))
-      .then(() => onSubmit());
+    try {
+      const {data} = await (originalMenu && originalMenu.id ? updateMenu(finalMenu) : createMenu(finalMenu));
+      const [mutation] = Object.keys(data);
+      const {[mutation]: {menu: {id: menuId}}} = data;
+      await Promise.all([
+          updateMenuItems(menuId, menuItems)
+        ].concat(
+          Object.keys(information).map(key =>
+            mutation !== 'createMenu' && get(['information', key])(originalMenu) ?
+              updateMenuInformation(Object.assign({language: key, menu: menuId}, information[key]))
+            : createMenuInformation(Object.assign({language: key, menu: menuId}, information[key]))
+          )
+        )
+      );
+      onSubmit();
+    } catch (error) {
+      if (typeof onError === 'function') {
+       return onError(error);
+      }
+      throw new Error(error);
+    };
   };
   handleToggle = e => {
     this.setState({[e.target.id]: !this.state[e.target.id]});
@@ -97,6 +131,7 @@ class MenuForm extends React.Component {
     e.preventDefault();
     this.props.onCancel();
   };
+  handleTabChange = tab => this.setState({activeLanguage: tab});
   handleMenuItemSelect = item => {
     const menuItems = new Set([...this.state.menuItems]);
     if (menuItems.has(item.id)) {
@@ -107,26 +142,42 @@ class MenuForm extends React.Component {
     this.setState({menuItems});
   }
   render() {
-    const {restaurant, t} = this.props;
-    const {description, name, manageMenuItems, menuItems} = this.state;
+    const {restaurant, t, languages} = this.props;
+    const {
+      manageMenuItems,
+      menuItems,
+      activeLanguage
+    } = this.state;
+    const tabs = reduce((prev, value) => Object.assign({}, prev, {
+      [value.locale]: {
+        label: value.name,
+        render: () => (
+          <div>
+            <Input
+                className="block"
+                label={t('restaurant.menus.name')}
+                onChange={this.handleInputChange(['information', value.locale, 'name'])}
+                type="text"
+                value={get(['information', value.locale, 'name'])(this.state) || ''}
+            />
+            <Input
+                className="block"
+                label={t('restaurant.menus.description')}
+                onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                rows={3}
+                type="text"
+                value={get(['information', value.locale, 'description'])(this.state) || ''}
+            />
+          </div>
+        )
+      }
+    }), {})(languages);
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-            className="block"
-            id="name"
-            label={t('restaurant.menus.name')}
-            onChange={this.handleInputChange}
-            type="text"
-            value={name}
-        />
-        <Input
-            className="block"
-            id="description"
-            label={t('restaurant.menus.description')}
-            onChange={this.handleInputChange}
-            rows={3}
-            type="text"
-            value={description}
+        <Tabbed
+            onTabChange={this.handleTabChange}
+            tab={activeLanguage}
+            tabs={tabs}
         />
         <div className="container">
           {manageMenuItems ?
@@ -161,5 +212,7 @@ export default compose(
   updateMenu,
   updateMenuItems,
   getActiveAccount,
-  getMenu
+  getMenu,
+  createMenuInformation,
+  updateMenuInformation
 )(connect(mapStateToProps, {})(MenuForm));

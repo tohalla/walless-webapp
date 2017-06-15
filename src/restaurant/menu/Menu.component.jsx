@@ -7,7 +7,10 @@ import MdlMenu from 'components/MdlMenu.component';
 import Button from 'components/Button.component';
 import {getMenu} from 'graphql/restaurant/menu.queries';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  language: state.util.translation.language,
+  t: state.util.translation.t
+});
 
 class Menu extends React.Component {
   static PropTypes = {
@@ -35,11 +38,15 @@ class Menu extends React.Component {
     this.setState({expand: !this.state.expand});
   };
   render() {
+    console.log(this.props);
     const {
       getMenu: {
         menu: {
-          name,
-          description,
+          information: {
+            [this.props.language]: {
+              name, description
+            } = {}
+          },
           id
         }
       } = {menu:

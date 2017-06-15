@@ -11,7 +11,7 @@ class Input extends React.Component {
       PropTypes.number
     ]),
     label: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string,
     type: PropTypes.string,
     className: PropTypes.string,
     onChange: PropTypes.func.isRequired,

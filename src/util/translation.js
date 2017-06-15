@@ -13,7 +13,12 @@ const polyglot = new Polyglot();
 const SET_TRANSLATIONS = 'SET_TRANSLATIONS';
 const SET_LANGUAGES = 'SET_LANGUAGES';
 
-export default (state: Object = {t: () => polyglot.t}, action: Object) =>
+const initialState = {
+ t: () => polyglot.t,
+ language: 'en'
+};
+
+export default (state: Object = initialState, action: Object) =>
   action.type === SET_TRANSLATIONS || action.type === SET_LANGUAGES ?
     Object.assign({}, state, action.payload)
   : state;

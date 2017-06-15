@@ -46,7 +46,7 @@ class WithActions extends React.Component {
       <div>
       {action ? (
           <div className={containerClass}>
-            {forceDefaultAction ? null : (
+            {forceDefaultAction || actions[action].hideReturn ? null : (
               <Button
                   className="block"
                   colored
@@ -62,15 +62,15 @@ class WithActions extends React.Component {
             <div className={containerClass}>
               <div>
                 {Object.keys(actions)
-                  .filter(action => !actions[action].hide)
-                  .map((action, key) => (
+                  .filter(key => !actions[key].hide)
+                  .map(key => (
                     <Button
                         colored
                         key={key}
-                        onClick={onActionChange({name: action})}
+                        onClick={onActionChange({name: key})}
                         type="button"
                     >
-                      {actions[action].label}
+                      {actions[key].label}
                     </Button>
                   ))
                 }
