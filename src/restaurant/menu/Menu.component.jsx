@@ -38,7 +38,6 @@ class Menu extends React.Component {
     this.setState({expand: !this.state.expand});
   };
   render() {
-    console.log(this.props);
     const {
       getMenu: {
         menu: {
@@ -109,5 +108,6 @@ class Menu extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps),
   getMenu
-)(connect(mapStateToProps)(Menu));
+)(Menu);

@@ -3,7 +3,7 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import {equals} from 'lodash/fp';
+import {reduce, set, get, equals} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import config from 'config';
@@ -14,17 +14,24 @@ import SelectImages from 'components/SelectImages.component';
 import {
   createMenuItem,
   updateMenuItem,
-  updateMenuItemFiles
+  updateMenuItemFiles,
+  createMenuItemInformation,
+  updateMenuItemInformation
 } from 'graphql/restaurant/menuItem.mutations';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 import {getFilesForRestaurant} from 'graphql/restaurant/restaurant.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
+import Tabbed from 'components/Tabbed.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  t: state.util.translation.t,
+  languages: state.util.translation.languages
+});
 
 class MenuItemForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onError: PropTypes.func,
     onCancel: PropTypes.func.isRequired,
     createMenuItem: PropTypes.func.isRequired,
     updateMenuItem: PropTypes.func.isRequired,
@@ -50,8 +57,7 @@ class MenuItemForm extends React.Component {
     const {
       getMenuItem: {
         menuItem: {
-          name = '',
-          description = '',
+          information,
           type,
           category,
           files = []
@@ -59,33 +65,41 @@ class MenuItemForm extends React.Component {
       } = {menuItem: typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}}
     } = props;
     updateState({
-      name,
-      description,
+      activeLanguage: 'en',
+      information,
       type,
       newImages: [],
       files,
       category
     });
   }
-  handleInputChange = e => {
-    const {id, value} = e.target;
-    this.setState({[id]: value});
+  handleInputChange = path => event => {
+    const {value} = event.target;
+    this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
     const {
       createMenuItem,
       updateMenuItem,
       updateMenuItemFiles,
+      createMenuItemInformation,
+      updateMenuItemInformation,
       restaurant,
       onSubmit,
-      onFailure,
+      onError,
       getActiveAccount: {account} = {},
       getMenuItem: {
-        menuItem
+        menuItem: originalMenuItem
       } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}}
     } = this.props;
-    const {newImages, files: menuItemFiles, ...menuItemOptions} = this.state;
+    const {
+      newImages,
+      files: menuItemFiles,
+      information,
+      activeLanguage, // eslint-disable-line
+      ...menuItemOptions
+    } = this.state;
     let files = menuItemFiles
       .reduce(
         (prev, curr) => curr._delete ?
@@ -93,7 +107,7 @@ class MenuItemForm extends React.Component {
           prev.concat(typeof curr === 'object' ? curr.id : curr),
         []
       );
-    (async() => {
+    try {
       if (newImages && newImages.length) {
         const formData = new FormData();
         formData.append('restaurant', restaurant.id);
@@ -115,28 +129,35 @@ class MenuItemForm extends React.Component {
             }
           )).json());
       }
-      const menuItemPayload = Object.assign({}, menuItemOptions,
-        menuItem ? {id: menuItem.id} : null,
+      const finalMenuItem = Object.assign({}, menuItemOptions,
+        originalMenuItem ? {id: originalMenuItem.id} : null,
         {
           restaurant: restaurant.id,
           createdBy: account.id
         }
       );
-      try {
-        const finalMenuItem = menuItem && menuItem.id ?
-          (await updateMenuItem(menuItemPayload)).data.updateMenuItemById.menuItem :
-          (await createMenuItem(menuItemPayload)).data.createMenuItem.menuItem;
-        await updateMenuItemFiles(finalMenuItem.id, files);
-        if (onSubmit) {
-          onSubmit();
-        }
-        onSubmit();
-      } catch (err) {
-        if (onFailure) {
-          onFailure();
-        }
+      const {data} = await (originalMenuItem && originalMenuItem.id ?
+        updateMenuItem(finalMenuItem) : createMenuItem(finalMenuItem)
+      );
+      const [mutation] = Object.keys(data);
+      const {[mutation]: {menuItem: {id: menuItemId}}} = data;
+      await Promise.all([
+          updateMenuItemFiles(menuItemId, files)
+        ].concat(
+          Object.keys(information).map(key =>
+            mutation !== 'createMenuItem' && get(['information', key])(originalMenuItem) ?
+              updateMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
+            : createMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
+          )
+        )
+      );
+      onSubmit();
+    } catch (error) {
+      if (typeof onError === 'function') {
+       return onError(error);
       }
-    })();
+      throw new Error(error);
+    };
   };
   deleteImage = image => () => {
     this.setState({
@@ -160,31 +181,49 @@ class MenuItemForm extends React.Component {
   handleImagesSelected = images => {
     this.setState({files: images});
   };
+  handleTabChange = tab => this.setState({activeLanguage: tab});
   render() {
     const {
       t,
-      getFilesForRestaurant = {}
+      getFilesForRestaurant = {},
+      languages
     } = this.props;
-    const {description, name, files = [], newImages = []} = this.state;
+    const {
+      files = [],
+      newImages = [],
+      activeLanguage
+    } = this.state;
+    const tabs = reduce((prev, value) => Object.assign({}, prev, {
+      [value.locale]: {
+        label: value.name,
+        render: () => (
+          <div>
+            <Input
+                className="block"
+                label={t('restaurant.menuItems.name')}
+                onChange={this.handleInputChange(['information', value.locale, 'name'])}
+                type="text"
+                value={get(['information', value.locale, 'name'])(this.state) || ''}
+            />
+            <Input
+                className="block"
+                label={t('restaurant.menuItems.description')}
+                onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                rows={3}
+                type="text"
+                value={get(['information', value.locale, 'description'])(this.state) || ''}
+            />
+          </div>
+        )
+      }
+    }), {})(languages);
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
-          <Input
-              className="block"
-              id="name"
-              label={t('restaurant.menus.name')}
-              onChange={this.handleInputChange}
-              type="text"
-              value={name}
-          />
-          <Input
-              className="block"
-              id="description"
-              label={t('restaurant.menus.description')}
-              onChange={this.handleInputChange}
-              rows={3}
-              type="text"
-              value={description}
+          <Tabbed
+              onTabChange={this.handleTabChange}
+              tab={activeLanguage}
+              tabs={tabs}
           />
           <div className="container">
             {
@@ -242,5 +281,7 @@ export default compose(
   updateMenuItemFiles,
   getMenuItem,
   getActiveAccount,
-  getFilesForRestaurant
+  getFilesForRestaurant,
+  createMenuItemInformation,
+  updateMenuItemInformation
 )(connect(mapStateToProps, {})(MenuItemForm));

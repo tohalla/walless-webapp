@@ -2,11 +2,10 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {reduce, set, get} from 'lodash/fp';
+import {reduce, set, get, equals} from 'lodash/fp';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'components/Input.component';
-import {equals} from 'lodash/fp';
 import Button from 'components/Button.component';
 import {
   createMenu,

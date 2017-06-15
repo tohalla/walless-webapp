@@ -1,9 +1,15 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import MdlMenu from 'components/MdlMenu.component';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
+
+const mapStateToProps = state => ({
+  language: state.util.translation.language,
+  t: state.util.translation.t
+});
 
 class MenuItem extends React.Component {
   static PropTypes = {
@@ -33,8 +39,11 @@ class MenuItem extends React.Component {
     const {
       getMenuItem: {
         menuItem: {
-          name,
-          description,
+          information: {
+            [this.props.language]: {
+              name, description
+            } = {}
+          },
           id,
           files
         }
@@ -87,5 +96,6 @@ class MenuItem extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps),
   getMenuItem
 )(MenuItem);
