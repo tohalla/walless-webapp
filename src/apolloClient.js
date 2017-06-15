@@ -8,10 +8,18 @@ const networkInterface = createNetworkInterface({
   uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
 });
 
+const apolloClient = new ApolloClient({
+  networkInterface,
+  shouldBatch: true,
+  dataIdFromObject,
+  queryDeduplication: true
+});
+
 networkInterface.use([{
-  applyMiddleware(req, next) {
-    if (Cookie.get('expiresAt') < Date.now() / 1000) {
-      authenticationHandler.logout;
+  async applyMiddleware(req, next) {
+    if (Cookie.get('Expiration') < Date.now() / 1000) {
+      await authenticationHandler.logout();
+      await apolloClient.resetStore();
     } else {
       if (!req.options.headers) {
         req.options.headers = {};
@@ -29,11 +37,5 @@ const dataIdFromObject = result =>
   result.id && result.__typename ?
     result.__typename + result.id : null;
 
-const apolloClient = new ApolloClient({
-  networkInterface,
-  shouldBatch: true,
-  dataIdFromObject,
-  queryDeduplication: true
-});
 
 export default apolloClient;

@@ -6,6 +6,7 @@ import ClickOutside from 'react-click-outside';
 import Input from 'components/Input.component';
 import {addNotification} from 'notifications/notification';
 import authenticationHandler from 'util/auth';
+import apolloClient from 'apolloClient';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -19,9 +20,9 @@ class Authenticate extends React.Component {
     this.setState({showLogin: true});
   closeDialog = () =>
     this.setState({showLogin: false});
-  handleAuthentication = e => {
+  handleAuthentication = async e => {
     e.preventDefault();
-    authenticationHandler.authenticate(
+    await authenticationHandler.authenticate(
       this.state.email,
       this.state.password
     )
@@ -29,6 +30,7 @@ class Authenticate extends React.Component {
         type: 'alert',
         content: 'login failed'
       }));
+    apolloClient.resetStore();
   }
   handleInputChange = e => {
     const {id, value} = e.target;

@@ -30,7 +30,6 @@ const authenticationHandler = {
     const authorization = await authenticate({email, password});
     Cookie.set('Authorization', authorization.token);
     Cookie.set('Expiration', authorization.expiresAt);
-    window.location.reload();
   },
   renew: async(token: string) => {
     const authorization = await authenticate({token});
@@ -40,7 +39,6 @@ const authenticationHandler = {
   logout: async() => {
     Cookie.remove('Authorization');
     Cookie.remove('Expiration');
-    window.location.reload();
   }
 };
 

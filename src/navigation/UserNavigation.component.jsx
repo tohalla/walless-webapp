@@ -5,10 +5,16 @@ import {compose} from 'react-apollo';
 import Authenticate from 'account/Authenticate.component';
 import authenticationHandler from 'util/auth';
 import {getActiveAccount} from 'graphql/account/account.queries';
+import apolloClient from 'apolloClient';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class UserNavigation extends React.Component {
+  handleLogout = async event => {
+    event.preventDefault();
+    await authenticationHandler.logout();
+    apolloClient.resetStore();
+  }
   render() {
     const {t, getActiveAccount: {account} = {}} = this.props;
     return (
@@ -22,7 +28,7 @@ class UserNavigation extends React.Component {
             </span>
             <button
                 className="button--plain button--light"
-                onClick={authenticationHandler.logout}
+                onClick={this.handleLogout}
                 type="button"
             >
               {t('account.signOut')}
