@@ -2,22 +2,29 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {equals} from 'lodash/fp';
+import {reduce, set, get, equals} from 'lodash/fp';
 
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'components/Input.component';
 import Button from 'components/Button.component';
 import {
   createRestaurant,
-  updateRestaurant
+  updateRestaurant,
+  createRestaurantInformation,
+  updateRestaurantInformation
   } from 'graphql/restaurant/restaurant.mutations';
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
+import Tabbed from 'components/Tabbed.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  languages: state.util.translation.languages,
+  t: state.util.translation.t
+});
 
 class RestaurantForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onError: PropTypes.func,
     onCancel: PropTypes.func,
     createRestaurant: PropTypes.func.isRequired,
     updateRestaurant: PropTypes.func.isRequired,
@@ -42,68 +49,101 @@ class RestaurantForm extends React.Component {
     const {
       getRestaurant: {
         restaurant: {
-          name = '',
-          description = ''
+          information
         }
       } = {restaurant: typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}}
     } = props;
     updateState({
-      name,
-      description
+      information,
+      activeLanguage: 'en'
     });
-  }
-  handleInputChange = e => {
-    const {id, value} = e.target;
-    this.setState({[id]: value});
-  }
-  handleSubmit = e => {
+  };
+  handleInputChange = path => event => {
+    const {value} = event.target;
+    this.setState(set(path)(value)(this.state));
+  };
+  handleSubmit = async e => {
     e.preventDefault();
     const {
       createRestaurant,
       updateRestaurant,
+      createRestaurantInformation,
+      updateRestaurantInformation,
       onSubmit,
+      onError,
       getActiveAccount: {account} = {},
       getRestaurant: {
-        restaurant = typeof this.props.restaurant === 'object' ? this.props.restaurant : {}
-      } = {}
+        restaurant: originalRestaurant
+      } = {restaurant: typeof this.props.restaurant === 'object' ? this.props.restaurant : {}}
     } = this.props;
-    const finalRestaurant = Object.assign({}, this.state,
-      restaurant ? {id: restaurant.id} : null,
+    const {
+      activeLanguage, // eslint-disable-line
+      information,
+      ...restaurantOptions
+    } = this.state;
+    const finalRestaurant = Object.assign({}, restaurantOptions,
+      originalRestaurant ? {id: originalRestaurant.id} : null,
       {createdBy: account.id}
     );
-    (restaurant && restaurant.id ?
-      updateRestaurant(finalRestaurant) : createRestaurant(finalRestaurant)
-    )
-      .then(() => onSubmit());
-  }
-  handleToggle = e => {
-    this.setState({[e.target.id]: !this.state[e.target.id]});
-  }
+    try {
+      const {data} = await (originalRestaurant && originalRestaurant.id ?
+        updateRestaurant(finalRestaurant) : createRestaurant(finalRestaurant)
+      );
+      const [mutation] = Object.keys(data);
+      const {[mutation]: {restaurant: {id: restaurantId}}} = data;
+      await Promise.all([].concat(
+        Object.keys(information).map(key =>
+          mutation !== 'createRestaurant' && get(['information', key])(originalRestaurant) ?
+            updateRestaurantInformation(Object.assign({language: key, restaurant: restaurantId}, information[key]))
+          : createRestaurantInformation(Object.assign({language: key, restaurant: restaurantId}, information[key]))
+        )
+      ));
+      onSubmit();
+    } catch (error) {
+      if (typeof onError === 'function') {
+       return onError(error);
+      }
+      throw new Error(error);
+    };
+  };
+  handleTabChange = tab => this.setState({activeLanguage: tab});
   handleCancel = e => {
     e.preventDefault();
     this.props.onCancel();
   }
   render() {
-    const {t, onCancel} = this.props;
-    const {description, name} = this.state;
+    const {t, onCancel, languages} = this.props;
+    const {activeLanguage, information} = this.state;
+    const tabs = reduce((prev, value) => Object.assign({}, prev, {
+      [value.locale]: {
+        label: value.name,
+        render: () => (
+          <div>
+            <Input
+                className="block"
+                label={t('restaurant.name')}
+                onChange={this.handleInputChange(['information', value.locale, 'name'])}
+                type="text"
+                value={get([value.locale, 'name'])(information) || ''}
+            />
+            <Input
+                className="block"
+                label={t('restaurant.description')}
+                onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                rows={3}
+                type="text"
+                value={get([value.locale, 'description'])(information) || ''}
+            />
+          </div>
+        )
+      }
+    }), {})(languages);
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-            className="block"
-            id="name"
-            label={t('restaurant.name')}
-            onChange={this.handleInputChange}
-            type="text"
-            value={name}
-        />
-        <Input
-            className="block"
-            id="description"
-            label={t('restaurant.description')}
-            onChange={this.handleInputChange}
-            rows={3}
-            type="text"
-            value={description}
+        <Tabbed
+            onTabChange={this.handleTabChange}
+            tab={activeLanguage}
+            tabs={tabs}
         />
         <div>
           <Button colored onClick={this.handleSubmit} raised type="submit">
@@ -125,5 +165,7 @@ export default compose(
   createRestaurant,
   updateRestaurant,
   getActiveAccount,
-  getRestaurant
+  getRestaurant,
+  createRestaurantInformation,
+  updateRestaurantInformation
 )(connect(mapStateToProps, {})(RestaurantForm));

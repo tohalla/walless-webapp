@@ -13,7 +13,7 @@ class AccountManagement extends React.Component {
   render() {
     const {getAccountsByRestaurant: {accounts}} = this.props;
     return (
-      <div className={`container container--distinct`}>
+      <div className={`container container--padded container--distinct`}>
         <table>
           <thead>
             <tr>

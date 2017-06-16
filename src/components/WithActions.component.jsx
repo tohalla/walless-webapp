@@ -30,7 +30,7 @@ class WithActions extends React.Component {
     ]).isRequired
   };
   static defaultProps = {
-    containerClass: 'container container--distinct'
+    containerClass: 'container container--padded container--distinct'
   };
   render() {
     const {

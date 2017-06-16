@@ -9,7 +9,10 @@ import Button from 'components/Button.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'components/WithActions.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  language: state.util.translation.language,
+  t: state.util.translation.t
+});
 
 class Restaurant extends React.Component {
   static propTypes = {
@@ -32,7 +35,14 @@ class Restaurant extends React.Component {
     if (this.props.getRestaurant && typeof this.props.getRestaurant.restaurant === 'object') {
       const {
         getRestaurant: {
-          restaurant: restaurant
+          restaurant: restaurant,
+          restaurant: {
+            information: {
+              [this.props.language]: {
+                name, description
+              } = {}
+            }
+          }
         } = {restaurant: this.props.restaurant},
         t
       } = this.props;
@@ -59,7 +69,7 @@ class Restaurant extends React.Component {
             onActionChange={this.handleActionChange}
         >
           <div className="container__row">
-            <h2>{restaurant.name}</h2>
+            <h2>{name}</h2>
             <div className="container__item">
               <Button
                   className="mdl-button mdl-js-button mdl-button--icon"
@@ -82,7 +92,7 @@ class Restaurant extends React.Component {
             <tbody>
               <tr>
                 <th>{t('restaurant.description')}</th>
-                <td>{restaurant.description}</td>
+                <td>{description}</td>
               </tr>
             </tbody>
           </table>

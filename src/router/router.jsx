@@ -26,8 +26,6 @@ export default (
       <Route component={Root} path="/">
         <IndexRoute component={Home} />
           {restaurant}
-          <Route path="users" />
-          <Route path="dashboard" />
         </Route>
         <Route path="documentation" />
         <Route path="contact" />

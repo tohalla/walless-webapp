@@ -113,7 +113,7 @@ class MenuItems extends React.Component {
       <ListItems
           action={action ? action.name : null}
           actions={actions}
-          containerClass={plain ? 'container' : 'container container--distinct'}
+          containerClass={plain ? 'container' : 'container container--padded container--distinct'}
           filterItems={this.filterItems}
           items={menuItems}
           onActionChange={this.handleActionChange}

@@ -219,50 +219,48 @@ class MenuItemForm extends React.Component {
     }), {})(languages);
     return (
       <form onSubmit={this.handleSubmit}>
-        <div>
-          <Tabbed
-              onTabChange={this.handleTabChange}
-              tab={activeLanguage}
-              tabs={tabs}
+        <Tabbed
+            onTabChange={this.handleTabChange}
+            tab={activeLanguage}
+            tabs={tabs}
+        />
+        <div className="container container--padded">
+          {
+            [].concat(
+              newImages.map(image => ({
+                src: image.preview,
+                delete: false,
+                handleDelete: this.deleteImage(image)
+              })),
+              files.map(file => ({
+                src: file.uri,
+                delete: file._delete,
+                handleDelete: this.toggleDeleteFile(file)
+              }))
+            )
+              .map((image, index) => (
+                <Deletable
+                    deleteText={image.delete ?
+                      t('cancel') :
+                      <i className="material-icons">{'delete'}</i>
+                    }
+                    key={index}
+                    onDelete={image.handleDelete}
+                >
+                  <img className="image-preview" src={image.src}/>
+                </Deletable>
+              ))
+          }
+          <SelectImages
+              dropzone={{onSubmit: this.handleDrop}}
+              select={{
+                images: getFilesForRestaurant.files,
+                selected: files,
+                onImagesSelected: this.handleImagesSelected
+              }}
           />
-          <div className="container">
-            {
-              [].concat(
-                newImages.map(image => ({
-                  src: image.preview,
-                  delete: false,
-                  handleDelete: this.deleteImage(image)
-                })),
-                files.map(file => ({
-                  src: file.uri,
-                  delete: file._delete,
-                  handleDelete: this.toggleDeleteFile(file)
-                }))
-              )
-                .map((image, index) => (
-                  <Deletable
-                      deleteText={image.delete ?
-                        t('cancel') :
-                        <i className="material-icons">{'delete'}</i>
-                      }
-                      key={index}
-                      onDelete={image.handleDelete}
-                  >
-                    <img className="image-preview" src={image.src}/>
-                  </Deletable>
-                ))
-            }
-            <SelectImages
-                dropzone={{onSubmit: this.handleDrop}}
-                select={{
-                  images: getFilesForRestaurant.files,
-                  selected: files,
-                  onImagesSelected: this.handleImagesSelected
-                }}
-            />
-          </div>
         </div>
-        <div>
+        <div className="container--row">
           <Button colored onClick={this.handleSubmit} raised type="submit">
             {t('submit')}
           </Button>

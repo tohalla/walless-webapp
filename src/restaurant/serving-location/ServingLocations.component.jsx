@@ -112,7 +112,7 @@ class ServingLocations extends React.Component {
       <ListItems
           action={action ? action.name : null}
           actions={actions}
-          containerClass={plain ? 'container' : 'container container--distinct'}
+          containerClass={plain ? 'container' : 'container container--padded container--distinct'}
           filterItems={this.filterItems}
           items={servingLocations}
           onActionChange={this.handleActionChange}

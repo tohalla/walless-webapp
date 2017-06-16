@@ -95,7 +95,7 @@ class Menus extends React.Component {
       <ListItems
           action={action ? action.name : null}
           actions={actions}
-          containerClass={plain ? 'container' : 'container container--distinct'}
+          containerClass={plain ? 'container' : 'container container--padded container--distinct'}
           items={menus}
           onActionChange={this.handleActionChange}
           renderItem={this.renderMenu}

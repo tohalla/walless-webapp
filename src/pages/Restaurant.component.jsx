@@ -2,9 +2,8 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import Select from 'react-select';
 import {Link} from 'react-router';
-import {find} from 'lodash/fp';
+import {find, get} from 'lodash/fp';
 import {connect} from 'react-redux';
-import {hasIn} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import Spinner from 'components/Spinner.component';
@@ -13,7 +12,10 @@ import Padded from 'containers/Padded.component';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  t: state.util.translation.t,
+  language: state.util.translation.language
+});
 
 const menuItems = [
   {
@@ -53,19 +55,11 @@ class Restaurant extends React.Component {
     const {getActiveAccount: {account}} = newProps;
     if (
       !newProps.routeParams.restaurant &&
-      hasIn([
-        'restaurantAccountsByAccount',
-        'edges',
-        0,
-        'node',
-        'restaurantByRestaurant'
-      ])(account) &&
-      account.restaurantAccountsByAccount.edges.length
+      Array.isArray(account.restaurants) &&
+      account.restaurants.length
     ) {
       this.props.router.push(
-        '/restaurant/' +
-        account.restaurantAccountsByAccount.edges[0]
-          .node.restaurantByRestaurant.id
+        `/restaurant/${account.restaurants[0].id}`
       );
     }
   }
@@ -77,22 +71,13 @@ class Restaurant extends React.Component {
   };
   render() {
     const {
-      getActiveAccount: {account, data: {loading}},
+      getActiveAccount: {account: {restaurants}, data: {loading}},
       routeParams,
       children,
       t,
-      router: {location}
+      router: {location},
+      language
     } = this.props;
-    const restaurants = hasIn([
-      'restaurantAccountsByAccount',
-      'edges',
-      0,
-      'node',
-      'restaurantByRestaurant'
-    ])(account) ?
-      account.restaurantAccountsByAccount.edges
-        .map(edge => edge.node.restaurantByRestaurant) :
-      [];
     const restaurant = routeParams.restaurant ?
       find(restaurant =>
         restaurant.id === Number(routeParams.restaurant)
@@ -112,7 +97,7 @@ class Restaurant extends React.Component {
                     options={
                       restaurants.map(value => ({
                         value: value.id,
-                        label: value.name
+                        label: get(['information', language, 'name'])(value)
                       }))
                     }
                     resetValue={restaurant.id}

@@ -56,7 +56,7 @@ class Menu extends React.Component {
     const {expand} = this.state;
     return (
       <div
-          className="trigger"
+          className="trigger container"
           onClick={this.toggleExpand}
       >
         <div className="container__row">

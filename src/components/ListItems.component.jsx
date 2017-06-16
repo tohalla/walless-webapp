@@ -26,7 +26,7 @@ export default class ListItems extends React.Component {
     renderItem: () =>
       null,
     items: [],
-    containerClass: 'container container--distinct',
+    containerClass: 'container container--padded container--distinct',
     selectedItems: new Set()
   };
   render() {

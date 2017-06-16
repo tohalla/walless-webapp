@@ -42,7 +42,9 @@ body {
   background: $gallery;
   min-height: 100vh;
 }
-
+form {
+  align-self: stretch;
+}
 .block {
   display: block;
 }

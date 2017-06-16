@@ -178,7 +178,7 @@ class MenuForm extends React.Component {
             tab={activeLanguage}
             tabs={tabs}
         />
-        <div className="container">
+        <div className="container container--padded">
           {manageMenuItems ?
             <MenuItems
                 action={'filter'}
