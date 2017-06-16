@@ -11,6 +11,7 @@ import WithSideBar from 'containers/WithSideBar.component';
 import Padded from 'containers/Padded.component';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -52,22 +53,36 @@ class Restaurant extends React.Component {
     ])
   };
   componentWillReceiveProps(newProps) {
-    const {getActiveAccount: {account}} = newProps;
+    const {
+      getActiveAccount: {
+        account: {restaurants},
+        data: {loading}
+      } = {account: {}, data: {}},
+      routeParams: {restaurant}
+    } = newProps;
+    if (loading) {
+      return;
+    }
     if (
-      !newProps.routeParams.restaurant &&
-      Array.isArray(account.restaurants) &&
-      account.restaurants.length
+      !restaurant &&
+      Array.isArray(restaurants) &&
+      restaurants.length
     ) {
-      this.props.router.push(
-        `/restaurant/${account.restaurants[0].id}`
-      );
+      newProps.router.push(`/restaurant/${restaurants[0].id}`);
+    } else if (
+      restaurant &&
+      restaurants &&
+      !find(r => r.id === Number(restaurant))(restaurants)
+    ) {
+      newProps.router.push('/restaurant/');
     }
   }
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   handleRestaurantChange = value => {
     this.props.router.push(`/restaurant/${value.value}`);
   };
   handleRestaurantSubmit = () => {
-    this.props.refetch();
+    this.props.getActiveAccount.data.refetch();
   };
   render() {
     const {
@@ -143,7 +158,7 @@ class Restaurant extends React.Component {
     return loading ?
       <Spinner /> :
       <Padded>
-        <div className="container container--distinct">
+        <div className="container container--padded container--distinct">
           <RestaurantForm onSubmit={this.handleRestaurantSubmit} />
         </div>
       </Padded>;

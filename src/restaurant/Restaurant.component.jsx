@@ -8,6 +8,7 @@ import MdlMenu from 'components/MdlMenu.component';
 import Button from 'components/Button.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'components/WithActions.component';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
   language: state.util.translation.language,
@@ -24,6 +25,7 @@ class Restaurant extends React.Component {
   state = {
     action: null
   };
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   handleRestaurantSubmit = () => {
     this.props.getRestaurant.data.refetch();
     this.setState({action: null});

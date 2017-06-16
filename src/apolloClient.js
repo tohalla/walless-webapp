@@ -8,6 +8,9 @@ const networkInterface = createNetworkInterface({
   uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
 });
 
+const dataIdFromObject = result =>
+  result.nodeId;
+
 const apolloClient = new ApolloClient({
   networkInterface,
   shouldBatch: true,
@@ -32,10 +35,6 @@ networkInterface.use([{
     next();
   }
 }]);
-
-const dataIdFromObject = result =>
-  result.id && result.__typename ?
-    result.__typename + result.id : null;
 
 
 export default apolloClient;

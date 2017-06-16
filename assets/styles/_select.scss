@@ -1,3 +1,8 @@
+.Select {
+  flex: 1 1 auto;
+  min-width: 120px;
+  align-self: stretch;
+}
 .Select-control {
   border-radius: none;
 }
@@ -18,18 +23,15 @@
   }
   .Select-menu-outer {
     @include shadow-2dp();
-    background: lighten($dark-gray, 5%);
+    background: $carrara;
     border: 1px solid $dark-gray;
   }
   .Select-option {
-    color: $light-gray !important;
+    color: $dark-gray !important;
     background: none;
-  }
-  .Select-option:hover {
-    color: $iron;
   }
   .Select-option.is-selected,  {
-    background: none;
+    background: darken($carrara, 5%);
     text-decoration: underline;
   }
 }

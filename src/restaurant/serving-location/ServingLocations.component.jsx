@@ -12,12 +12,12 @@ import ServingLocation from
   'restaurant/serving-location/ServingLocation.component';
 import ServingLocationForm from
   'restaurant/serving-location/ServingLocationForm.component';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
   filter: hasIn(['form', 'servingLocationFilter', 'values'])(state) ?
     state.form.servingLocationFilter.values : {}
-
 });
 
 class ServingLocations extends React.Component {
@@ -38,6 +38,7 @@ class ServingLocations extends React.Component {
       action: props.action
     };
   }
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   handleActionChange = action => event => {
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();

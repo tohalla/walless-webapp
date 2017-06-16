@@ -7,6 +7,7 @@ import MenuForm from 'restaurant/menu/MenuForm.component';
 import {getMenusByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import Menu from 'restaurant/menu/Menu.component';
 import ListItems from 'components/ListItems.component';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -29,6 +30,7 @@ class Menus extends React.Component {
       action: props.action
     };
   }
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   handleActionChange = action => event => {
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();

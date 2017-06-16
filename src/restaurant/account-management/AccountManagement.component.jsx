@@ -6,10 +6,12 @@ import {
   getAccountsByRestaurant,
   getAccountRolesForRestaurant
 } from 'graphql/restaurant/restaurant.queries';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 class AccountManagement extends React.Component {
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   render() {
     const {getAccountsByRestaurant: {accounts}} = this.props;
     return (
@@ -44,5 +46,6 @@ class AccountManagement extends React.Component {
 };
 
 export default compose(
+  connect(mapStateToProps, {}),
   getAccountsByRestaurant, getAccountRolesForRestaurant
-)(connect(mapStateToProps, {})(AccountManagement));
+)(AccountManagement);

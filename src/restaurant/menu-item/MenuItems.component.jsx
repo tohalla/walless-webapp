@@ -9,6 +9,7 @@ import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
 import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
 import ListItems from 'components/ListItems.component';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -38,6 +39,7 @@ class MenuItems extends React.Component {
       action: props.action
     };
   }
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   handleActionChange = action => event => {
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();

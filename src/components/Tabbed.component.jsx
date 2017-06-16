@@ -14,7 +14,7 @@ export default class Tabbed extends React.Component {
   render() {
     const {tabs, tab = Object.keys(tabs)[0]} = this.props;
     return (
-      <div className="tab-container container--padded">
+      <div className="tab-container">
         <div className="tab-container__tabs">
           {Object.keys(tabs).map(key => (
             <div

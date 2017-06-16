@@ -1,6 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import {reduce, set, get, equals} from 'lodash/fp';
 
@@ -13,6 +14,7 @@ import {
   createRestaurantInformation,
   updateRestaurantInformation
   } from 'graphql/restaurant/restaurant.mutations';
+import {getCurrencies} from 'graphql/misc.queries';
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
 import Tabbed from 'components/Tabbed.component';
 
@@ -55,7 +57,8 @@ class RestaurantForm extends React.Component {
     } = props;
     updateState({
       information,
-      activeLanguage: 'en'
+      activeLanguage: 'en',
+      currency: 'EUR'
     });
   };
   handleInputChange = path => event => {
@@ -82,7 +85,7 @@ class RestaurantForm extends React.Component {
       ...restaurantOptions
     } = this.state;
     const finalRestaurant = Object.assign({}, restaurantOptions,
-      originalRestaurant ? {id: originalRestaurant.id} : null,
+      originalRestaurant.id ? {id: originalRestaurant.id} : null,
       {createdBy: account.id}
     );
     try {
@@ -107,12 +110,18 @@ class RestaurantForm extends React.Component {
     };
   };
   handleTabChange = tab => this.setState({activeLanguage: tab});
-  handleCancel = e => {
-    e.preventDefault();
+  handleCurrencyChange = ({value: currency}) => this.setState({currency});
+  handleCancel = event => {
+    event.preventDefault();
     this.props.onCancel();
   }
   render() {
-    const {t, onCancel, languages} = this.props;
+    const {
+      t,
+      onCancel,
+      languages,
+      getCurrencies: {currencies = []} = {}
+    } = this.props;
     const {activeLanguage, information} = this.state;
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
       [value.locale]: {
@@ -145,6 +154,33 @@ class RestaurantForm extends React.Component {
             tab={activeLanguage}
             tabs={tabs}
         />
+        <div className="container container--padded">
+          <div className="container__row">
+            <table>
+              <tbody>
+                <tr>
+                  <th>{'currency'}</th>
+                  <td>
+                    <Select
+                        autoBlur
+                        className="Select"
+                        clearable={false}
+                        id="currency"
+                        onChange={this.handleCurrencyChange}
+                        options={
+                          currencies.map(value => ({
+                            value: value.code,
+                            label: value.name
+                          }))
+                        }
+                        value={this.state.currency}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div>
           <Button colored onClick={this.handleSubmit} raised type="submit">
             {t('submit')}
@@ -162,10 +198,12 @@ class RestaurantForm extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   createRestaurant,
   updateRestaurant,
   getActiveAccount,
   getRestaurant,
   createRestaurantInformation,
-  updateRestaurantInformation
-)(connect(mapStateToProps, {})(RestaurantForm));
+  updateRestaurantInformation,
+  getCurrencies
+)(RestaurantForm);
