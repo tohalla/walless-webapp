@@ -25,11 +25,11 @@ const menuItems = [
   },
   {
     path: 'menus',
-    translationKey: 'restaurant.menus'
+    translationKey: 'restaurant.menus.menus'
   },
   {
     path: 'menuitems',
-    translationKey: 'restaurant.menuItems'
+    translationKey: 'restaurant.menuItems.menuItems'
   },
   {
     path: 'users',

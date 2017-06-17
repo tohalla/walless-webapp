@@ -60,12 +60,14 @@ class MenuItemForm extends React.Component {
           information,
           type,
           category,
+          price = '',
           files = []
         }
       } = {menuItem: typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}}
     } = props;
     updateState({
       activeLanguage: 'en',
+      price,
       information,
       type,
       newImages: [],
@@ -85,7 +87,7 @@ class MenuItemForm extends React.Component {
       updateMenuItemFiles,
       createMenuItemInformation,
       updateMenuItemInformation,
-      restaurant,
+      restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
       getActiveAccount: {account} = {},
@@ -110,7 +112,7 @@ class MenuItemForm extends React.Component {
     try {
       if (newImages && newImages.length) {
         const formData = new FormData();
-        formData.append('restaurant', restaurant.id);
+        formData.append('restaurant', restaurant);
         files = files
           .concat(await (await fetch(
             `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
@@ -132,7 +134,8 @@ class MenuItemForm extends React.Component {
       const finalMenuItem = Object.assign({}, menuItemOptions,
         originalMenuItem ? {id: originalMenuItem.id} : null,
         {
-          restaurant: restaurant.id,
+          restaurant,
+          currency,
           createdBy: account.id
         }
       );
@@ -186,12 +189,14 @@ class MenuItemForm extends React.Component {
     const {
       t,
       getFilesForRestaurant = {},
+      restaurant,
       languages
     } = this.props;
     const {
       files = [],
       newImages = [],
-      activeLanguage
+      activeLanguage,
+      price
     } = this.state;
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
       [value.locale]: {
@@ -202,7 +207,6 @@ class MenuItemForm extends React.Component {
                 className="block"
                 label={t('restaurant.menuItems.name')}
                 onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                type="text"
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
@@ -210,7 +214,6 @@ class MenuItemForm extends React.Component {
                 label={t('restaurant.menuItems.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}
                 rows={3}
-                type="text"
                 value={get(['information', value.locale, 'description'])(this.state) || ''}
             />
           </div>
@@ -225,6 +228,16 @@ class MenuItemForm extends React.Component {
             tabs={tabs}
         />
         <div className="container container--padded">
+          <div className="container--row">
+            <Input
+                className="input--small"
+                label={t('restaurant.menuItems.price')}
+                onChange={this.handleInputChange('price')}
+                pattern="^\d+(\.\d{0,2})?$|^$"
+                value={price}
+            />
+            {get(['currency', 'symbol'])(restaurant)}
+          </div>
           {
             [].concat(
               newImages.map(image => ({

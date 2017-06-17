@@ -38,6 +38,12 @@ class Input extends React.Component {
       findDOMNode(this).MaterialTextfield.change(this.props.value);
     }
   }
+  handleInputChange = event => {
+    const {pattern, onChange} = this.props;
+    if (!pattern || new RegExp(pattern).test(event.target.value)) {
+      onChange(event);
+    }
+  }
   render() {
     const {
       floatingLabel,
@@ -45,6 +51,7 @@ class Input extends React.Component {
       rows,
       id,
       className,
+      onChange, // eslint-disable-line
       ...props
     } = this.props;
     return (
@@ -59,11 +66,13 @@ class Input extends React.Component {
           <textarea
               className="mdl-textfield__input"
               id={id}
+              onChange={this.handleInputChange}
               {...props}
           /> :
           <input
               className="mdl-textfield__input"
               id={id}
+              onChange={this.handleInputChange}
               {...props}
           />
         }

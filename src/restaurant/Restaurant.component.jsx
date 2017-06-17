@@ -8,6 +8,7 @@ import MdlMenu from 'components/MdlMenu.component';
 import Button from 'components/Button.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'components/WithActions.component';
+import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
@@ -90,14 +91,9 @@ class Restaurant extends React.Component {
               </MdlMenu>
             </div>
           </div>
-          <table>
-            <tbody>
-              <tr>
-                <th>{t('restaurant.description')}</th>
-                <td>{description}</td>
-              </tr>
-            </tbody>
-          </table>
+          <ItemsWithLabels
+              items={[{label: t('restaurant.description'), item: description}]}
+          />
         </WithActions>
       );
     }

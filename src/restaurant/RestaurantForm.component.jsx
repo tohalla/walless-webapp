@@ -17,6 +17,7 @@ import {
 import {getCurrencies} from 'graphql/misc.queries';
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
 import Tabbed from 'components/Tabbed.component';
+import ItemsWithLabels from 'components/ItemsWithLabels.component';
 
 const mapStateToProps = state => ({
   languages: state.util.translation.languages,
@@ -156,29 +157,29 @@ class RestaurantForm extends React.Component {
         />
         <div className="container container--padded">
           <div className="container__row">
-            <table>
-              <tbody>
-                <tr>
-                  <th>{'currency'}</th>
-                  <td>
-                    <Select
-                        autoBlur
-                        className="Select"
-                        clearable={false}
-                        id="currency"
-                        onChange={this.handleCurrencyChange}
-                        options={
-                          currencies.map(value => ({
-                            value: value.code,
-                            label: value.name
-                          }))
-                        }
-                        value={this.state.currency}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <ItemsWithLabels
+                items={[
+                  {
+                    label: t('currency'),
+                    item: (
+                      <Select
+                          autoBlur
+                          className="Select input--medium"
+                          clearable={false}
+                          id="currency"
+                          onChange={this.handleCurrencyChange}
+                          options={
+                            currencies.map(value => ({
+                              value: value.code,
+                              label: `${value.code} (${value.symbol}) - ${value.name}`
+                            }))
+                          }
+                          value={this.state.currency}
+                      />
+                    )
+                  }
+                ]}
+            />
           </div>
         </div>
         <div>
