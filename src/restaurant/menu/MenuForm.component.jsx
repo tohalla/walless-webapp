@@ -181,7 +181,9 @@ class MenuForm extends React.Component {
         <div className="container container--padded">
           {manageMenuItems ?
             <MenuItems
-                action={'filter'}
+                action={{name: 'filter'}}
+                actions={['filter']}
+                forceDefaultAction
                 menuItem={{onClick: this.handleMenuItemSelect}}
                 plain
                 restaurant={restaurant}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import {hasIn} from 'lodash/fp';
+import {hasIn, get} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
@@ -13,6 +13,7 @@ import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
+  language: state.util.translation.language,
   filter: hasIn(['form', 'menuItemFilter', 'values'])(state) ?
     state.form.menuItemFilter.values : {}
 });
@@ -24,14 +25,18 @@ class MenuItems extends React.Component {
       name: PropTypes.string.isRequired,
       item: PropTypes.object
     }),
+    actions: PropTypes.arrayOf(PropTypes.string),
     selectedItems: PropTypes.instanceOf(Set),
     menuItem: PropTypes.shape({
       onClick: PropTypes.func
     }),
-    plain: PropTypes.bool
+    plain: PropTypes.bool,
+    forceDefaultAction: PropTypes.bool
   };
   static defaultProps = {
-    selectedItems: new Set()
+    actions: ['filter', 'edit', 'new'],
+    selectedItems: new Set(),
+    forceDefaultAction: false
   };
   constructor(props) {
     super(props);
@@ -68,17 +73,21 @@ class MenuItems extends React.Component {
     this.props.getMenuItemsByRestaurant.data.refetch();
   };
   filterItems = item =>
-    !this.props.filter.name || item.name.indexOf(this.props.filter.name) > -1;
+    !this.props.filter.name ||
+    get(['information', this.props.language, 'name'])(item).toLowerCase()
+      .indexOf(this.props.filter.name.toLowerCase()) > -1;
   render() {
     const {
       getMenuItemsByRestaurant: {menuItems} = {},
       restaurant,
       selectedItems,
       plain,
-      t
+      t,
+      actions,
+      forceDefaultAction
     } = this.props;
     const {action} = this.state;
-    const actions = {
+    const defaultActions = {
       filter: {
         label: t('restaurant.menuItems.filter'),
         render: () => (
@@ -114,9 +123,15 @@ class MenuItems extends React.Component {
     return (
       <ListItems
           action={action ? action.name : null}
-          actions={actions}
+          actions={
+            Object.keys(defaultActions).reduce((prev, key) =>
+              actions.indexOf(key) === -1 ?
+                prev : Object.assign({}, prev, {[key]: defaultActions[key]})
+            , {})
+          }
           containerClass={plain ? 'container' : 'container container--padded container--distinct'}
           filterItems={this.filterItems}
+          forceDefaultAction={forceDefaultAction}
           items={menuItems}
           onActionChange={this.handleActionChange}
           renderItem={this.renderMenuItem}

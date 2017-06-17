@@ -205,7 +205,7 @@ class SelectImages extends React.Component {
       );
       return (
         <div>
-          <div>{images.length ? selectImagesButton : 'placeholder translation'}</div>
+          <div>{images.length ? selectImagesButton : null}</div>
           <div>{dropzoneButton}</div>
           {addImagesModal}
           {selectImagesModal}

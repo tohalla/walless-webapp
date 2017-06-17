@@ -43,39 +43,40 @@ class WithActions extends React.Component {
       hideActions
     } = this.props;
     return (
-      <div>
-      {action ? (
-          <div className={containerClass}>
-            {forceDefaultAction || actions[action].hideReturn ? null : (
-              <Button
-                  className="block"
-                  colored
-                  onClick={onActionChange()}
-                  type="button"
-              >
-                {t('return')}
-              </Button>
-            )}
-            {actions[action].render()}
-          </div>
-        ) : !hideActions && typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
+      <div className="container">
+        {action ? (
             <div className={containerClass}>
-              <div>
-                {Object.keys(actions)
-                  .filter(key => !actions[key].hide)
-                  .map(key => (
-                    <Button
-                        colored
-                        key={key}
-                        onClick={onActionChange({name: key})}
-                        type="button"
-                    >
-                      {actions[key].label}
-                    </Button>
-                  ))
-                }
-              </div>
+              {forceDefaultAction || actions[action].hideReturn ? null : (
+                <Button
+                    className="block"
+                    colored
+                    onClick={onActionChange()}
+                    type="button"
+                >
+                  {t('return')}
+                </Button>
+              )}
+              {actions[action].render()}
             </div>
+          )
+        : !hideActions && typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
+              <div className={containerClass}>
+                <div>
+                  {Object.keys(actions)
+                    .filter(key => !actions[key].hide)
+                    .map(key => (
+                      <Button
+                          colored
+                          key={key}
+                          onClick={onActionChange({name: key})}
+                          type="button"
+                      >
+                        {actions[key].label}
+                      </Button>
+                    ))
+                  }
+                </div>
+              </div>
           : null
         }
         {get([action, 'hideItems'])(actions) ? null :

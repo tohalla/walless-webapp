@@ -66,7 +66,8 @@ class ServingLocations extends React.Component {
     this.props.getServingLocationsByRestaurant.data.refetch();
   };
   filterItems = item =>
-    !this.props.filter.name || item.name.indexOf(this.props.filter.name) > -1;
+    !this.props.filter.name ||
+    item.name.toLowerCase().indexOf(this.props.filter.name.toLowerCase()) > -1;
   render() {
     const {
       getServingLocationsByRestaurant: {servingLocations} = {},

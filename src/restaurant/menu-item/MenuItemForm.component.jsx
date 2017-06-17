@@ -22,6 +22,7 @@ import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 import {getFilesForRestaurant} from 'graphql/restaurant/restaurant.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
+import ItemsWithLabels from 'components/ItemsWithLabels.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -228,16 +229,25 @@ class MenuItemForm extends React.Component {
             tabs={tabs}
         />
         <div className="container container--padded">
-          <div className="container--row">
-            <Input
-                className="input--small"
-                label={t('restaurant.menuItems.price')}
-                onChange={this.handleInputChange('price')}
-                pattern="^\d+(\.\d{0,2})?$|^$"
-                value={price}
-            />
-            {get(['currency', 'symbol'])(restaurant)}
-          </div>
+          <ItemsWithLabels
+              items={[
+                {
+                  label: t('restaurant.menuItems.price'),
+                  item: (
+                    <div>
+                      <Input
+                          className="input--small"
+                          label={t('restaurant.menuItems.price')}
+                          onChange={this.handleInputChange('price')}
+                          pattern="^\d+(\.\d{0,2})?$|^$"
+                          value={price}
+                      />
+                      {get(['currency', 'symbol'])(restaurant)}
+                    </div>
+                  )
+                }
+            ]}
+          />
           {
             [].concat(
               newImages.map(image => ({
