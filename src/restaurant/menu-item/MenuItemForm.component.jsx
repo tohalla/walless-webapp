@@ -240,6 +240,7 @@ class MenuItemForm extends React.Component {
                           label={t('restaurant.menuItems.price')}
                           onChange={this.handleInputChange('price')}
                           pattern="^\d+(\.\d{0,2})?$|^$"
+                          required
                           value={price}
                       />
                       {get(['currency', 'symbol'])(restaurant)}

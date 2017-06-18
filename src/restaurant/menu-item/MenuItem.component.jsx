@@ -45,7 +45,9 @@ class MenuItem extends React.Component {
             } = {}
           },
           id,
-          files
+          files,
+          price,
+          currency: {symbol}
         }
       } = {menuItem: typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {}},
       className,
@@ -55,7 +57,6 @@ class MenuItem extends React.Component {
       <div
           className={(className || 'container__row') + (this.props.onClick ? ' trigger' : '')}
           onClick={this.handleClick}
-
       >
         <div className="container__item container__item__thumbnail">
           {files.length ? <img src={files[0].uri} /> : null}
@@ -67,6 +68,9 @@ class MenuItem extends React.Component {
           <div>
             {description}
           </div>
+        </div>
+        <div className="container__item">
+          {`${price} ${symbol}`}
         </div>
         {actions && actions.length ?
           <div className="container__item">

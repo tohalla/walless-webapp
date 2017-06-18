@@ -18,13 +18,15 @@ export default class ListItems extends React.Component {
     forceDefaultAction: PropTypes.bool,
     onActionChange: PropTypes.func,
     renderItem: PropTypes.func,
+    renderItems: PropTypes.func,
     items: PropTypes.arrayOf(PropTypes.object),
     filterItems: PropTypes.func,
     selectedItems: PropTypes.instanceOf(Set)
   };
   static defaultProps = {
-    renderItem: () =>
-      null,
+    renderItem: () => null,
+    renderItems: ({items, renderItem}) =>
+      items.map((item, key) => renderItem(item, {key})),
     items: [],
     containerClass: 'container container--padded container--distinct',
     selectedItems: new Set()
@@ -32,6 +34,7 @@ export default class ListItems extends React.Component {
   render() {
     const {
       containerClass,
+      renderItems,
       renderItem,
       items,
       actions,
@@ -49,9 +52,12 @@ export default class ListItems extends React.Component {
           onActionChange={onActionChange}
       >
         {
-          (typeof filterItems === 'function'
-            ? items.filter(filterItems) : items
-          ).map((item, key) => renderItem(item, {key}))
+          renderItems({
+            items: (typeof filterItems === 'function'
+              ? items.filter(filterItems) : items
+            ),
+            renderItem
+          })
         }
       </WithActions>
     );
