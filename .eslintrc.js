@@ -7,12 +7,12 @@ module.exports = {
     'google',
     'plugin:flowtype/recommended'
   ],
-  "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-          "jsx": true
-      }
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
   plugins: [
     'babel',
@@ -48,7 +48,7 @@ module.exports = {
     'babel/object-curly-spacing': 1,
     'object-shorthand': 1,
     'no-await-in-loop': 1,
-    'max-len': 1,
+    'max-len': 0,
     'react/jsx-boolean-value': 2,
     'react/jsx-closing-bracket-location': 2,
     'react/jsx-curly-spacing': 2,
