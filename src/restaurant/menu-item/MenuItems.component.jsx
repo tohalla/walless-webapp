@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import {hasIn, get} from 'lodash/fp';
+import {get} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
@@ -14,8 +14,7 @@ import {isLoading} from 'util/shouldComponentUpdate';
 const mapStateToProps = state => ({
   t: state.util.translation.t,
   language: state.util.translation.language,
-  filter: hasIn(['form', 'menuItemFilter', 'values'])(state) ?
-    state.form.menuItemFilter.values : {}
+  filter: get(['form', 'menuItemFilter', 'values'])(state) || {}
 });
 
 class MenuItems extends React.Component {
@@ -142,5 +141,6 @@ class MenuItems extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   getMenuItemsByRestaurant
-)(connect(mapStateToProps, {})(MenuItems));
+)(MenuItems);

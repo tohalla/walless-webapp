@@ -7,10 +7,9 @@ import {reduce, set, get, equals} from 'lodash/fp';
 import PropTypes from 'prop-types';
 
 import config from 'config';
-import Deletable from 'components/Deletable.component';
 import Input from 'components/Input.component';
 import Button from 'components/Button.component';
-import SelectImages from 'components/SelectImages.component';
+import SelectItems from 'components/SelectItems.component';
 import {
   createMenuItem,
   updateMenuItem,
@@ -72,7 +71,9 @@ class MenuItemForm extends React.Component {
       information,
       type,
       newImages: [],
-      files,
+      files: files ? new Set(
+        files.map(item => item.id)
+      ) : new Set(),
       category
     });
   }
@@ -88,6 +89,7 @@ class MenuItemForm extends React.Component {
       updateMenuItemFiles,
       createMenuItemInformation,
       updateMenuItemInformation,
+      getFilesForRestaurant: {data: {refetch}},
       restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
@@ -98,40 +100,31 @@ class MenuItemForm extends React.Component {
     } = this.props;
     const {
       newImages,
-      files: menuItemFiles,
+      files: filesSet,
       information,
       activeLanguage, // eslint-disable-line
       ...menuItemOptions
     } = this.state;
-    let files = menuItemFiles
-      .reduce(
-        (prev, curr) => curr._delete ?
-          prev :
-          prev.concat(typeof curr === 'object' ? curr.id : curr),
-        []
-      );
+    const files = Array.from(filesSet);
     try {
-      if (newImages && newImages.length) {
-        const formData = new FormData();
-        formData.append('restaurant', restaurant);
-        files = files
-          .concat(await (await fetch(
-            `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
-            {
-              method: 'POST',
-              body: newImages.reduce(
-                (prev, curr, index) => {
-                  prev.append(index, curr);
-                  return prev;
-                },
-                formData
-              ),
-              headers: {
-                'authorization': Cookie.get('Authorization')
-              }
-            }
-          )).json());
-      }
+      const formData = new FormData();
+      formData.append('restaurant', restaurant);
+      const allFiles = newImages.length ? files.concat(await (await fetch(
+        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
+        {
+          method: 'POST',
+          body: newImages.reduce(
+            (prev, curr, index) => {
+              prev.append(index, curr);
+              return prev;
+            },
+            formData
+          ),
+          headers: {
+            'authorization': Cookie.get('Authorization')
+          }
+        }
+      )).json()) : files;
       const finalMenuItem = Object.assign({}, menuItemOptions,
         originalMenuItem ? {id: originalMenuItem.id} : null,
         {
@@ -145,17 +138,15 @@ class MenuItemForm extends React.Component {
       );
       const [mutation] = Object.keys(data);
       const {[mutation]: {menuItem: {id: menuItemId}}} = data;
-      await Promise.all([
-          updateMenuItemFiles(menuItemId, files)
-        ].concat(
-          Object.keys(information).map(key =>
-            mutation !== 'createMenuItem' && get(['information', key])(originalMenuItem) ?
-              updateMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
-            : createMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
-          )
+      await Promise.all([updateMenuItemFiles(menuItemId, allFiles)].concat(
+        Object.keys(information).map(key =>
+          mutation !== 'createMenuItem' && get(['information', key])(originalMenuItem) ?
+            updateMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
+          : createMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
         )
-      );
+      ));
       onSubmit();
+      refetch();
     } catch (error) {
       if (typeof onError === 'function') {
        return onError(error);
@@ -163,17 +154,17 @@ class MenuItemForm extends React.Component {
       throw new Error(error);
     };
   };
-  deleteImage = image => () => {
+  handleDropzoneDelete = image => () => {
     this.setState({
-      newImages: this.state.newImages.filter(i => i.preview !== image.preview)
+      newImages: this.state.newImages.filter(i => !equals(i)(image))
     });
   };
-  toggleDeleteFile = file => () => {
-    this.setState({
-      files: this.state.files.map(f => f.id === file.id ?
-        Object.assign({}, f, {_delete: !f._delete}) : f
-      )
-    });
+  toggleImageSelect = image => {
+    const files = this.state.files;
+    if (!files.delete(image.id)) {
+      files.add(image.id);
+    }
+    this.setState({files});
   };
   handleDrop = accepted => {
     this.setState({newImages: this.state.newImages.concat(accepted)});
@@ -181,9 +172,6 @@ class MenuItemForm extends React.Component {
   handleCancel = e => {
     e.preventDefault();
     this.props.onCancel();
-  };
-  handleImagesSelected = images => {
-    this.setState({files: images});
   };
   handleTabChange = tab => this.setState({activeLanguage: tab});
   render() {
@@ -246,42 +234,24 @@ class MenuItemForm extends React.Component {
                       {get(['currency', 'symbol'])(restaurant)}
                     </div>
                   )
+                }, {
+                  label: t('restaurant.menuItems.images'),
+                  item: (
+                    <SelectItems
+                        dropzone={{
+                          items: newImages,
+                          onDelete: this.handleDropzoneDelete,
+                          onDrop: this.handleDrop
+                        }}
+                        select={{
+                          items: getFilesForRestaurant.files,
+                          selected: files,
+                          onToggleSelect: this.toggleImageSelect
+                        }}
+                    />
+                  )
                 }
             ]}
-          />
-          {
-            [].concat(
-              newImages.map(image => ({
-                src: image.preview,
-                delete: false,
-                handleDelete: this.deleteImage(image)
-              })),
-              files.map(file => ({
-                src: file.uri,
-                delete: file._delete,
-                handleDelete: this.toggleDeleteFile(file)
-              }))
-            )
-              .map((image, index) => (
-                <Deletable
-                    deleteText={image.delete ?
-                      t('cancel') :
-                      <i className="material-icons">{'delete'}</i>
-                    }
-                    key={index}
-                    onDelete={image.handleDelete}
-                >
-                  <img className="image-preview" src={image.src}/>
-                </Deletable>
-              ))
-          }
-          <SelectImages
-              dropzone={{onSubmit: this.handleDrop}}
-              select={{
-                images: getFilesForRestaurant.files,
-                selected: files,
-                onImagesSelected: this.handleImagesSelected
-              }}
           />
         </div>
         <div className="container--row">
