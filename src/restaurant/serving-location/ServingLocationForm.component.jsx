@@ -40,11 +40,9 @@ class ServingLocationForm extends React.Component {
   }
   resetForm = (props, updateState = this.setState) => {
     const {
-      getServingLocation: {
-        servingLocation: {
-          name = ''
-        }
-      } = {servingLocation: typeof props.servingLocation === 'object' && props.servingLocation ? props.servingLocation : {}}
+      servingLocation: {
+        name = ''
+      } = typeof props.servingLocation === 'object' && props.servingLocation ? props.servingLocation : {}
     } = props;
     updateState({
       name
@@ -61,9 +59,7 @@ class ServingLocationForm extends React.Component {
       updateServingLocation,
       restaurant,
       onSubmit,
-      getServingLocation: {
-        servingLocation = typeof this.props.servingLocation === 'object' ? this.props.servingLocation : {}
-      } = {}
+      servingLocation = typeof this.props.servingLocation === 'object' ? this.props.servingLocation : {}
     } = this.props;
     const finalServingLocation = Object.assign({}, this.state,
       servingLocation ? {id: servingLocation.id} : null,

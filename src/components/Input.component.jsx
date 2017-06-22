@@ -15,6 +15,9 @@ class Input extends React.Component {
     type: PropTypes.string,
     className: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    onFocus: PropTypes.func,
     floatingLabel: PropTypes.bool,
     disabled: PropTypes.bool,
     required: PropTypes.bool,
@@ -23,27 +26,36 @@ class Input extends React.Component {
   static defaultProps = {
     floatingLabel: false,
     type: 'text',
+    onBlur: () => {},
+    onChange: () => {},
+    onFocus: () => {},
     required: false,
     disabled: false,
     rows: 1
   };
-  componentDidUpdate(prevProps) {
-    if (this.props.disabled !== prevProps.disabled) {
-      findDOMNode(this).MaterialTextfield.checkDisabled();
-    }
-    if (
-      this.props.value !== prevProps.value &&
-      this.inputRef !== document.activeElement
-    ) {
-      findDOMNode(this).MaterialTextfield.change(this.props.value);
+  state = {
+    currentValue: this.props.value,
+    isFocused: false
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.isFocused) {
+      this.setState({currentValue: nextProps.value});
     }
   }
-  handleInputChange = event => {
-    const {pattern, onChange} = this.props;
+  handleChange = event => {
+    const {pattern} = this.props;
     if (!pattern || new RegExp(pattern).test(event.target.value)) {
-      onChange(event);
+      this.setState({currentValue: event.target.value});
     }
   }
+  handleFocus = event => {
+    this.setState({isFocused: true});
+    this.props.onFocus(event);
+  };
+  handleBlur = event => {
+    this.setState({isFocused: false});
+    this.props.onBlur(event);
+  };
   render() {
     const {
       floatingLabel,
@@ -51,9 +63,9 @@ class Input extends React.Component {
       rows,
       id,
       className,
-      onChange, // eslint-disable-line
       ...props
     } = this.props;
+    const {currentValue} = this.state;
     return (
       <div
           className={
@@ -64,16 +76,22 @@ class Input extends React.Component {
       >
         {rows > 1 ?
           <textarea
+              {...props}
               className="mdl-textfield__input"
               id={id}
-              onChange={this.handleInputChange}
-              {...props}
+              onBlur={this.handleBlur}
+              onChange={this.handleChange}
+              onFocus={this.handleFocus}
+              value={currentValue}
           /> :
           <input
+              {...props}
               className="mdl-textfield__input"
               id={id}
-              onChange={this.handleInputChange}
-              {...props}
+              onBlur={this.handleBlur}
+              onChange={this.handleChange}
+              onFocus={this.handleFocus}
+              value={currentValue}
           />
         }
         <label className="mdl-textfield__label" htmlFor={id}>

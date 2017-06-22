@@ -40,7 +40,7 @@ class Menus extends React.Component {
   };
   handleMenuSubmit = () => {
     this.setState({action: null});
-    this.props.getMenusByRestaurant.data.refetch();
+    this.props.getMenusByRestaurant.refetch();
   };
   renderMenu = (menu, props) => (
     <Menu
@@ -59,7 +59,7 @@ class Menus extends React.Component {
   );
   render() {
     const {
-      getMenusByRestaurant: {menus} = {},
+      menus,
       restaurant,
       selectedItems,
       plain,

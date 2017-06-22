@@ -28,25 +28,23 @@ class Restaurant extends React.Component {
   };
   shouldComponentUpdate = newProps => !isLoading(newProps);
   handleRestaurantSubmit = () => {
-    this.props.getRestaurant.data.refetch();
+    this.props.getRestaurant.refetch();
     this.setState({action: null});
   };
   handleActionChange = action => event => {
     this.setState({action});
   };
   render() {
-    if (this.props.getRestaurant && typeof this.props.getRestaurant.restaurant === 'object') {
+    if (this.props.restaurant && typeof this.props.restaurant === 'object') {
       const {
-        getRestaurant: {
-          restaurant: restaurant,
-          restaurant: {
-            information: {
-              [this.props.language]: {
-                name, description
-              } = {}
-            }
+        restaurant,
+        restaurant: {
+          information: {
+            [this.props.language]: {
+              name, description
+            } = {}
           }
-        } = {restaurant: this.props.restaurant},
+        },
         t
       } = this.props;
       const actions = {

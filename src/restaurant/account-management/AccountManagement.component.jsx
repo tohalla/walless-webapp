@@ -14,7 +14,7 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 class AccountManagement extends React.Component {
   shouldComponentUpdate = newProps => !isLoading(newProps);
   render() {
-    const {getAccountsByRestaurant: {accounts}} = this.props;
+    const {accounts} = this.props;
     return accounts.length ? (
       <div className={`container container--padded container--distinct`}>
         <ReactTable

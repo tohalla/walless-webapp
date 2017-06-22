@@ -51,12 +51,10 @@ class MenuForm extends React.Component {
   }
   resetForm = (props, updateState = this.setState) => {
     const {
-      getMenu: {
-        menu: {
-          information,
-          menuItems
-        }
-      } = {menu: typeof props.menu === 'object' && props.menu ? props.menu : {}}
+      menu: {
+        information,
+        menuItems
+      } = typeof props.menu === 'object' && props.menu ? props.menu : {}
     } = props;
     updateState({
       activeLanguage: 'en',
@@ -81,10 +79,8 @@ class MenuForm extends React.Component {
       onError,
       createMenuInformation,
       updateMenuInformation,
-      getActiveAccount: {account} = {},
-      getMenu: {
-        menu: originalMenu
-      } = {menu: typeof this.props.menu === 'object' ? this.props.menu : {}},
+      account,
+      menu: originalMenu = typeof this.props.menu === 'object' ? this.props.menu : {},
       updateMenuItems
     } = this.props;
     const {

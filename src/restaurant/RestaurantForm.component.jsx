@@ -57,20 +57,18 @@ class RestaurantForm extends React.Component {
   }
   resetForm = (props, updateState = this.setState) => {
     const {
-      getRestaurant: {
-        restaurant: {
-          information,
-          files = []
-        }
-      } = {restaurant: typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}}
+      restaurant: {
+        information,
+        files: selectedFiles
+      } = typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}
     } = props;
     updateState({
       information,
       activeLanguage: 'en',
       currency: 'EUR',
       newImages: [],
-      files: files ? new Set(
-        files.map(item => item.id)
+      selectedFiles: selectedFiles ? new Set(
+        selectedFiles.map(item => item.id)
       ) : new Set()
     });
   };
@@ -78,25 +76,23 @@ class RestaurantForm extends React.Component {
     const {value} = event.target;
     this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = async e => {
+  handleSubmit = async(e) => {
     e.preventDefault();
     const {
       createRestaurant,
       updateRestaurant,
-      getFilesForRestaurant: {data: {refetch}},
+      getFilesForRestaurant,
       createRestaurantInformation,
       updateRestaurantInformation,
       updateRestaurantFiles,
       onSubmit,
       onError,
-      getActiveAccount: {account} = {},
-      getRestaurant: {
-        restaurant: originalRestaurant
-      } = {restaurant: typeof this.props.restaurant === 'object' ? this.props.restaurant : {}}
+      account,
+      restaurant: originalRestaurant = typeof this.props.restaurant === 'object' ? this.props.restaurant : {}
     } = this.props;
     const {
       newImages = [],
-      files: filesSet,
+      selectedFiles,
       activeLanguage, // eslint-disable-line
       information,
       ...restaurantOptions
@@ -105,7 +101,7 @@ class RestaurantForm extends React.Component {
       originalRestaurant.id ? {id: originalRestaurant.id} : null,
       {createdBy: account.id}
     );
-    const files = Array.from(filesSet);
+    const files = Array.from(selectedFiles);
     try {
       const {data} = await (originalRestaurant && originalRestaurant.id ?
         updateRestaurant(finalRestaurant) : createRestaurant(finalRestaurant)
@@ -140,7 +136,7 @@ class RestaurantForm extends React.Component {
         )
       );
       onSubmit();
-      refetch();
+      getFilesForRestaurant.refetch();
     } catch (error) {
       if (typeof onError === 'function') {
        return onError(error);
@@ -156,11 +152,11 @@ class RestaurantForm extends React.Component {
     });
   };
   toggleImageSelect = image => {
-    const files = this.state.files;
-    if (!files.delete(image.id)) {
-      files.add(image.id);
+    const selectedFiles = this.state.selectedFiles;
+    if (!selectedFiles.delete(image.id)) {
+      selectedFiles.add(image.id);
     }
-    this.setState({files});
+    this.setState({selectedFiles});
   };
   handleDrop = accepted => {
     this.setState({newImages: this.state.newImages.concat(accepted)});
@@ -174,13 +170,13 @@ class RestaurantForm extends React.Component {
       t,
       onCancel,
       languages,
-      getFilesForRestaurant = {},
-      getCurrencies: {currencies = []} = {}
+      files,
+      currencies = []
     } = this.props;
     const {
       activeLanguage,
       information,
-      files = new Set(),
+      selectedFiles = new Set(),
       newImages = []
     } = this.state;
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
@@ -246,8 +242,8 @@ class RestaurantForm extends React.Component {
                             onDrop: this.handleDrop
                           }}
                           select={{
-                            items: getFilesForRestaurant.files,
-                            selected: files,
+                            items: files,
+                            selected: selectedFiles,
                             onToggleSelect: this.toggleImageSelect
                           }}
                       />

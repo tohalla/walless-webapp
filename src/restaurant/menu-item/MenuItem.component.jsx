@@ -26,9 +26,7 @@ class MenuItem extends React.Component {
   };
   handleClick = () => {
     const {
-      getMenuItem: {
-        menuItem
-      } = {menuItem: typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {}},
+      menuItem = typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {},
       onClick
     } = this.props;
     if (typeof onClick === 'function') {
@@ -37,19 +35,17 @@ class MenuItem extends React.Component {
   };
   render() {
     const {
-      getMenuItem: {
-        menuItem: {
-          information: {
-            [this.props.language]: {
-              name, description
-            } = {}
-          },
-          id,
-          files,
-          price,
-          currency: {symbol}
-        }
-      } = {menuItem: typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {}},
+      menuItem: {
+        information: {
+          [this.props.language]: {
+            name, description
+          } = {}
+        },
+        id,
+        files,
+        price,
+        currency: {symbol}
+      } = typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {},
       className,
       actions
     } = this.props;

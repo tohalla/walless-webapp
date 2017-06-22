@@ -27,7 +27,7 @@ class Orders extends React.Component {
     </div>
   );
   render() {
-    const {getOrdersByRestaurant: {orders}} = this.props;
+    const {orders} = this.props;
     return orders.length ? (
       <div className={`container container--padded container--distinct`}>
         <ReactTable

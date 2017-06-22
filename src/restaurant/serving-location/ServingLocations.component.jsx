@@ -63,14 +63,14 @@ class ServingLocations extends React.Component {
   );
   handleServingLocationSubmit = () => {
     this.setState({action: null});
-    this.props.getServingLocationsByRestaurant.data.refetch();
+    this.props.getServingLocationsByRestaurant.refetch();
   };
   filterItems = item =>
     !this.props.filter.name ||
     item.name.toLowerCase().indexOf(this.props.filter.name.toLowerCase()) > -1;
   render() {
     const {
-      getServingLocationsByRestaurant: {servingLocations} = {},
+      servingLocations,
       restaurant,
       selectedItems,
       plain,

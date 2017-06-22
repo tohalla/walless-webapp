@@ -39,18 +39,14 @@ class Menu extends React.Component {
   };
   render() {
     const {
-      getMenu: {
-        menu: {
-          information: {
-            [this.props.language]: {
-              name, description
-            } = {}
-          },
-          id
-        }
-      } = {menu:
-        typeof this.props.menu === 'object' && this.props.menu ? this.props.menu : {}
-      },
+      menu: {
+        information: {
+          [this.props.language]: {
+            name, description
+          } = {}
+        },
+        id
+      } = typeof this.props.menu === 'object' && this.props.menu ? this.props.menu : {},
       actions
     } = this.props;
     const {expand} = this.state;

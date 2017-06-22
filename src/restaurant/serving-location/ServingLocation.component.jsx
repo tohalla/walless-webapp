@@ -22,15 +22,10 @@ class ServingLocation extends React.Component {
   };
   render() {
     const {
-      getServingLocation: {
-        servingLocation: {
-          id,
-          name
-        }
-      } = {servingLocation:
-        typeof this.props.servingLocation === 'object' && this.props.servingLocation ?
-          this.props.servingLocation : {}
-      },
+      servingLocation: {
+        id,
+        name
+      } = typeof this.props.servingLocation === 'object' && this.props.servingLocation ? this.props.servingLocation : {},
       actions
     } = this.props;
     return (

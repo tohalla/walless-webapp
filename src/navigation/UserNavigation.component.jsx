@@ -16,7 +16,7 @@ class UserNavigation extends React.Component {
     apolloClient.resetStore();
   }
   render() {
-    const {t, getActiveAccount: {account, data: {loading}} = {}} = this.props;
+    const {t, account, getActiveAccount: {loading} = {}} = this.props;
     return loading ? null : (
       <nav className="mdl-navigation">
         {account ?

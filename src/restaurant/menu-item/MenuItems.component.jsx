@@ -69,7 +69,7 @@ class MenuItems extends React.Component {
   );
   handleMenuItemSubmit = () => {
     this.setState({action: null});
-    this.props.getMenuItemsByRestaurant.data.refetch();
+    this.props.getMenuItemsByRestaurant.refetch();
   };
   filterItems = item =>
     !this.props.filter.name ||
@@ -77,7 +77,7 @@ class MenuItems extends React.Component {
       .indexOf(this.props.filter.name.toLowerCase()) > -1;
   render() {
     const {
-      getMenuItemsByRestaurant: {menuItems} = {},
+      menuItems,
       restaurant,
       selectedItems,
       plain,

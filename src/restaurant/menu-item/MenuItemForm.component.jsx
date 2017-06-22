@@ -55,15 +55,13 @@ class MenuItemForm extends React.Component {
   }
   resetForm = (props, updateState = this.setState) => {
     const {
-      getMenuItem: {
-        menuItem: {
-          information,
-          type,
-          category,
-          price = '',
-          files = []
-        }
-      } = {menuItem: typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}}
+      menuItem: {
+        information,
+        type,
+        category,
+        price = '',
+        files = []
+      } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}
     } = props;
     updateState({
       activeLanguage: 'en',
@@ -71,7 +69,7 @@ class MenuItemForm extends React.Component {
       information,
       type,
       newImages: [],
-      files: files ? new Set(
+      selectedFiles: files ? new Set(
         files.map(item => item.id)
       ) : new Set(),
       category
@@ -81,7 +79,7 @@ class MenuItemForm extends React.Component {
     const {value} = event.target;
     this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = async e => {
+  handleSubmit = async(e) => {
     e.preventDefault();
     const {
       createMenuItem,
@@ -89,23 +87,21 @@ class MenuItemForm extends React.Component {
       updateMenuItemFiles,
       createMenuItemInformation,
       updateMenuItemInformation,
-      getFilesForRestaurant: {data: {refetch}},
+      getFilesForRestaurant,
       restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
-      getActiveAccount: {account} = {},
-      getMenuItem: {
-        menuItem: originalMenuItem
-      } = {menuItem: typeof this.props.menuItem === 'object' ? this.props.menuItem : {}}
+      account,
+      menuItem: originalMenuItem = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
     } = this.props;
     const {
       newImages,
-      files: filesSet,
+      selectedFiles,
       information,
       activeLanguage, // eslint-disable-line
       ...menuItemOptions
     } = this.state;
-    const files = Array.from(filesSet);
+    const files = Array.from(selectedFiles);
     try {
       const formData = new FormData();
       formData.append('restaurant', restaurant);
@@ -146,7 +142,7 @@ class MenuItemForm extends React.Component {
         )
       ));
       onSubmit();
-      refetch();
+      getFilesForRestaurant.refetch();
     } catch (error) {
       if (typeof onError === 'function') {
        return onError(error);
@@ -160,11 +156,11 @@ class MenuItemForm extends React.Component {
     });
   };
   toggleImageSelect = image => {
-    const files = this.state.files;
-    if (!files.delete(image.id)) {
-      files.add(image.id);
+    const selectedFiles = this.state.selectedFiles;
+    if (!selectedFiles.delete(image.id)) {
+      selectedFiles.add(image.id);
     }
-    this.setState({files});
+    this.setState({selectedFiles});
   };
   handleDrop = accepted => {
     this.setState({newImages: this.state.newImages.concat(accepted)});
@@ -177,12 +173,12 @@ class MenuItemForm extends React.Component {
   render() {
     const {
       t,
-      getFilesForRestaurant = {},
+      files,
       restaurant,
       languages
     } = this.props;
     const {
-      files = [],
+      selectedFiles,
       newImages = [],
       activeLanguage,
       price
@@ -244,8 +240,8 @@ class MenuItemForm extends React.Component {
                           onDrop: this.handleDrop
                         }}
                         select={{
-                          items: getFilesForRestaurant.files,
-                          selected: files,
+                          items: files,
+                          selected: selectedFiles,
                           onToggleSelect: this.toggleImageSelect
                         }}
                     />

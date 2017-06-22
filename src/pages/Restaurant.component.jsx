@@ -9,7 +9,10 @@ import PropTypes from 'prop-types';
 import Spinner from 'components/Spinner.component';
 import WithSideBar from 'containers/WithSideBar.component';
 import Padded from 'containers/Padded.component';
-import {getActiveAccount} from 'graphql/account/account.queries';
+import {
+  getActiveAccount,
+  getRestaurantsByAccount
+} from 'graphql/account/account.queries';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import {isLoading} from 'util/shouldComponentUpdate';
 
@@ -58,27 +61,26 @@ class Restaurant extends React.Component {
   };
   componentWillReceiveProps(newProps) {
     const {
-      getActiveAccount: {
-        account: {restaurants},
-        data: {loading}
-      } = {account: {}, data: {}},
+      restaurants,
+      getRestaurantsByAccount = {},
+      getActiveAccount = {},
       routeParams: {restaurant}
     } = newProps;
-    if (loading) {
-      return;
-    }
-    if (
-      !restaurant &&
-      Array.isArray(restaurants) &&
-      restaurants.length
-    ) {
-      newProps.router.push(`/restaurant/${restaurants[0].id}`);
-    } else if (
-      restaurant &&
-      restaurants &&
-      !find(r => r.id === Number(restaurant))(restaurants)
-    ) {
-      newProps.router.push('/restaurant/');
+    const loading = getRestaurantsByAccount.loading || getActiveAccount.loading;
+    if (!loading) {
+      if (
+        !restaurant &&
+        Array.isArray(restaurants) &&
+        restaurants.length
+      ) {
+        newProps.router.push(`/restaurant/${restaurants[0].id}`);
+      } else if (
+        restaurant &&
+        restaurants &&
+        !find(r => r.id === Number(restaurant))(restaurants)
+      ) {
+        newProps.router.push('/restaurant/');
+      }
     }
   }
   shouldComponentUpdate = newProps => !isLoading(newProps);
@@ -86,22 +88,24 @@ class Restaurant extends React.Component {
     this.props.router.push(`/restaurant/${value.value}`);
   };
   handleRestaurantSubmit = () => {
-    this.props.getActiveAccount.data.refetch();
+    this.props.getRestaurantsByAccount.refetch();
   };
   render() {
     const {
-      getActiveAccount: {account: {restaurants}, data: {loading}},
+      restaurants,
       routeParams,
+      getRestaurantsByAccount = {},
+      getActiveAccount = {},
       children,
       t,
       router: {location},
       language
     } = this.props;
+    const loading = getRestaurantsByAccount.loading || getActiveAccount.loading;
     const restaurant = routeParams.restaurant ?
       find(restaurant =>
         restaurant.id === Number(routeParams.restaurant)
-      )(restaurants) :
-      restaurants[0];
+      )(restaurants) : restaurants[0];
     if (restaurant && restaurants.length) {
       return (
         <WithSideBar
@@ -170,5 +174,6 @@ class Restaurant extends React.Component {
 }
 
 export default compose(
-  getActiveAccount
+  getActiveAccount,
+  getRestaurantsByAccount
 )(connect(mapStateToProps, {})(Restaurant));
