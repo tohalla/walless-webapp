@@ -6,6 +6,7 @@ import mdl from 'components/mdl';
 class Button extends React.Component {
   static propTypes = {
     colored: PropTypes.bool,
+    className: PropTypes.string,
     accent: PropTypes.bool,
     raised: PropTypes.bool,
     children: PropTypes.oneOfType([
@@ -14,7 +15,8 @@ class Button extends React.Component {
       PropTypes.element
     ]),
     onClick: PropTypes.func,
-    type: PropTypes.string
+    type: PropTypes.string,
+    style: PropTypes.object
   };
   static defaultProps = {
     type: 'button'
@@ -22,7 +24,7 @@ class Button extends React.Component {
   handleClick = event => {
     event.preventDefault();
     event.stopPropagation();
-    if(typeof this.props.onClick === 'function') {
+    if (typeof this.props.onClick === 'function') {
       this.props.onClick(event);
     }
   }
