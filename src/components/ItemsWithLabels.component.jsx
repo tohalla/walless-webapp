@@ -16,7 +16,7 @@ export default class ItemsWithLabels extends React.Component {
     return (
       <table>
         <tbody>
-          {items.map((item, index) =>
+          {items.filter(item => item).map((item, index) =>
             item.label ? (
               <tr key={index}>
                 <th>{item.label}</th>

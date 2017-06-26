@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import {reduce, set, get, equals} from 'lodash/fp';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 
 import config from 'config';
 import Input from 'components/Input.component';
@@ -17,11 +18,15 @@ import {
   createMenuItemInformation,
   updateMenuItemInformation
 } from 'graphql/restaurant/menuItem.mutations';
-import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
+import {
+  getMenuItem,
+  getMenuItemTypes
+} from 'graphql/restaurant/menuItem.queries';
 import {getFilesForRestaurant} from 'graphql/restaurant/restaurant.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
+import {isLoading} from 'util/shouldComponentUpdate';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -53,12 +58,13 @@ class MenuItemForm extends React.Component {
       this.resetForm(newProps);
     }
   }
+  shouldComponentUpdate = newProps => !isLoading(newProps);
   resetForm = (props, updateState = this.setState) => {
     const {
       menuItem: {
         information,
-        type,
-        category,
+        menuItemCategory,
+        menuItemType,
         price = '',
         files = []
       } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}
@@ -67,17 +73,16 @@ class MenuItemForm extends React.Component {
       activeLanguage: 'en',
       price,
       information,
-      type,
       newImages: [],
       selectedFiles: files ? new Set(
         files.map(item => item.id)
       ) : new Set(),
-      category
+      type: get(['id'])(menuItemType),
+      category: get(['id'])(menuItemCategory)
     });
   }
-  handleInputChange = path => event => {
-    const {value} = event.target;
-    this.setState(set(path)(value)(this.state));
+  handleInputChange = (path, getValue = item => item.target.value) => item => {
+    this.setState(set(path)(getValue(item))(this.state));
   };
   handleSubmit = async(e) => {
     e.preventDefault();
@@ -175,14 +180,19 @@ class MenuItemForm extends React.Component {
       t,
       files,
       restaurant,
-      languages
+      languages,
+      menuItemTypes
     } = this.props;
     const {
       selectedFiles,
       newImages = [],
       activeLanguage,
-      price
+      price,
+      type,
+      category
     } = this.state;
+    const categories = type && menuItemTypes.length ?
+      (menuItemTypes.find(i => i.id === type).menuItemCategories || []) : [];
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
       [value.locale]: {
         label: value.name,
@@ -230,7 +240,43 @@ class MenuItemForm extends React.Component {
                       {get(['currency', 'symbol'])(restaurant)}
                     </div>
                   )
-                }, {
+                },
+                {
+                  label: t('restaurant.menuItems.type'),
+                  item: (
+                    <Select
+                        autoBlur
+                        className="Select input--medium"
+                        clearable={false}
+                        id="cateogry"
+                        onChange={this.handleInputChange('type', item => item.value)}
+                        options={
+                          menuItemTypes.map(type => ({
+                            value: type.id,
+                            label: type.name
+                          }))
+                        }
+                        value={type}
+                    />
+                  )
+                },
+                categories.length ? {
+                  label: t('restaurant.menuItems.category'),
+                  item: (
+                    <Select
+                        autoBlur
+                        className="Select input--medium"
+                        clearable={false}
+                        id="cateogry"
+                        onChange={this.handleInputChange('category', item => item.value)}
+                        options={categories.map(category => ({
+                          value: category.id,
+                          label: category.name
+                        }))}
+                        value={category}
+                    />
+                  )
+                } : null, {
                   label: t('restaurant.menuItems.images'),
                   item: (
                     <SelectItems
@@ -271,5 +317,6 @@ export default compose(
   getActiveAccount,
   getFilesForRestaurant,
   createMenuItemInformation,
-  updateMenuItemInformation
+  updateMenuItemInformation,
+  getMenuItemTypes
 )(connect(mapStateToProps, {})(MenuItemForm));

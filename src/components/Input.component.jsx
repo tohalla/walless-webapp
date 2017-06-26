@@ -1,5 +1,4 @@
 import React from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 
 import mdl from 'components/mdl';
@@ -46,6 +45,7 @@ class Input extends React.Component {
     const {pattern} = this.props;
     if (!pattern || new RegExp(pattern).test(event.target.value)) {
       this.setState({currentValue: event.target.value});
+      this.props.onChange(event);
     }
   }
   handleFocus = event => {
