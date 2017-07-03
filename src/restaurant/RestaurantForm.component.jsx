@@ -16,12 +16,12 @@ import {
   updateRestaurant,
   createRestaurantInformation,
   updateRestaurantInformation,
-  updateRestaurantFiles
+  updateRestaurantImages
   } from 'graphql/restaurant/restaurant.mutations';
 import {getCurrencies} from 'graphql/misc.queries';
 import {
   getRestaurant,
-  getFilesForRestaurant
+  getImagesForRestaurant
 } from 'graphql/restaurant/restaurant.queries';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
@@ -59,7 +59,7 @@ class RestaurantForm extends React.Component {
     const {
       restaurant: {
         information,
-        files: selectedFiles
+        images: selectedFiles
       } = typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}
     } = props;
     updateState({
@@ -81,10 +81,10 @@ class RestaurantForm extends React.Component {
     const {
       createRestaurant,
       updateRestaurant,
-      getFilesForRestaurant,
+      getImagesForRestaurant,
       createRestaurantInformation,
       updateRestaurantInformation,
-      updateRestaurantFiles,
+      updateRestaurantImages,
       onSubmit,
       onError,
       account,
@@ -111,7 +111,7 @@ class RestaurantForm extends React.Component {
       const formData = new FormData();
       formData.append('restaurant', restaurantId);
       const allFiles = newImages.length ? files.concat(await (await fetch(
-        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
+        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}/image`,
         {
           method: 'POST',
           body: newImages.reduce(
@@ -127,7 +127,7 @@ class RestaurantForm extends React.Component {
         }
       )).json()) : files;
       await Promise.all(
-        [updateRestaurantFiles(restaurantId, allFiles)].concat(
+        [updateRestaurantImages(restaurantId, allFiles)].concat(
           Object.keys(information).map(key =>
             mutation !== 'createRestaurant' && get(['information', key])(originalRestaurant) ?
               updateRestaurantInformation(Object.assign({language: key, restaurant: restaurantId}, information[key]))
@@ -136,7 +136,7 @@ class RestaurantForm extends React.Component {
         )
       );
       onSubmit();
-      getFilesForRestaurant.refetch();
+      getImagesForRestaurant.refetch();
     } catch (error) {
       if (typeof onError === 'function') {
        return onError(error);
@@ -170,7 +170,7 @@ class RestaurantForm extends React.Component {
       t,
       onCancel,
       languages,
-      files,
+      images,
       currencies = []
     } = this.props;
     const {
@@ -242,7 +242,7 @@ class RestaurantForm extends React.Component {
                             onDrop: this.handleDrop
                           }}
                           select={{
-                            items: files,
+                            items: images,
                             selected: selectedFiles,
                             onToggleSelect: this.toggleImageSelect
                           }}
@@ -278,6 +278,6 @@ export default compose(
   createRestaurantInformation,
   updateRestaurantInformation,
   getCurrencies,
-  getFilesForRestaurant,
-  updateRestaurantFiles
+  getImagesForRestaurant,
+  updateRestaurantImages
 )(RestaurantForm);

@@ -14,7 +14,7 @@ import SelectItems from 'components/SelectItems.component';
 import {
   createMenuItem,
   updateMenuItem,
-  updateMenuItemFiles,
+  updateMenuItemImages,
   createMenuItemInformation,
   updateMenuItemInformation
 } from 'graphql/restaurant/menuItem.mutations';
@@ -22,7 +22,7 @@ import {
   getMenuItem,
   getMenuItemTypes
 } from 'graphql/restaurant/menuItem.queries';
-import {getFilesForRestaurant} from 'graphql/restaurant/restaurant.queries';
+import {getImagesForRestaurant} from 'graphql/restaurant/restaurant.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
@@ -66,7 +66,7 @@ class MenuItemForm extends React.Component {
         menuItemCategory,
         menuItemType,
         price = '',
-        files = []
+        images = []
       } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}
     } = props;
     updateState({
@@ -74,8 +74,8 @@ class MenuItemForm extends React.Component {
       price,
       information,
       newImages: [],
-      selectedFiles: files ? new Set(
-        files.map(item => item.id)
+      selectedFiles: images ? new Set(
+        images.map(item => item.id)
       ) : new Set(),
       type: get(['id'])(menuItemType),
       category: get(['id'])(menuItemCategory)
@@ -89,10 +89,10 @@ class MenuItemForm extends React.Component {
     const {
       createMenuItem,
       updateMenuItem,
-      updateMenuItemFiles,
+      updateMenuItemImages,
       createMenuItemInformation,
       updateMenuItemInformation,
-      getFilesForRestaurant,
+      getImagesForRestaurant,
       restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
@@ -111,7 +111,7 @@ class MenuItemForm extends React.Component {
       const formData = new FormData();
       formData.append('restaurant', restaurant);
       const allFiles = newImages.length ? files.concat(await (await fetch(
-        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}`,
+        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}/image`,
         {
           method: 'POST',
           body: newImages.reduce(
@@ -139,7 +139,7 @@ class MenuItemForm extends React.Component {
       );
       const [mutation] = Object.keys(data);
       const {[mutation]: {menuItem: {id: menuItemId}}} = data;
-      await Promise.all([updateMenuItemFiles(menuItemId, allFiles)].concat(
+      await Promise.all([updateMenuItemImages(menuItemId, allFiles)].concat(
         Object.keys(information).map(key =>
           mutation !== 'createMenuItem' && get(['information', key])(originalMenuItem) ?
             updateMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
@@ -147,7 +147,7 @@ class MenuItemForm extends React.Component {
         )
       ));
       onSubmit();
-      getFilesForRestaurant.refetch();
+      getImagesForRestaurant.refetch();
     } catch (error) {
       if (typeof onError === 'function') {
        return onError(error);
@@ -178,7 +178,7 @@ class MenuItemForm extends React.Component {
   render() {
     const {
       t,
-      files,
+      images,
       restaurant,
       languages,
       menuItemTypes
@@ -286,7 +286,7 @@ class MenuItemForm extends React.Component {
                           onDrop: this.handleDrop
                         }}
                         select={{
-                          items: files,
+                          items: images,
                           selected: selectedFiles,
                           onToggleSelect: this.toggleImageSelect
                         }}
@@ -312,10 +312,10 @@ class MenuItemForm extends React.Component {
 export default compose(
   createMenuItem,
   updateMenuItem,
-  updateMenuItemFiles,
+  updateMenuItemImages,
   getMenuItem,
   getActiveAccount,
-  getFilesForRestaurant,
+  getImagesForRestaurant,
   createMenuItemInformation,
   updateMenuItemInformation,
   getMenuItemTypes

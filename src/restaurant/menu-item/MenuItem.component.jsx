@@ -42,7 +42,7 @@ class MenuItem extends React.Component {
           } = {}
         },
         id,
-        files,
+        images,
         price,
         currency: {symbol}
       } = typeof this.props.menuItem === 'object' && this.props.menuItem ? this.props.menuItem : {},
@@ -55,7 +55,7 @@ class MenuItem extends React.Component {
           onClick={this.handleClick}
       >
         <div className="container__item container__item__thumbnail">
-          {files.length ? <img src={files[0].uri} /> : null}
+          {images.length ? <img src={images[0].uri} /> : null}
         </div>
         <div className="container__item container__item__content">
           <h6>

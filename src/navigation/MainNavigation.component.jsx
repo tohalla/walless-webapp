@@ -22,7 +22,7 @@ const menuItems = [
   },
   {
     path: '/settings',
-    translationKey: 'navigation.settings',
+    translationKey: 'navigation.settings.settings',
     requireAuthentication: true
   },
   {
