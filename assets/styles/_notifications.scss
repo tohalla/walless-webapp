@@ -1,7 +1,3 @@
-$alert: unquote('rgb(#{$palette-red-600})');
-$success: unquote('rgb(#{$palette-green-600})');
-$warning: unquote('rgb(#{$palette-orange-600})');
-
 .notifications__container {
   position: fixed;
   right: 0;

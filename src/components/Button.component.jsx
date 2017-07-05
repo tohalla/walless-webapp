@@ -45,12 +45,15 @@ class Button extends React.Component {
       <button
           className={
             [].concat(
-              plain ? 'button--plain'
-                : ['mdl-button mdl-js-button'].concat(
-                  colored ? 'mdl-button--colored' : [],
-                  raised ? 'mdl-button--raised' : [],
-                  accent ? 'mdl-button--accent' : []
-                ),
+              plain ? ['button--plain'].concat(
+                colored ? 'button--colored' : [],
+                raised ? 'button--raised' : [],
+                accent ? 'button--accent' : []
+              ) : ['mdl-button mdl-js-button'].concat(
+                colored ? 'mdl-button--colored' : [],
+                raised ? 'mdl-button--raised' : [],
+                accent ? 'mdl-button--accent' : []
+              ),
               light ? 'button--light' : [],
               className ? className : []
             ).join(' ')

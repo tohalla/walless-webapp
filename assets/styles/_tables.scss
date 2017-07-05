@@ -19,4 +19,13 @@ th + td {
 
 .ReactTable {
   width: 100%;
+  background: $carrara;
+}
+.rt-td, .rt-tr, .rt-th {
+  &.-hidden {
+    display: none;
+  }
+}
+.sub-component {
+  background: darken($gallery, 5%);
 }

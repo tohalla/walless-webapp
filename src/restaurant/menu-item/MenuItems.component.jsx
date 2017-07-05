@@ -29,6 +29,7 @@ class MenuItems extends React.Component {
     menuItem: PropTypes.shape({
       onClick: PropTypes.func
     }),
+    menuItems: PropTypes.arrayOf(PropTypes.object),
     plain: PropTypes.bool,
     forceDefaultAction: PropTypes.bool
   };
@@ -121,8 +122,8 @@ class MenuItems extends React.Component {
     };
     return (
       <ListItems
-          action={action ? action.name : null}
-          actions={
+          action={action && action.name}
+          actions={actions &&
             Object.keys(defaultActions).reduce((prev, key) =>
               actions.indexOf(key) === -1 ?
                 prev : Object.assign({}, prev, {[key]: defaultActions[key]})
