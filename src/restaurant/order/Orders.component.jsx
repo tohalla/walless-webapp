@@ -45,16 +45,17 @@ class Orders extends React.Component {
                 show: false
               },
               {
+                Header: t('restaurant.menuItems.quantity'),
+                id: 'quantity',
+                accessor: 'id',
+                aggregate: values => values.length,
+                width: 80
+              },
+              {
                 Header: t('restaurant.menuItems.name'),
                 id: 'name',
                 accessor: data => get(['information', language, 'name'])(data),
                 aggregate: ([value]) => value
-              },
-              {
-                Header: t('restaurant.menuItems.quantity'),
-                id: 'quantity',
-                accessor: 'id',
-                aggregate: values => values.length
               }
             ]}
             data={items}
