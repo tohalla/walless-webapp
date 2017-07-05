@@ -6,28 +6,36 @@ $warning: unquote('rgb(#{$palette-orange-600})');
   position: fixed;
   right: 0;
   top: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  display: flex;
   z-index: $z-index-notifications;
 }
 .notification {
-  float: right;
-  color: $white;
-  padding: 0.5rem 1.5rem;
-  display: block;
-  clear: both;
-  margin: 0.1rem;
-  .notification__content, .notification__actions {
-    display: inline-block;
-    & + * {
-      margin-left: 0.5rem;
-    }
+  max-width: 400px;
+  background: $carrara;
+  display: flex;
+  flex-direction: row;
+  color: $dark-gray;
+  justify-content: center;
+  align-items: center;
+  & + & {
+    margin-top: 1px;
   }
-  &--success {
-    background: $success;
+  .notification__indicator {
+    flex: 0 0 5px;
+    align-self: stretch;
+    &--success {background: $success;}
+    &--alert {background: $alert;}
+    &--warning {background: $warning;}
+    &--neutral {display: none;}
   }
-  &--alert {
-    background: $alert;
+  .notification__content {
+    padding: 0.5rem;
+    flex: 1 0 auto;
+    justify-content: center;
   }
-  &--warning {
-    background: $warning;
+  .notification__actions {
+    flex: 0;
   }
 }

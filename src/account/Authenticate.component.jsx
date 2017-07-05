@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import ClickOutside from 'react-click-outside';
+import Button from 'components/Button.component';
 
 import Input from 'components/Input.component';
 import {addNotification} from 'notifications/notification';
@@ -20,7 +21,7 @@ class Authenticate extends React.Component {
     this.setState({showLogin: true});
   closeDialog = () =>
     this.setState({showLogin: false});
-  handleAuthentication = async e => {
+  handleAuthentication = async(e) => {
     e.preventDefault();
     await authenticationHandler.authenticate(
       this.state.email,
@@ -31,7 +32,7 @@ class Authenticate extends React.Component {
         content: 'login failed'
       }));
     apolloClient.resetStore();
-  }
+  };
   handleInputChange = e => {
     const {id, value} = e.target;
     this.setState({[id]: value});
@@ -41,9 +42,9 @@ class Authenticate extends React.Component {
     const {email, password, showLogin} = this.state;
     return showLogin ? (
       <div>
-        <button className="mdl-button button--light--disabled popup-container">
+        <Button className="popup-container" disabled light>
           {t('account.authenticate')}
-        </button>
+        </Button>
         <ClickOutside onClickOutside={this.closeDialog}>
           <div className="mdl-card mdl-shadow--2dp popup">
             <form onSubmit={this.handleAuthentication}>
@@ -68,22 +69,18 @@ class Authenticate extends React.Component {
                 <Link to="/passwordReset">
                   {t('account.passwordForgotten')}
                 </Link>
-                <button className="mdl-button mdl-js-button">
+                <Button type="submit">
                   {t('account.authenticate')}
-                </button>
+                </Button>
               </div>
             </form>
           </div>
         </ClickOutside>
       </div>
     ) : (
-      <button
-          className="mdl-button mdl-js-button button--light"
-          onClick={this.openDialog}
-          type="button"
-      >
+      <Button light onClick={this.openDialog}>
         {t('account.authenticate')}
-      </button>
+      </Button>
     );
   }
 }

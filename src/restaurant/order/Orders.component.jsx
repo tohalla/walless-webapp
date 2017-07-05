@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import {get} from 'lodash/fp';
+import {uniqBy, get} from 'lodash/fp';
 import ReactTable from 'react-table';
 
+import Button from 'components/Button.component';
 import {getOrdersByRestaurant} from 'walless-graphql/restaurant/restaurant.queries';
 import {isLoading} from 'util/shouldComponentUpdate';
 

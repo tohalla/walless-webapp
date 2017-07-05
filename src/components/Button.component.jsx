@@ -16,13 +16,14 @@ class Button extends React.Component {
     ]),
     onClick: PropTypes.func,
     type: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    plain: PropTypes.bool,
+    light: PropTypes.bool
   };
   static defaultProps = {
     type: 'button'
   }
   handleClick = event => {
-    event.preventDefault();
     event.stopPropagation();
     if (typeof this.props.onClick === 'function') {
       this.props.onClick(event);
@@ -35,19 +36,24 @@ class Button extends React.Component {
       accent,
       children,
       className,
+      plain,
+      light,
       onClick, // eslint-disable-line
       ...props
     } = this.props;
     return (
       <button
           className={
-            'mdl-button mdl-js-button' +
-            (raised ? ' mdl-button--raised' : '') +
-            (
-              colored ? ' mdl-button--colored'
-              : accent ? ' mdl-button--accent'
-              : ''
-            ) + (className ? ` ${className}` : '')
+            [].concat(
+              plain ? 'button--plain'
+                : ['mdl-button mdl-js-button'].concat(
+                  colored ? 'mdl-button--colored' : [],
+                  raised ? 'mdl-button--raised' : [],
+                  accent ? 'mdl-button--accent' : []
+                ),
+              light ? 'button--light' : [],
+              className ? className : []
+            ).join(' ')
           }
           onClick={this.handleClick}
           {...props}

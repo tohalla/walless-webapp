@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Button from 'components/Button.component';
+
 export default class Deletable extends React.Component {
   static propTypes = {
     deleteText: PropTypes.oneOfType([
@@ -18,9 +20,9 @@ export default class Deletable extends React.Component {
   };
   render = () => (
     <div style={{position: 'relative', display: 'inline-block'}}>
-      <button
-          className="button--plain"
+      <Button
           onClick={this.handleDelete}
+          plain
           style={{
             background: 'rgba(255,255,255,0.5)',
             position: 'absolute',
@@ -30,7 +32,7 @@ export default class Deletable extends React.Component {
           type="button"
       >
         {this.props.deleteText}
-      </button>
+      </Button>
       {this.props.children}
     </div>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 
+import Button from 'components/Button.component';
 import Authenticate from 'account/Authenticate.component';
 import authenticationHandler from 'util/auth';
 import {getActiveAccount} from 'graphql/account/account.queries';
@@ -26,13 +27,14 @@ class UserNavigation extends React.Component {
                 name: account.firstName
               })}
             </span>
-            <button
-                className="button--plain button--light"
+            <Button
+                light
                 onClick={this.handleLogout}
+                plain
                 type="button"
             >
               {t('account.signOut')}
-            </button>
+            </Button>
           </div> :
           <Authenticate />
         }

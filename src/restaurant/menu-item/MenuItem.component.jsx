@@ -4,6 +4,7 @@ import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import MdlMenu from 'components/MdlMenu.component';
+import Button from 'components/Button.component';
 import {getMenuItem} from 'graphql/restaurant/menuItem.queries';
 
 const mapStateToProps = state => ({
@@ -70,13 +71,13 @@ class MenuItem extends React.Component {
         </div>
         {actions && actions.length ?
           <div className="container__item">
-            <button
-                className="mdl-button mdl-js-button mdl-button--icon"
+            <Button
+                className="mdl-button--icon"
                 id={`menu-item-actions-${id}`}
                 type="button"
             >
               <i className="material-icons">{'more_vert'}</i>
-            </button>
+            </Button>
             <MdlMenu htmlFor={`menu-item-actions-${id}`}>
               {actions.map((action, index) => (
                 <li
