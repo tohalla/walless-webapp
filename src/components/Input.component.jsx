@@ -17,6 +17,7 @@ class Input extends React.Component {
     onBlur: PropTypes.func,
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func,
+    Input: PropTypes.any,
     floatingLabel: PropTypes.bool,
     disabled: PropTypes.bool,
     required: PropTypes.bool,
@@ -30,7 +31,8 @@ class Input extends React.Component {
     onFocus: () => {},
     required: false,
     disabled: false,
-    rows: 1
+    rows: 1,
+    Input: props => <input {...props} />
   };
   state = {
     currentValue: this.props.value,
@@ -60,9 +62,9 @@ class Input extends React.Component {
     const {
       floatingLabel,
       label,
-      rows,
       id,
       className,
+      Input,
       ...props
     } = this.props;
     const {currentValue} = this.state;
@@ -74,26 +76,15 @@ class Input extends React.Component {
             (className ? ` ${className}` : '')
           }
       >
-        {rows > 1 ?
-          <textarea
-              {...props}
-              className="mdl-textfield__input"
-              id={id}
-              onBlur={this.handleBlur}
-              onChange={this.handleChange}
-              onFocus={this.handleFocus}
-              value={currentValue}
-          /> :
-          <input
-              {...props}
-              className="mdl-textfield__input"
-              id={id}
-              onBlur={this.handleBlur}
-              onChange={this.handleChange}
-              onFocus={this.handleFocus}
-              value={currentValue}
-          />
-        }
+        <Input
+            {...props}
+            className="mdl-textfield__input"
+            id={id}
+            onBlur={this.handleBlur}
+            onChange={this.handleChange}
+            onFocus={this.handleFocus}
+            value={currentValue}
+        />
         <label className="mdl-textfield__label" htmlFor={id}>
           {label}
         </label>

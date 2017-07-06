@@ -5,7 +5,7 @@ export default class Tabbed extends React.Component {
   static propTypes = {
     tabs: PropTypes.shape({tab: PropTypes.shape({
       label: PropTypes.string.isRequired,
-      render: PropTypes.bool.isRequired
+      content: PropTypes.node.isRequired
     })}).isRequired,
     tab: PropTypes.string,
     onTabChange: PropTypes.func.isRequired
@@ -27,8 +27,8 @@ export default class Tabbed extends React.Component {
           ))}
         </div>
         <div className="tab-container__content">
-          {tabs[tab] && typeof tabs[tab].render === 'function' ?
-            tabs[tab].render() : null
+          {tabs[tab] && tabs[tab].content ?
+            tabs[tab].content : null
           }
         </div>
       </div>

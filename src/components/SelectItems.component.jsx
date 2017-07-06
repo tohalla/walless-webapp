@@ -12,7 +12,7 @@ const mapStateToProps = state => ({t: state.util.translation.t});
 class SelectImages extends React.Component {
   static propTypes = {
     select: PropTypes.shape({
-      items: PropTypes.arrayOf(PropTypes.object).isRequired,
+      items: PropTypes.arrayOf(PropTypes.object),
       selected: PropTypes.instanceOf(Set),
       onToggleSelect: PropTypes.func
     }),

@@ -7,6 +7,9 @@ module.exports = {
     'google',
     'plugin:flowtype/recommended'
   ],
+  globals: {
+    google: true
+  },
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',
@@ -55,7 +58,7 @@ module.exports = {
     'react/jsx-indent-props': 2,
     'react/jsx-key': 2,
     'react/jsx-max-props-per-line': [2, {maximum: 5}],
-    'react/jsx-no-bind': 2,
+    'react/jsx-no-bind': [2, {ignoreRefs: true}],
     'react/jsx-no-duplicate-props': 2,
     'react/jsx-no-literals': 2,
     'react/jsx-no-undef': 2,

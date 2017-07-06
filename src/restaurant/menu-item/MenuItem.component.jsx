@@ -55,9 +55,11 @@ class MenuItem extends React.Component {
           className={(className || 'container__row') + (this.props.onClick ? ' trigger' : '')}
           onClick={this.handleClick}
       >
-        <div className="container__item container__item__thumbnail">
-          {images.length ? <img src={images[0].uri} /> : null}
-        </div>
+        {images.length ? (
+          <div className="container__item container__item__thumbnail">
+            <img src={images[0].uri} />
+          </div>
+        ) : null}
         <div className="container__item container__item__content">
           <h6>
             {name}

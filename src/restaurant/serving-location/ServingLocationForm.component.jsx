@@ -38,7 +38,7 @@ class ServingLocationForm extends React.Component {
       this.resetForm(newProps);
     }
   }
-  resetForm = (props, updateState = this.setState) => {
+  resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       servingLocation: {
         name = ''

@@ -28,6 +28,8 @@ import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import {isLoading} from 'util/shouldComponentUpdate';
 
+const TextArea = props => <textarea {...props} />;
+
 const mapStateToProps = state => ({
   t: state.util.translation.t,
   languages: state.util.translation.languages
@@ -59,7 +61,7 @@ class MenuItemForm extends React.Component {
     }
   }
   shouldComponentUpdate = newProps => !isLoading(newProps);
-  resetForm = (props, updateState = this.setState) => {
+  resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       menuItem: {
         information,
@@ -196,7 +198,7 @@ class MenuItemForm extends React.Component {
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
       [value.locale]: {
         label: value.name,
-        render: () => (
+        content: (
           <div>
             <Input
                 className="block"
@@ -205,6 +207,7 @@ class MenuItemForm extends React.Component {
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
+                Input={TextArea}
                 className="block"
                 label={t('restaurant.menuItems.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}

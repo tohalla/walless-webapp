@@ -102,11 +102,11 @@ class Restaurant extends React.Component {
       language
     } = this.props;
     const loading = getRestaurantsByAccount.loading || getActiveAccount.loading;
-    const restaurant = routeParams.restaurant ?
-      find(restaurant =>
-        restaurant.id === Number(routeParams.restaurant)
+    if (restaurants && restaurants.length) {
+      const restaurant = routeParams.restaurant ?
+        find(restaurant =>
+          restaurant.id === Number(routeParams.restaurant)
       )(restaurants) : restaurants[0];
-    if (restaurant && restaurants.length) {
       return (
         <WithSideBar
             sideContent={

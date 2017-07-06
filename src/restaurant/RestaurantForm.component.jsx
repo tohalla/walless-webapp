@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import Select from 'react-select';
 import Cookie from 'js-cookie';
 import PropTypes from 'prop-types';
-import {reduce, set, get, equals} from 'lodash/fp';
+import {set, get, equals} from 'lodash/fp';
 
 import config from 'config';
 import SelectItems from 'components/SelectItems.component';
@@ -17,14 +17,18 @@ import {
   createRestaurantInformation,
   updateRestaurantInformation,
   updateRestaurantImages
-  } from 'graphql/restaurant/restaurant.mutations';
+} from 'graphql/restaurant/restaurant.mutations';
 import {getCurrencies} from 'graphql/misc.queries';
+import {createAddress} from 'graphql/misc.mutations';
 import {
   getRestaurant,
   getImagesForRestaurant
 } from 'graphql/restaurant/restaurant.queries';
 import Tabbed from 'components/Tabbed.component';
+import LocationInput from 'components/LocationInput.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
+
+const TextArea = props => <textarea {...props} />;
 
 const mapStateToProps = state => ({
   languages: state.util.translation.languages,
@@ -55,14 +59,16 @@ class RestaurantForm extends React.Component {
       this.resetForm(newProps);
     }
   }
-  resetForm = (props, updateState = this.setState) => {
+  resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       restaurant: {
+        address = {},
         information,
         images: selectedFiles
       } = typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}
     } = props;
     updateState({
+      address,
       information,
       activeLanguage: 'en',
       currency: 'EUR',
@@ -85,6 +91,7 @@ class RestaurantForm extends React.Component {
       createRestaurantInformation,
       updateRestaurantInformation,
       updateRestaurantImages,
+      createAddress,
       onSubmit,
       onError,
       account,
@@ -95,14 +102,19 @@ class RestaurantForm extends React.Component {
       selectedFiles,
       activeLanguage, // eslint-disable-line
       information,
+      address = {},
       ...restaurantOptions
     } = this.state;
-    const finalRestaurant = Object.assign({}, restaurantOptions,
-      originalRestaurant.id ? {id: originalRestaurant.id} : null,
-      {createdBy: account.id}
-    );
-    const files = Array.from(selectedFiles);
     try {
+      const addressId = !get('placeId')(address) ? null
+        : get(['address', 'placeId'])(originalRestaurant) === address.placeId ?
+          get(['address', 'id'])(originalRestaurant)
+        : get(['data', 'createAddress', 'address', 'id'])(await createAddress(address));
+      const finalRestaurant = Object.assign({}, restaurantOptions,
+        originalRestaurant.id ? {id: originalRestaurant.id} : null,
+        {createdBy: account.id, address: addressId}
+      );
+      const files = Array.from(selectedFiles);
       const {data} = await (originalRestaurant && originalRestaurant.id ?
         updateRestaurant(finalRestaurant) : createRestaurant(finalRestaurant)
       );
@@ -136,7 +148,9 @@ class RestaurantForm extends React.Component {
         )
       );
       onSubmit();
-      getImagesForRestaurant.refetch();
+      if (getImagesForRestaurant) {
+        getImagesForRestaurant.refetch();
+      }
     } catch (error) {
       if (typeof onError === 'function') {
        return onError(error);
@@ -144,6 +158,7 @@ class RestaurantForm extends React.Component {
       throw new Error(error);
     };
   };
+  handleLocationChange = ({address}) => this.setState({address});
   handleTabChange = tab => this.setState({activeLanguage: tab});
   handleCurrencyChange = ({value: currency}) => this.setState({currency});
   handleDropzoneDelete = image => () => {
@@ -164,51 +179,51 @@ class RestaurantForm extends React.Component {
   handleCancel = event => {
     event.preventDefault();
     this.props.onCancel();
-  }
+  };
   render() {
     const {
       t,
       onCancel,
       languages,
       images,
+      restaurant,
       currencies = []
     } = this.props;
     const {
       activeLanguage,
-      information,
       selectedFiles = new Set(),
       newImages = []
     } = this.state;
-    const tabs = reduce((prev, value) => Object.assign({}, prev, {
-      [value.locale]: {
-        label: value.name,
-        render: () => (
-          <div>
-            <Input
-                className="block"
-                label={t('restaurant.name')}
-                onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                type="text"
-                value={get([value.locale, 'name'])(information) || ''}
-            />
-            <Input
-                className="block"
-                label={t('restaurant.description')}
-                onChange={this.handleInputChange(['information', value.locale, 'description'])}
-                rows={3}
-                type="text"
-                value={get([value.locale, 'description'])(information) || ''}
-            />
-          </div>
-        )
-      }
-    }), {})(languages);
     return (
       <form onSubmit={this.handleSubmit}>
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}
-            tabs={tabs}
+            tabs={languages.reduce((prev, value) => Object.assign({}, prev, {
+              [value.locale]: {
+                label: value.name,
+                content: (
+                  <div>
+                    <Input
+                        className="block"
+                        label={this.props.t('restaurant.name')}
+                        onChange={this.handleInputChange(['information', value.locale, 'name'])}
+                        type="text"
+                        value={get(['information', value.locale, 'name'])(this.state) || ''}
+                    />
+                    <Input
+                        Input={TextArea}
+                        className="block"
+                        label={this.props.t('restaurant.description')}
+                        onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                        rows={3}
+                        type="text"
+                        value={get(['information', value.locale, 'description'])(this.state) || ''}
+                    />
+                  </div>
+                )
+              }
+            }), {})}
         />
         <div className="container container--padded">
           <div className="container__row">
@@ -248,6 +263,15 @@ class RestaurantForm extends React.Component {
                           }}
                       />
                     )
+                  }, {
+                    label: t('restaurant.address'),
+                    item: (
+                      <LocationInput
+                          onChange={this.handleLocationChange}
+                          placeholder={t('restaurant.placeholder.address')}
+                          value={get(['address', 'placeId'])(restaurant)}
+                      />
+                    )
                   }
                 ]}
             />
@@ -279,5 +303,6 @@ export default compose(
   updateRestaurantInformation,
   getCurrencies,
   getImagesForRestaurant,
-  updateRestaurantImages
+  updateRestaurantImages,
+  createAddress
 )(RestaurantForm);

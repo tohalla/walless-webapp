@@ -18,6 +18,8 @@ import {getMenu} from 'graphql/restaurant/menu.queries';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import Tabbed from 'components/Tabbed.component';
 
+const TextArea = props => <textarea {...props} />;
+
 const mapStateToProps = state => ({
   languages: state.util.translation.languages,
   t: state.util.translation.t
@@ -49,7 +51,7 @@ class MenuForm extends React.Component {
       this.resetForm(newProps);
     }
   }
-  resetForm = (props, updateState = this.setState) => {
+  resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       menu: {
         information,
@@ -146,7 +148,7 @@ class MenuForm extends React.Component {
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
       [value.locale]: {
         label: value.name,
-        render: () => (
+        content: (
           <div>
             <Input
                 className="block"
@@ -156,6 +158,7 @@ class MenuForm extends React.Component {
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
+                Input={TextArea}
                 className="block"
                 label={t('restaurant.menus.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}

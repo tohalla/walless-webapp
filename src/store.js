@@ -7,9 +7,11 @@ import apolloClient from 'apolloClient';
 import DevTools from 'DevTools';
 import notifications from 'notifications/notification';
 import translation, {fetchLanguages} from 'util/translation';
+import location, {updateLocation} from 'util/location';
 
 const util = combineReducers({
   translation,
+  location,
   routing: routerReducer
 });
 
@@ -29,5 +31,6 @@ const store = createStore(
 );
 
 store.dispatch(fetchLanguages);
+store.dispatch(updateLocation);
 
 export default store;
