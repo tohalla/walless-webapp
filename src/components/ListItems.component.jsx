@@ -11,12 +11,14 @@ export default class ListItems extends React.Component {
       hide: PropTypes.bool,
       hideItems: PropTypes.bool,
       hideReturn: PropTypes.bool,
-      render: PropTypes.bool.isRequired
+      item: PropTypes.node,
+      onClick: PropTypes.func
     })}),
     containerClass: PropTypes.string,
     defaultAction: PropTypes.string,
     forceDefaultAction: PropTypes.bool,
     onActionChange: PropTypes.func,
+    onToggleSelect: PropTypes.func,
     renderItem: PropTypes.func,
     renderItems: PropTypes.func,
     items: PropTypes.arrayOf(PropTypes.object),
@@ -30,6 +32,8 @@ export default class ListItems extends React.Component {
     items: [],
     containerClass: 'container container--padded container--distinct',
     selectedItems: new Set()
+  };
+  handleRenderItem = () => {
   };
   render() {
     const {

@@ -12,20 +12,16 @@ $side-navigation-link-background-color-hover: lighten($side-navigation-link-back
 }
 .side--outer-container {
   flex: 1 1 auto;
+  overflow: auto;
 }
 .side__side-container {
+  flex: 0 0 15rem;
   position: relative;
   display: block;
-  width: 15rem;
-  min-width: 15rem;
   background: $side-navigation-background-color;
 }
-.side__fixed-content {
-  display: block;
-  position: fixed;
-  width: inherit;
-}
 .side__navigation {
+  flex: 1;
   flex-direction: column;
 }
 .side__navigation__link {

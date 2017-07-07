@@ -184,7 +184,7 @@ class RestaurantForm extends React.Component {
     const {
       t,
       onCancel,
-      languages,
+      languages = [],
       images,
       restaurant,
       currencies = []

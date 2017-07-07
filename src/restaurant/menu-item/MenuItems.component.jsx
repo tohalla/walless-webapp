@@ -46,10 +46,6 @@ class MenuItems extends React.Component {
   }
   shouldComponentUpdate = newProps => !isLoading(newProps);
   handleActionChange = action => event => {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-      event.stopPropagation();
-    }
     this.setState({action});
   };
   renderMenuItem = (menuItem, props) => (
@@ -57,7 +53,7 @@ class MenuItems extends React.Component {
         actions={this.props.plain ? [] : [
           {
             label: this.props.t('edit'),
-            onClick: this.handleActionChange({name: 'edit', menuItem})
+            onClick: this.handleActionChange({key: 'edit', menuItem})
           }
         ]}
         className={this.props.selectedItems.has(menuItem.id) ?
@@ -89,8 +85,8 @@ class MenuItems extends React.Component {
     const {action} = this.state;
     const defaultActions = {
       filter: {
-        label: t('restaurant.menuItems.filter'),
-        render: () => (
+        label: t('restaurant.menuItems.action.filter'),
+        item: (
           <FilterMenuItems />
         )
       },
@@ -98,7 +94,7 @@ class MenuItems extends React.Component {
         hide: true,
         hideReturn: true,
         hideItems: true,
-        render: () => (
+        item: (
           <MenuItemForm
               menuItem={action ? action.menuItem : null}
               onCancel={this.handleActionChange()}
@@ -108,10 +104,10 @@ class MenuItems extends React.Component {
         )
       },
       new: {
-        label: t('restaurant.menuItems.create'),
+        label: t('restaurant.menuItems.action.create'),
         hideReturn: true,
         hideItems: true,
-        render: () => (
+        item: (
           <MenuItemForm
               onCancel={this.handleActionChange()}
               onSubmit={this.handleMenuItemSubmit}
@@ -122,7 +118,7 @@ class MenuItems extends React.Component {
     };
     return (
       <ListItems
-          action={action && action.name}
+          action={action && action.key}
           actions={actions &&
             Object.keys(defaultActions).reduce((prev, key) =>
               actions.indexOf(key) === -1 ?

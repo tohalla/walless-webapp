@@ -9,20 +9,17 @@ export default class WithSideBar extends React.Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
     ]),
-    sideContent: PropTypes.element,
-    fixedSideContent: PropTypes.bool
+    sideContent: PropTypes.element
   };
   static defaultProps = {
     fixedSideContent: true
   };
   render() {
-    const {fixedSideContent, sideContent} = this.props;
+    const {sideContent} = this.props;
     return (
       <div className="side">
         <div className="side__side-container">
-          <div className={fixedSideContent ? 'side__fixed-content' : ''}>
-            {sideContent}
-          </div>
+          {sideContent}
         </div>
         <div className="side--outer-container">
           <Padded>

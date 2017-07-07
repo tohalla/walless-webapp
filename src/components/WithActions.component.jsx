@@ -17,7 +17,8 @@ class WithActions extends React.Component {
       hide: PropTypes.bool,
       hideItems: PropTypes.bool,
       hideReturn: PropTypes.bool,
-      render: PropTypes.bool.isRequired
+      item: PropTypes.node,
+      onClick: PropTypes.func
     })}),
     containerClass: PropTypes.string,
     defaultAction: PropTypes.string,
@@ -32,6 +33,18 @@ class WithActions extends React.Component {
   static defaultProps = {
     containerClass: 'container container--padded container--distinct'
   };
+  handleActionChange = ({key, action}) => event => {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (typeof action.onClick === 'function') {
+      action.onClick();
+    }
+    if (typeof this.props.onActionChange === 'function') {
+      this.props.onActionChange({key, action})(event);
+    }
+  }
   render() {
     const {
       containerClass,
@@ -56,7 +69,7 @@ class WithActions extends React.Component {
                   {t('return')}
                 </Button>
               )}
-              {actions[action].render()}
+              {actions[action].item}
             </div>
           )
         : !hideActions && typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
@@ -68,7 +81,7 @@ class WithActions extends React.Component {
                       <Button
                           colored
                           key={key}
-                          onClick={onActionChange({name: key})}
+                          onClick={this.handleActionChange({key, action: actions[key]})}
                           type="button"
                       >
                         {actions[key].label}

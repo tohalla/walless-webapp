@@ -18,14 +18,31 @@ th + td {
 }
 
 .ReactTable {
-  width: 100%;
+  align-self: stretch;
   background: $carrara;
 }
+
 .rt-td, .rt-tr, .rt-th {
   &.-hidden {
     display: none;
   }
 }
+
+.rt-thead {
+  background: lighten($carrara, 3%) !important;
+  .rt-tr {
+    text-align: left !important;
+  }
+}
+
+.rt-noData {
+  position: static !important;
+  flex: 1 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: none !important;
+}
+
 .sub-component {
   background: darken($gallery, 5%);
 }

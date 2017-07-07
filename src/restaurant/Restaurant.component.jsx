@@ -52,7 +52,7 @@ class Restaurant extends React.Component {
           hide: true,
           hideReturn: true,
           hideItems: true,
-          render: () => (
+          item: (
             <RestaurantForm
                 onCancel={this.handleActionChange()}
                 onSubmit={this.handleRestaurantSubmit}
@@ -64,7 +64,7 @@ class Restaurant extends React.Component {
       const {action} = this.state;
       return (
         <WithActions
-            action={action ? action.name : null}
+            action={action ? action.key : null}
             actions={actions}
             hideActions
             onActionChange={this.handleActionChange}
@@ -82,7 +82,7 @@ class Restaurant extends React.Component {
               <MdlMenu htmlFor="restaurant-actions">
                   <li
                       className="mdl-menu__item"
-                      onClick={this.handleActionChange({name: 'edit'})}
+                      onClick={this.handleActionChange({key: 'edit'})}
                   >
                     {'edit'}
                   </li>

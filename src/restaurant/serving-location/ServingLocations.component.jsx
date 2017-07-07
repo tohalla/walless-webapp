@@ -3,13 +3,13 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 import {hasIn} from 'lodash/fp';
+import ReactTable from 'react-table';
 
-import ListItems from 'components/ListItems.component';
+import Button from 'components/Button.component';
+import WithActions from 'components/WithActions.component';
 import {
   getServingLocationsByRestaurant
 } from 'graphql/restaurant/restaurant.queries';
-import ServingLocation from
-  'restaurant/serving-location/ServingLocation.component';
 import ServingLocationForm from
   'restaurant/serving-location/ServingLocationForm.component';
 import {isLoading} from 'util/shouldComponentUpdate';
@@ -27,6 +27,7 @@ class ServingLocations extends React.Component {
       item: PropTypes.object
     }),
     selectedItems: PropTypes.instanceOf(Set),
+    servingLocations: PropTypes.arrayOf(PropTypes.object),
     restaurant: PropTypes.object.isRequired
   };
   static defaultProps = {
@@ -39,28 +40,9 @@ class ServingLocations extends React.Component {
     };
   }
   shouldComponentUpdate = newProps => !isLoading(newProps);
-  handleActionChange = action => event => {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  handleActionChange = (action = {}) => event => {
     this.setState({action});
   };
-  renderServingLocation = (servingLocation, props) => (
-    <ServingLocation
-        actions={this.props.plain ? [] : [
-          {
-            label: this.props.t('edit'),
-            onClick: this.handleActionChange({name: 'edit', servingLocation})
-          }
-        ]}
-        className={this.props.selectedItems.has(servingLocation.id) ?
-          'container__row selected' : null
-        }
-        servingLocation={servingLocation}
-        {...props}
-    />
-  );
   handleServingLocationSubmit = () => {
     this.setState({action: null});
     this.props.getServingLocationsByRestaurant.refetch();
@@ -72,15 +54,14 @@ class ServingLocations extends React.Component {
     const {
       servingLocations,
       restaurant,
-      selectedItems,
       plain,
       t
     } = this.props;
     const {action} = this.state;
     const actions = {
       filter: {
-        label: t('restaurant.servingLocations.filter'),
-        render: () => (
+        label: t('restaurant.servingLocations.action.filter'),
+        item: (
           <div />
         )
       },
@@ -88,7 +69,7 @@ class ServingLocations extends React.Component {
         hide: true,
         hideReturn: true,
         hideItems: true,
-        render: () => (
+        item: (
           <ServingLocationForm
               onCancel={this.handleActionChange()}
               onSubmit={this.handleServingLocationSubmit}
@@ -98,10 +79,10 @@ class ServingLocations extends React.Component {
         )
       },
       new: {
-        label: t('restaurant.servingLocations.create'),
+        label: t('restaurant.servingLocations.action.create'),
         hideReturn: true,
         hideItems: true,
-        render: () => (
+        item: (
           <ServingLocationForm
               onCancel={this.handleActionChange()}
               onSubmit={this.handleServingLocationSubmit}
@@ -111,16 +92,38 @@ class ServingLocations extends React.Component {
       }
     };
     return (
-      <ListItems
-          action={action ? action.name : null}
+      <WithActions
+          action={action ? action.key : undefined}
           actions={actions}
           containerClass={plain ? 'container' : 'container container--padded container--distinct'}
-          filterItems={this.filterItems}
-          items={servingLocations}
           onActionChange={this.handleActionChange}
-          renderItem={this.renderServingLocation}
-          selectedItems={selectedItems}
-      />
+      >
+        {servingLocations.length ?
+          <ReactTable
+              columns={[
+                {
+                  Header: t('restaurant.servingLocations.name'),
+                  accessor: 'name'
+                },
+                {
+                  Header: t('restaurant.servingLocations.actions'),
+                  id: 'edit',
+                  accessor: data => (
+                    <Button onClick={this.handleActionChange({key: 'edit', servingLocation: data})} plain>
+                      {t('restaurant.servingLocations.action.edit')}
+                    </Button>
+                  ),
+                  width: 100
+                }
+              ]}
+              data={servingLocations}
+              defaultPageSize={servingLocations.length}
+              showPageJump={false}
+              showPageSizeOptions={false}
+              showPagination={false}
+          />
+        : ''}
+      </WithActions>
     );
   }
 }

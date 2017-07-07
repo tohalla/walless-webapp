@@ -32,10 +32,6 @@ class Menus extends React.Component {
   }
   shouldComponentUpdate = newProps => !isLoading(newProps);
   handleActionChange = action => event => {
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-      event.stopPropagation();
-    }
     this.setState({action});
   };
   handleMenuSubmit = () => {
@@ -48,7 +44,7 @@ class Menus extends React.Component {
           {
             label: this.props.t('edit'),
             onClick: this.handleActionChange({
-              name: 'edit',
+              key: 'edit',
               menu
             })
           }
@@ -68,10 +64,10 @@ class Menus extends React.Component {
     const {action} = this.state;
     const actions = {
       new: {
-        label: t('restaurant.menus.create'),
+        label: t('restaurant.menus.action.create'),
         hideReturn: true,
         hideItems: true,
-        render: () => (
+        item: (
           <MenuForm
               onCancel={this.handleActionChange()}
               onSubmit={this.handleMenuSubmit}
@@ -83,7 +79,7 @@ class Menus extends React.Component {
         hide: true,
         hideReturn: true,
         hideItems: true,
-        render: () => (
+        item: (
           <MenuForm
               menu={action ? action.menu : null}
               onCancel={this.handleActionChange()}
@@ -95,7 +91,7 @@ class Menus extends React.Component {
     };
     return (
       <ListItems
-          action={action ? action.name : null}
+          action={action ? action.key : null}
           actions={actions}
           containerClass={plain ? 'container' : 'container container--padded container--distinct'}
           items={menus}
