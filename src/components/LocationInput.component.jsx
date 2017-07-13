@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import {pickBy, debounce} from 'lodash/fp';
 import {camelizeKeys} from 'humps';
 import {connect} from 'react-redux';
+
+import containers from 'styles/containers';
+import Select from 'components/Select.component';
 
 const mapStateToProps = state => ({
   location: state.util.location
@@ -123,24 +125,28 @@ class LocationInput extends React.Component {
     const {placeholder} = this.props;
     return (
       <div>
-        <Select
-            autoBlur
-            className="Select input--medium"
-            clearable
-            id="location"
-            isLoading={loading}
-            onChange={this.handleChange}
-            onInputChange={this.handleLoadOptions}
-            options={options}
-            placeholder={placeholder}
-            value={this.state.value}
-        />
-        {route ? <p className="address-row">{`${route} ${streetNumber}`}</p> : null}
-        {postalCode || locality ? <p className="address-row">{`${postalCode} ${locality}`.trim()}</p> : null}
-        {country ? <p className="address-row">{country}</p> : null}
+        <div>
+          <Select
+              autoBlur
+              clearable
+              id="location"
+              isLoading={loading}
+              onChange={this.handleChange}
+              onInputChange={this.handleLoadOptions}
+              options={options}
+              placeholder={placeholder}
+              value={this.state.value}
+          />
+        </div>
+        <div style={containers.informationContainer}>
+          {route ? `${route} ${streetNumber}` : null}
+          {postalCode || locality ? `${postalCode} ${locality}`.trim() : null}
+          {country ? country : null}
+        </div>
       </div>
     );
   }
 }
 
 export default connect(mapStateToProps)(LocationInput);
+

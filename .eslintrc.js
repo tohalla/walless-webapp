@@ -38,6 +38,7 @@ module.exports = {
     'import/named': 2,
     'import/no-commonjs': 2,
     'import/namespace': 2,
+    "space-before-function-paren": 0,
     'import/default': 2,
     'import/export': 2,
     'import/extensions': [2, {jsx: 'never', js: 'never'}],

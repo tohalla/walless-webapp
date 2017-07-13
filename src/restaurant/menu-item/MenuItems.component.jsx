@@ -1,15 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
-import PropTypes from 'prop-types';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
 import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
-import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
-import ListItems from 'components/ListItems.component';
-import {isLoading} from 'util/shouldComponentUpdate';
+import Table from 'components/Table.component';
+import Button from 'components/Button.component';
+import WithActions from 'components/WithActions.component';
+import loadable from 'decorators/loadable';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -17,6 +19,8 @@ const mapStateToProps = state => ({
   filter: get(['form', 'menuItemFilter', 'values'])(state) || {}
 });
 
+@loadable()
+@Radium
 class MenuItems extends React.Component {
   static PropTypes = {
     restaurant: PropTypes.object.isRequired,
@@ -25,12 +29,12 @@ class MenuItems extends React.Component {
       item: PropTypes.object
     }),
     actions: PropTypes.arrayOf(PropTypes.string),
-    selectedItems: PropTypes.instanceOf(Set),
-    menuItem: PropTypes.shape({
-      onClick: PropTypes.func
+    select: PropTypes.shape({
+      toggleSelect: PropTypes.func.isRequired,
+      selectedItems: PropTypes.instanceOf(Set).isRequired,
+      onHeaderClick: PropTypes.func
     }),
     menuItems: PropTypes.arrayOf(PropTypes.object),
-    plain: PropTypes.bool,
     forceDefaultAction: PropTypes.bool
   };
   static defaultProps = {
@@ -44,26 +48,8 @@ class MenuItems extends React.Component {
       action: props.action
     };
   }
-  shouldComponentUpdate = newProps => !isLoading(newProps);
-  handleActionChange = action => event => {
-    this.setState({action});
-  };
-  renderMenuItem = (menuItem, props) => (
-    <MenuItem
-        actions={this.props.plain ? [] : [
-          {
-            label: this.props.t('edit'),
-            onClick: this.handleActionChange({key: 'edit', menuItem})
-          }
-        ]}
-        className={this.props.selectedItems.has(menuItem.id) ?
-          'container__row selected' : null
-        }
-        menuItem={menuItem}
-        {...this.props.menuItem}
-        {...props}
-    />
-  );
+  handleActionChange = action => this.setState({action});
+  handleActionSelect = action => () => this.handleActionChange(action);
   handleMenuItemSubmit = () => {
     this.setState({action: null});
     this.props.getMenuItemsByRestaurant.refetch();
@@ -76,11 +62,11 @@ class MenuItems extends React.Component {
     const {
       menuItems,
       restaurant,
-      selectedItems,
-      plain,
+      language,
       t,
       actions,
-      forceDefaultAction
+      select,
+      ...props
     } = this.props;
     const {action} = this.state;
     const defaultActions = {
@@ -97,7 +83,7 @@ class MenuItems extends React.Component {
         item: (
           <MenuItemForm
               menuItem={action ? action.menuItem : null}
-              onCancel={this.handleActionChange()}
+              onCancel={this.handleActionChange}
               onSubmit={this.handleMenuItemSubmit}
               restaurant={restaurant}
           />
@@ -109,7 +95,7 @@ class MenuItems extends React.Component {
         hideItems: true,
         item: (
           <MenuItemForm
-              onCancel={this.handleActionChange()}
+              onCancel={this.handleActionChange}
               onSubmit={this.handleMenuItemSubmit}
               restaurant={restaurant}
           />
@@ -117,22 +103,57 @@ class MenuItems extends React.Component {
       }
     };
     return (
-      <ListItems
-          action={action && action.key}
+      <WithActions
+          {...props}
+          action={action ? action.key : undefined}
           actions={actions &&
             Object.keys(defaultActions).reduce((prev, key) =>
               actions.indexOf(key) === -1 ?
                 prev : Object.assign({}, prev, {[key]: defaultActions[key]})
             , {})
           }
-          containerClass={plain ? 'container' : 'container container--padded container--distinct'}
-          filterItems={this.filterItems}
-          forceDefaultAction={forceDefaultAction}
-          items={menuItems}
           onActionChange={this.handleActionChange}
-          renderItem={this.renderMenuItem}
-          selectedItems={selectedItems}
-      />
+      >
+        {menuItems.length ?
+          <Table
+              columns={[
+                {
+                  Header: t('restaurant.menuItems.images'),
+                  id: 'img',
+                  accessor: menuItem => menuItem.images.length ? (
+                    <img src={menuItem.images[0].uri} style={styles.image} />
+                  ) : null,
+                  style: {padding: 0},
+                  width: 120
+                },
+                {
+                  Header: t('restaurant.menuItems.actions'),
+                  id: 'actions',
+                  accessor: menuItem => (
+                    <Button onClick={this.handleActionSelect({key: 'edit', menuItem})} plain>
+                      {t('restaurant.menuItems.action.edit')}
+                    </Button>
+                  ),
+                  maxWidth: 100,
+                  resizable: false,
+                  sortable: false
+                },
+                {
+                  Header: t('restaurant.menuItems.name'),
+                  accessor: menuItem => get(['information', language, 'name'])(menuItem),
+                  id: 'name'
+                },
+                {
+                  Header: t('restaurant.menuItems.description'),
+                  accessor: menuItem => get(['information', language, 'description'])(menuItem),
+                  id: 'description'
+                }
+              ]}
+              data={menuItems}
+              select={select}
+          />
+        : ''}
+      </WithActions>
     );
   }
 }
@@ -141,3 +162,13 @@ export default compose(
   connect(mapStateToProps, {}),
   getMenuItemsByRestaurant
 )(MenuItems);
+
+const styles = {
+  image: {
+    maxWidth: '100%',
+    maxHeight: '100%',
+    height: 'auto',
+    width: 'auto',
+    overflow: 'hidden'
+  }
+};

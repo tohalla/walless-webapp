@@ -1,12 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import {reduce, set, get, equals} from 'lodash/fp';
 
+import Form from 'components/Form.component';
+import Button from 'components/Button.component';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'components/Input.component';
-import Button from 'components/Button.component';
 import {
   createMenu,
   updateMenu,
@@ -25,6 +27,7 @@ const mapStateToProps = state => ({
   t: state.util.translation.t
 });
 
+@Radium
 class MenuForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -47,7 +50,6 @@ class MenuForm extends React.Component {
       typeof this.props.menu !== typeof newProps.menu ||
       !equals(this.props.getMenu)(newProps.getMenu)
     ) {
-      // should reset inputs when menu information fetched with given id
       this.resetForm(newProps);
     }
   }
@@ -66,11 +68,9 @@ class MenuForm extends React.Component {
         menuItems.map(item => item.id)
       ) : new Set()
     });
-  }
-  handleInputChange = path => event => {
-    const {value} = event.target;
-    this.setState(set(path)(value)(this.state));
   };
+  handleInputChange = path => event =>
+    this.setState(set(path)(event.target.value)(this.state));
   handleSubmit = async event => {
     event.preventDefault();
     const {
@@ -85,14 +85,8 @@ class MenuForm extends React.Component {
       menu: originalMenu = typeof this.props.menu === 'object' ? this.props.menu : {},
       updateMenuItems
     } = this.props;
-    const {
-      activeLanguage, // eslint-disable-line
-      information,
-      manageMenuItems, // eslint-disable-line
-      menuItems,
-      ...menuOptions
-    } = this.state;
-    const finalMenu = Object.assign({}, menuOptions,
+    const {information, menuItems} = this.state;
+    const finalMenu = Object.assign({},
       originalMenu ? {id: originalMenu.id} : null,
       {
         restaurant: restaurant.id,
@@ -121,13 +115,8 @@ class MenuForm extends React.Component {
       throw new Error(error);
     };
   };
-  handleToggle = e => {
-    this.setState({[e.target.id]: !this.state[e.target.id]});
-  };
-  handleCancel = e => {
-    e.preventDefault();
-    this.props.onCancel();
-  };
+  handleToggle = key => () => this.setState({[key]: !this.state[key]});
+  handleCancel = () => this.props.onCancel();
   handleTabChange = tab => this.setState({activeLanguage: tab});
   handleMenuItemSelect = item => {
     const menuItems = new Set([...this.state.menuItems]);
@@ -151,19 +140,15 @@ class MenuForm extends React.Component {
         content: (
           <div>
             <Input
-                className="block"
                 label={t('restaurant.menus.name')}
                 onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                type="text"
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={TextArea}
-                className="block"
                 label={t('restaurant.menus.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}
                 rows={3}
-                type="text"
                 value={get(['information', value.locale, 'description'])(this.state) || ''}
             />
           </div>
@@ -171,38 +156,32 @@ class MenuForm extends React.Component {
       }
     }), {})(languages);
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}
             tabs={tabs}
         />
-        <div className="container container--padded">
-          {manageMenuItems ?
-            <MenuItems
-                action={{name: 'filter'}}
-                actions={['filter']}
-                forceDefaultAction
-                menuItem={{onClick: this.handleMenuItemSelect}}
-                plain
-                restaurant={restaurant}
-                selectedItems={menuItems}
-            />
-            :
-            <Button colored id="manageMenuItems" onClick={this.handleToggle}>
+        {manageMenuItems ? (
+          <MenuItems
+              action={{name: 'filter'}}
+              actions={['filter']}
+              forceDefaultAction
+              plain
+              restaurant={restaurant}
+              select={{
+                toggleSelect: this.handleMenuItemSelect,
+                selectedItems: menuItems
+              }}
+          />
+         ) : (
+          <div>
+            <Button onClick={this.handleToggle('manageMenuItems')}>
               {t('restaurant.menus.manageMenuItems')}
             </Button>
-          }
-        </div>
-        <div>
-          <Button colored onClick={this.handleSubmit} raised type="submit">
-            {t('submit')}
-          </Button>
-          <Button accent onClick={this.handleCancel} raised type="reset">
-            {t('cancel')}
-          </Button>
-        </div>
-      </form>
+          </div>
+        )}
+      </Form>
     );
   }
 }

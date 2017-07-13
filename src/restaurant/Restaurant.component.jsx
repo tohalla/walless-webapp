@@ -2,20 +2,22 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
-import MdlMenu from 'components/MdlMenu.component';
-import Button from 'components/Button.component';
+import PopOverMenu from 'components/PopOverMenu.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'components/WithActions.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
-import {isLoading} from 'util/shouldComponentUpdate';
+import loadable from 'decorators/loadable';
 
 const mapStateToProps = state => ({
   language: state.util.translation.language,
   t: state.util.translation.t
 });
 
+@loadable()
+@Radium
 class Restaurant extends React.Component {
   static propTypes = {
     restaurant: PropTypes.oneOfType([
@@ -26,14 +28,12 @@ class Restaurant extends React.Component {
   state = {
     action: null
   };
-  shouldComponentUpdate = newProps => !isLoading(newProps);
   handleRestaurantSubmit = () => {
     this.props.getRestaurant.refetch();
     this.setState({action: null});
   };
-  handleActionChange = action => event => {
-    this.setState({action});
-  };
+  handleActionChange = action => this.setState({action});
+  handleActionSelect = action => () => this.handleActionChange(action);
   render() {
     if (this.props.restaurant && typeof this.props.restaurant === 'object') {
       const {
@@ -54,7 +54,7 @@ class Restaurant extends React.Component {
           hideItems: true,
           item: (
             <RestaurantForm
-                onCancel={this.handleActionChange()}
+                onCancel={this.handleActionChange}
                 onSubmit={this.handleRestaurantSubmit}
                 restaurant={restaurant}
             />
@@ -69,25 +69,14 @@ class Restaurant extends React.Component {
             hideActions
             onActionChange={this.handleActionChange}
         >
-          <div className="container__row">
+          <div style={styles.titleContainer}>
             <h2>{name}</h2>
-            <div className="container__item">
-              <Button
-                  className="mdl-button mdl-js-button mdl-button--icon"
-                  id="restaurant-actions"
-                  type="button"
-              >
-                <i className="material-icons">{'more_vert'}</i>
-              </Button>
-              <MdlMenu htmlFor="restaurant-actions">
-                  <li
-                      className="mdl-menu__item"
-                      onClick={this.handleActionChange({key: 'edit'})}
-                  >
-                    {'edit'}
-                  </li>
-              </MdlMenu>
-            </div>
+            <PopOverMenu
+                items={[
+                  {label: 'edit', onClick: this.handleActionSelect({key: 'edit'})}
+                ]}
+                label={<i className="material-icons">{'more_vert'}</i>}
+            />
           </div>
           <ItemsWithLabels
               items={[{label: t('restaurant.description'), item: description}]}
@@ -100,3 +89,11 @@ class Restaurant extends React.Component {
 }
 
 export default compose(getRestaurant)(connect(mapStateToProps)(Restaurant));
+
+const styles = {
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  }
+};

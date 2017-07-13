@@ -4,5 +4,5 @@ import router from 'router/router';
 
 ReactDOM.render(router, document.getElementById('app'));
 
-import 'react-table/react-table.css';
-import 'styles/main.scss';
+import 'styles/main.css';
+import 'styles/font.css';

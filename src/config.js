@@ -14,6 +14,9 @@ export default {
     },
     upload: {
       endpoint: 'upload'
+    },
+    servingLocation: {
+      endpoint: 'serving-location'
     }
   }
 };

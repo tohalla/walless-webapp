@@ -1,16 +1,17 @@
 import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import Select from 'react-select';
 import Cookie from 'js-cookie';
 import PropTypes from 'prop-types';
-import {set, get, equals} from 'lodash/fp';
+import {set, get, equals, pick} from 'lodash/fp';
+import Radium from 'radium';
 
+import Form from 'components/Form.component';
+import Select from 'components/Select.component';
 import config from 'config';
 import SelectItems from 'components/SelectItems.component';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Input from 'components/Input.component';
-import Button from 'components/Button.component';
 import {
   createRestaurant,
   updateRestaurant,
@@ -35,6 +36,7 @@ const mapStateToProps = state => ({
   t: state.util.translation.t
 });
 
+@Radium
 class RestaurantForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -45,6 +47,10 @@ class RestaurantForm extends React.Component {
     restaurant: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number
+    ]),
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
     ])
   };
   constructor(props) {
@@ -82,8 +88,7 @@ class RestaurantForm extends React.Component {
     const {value} = event.target;
     this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = async(e) => {
-    e.preventDefault();
+  handleSubmit = async() => {
     const {
       createRestaurant,
       updateRestaurant,
@@ -100,17 +105,18 @@ class RestaurantForm extends React.Component {
     const {
       newImages = [],
       selectedFiles,
-      activeLanguage, // eslint-disable-line
       information,
-      address = {},
-      ...restaurantOptions
+      address = {}
     } = this.state;
     try {
       const addressId = !get('placeId')(address) ? null
         : get(['address', 'placeId'])(originalRestaurant) === address.placeId ?
           get(['address', 'id'])(originalRestaurant)
         : get(['data', 'createAddress', 'address', 'id'])(await createAddress(address));
-      const finalRestaurant = Object.assign({}, restaurantOptions,
+      const finalRestaurant = Object.assign({},
+        pick([
+          'currency'
+        ])(this.state),
         originalRestaurant.id ? {id: originalRestaurant.id} : null,
         {createdBy: account.id, address: addressId}
       );
@@ -176,18 +182,15 @@ class RestaurantForm extends React.Component {
   handleDrop = accepted => {
     this.setState({newImages: this.state.newImages.concat(accepted)});
   };
-  handleCancel = event => {
-    event.preventDefault();
-    this.props.onCancel();
-  };
   render() {
     const {
       t,
-      onCancel,
       languages = [],
       images,
       restaurant,
-      currencies = []
+      onCancel,
+      currencies = [],
+      style
     } = this.props;
     const {
       activeLanguage,
@@ -195,7 +198,7 @@ class RestaurantForm extends React.Component {
       newImages = []
     } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onCancel={onCancel} onSubmit={this.handleSubmit} style={style}>
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}
@@ -205,19 +208,15 @@ class RestaurantForm extends React.Component {
                 content: (
                   <div>
                     <Input
-                        className="block"
                         label={this.props.t('restaurant.name')}
                         onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                        type="text"
                         value={get(['information', value.locale, 'name'])(this.state) || ''}
                     />
                     <Input
                         Input={TextArea}
-                        className="block"
                         label={this.props.t('restaurant.description')}
                         onChange={this.handleInputChange(['information', value.locale, 'description'])}
                         rows={3}
-                        type="text"
                         value={get(['information', value.locale, 'description'])(this.state) || ''}
                     />
                   </div>
@@ -225,70 +224,54 @@ class RestaurantForm extends React.Component {
               }
             }), {})}
         />
-        <div className="container container--padded">
-          <div className="container__row">
-            <ItemsWithLabels
-                items={[
-                  {
-                    label: t('currency'),
-                    item: (
-                      <Select
-                          autoBlur
-                          className="Select input--medium"
-                          clearable={false}
-                          id="currency"
-                          onChange={this.handleCurrencyChange}
-                          options={
-                            currencies.map(value => ({
-                              value: value.code,
-                              label: `${value.code} (${value.symbol}) - ${value.name}`
-                            }))
-                          }
-                          value={this.state.currency}
-                      />
-                    )
-                  }, {
-                    label: t('restaurant.images'),
-                    item: (
-                      <SelectItems
-                          dropzone={{
-                            items: newImages,
-                            onDelete: this.handleDropzoneDelete,
-                            onDrop: this.handleDrop
-                          }}
-                          select={{
-                            items: images,
-                            selected: selectedFiles,
-                            onToggleSelect: this.toggleImageSelect
-                          }}
-                      />
-                    )
-                  }, {
-                    label: t('restaurant.address'),
-                    item: (
-                      <LocationInput
-                          onChange={this.handleLocationChange}
-                          placeholder={t('restaurant.placeholder.address')}
-                          value={get(['address', 'placeId'])(restaurant)}
-                      />
-                    )
-                  }
-                ]}
-            />
-          </div>
-        </div>
-        <div>
-          <Button colored onClick={this.handleSubmit} raised type="submit">
-            {t('submit')}
-          </Button>
-          {typeof onCancel === 'function' ?
-            <Button accent onClick={this.handleCancel} raised type="reset">
-              {t('cancel')}
-            </Button>
-            : null
-          }
-        </div>
-      </form>
+        <ItemsWithLabels
+            items={[
+              {
+                label: t('currency'),
+                item: (
+                  <Select
+                      autoBlur
+                      clearable={false}
+                      id="currency"
+                      onChange={this.handleCurrencyChange}
+                      options={
+                        currencies.map(value => ({
+                          value: value.code,
+                          label: `${value.code} (${value.symbol}) - ${value.name}`
+                        }))
+                      }
+                      value={this.state.currency}
+                  />
+                )
+              }, {
+                label: t('restaurant.images'),
+                item: (
+                  <SelectItems
+                      dropzone={{
+                        items: newImages,
+                        onDelete: this.handleDropzoneDelete,
+                        onDrop: this.handleDrop
+                      }}
+                      select={{
+                        items: images,
+                        selected: selectedFiles,
+                        onToggleSelect: this.toggleImageSelect
+                      }}
+                  />
+                )
+              }, {
+                label: t('restaurant.address'),
+                item: (
+                  <LocationInput
+                      onChange={this.handleLocationChange}
+                      placeholder={t('restaurant.placeholder.address')}
+                      value={get(['address', 'placeId'])(restaurant)}
+                  />
+                )
+              }
+            ]}
+        />
+      </Form>
     );
   }
 }
@@ -306,3 +289,7 @@ export default compose(
   updateRestaurantImages,
   createAddress
 )(RestaurantForm);
+
+const styles = {
+
+};

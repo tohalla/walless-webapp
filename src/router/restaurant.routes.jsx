@@ -7,8 +7,6 @@ import {
 import routeParamWrapper from 'util/routeParamWrapper';
 import {requireAuthentication} from 'util/auth';
 import RestaurantPage from 'pages/Restaurant.component';
-import Menu from 'restaurant/menu/Menu.component';
-import MenuItem from 'restaurant/menu-item/MenuItem.component';
 import Menus from 'restaurant/menu/Menus.component';
 import Orders from 'restaurant/order/Orders.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
@@ -30,23 +28,9 @@ export default (
     />
     <Route path="menus">
       <IndexRoute component={Menus} />
-      <Route
-          component={routeParamWrapper(Menu, [{
-            key: 'menu',
-            transform: value => Number(value)
-          }], {expand: true})}
-          path=":menu"
-      />
     </Route>
     <Route path="menuitems">
       <IndexRoute component={MenuItems} />
-      <Route
-          component={routeParamWrapper(MenuItem, [{
-            key: 'menuItem',
-            transform: value => Number(value)
-          }], {expand: true})}
-          path=":menuItem"
-      />
     </Route>
     <Route path="orders">
       <IndexRoute component={Orders} />

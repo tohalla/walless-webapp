@@ -2,15 +2,21 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
+import {get} from 'lodash/fp';
 
 import MenuForm from 'restaurant/menu/MenuForm.component';
 import {getMenusByRestaurant} from 'graphql/restaurant/restaurant.queries';
-import Menu from 'restaurant/menu/Menu.component';
-import ListItems from 'components/ListItems.component';
-import {isLoading} from 'util/shouldComponentUpdate';
+import Button from 'components/Button.component';
+import Table from 'components/Table.component';
+import WithActions from 'components/WithActions.component';
+import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
+const mapStateToProps = state => ({
+  language: state.util.translation.language,
+  t: state.util.translation.t
+});
 
+@loadable()
 class Menus extends React.Component {
   static PropTypes = {
     restaurant: PropTypes.object.isRequired,
@@ -30,35 +36,17 @@ class Menus extends React.Component {
       action: props.action
     };
   }
-  shouldComponentUpdate = newProps => !isLoading(newProps);
-  handleActionChange = action => event => {
-    this.setState({action});
-  };
+  handleActionChange = action => this.setState({action});
+  handleActionSelect = action => () => this.handleActionChange(action);
   handleMenuSubmit = () => {
     this.setState({action: null});
     this.props.getMenusByRestaurant.refetch();
   };
-  renderMenu = (menu, props) => (
-    <Menu
-        actions={[
-          {
-            label: this.props.t('edit'),
-            onClick: this.handleActionChange({
-              key: 'edit',
-              menu
-            })
-          }
-        ]}
-        menu={menu}
-        {...props}
-    />
-  );
   render() {
     const {
       menus,
       restaurant,
-      selectedItems,
-      plain,
+      language,
       t
     } = this.props;
     const {action} = this.state;
@@ -69,7 +57,7 @@ class Menus extends React.Component {
         hideItems: true,
         item: (
           <MenuForm
-              onCancel={this.handleActionChange()}
+              onCancel={this.handleActionChange}
               onSubmit={this.handleMenuSubmit}
               restaurant={restaurant}
           />
@@ -82,7 +70,7 @@ class Menus extends React.Component {
         item: (
           <MenuForm
               menu={action ? action.menu : null}
-              onCancel={this.handleActionChange()}
+              onCancel={this.handleActionChange}
               onSubmit={this.handleMenuSubmit}
               restaurant={restaurant}
           />
@@ -90,15 +78,41 @@ class Menus extends React.Component {
       }
     };
     return (
-      <ListItems
-          action={action ? action.key : null}
+      <WithActions
+          action={action ? action.key : undefined}
           actions={actions}
-          containerClass={plain ? 'container' : 'container container--padded container--distinct'}
-          items={menus}
           onActionChange={this.handleActionChange}
-          renderItem={this.renderMenu}
-          selectedItems={selectedItems}
-      />
+      >
+        {menus.length ?
+          <Table
+              columns={[
+                {
+                  Header: t('restaurant.menus.actions'),
+                  id: 'actions',
+                  accessor: menu => (
+                    <Button onClick={this.handleActionSelect({key: 'edit', menu})} plain>
+                      {t('restaurant.menus.action.edit')}
+                    </Button>
+                  ),
+                  maxWidth: 100,
+                  resizable: false,
+                  sortable: false
+                },
+                {
+                  Header: t('restaurant.menus.name'),
+                  accessor: menu => get(['information', language, 'name'])(menu),
+                  id: 'name'
+                },
+                {
+                  Header: t('restaurant.menus.description'),
+                  accessor: menu => get(['information', language, 'description'])(menu),
+                  id: 'description'
+                }
+              ]}
+              data={menus}
+          />
+        : ''}
+      </WithActions>
     );
   }
 }

@@ -1,14 +1,20 @@
 import React from 'react';
-import Dropzone from 'react-dropzone';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
+import ReactDropzone from 'react-dropzone';
+import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 
+const Dropzone = new Radium(ReactDropzone);
+
+import {normal, content} from 'styles/spacing';
+import colors from 'styles/colors';
 import Button from 'components/Button.component';
 import Deletable from 'components/Deletable.component';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
+@Radium
 class SelectImages extends React.Component {
   static propTypes = {
     select: PropTypes.shape({
@@ -45,64 +51,53 @@ class SelectImages extends React.Component {
     } = this.props;
     const {action} = this.state;
     const items = selectItems.map((item, index) => (
-      <div className="image-preview" key={index}>
-        <img
-            onClick={this.handleToggleSelect(item)}
-            src={item.src || item.uri}
-            style={{opacity: selected.has(item.id) ? 1 : .6}}
-        />
-      </div>
+      <img
+          key={index}
+          onClick={this.handleToggleSelect(item)}
+          src={item.src || item.uri}
+          style={[styles.preview, {opacity: selected.has(item.id) ? 1 : .6}]}
+      />
     ));
     return (action === 'selectImages' ? (
-        <div className="container">
-          <div className="container container--padded">
-            <Button onClick={this.handleResetAction} raised type="button">
-              {'placeholder'}
-            </Button>
-          </div>
-          <div className="container">
-            <div className="container container--padded ">
-              <Dropzone
-                  accept="image/*"
-                  className="dropzone"
-                  onDrop={onDrop}
+        <div style={styles.container}>
+          <Dropzone
+              accept="image/*"
+              onDrop={onDrop}
+              style={styles.dropzone}
+          >
+            {dropzoneItems.length ?
+              dropzoneItems.map((item, index) => (
+              <Deletable
+                  key={index}
+                  onDelete={onDelete(item)}
               >
-                <div className="container container--row container--padded">
-                  {dropzoneItems.length ?
-                    dropzoneItems.map((item, index) => (
-                    <Deletable
-                        key={index}
-                        onDelete={onDelete(item)}
-                    >
-                      <div className="image-preview">
-                        <img className="image-preview" src={item.preview}/>
-                      </div>
-                    </Deletable>
-                  )) : <div>{t('dropImages')}</div>}
-                </div>
-              </Dropzone>
-            </div>
-            <div className="container container--row">
-              {items}
-            </div>
+                <img src={item.preview} style={styles.preview} />
+              </Deletable>
+            )) : <div>{t('dropImages')}</div>}
+          </Dropzone>
+          <div style={styles.items}>
+            {items}
+          </div>
+          <div style={styles.actions}>
+            <Button accent onClick={this.handleResetAction}>
+              {t('cancel')}
+            </Button>
           </div>
         </div>
       ) : (
-        <div className="container">
-          <div className="container container--row">
+        <div style={styles.container}>
+          <div style={styles.items}>
             {selectItems.filter(item => selected.has(item.id)).map((item, index) => (
               <Deletable
                   key={index}
                   onDelete={this.handleToggleSelect(item)}
               >
-                <div className="image-preview">
-                  <img src={item.src || item.uri} />
-                </div>
+                <img src={item.src || item.uri} style={styles.preview} />
               </Deletable>
             ))}
           </div>
-          <div className="container container--padded">
-            <Button onClick={this.setAction('selectImages')} type="button">
+          <div style={styles.actions}>
+            <Button onClick={this.setAction('selectImages')}>
               {t('selectImages')}
             </Button>
           </div>
@@ -113,3 +108,40 @@ class SelectImages extends React.Component {
 }
 
 export default connect(mapStateToProps, {})(SelectImages);
+
+const styles = {
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  },
+  preview: {
+    maxWidth: '150px',
+    maxHeight: '150px',
+    width: 'auto',
+    height: 'auto'
+  },
+  dropzone: {
+    display: 'flex',
+    color: colors.lightGray,
+    border: `1px solid ${colors.border}`,
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: normal,
+    marginBottom: content
+  },
+  items: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center'
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row'
+  }
+};

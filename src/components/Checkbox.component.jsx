@@ -1,56 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 
-import mdl from 'components/mdl';
+import colors from 'styles/colors';
 
-class CheckBox extends React.Component {
+@Radium
+export default class Checkbox extends React.Component {
   static propTypes = {
-    id: PropTypes.string.isRequired,
     checked: PropTypes.bool,
-    inputClass: PropTypes.string,
-    label: PropTypes.oneOfType([
-      PropTypes.node,
-      PropTypes.string
-    ]),
-    ripple: PropTypes.bool,
-    onChange: PropTypes.func,
-    value: PropTypes.any
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func.isRequired
+  };
+  static defaultProps = {
+    checked: false,
+    disabled: false
+  };
+  handleClick = event => {
+    event.stopPropagation();
+    this.props.onClick(event);
   };
   render() {
-    const {
-      ripple,
-      id,
-      label,
-      inputClass,
-      checked,
-      onChange,
-      value,
-      ...props
-    } = this.props;
+    const {checked, disabled} = this.props;
     return (
-      <label
-          className={
-            'mdl-checkbox mdl-js-checkbox' +
-            (ripple ? ' mdl-js-ripple-effect' : '')
-          }
-          htmlFor={id}
-          {...props}
+      <i
+          className="material-icons"
+          onClick={this.handleClick}
+          style={[
+            styles.checkbox,
+            disabled ? styles.disabled
+            : checked ? {color: colors.default}
+            : {color: colors.gray}
+          ]}
       >
-        <input
-            checked={checked}
-            className={'mdl-checkbox__input ' + (inputClass || '')}
-            id={id}
-            onChange={onChange}
-            type="checkbox"
-            value={value}
-        />
-        {typeof label === 'string' ?
-          <span className="mdl-checkbox__label">{label}</span> :
-          label
-        }
-      </label>
+        {checked ? 'check_box' : 'check_box_outline_blank'}
+      </i>
     );
-  }
-}
+  };
+};
 
-export default mdl(CheckBox);
+const styles = {
+  checkbox: {
+    fontSize: '20px',
+    userSelect: 'none',
+    cursor: 'default'
+  },
+  disabled: {
+    color: colors.lightGray
+  }
+};

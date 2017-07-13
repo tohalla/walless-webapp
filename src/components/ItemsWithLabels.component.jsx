@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 
+import {content, normal} from 'styles/spacing';
+
+@Radium
 export default class ItemsWithLabels extends React.Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([
@@ -11,21 +15,49 @@ export default class ItemsWithLabels extends React.Component {
       PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.number])
     ]))
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      headerWidth: .6 * props.items.reduce((length, item) =>
+        item && item.label && item.label.length > length ?
+          item.label.length : length,
+        0
+      ) + 'rem'
+    };
+  }
   render() {
     const {items} = this.props;
     return (
-      <table>
-        <tbody>
-          {items.filter(item => item).map((item, index) =>
-            item.label ? (
-              <tr key={index}>
-                <th>{item.label}</th>
-                <td>{item.item}</td>
-              </tr>
-              ) : <tr key={index}><td colSpan={2}>{item}</td></tr>
-          )}
-        </tbody>
-      </table>
+      <div style={styles.container}>
+        {items.filter(item => item).map((item, index) => (
+          <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
+            {item.label ?
+              <div style={[].concat(styles.header, {flexBasis: this.state.headerWidth})}>
+                {item.label}
+              </div> : null
+            }
+            {item.item}
+          </div>
+        ))}
+      </div>
     );
   }
 }
+
+const styles = {
+  container: {
+    flexShrink: 0,
+    display: 'flex',
+    alignItems: 'stretch',
+    flexDirection: 'column'
+  },
+  header: {
+    marginRight: normal
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  }
+};

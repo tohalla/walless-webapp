@@ -6,7 +6,7 @@ import {reducer as form} from 'redux-form';
 import apolloClient from 'apolloClient';
 import DevTools from 'DevTools';
 import notifications from 'notifications/notification';
-import translation, {fetchLanguages} from 'util/translation';
+import translation, {fetchLanguages, setLanguage} from 'util/translation';
 import location, {updateLocation} from 'util/location';
 
 const util = combineReducers({
@@ -30,7 +30,12 @@ const store = createStore(
   )
 );
 
-store.dispatch(fetchLanguages);
-store.dispatch(updateLocation);
+(async() => {
+  await Promise.all([
+    store.dispatch(fetchLanguages),
+    store.dispatch(updateLocation)
+  ]);
+  store.dispatch(setLanguage('en'));
+})();
 
 export default store;

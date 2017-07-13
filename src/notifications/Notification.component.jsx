@@ -1,34 +1,30 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {connect} from 'react-redux';
 
 import Button from 'components/Button.component';
 import {deleteNotification} from 'notifications/notification';
+import colors from 'styles/colors';
+import {normal} from 'styles/spacing';
 
+@Radium
 class Notification extends React.Component {
   static propTypes = {
     notification: PropTypes.object.isRequired
   };
-  handleDelete = e => {
-    e.preventDefault();
-    const {deleteNotification, notification} = this.props;
-    deleteNotification(notification);
-  };
+  handleDelete = () => this.props.deleteNotification(this.props.notification);
   render() {
     const {notification} = this.props;
     return (
-      <div className="notification">
-        <div className={`notification__indicator notification__indicator--${notification.get('type') || 'neutral'}`} />
-        <div className="notification__content">
+      <div style={styles.container}>
+        <div style={[styles.indicator, styles[notification.get('type') || 'neutral']]} />
+        <div style={styles.content}>
           {notification.get('content')}
         </div>
-        <div className="notification__actions">
-          <Button
-              onClick={this.handleDelete}
-              plain
-              type="button"
-          >
-            <i className="material-icons mdi mdi-18px">{'close'}</i>
+        <div style={styles.actions}>
+          <Button onClick={this.handleDelete} plain>
+            <i className="material-icons">{'close'}</i>
           </Button>
         </div>
       </div>
@@ -39,3 +35,29 @@ class Notification extends React.Component {
 export default connect(
   null, {deleteNotification}
 )(Notification);
+
+const styles = {
+  container: {
+    flex: '0 0 auto',
+    backgroundColor: colors.background,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '1px',
+    border: `1px solid ${colors.border}`
+  },
+  indicator: {
+    flex: '0 0 5px',
+    alignSelf: 'stretch'
+  },
+  content: {
+    padding: normal,
+    flex: '1 0 auto'
+  },
+  success: {backgroundColor: colors.success},
+  danger: {backgroundColor: colors.danger},
+  alert: {backgroundColor: colors.alert},
+  neutral: {display: 'none'},
+  actions: {flex: '0 0 auto', padding: `0 ${normal}`}
+};

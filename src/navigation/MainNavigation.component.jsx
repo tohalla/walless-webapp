@@ -1,9 +1,16 @@
 import React from 'react';
-import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 
+import Logo from 'components/Logo.component';
+import Navigation from 'navigation/Navigation.component';
+import NavigationItem from 'navigation/NavigationItem.component';
+import colors from 'styles/colors';
+import shadow from 'styles/shadow';
+import {normal} from 'styles/spacing';
+import UserNavigation from 'navigation/UserNavigation.component';
 import {getActiveAccount} from 'graphql/account/account.queries';
 
 const menuItems = [
@@ -36,6 +43,7 @@ const mapStateToProps = state => ({
   routing: state.util.routing
 });
 
+@Radium
 class MainNavigation extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired
@@ -44,27 +52,28 @@ class MainNavigation extends React.Component {
     const {router: {location}} = this.context;
     const {t, account} = this.props;
     return (
-      <nav className="mdl-navigation main-navigation">
-        {
-          menuItems
+      <div style={[styles.container, shadow.small]}>
+        <Logo />
+        <Navigation style={styles.navigation}>
+          {menuItems
             .filter(item => !item.requireAuthentication || account)
             .map((item, index) => (
-              <Link
-                  className={
-                    'main-navigation__link mdl-navigation__link' + (
-                      location.pathname.indexOf(item.path) === 0 &&
-                      (item.path !== '/' || location.pathname === '/') ?
-                        ' main-navigation__link--active' : ''
-                    )
+              <NavigationItem
+                  active={
+                    location.pathname.indexOf(item.path) === 0 &&
+                    (item.path !== '/' || location.pathname === '/')
                   }
+                  activeStyle={styles.itemActive}
                   key={index}
-                  to={item.path}
+                  path={item.path}
+                  style={styles.item}
               >
                 {t(item.translationKey)}
-              </Link>
-          ))
-        }
-      </nav>
+              </NavigationItem>
+          ))}
+        </Navigation>
+        <UserNavigation />
+      </div>
     );
   }
 }
@@ -72,3 +81,28 @@ class MainNavigation extends React.Component {
 export default compose(
   getActiveAccount
 )(connect(mapStateToProps, {})(MainNavigation));
+
+const styles = {
+  container: {
+    display: 'flex',
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    padding: `0 ${normal}`,
+    backgroundColor: colors.headerBackground,
+    color: colors.headerForeground
+  },
+  navigation: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: normal
+  },
+  item: {
+    color: colors.headerForeground,
+    textDecoration: 'none',
+    padding: normal
+  },
+  itemActive: {
+    textDecoration: 'underline'
+  }
+};

@@ -1,6 +1,5 @@
 /* eslint-disable import/no-commonjs */
 const webpack = require('webpack');
-const rucksack = require('rucksack-css');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
@@ -15,12 +14,14 @@ module.exports = {
     vendor: [
       'material-design-icons/iconfont/material-icons.css',
       'normalize.css/normalize.css',
-      'material-design-lite/material',
       'react-select/dist/react-select.css'
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: {
+      radium: path.join(__dirname, 'node_modules', 'radium')
+    }
   },
   output: {
     path: path.resolve(__dirname, 'dist', 'assets'),
@@ -35,40 +36,31 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.s?css$/,
+        test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          use: [
-            'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: rucksack({
-                  autoprefixer: true
-                })
-              }
-            },
-            'sass-loader'
-          ]
+          use: 'css-loader'
         })
       },
       {
-        test: /\.(png|svg)$/,
+        test: /\.png$/,
         loader: 'url-loader',
         options: {
           limit: 100000
         }
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
+        test: /\.(ttf|eot|woff|woff2)?(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
-          minetype: 'application/font-woff'
+          limit: 50000,
+          name: 'fonts/[name].[ext]',
+          mimetype: 'application/font-woff'
         }
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
-        loader: 'file-loader'
+        test: /\.svg$/,
+        exclude: /node_modules/,
+        loader: 'svg-react-loader'
       }
     ]
   },

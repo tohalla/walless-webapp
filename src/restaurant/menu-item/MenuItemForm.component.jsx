@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import {reduce, set, get, equals} from 'lodash/fp';
-import PropTypes from 'prop-types';
-import Select from 'react-select';
+import {reduce, set, get, pick, equals} from 'lodash/fp';
 
+import Select from 'components/Select.component';
 import config from 'config';
 import Input from 'components/Input.component';
-import Button from 'components/Button.component';
+import Form from 'components/Form.component';
 import SelectItems from 'components/SelectItems.component';
 import {
   createMenuItem,
@@ -26,7 +27,7 @@ import {getImagesForRestaurant} from 'graphql/restaurant/restaurant.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
-import {isLoading} from 'util/shouldComponentUpdate';
+import loadable from 'decorators/loadable';
 
 const TextArea = props => <textarea {...props} />;
 
@@ -35,6 +36,8 @@ const mapStateToProps = state => ({
   languages: state.util.translation.languages
 });
 
+@loadable()
+@Radium
 class MenuItemForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -60,7 +63,6 @@ class MenuItemForm extends React.Component {
       this.resetForm(newProps);
     }
   }
-  shouldComponentUpdate = newProps => !isLoading(newProps);
   resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       menuItem: {
@@ -82,10 +84,9 @@ class MenuItemForm extends React.Component {
       type: get(['id'])(menuItemType),
       category: get(['id'])(menuItemCategory)
     });
-  }
-  handleInputChange = (path, getValue = item => item.target.value) => item => {
-    this.setState(set(path)(getValue(item))(this.state));
   };
+  handleInputChange = (path, getValue = item => item.target.value) => item =>
+    this.setState(set(path)(getValue(item))(this.state));
   handleSubmit = async(e) => {
     e.preventDefault();
     const {
@@ -98,16 +99,9 @@ class MenuItemForm extends React.Component {
       restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
-      account,
       menuItem: originalMenuItem = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
     } = this.props;
-    const {
-      newImages,
-      selectedFiles,
-      information,
-      activeLanguage, // eslint-disable-line
-      ...menuItemOptions
-    } = this.state;
+    const {newImages, selectedFiles, information} = this.state;
     const files = Array.from(selectedFiles);
     try {
       const formData = new FormData();
@@ -128,13 +122,10 @@ class MenuItemForm extends React.Component {
           }
         }
       )).json()) : files;
-      const finalMenuItem = Object.assign({}, menuItemOptions,
+      const finalMenuItem = Object.assign(
+        pick(['price', 'type', 'category'])(this.state),
         originalMenuItem ? {id: originalMenuItem.id} : null,
-        {
-          restaurant,
-          currency,
-          createdBy: account.id
-        }
+        {restaurant, currency}
       );
       const {data} = await (originalMenuItem && originalMenuItem.id ?
         updateMenuItem(finalMenuItem) : createMenuItem(finalMenuItem)
@@ -157,11 +148,9 @@ class MenuItemForm extends React.Component {
       throw new Error(error);
     };
   };
-  handleDropzoneDelete = image => () => {
-    this.setState({
-      newImages: this.state.newImages.filter(i => !equals(i)(image))
-    });
-  };
+  handleDropzoneDelete = image => () => this.setState({
+    newImages: this.state.newImages.filter(i => !equals(i)(image))
+  });
   toggleImageSelect = image => {
     const selectedFiles = this.state.selectedFiles;
     if (!selectedFiles.delete(image.id)) {
@@ -169,13 +158,9 @@ class MenuItemForm extends React.Component {
     }
     this.setState({selectedFiles});
   };
-  handleDrop = accepted => {
+  handleDrop = accepted =>
     this.setState({newImages: this.state.newImages.concat(accepted)});
-  };
-  handleCancel = e => {
-    e.preventDefault();
-    this.props.onCancel();
-  };
+  handleCancel = event => this.props.onCancel();
   handleTabChange = tab => this.setState({activeLanguage: tab});
   render() {
     const {
@@ -201,14 +186,12 @@ class MenuItemForm extends React.Component {
         content: (
           <div>
             <Input
-                className="block"
                 label={t('restaurant.menuItems.name')}
                 onChange={this.handleInputChange(['information', value.locale, 'name'])}
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={TextArea}
-                className="block"
                 label={t('restaurant.menuItems.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}
                 rows={3}
@@ -219,95 +202,79 @@ class MenuItemForm extends React.Component {
       }
     }), {})(languages);
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}
             tabs={tabs}
         />
-        <div className="container container--padded">
-          <ItemsWithLabels
-              items={[
-                {
-                  label: t('restaurant.menuItems.price'),
-                  item: (
-                    <div>
-                      <Input
-                          className="input--small"
-                          label={t('restaurant.menuItems.price')}
-                          onChange={this.handleInputChange('price')}
-                          pattern="^\d+(\.\d{0,2})?$|^$"
-                          required
-                          value={price}
-                      />
-                      {get(['currency', 'symbol'])(restaurant)}
-                    </div>
-                  )
-                },
-                {
-                  label: t('restaurant.menuItems.type'),
-                  item: (
-                    <Select
-                        autoBlur
-                        className="Select input--medium"
-                        clearable={false}
-                        id="cateogry"
-                        onChange={this.handleInputChange('type', item => item.value)}
-                        options={
-                          menuItemTypes.map(type => ({
-                            value: type.id,
-                            label: type.name
-                          }))
-                        }
-                        value={type}
-                    />
-                  )
-                },
-                categories.length ? {
-                  label: t('restaurant.menuItems.category'),
-                  item: (
-                    <Select
-                        autoBlur
-                        className="Select input--medium"
-                        clearable={false}
-                        id="cateogry"
-                        onChange={this.handleInputChange('category', item => item.value)}
-                        options={categories.map(category => ({
-                          value: category.id,
-                          label: category.name
-                        }))}
-                        value={category}
-                    />
-                  )
-                } : null, {
-                  label: t('restaurant.menuItems.images'),
-                  item: (
-                    <SelectItems
-                        dropzone={{
-                          items: newImages,
-                          onDelete: this.handleDropzoneDelete,
-                          onDrop: this.handleDrop
-                        }}
-                        select={{
-                          items: images,
-                          selected: selectedFiles,
-                          onToggleSelect: this.toggleImageSelect
-                        }}
-                    />
-                  )
-                }
-            ]}
-          />
-        </div>
-        <div className="container--row">
-          <Button colored onClick={this.handleSubmit} raised type="submit">
-            {t('submit')}
-          </Button>
-          <Button accent onClick={this.handleCancel} raised type="reset">
-            {t('cancel')}
-          </Button>
-        </div>
-      </form>
+        <ItemsWithLabels
+            items={[
+              {
+                item: (
+                  <Input
+                      afterInput={get(['currency', 'symbol'])(restaurant)}
+                      label={t('restaurant.menuItems.price')}
+                      onChange={this.handleInputChange('price')}
+                      pattern="^\d+(\.\d{0,2})?$|^$"
+                      required
+                      value={price}
+                  />
+                )
+              },
+              {
+                label: t('restaurant.menuItems.type'),
+                item: (
+                  <Select
+                      autoBlur
+                      clearable={false}
+                      id="cateogry"
+                      onChange={this.handleInputChange('type', item => item.value)}
+                      options={
+                        menuItemTypes.map(type => ({
+                          value: type.id,
+                          label: type.name
+                        }))
+                      }
+                      value={type}
+                  />
+                )
+              },
+              categories.length ? {
+                label: t('restaurant.menuItems.category'),
+                item: (
+                  <Select
+                      autoBlur
+                      clearable={false}
+                      id="cateogry"
+                      onChange={this.handleInputChange('category', item => item.value)}
+                      options={categories.map(category => ({
+                        value: category.id,
+                        label: category.name
+                      }))}
+                      value={category}
+                  />
+                )
+              } : null, {
+                label: t('restaurant.menuItems.images'),
+                item: (
+                  <SelectItems
+                      dropzone={{
+                        items: newImages,
+                        onDelete: this.handleDropzoneDelete,
+                        onDrop: this.handleDrop
+                      }}
+                      select={{
+                        items: images,
+                        selected: selectedFiles,
+                        onToggleSelect: this.toggleImageSelect
+                      }}
+                  />
+                )
+              }
+          ]}
+        />
+      </Form>
     );
   }
 }

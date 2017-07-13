@@ -14,7 +14,7 @@ const SET_TRANSLATIONS = 'SET_TRANSLATIONS';
 const SET_LANGUAGES = 'SET_LANGUAGES';
 
 const initialState = {
- t: () => polyglot.t,
+ t: () => '',
  language: 'en'
 };
 

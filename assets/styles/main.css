@@ -1,0 +1,45 @@
+#app {
+  display: flex;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  outline: none;
+}
+
+h1 {
+    display: block;
+    font-size: 2em;
+    margin: 0.67em 0 0.67em 0;
+    font-weight: 900;
+}
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin: 0.67em 0 0.67em 0;
+    font-weight: 900;
+}
+h3 {
+    display: block;
+    font-size: 1.17em;
+    margin: 0.67em 0 0.67em 0;
+    font-weight: 900;
+}
+h4 {
+    display: block;
+    margin: 0.67em 0 0.67em 0;
+    font-weight: 900;
+}
+h5 {
+    display: block;
+    font-size: .83em;
+    margin: 0.67em 0 0.67em 0;
+    font-weight: 900;
+}
+h6 {
+    display: block;
+    font-size: .67em;
+    margin: 0.67em 0 0.67em 0;
+    font-weight: 900;
+}

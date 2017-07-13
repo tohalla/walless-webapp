@@ -1,17 +1,20 @@
 import React from 'react';
+import Radium from 'radium';
 import {connect} from 'react-redux';
 
+import {notificationsZIndex} from 'styles/zIndex';
 import Notification from 'notifications/Notification.Component';
 
 const mapStateToProps = state => ({
   notifications: state.notifications
 });
 
+@Radium
 class Notifications extends React.Component {
   render() {
     const {notifications} = this.props;
     return (
-      <div className="notifications__container">
+      <div style={styles.container}>
         {
           notifications.map((notification, index) =>
             <Notification key={index} notification={notification} />
@@ -25,3 +28,15 @@ class Notifications extends React.Component {
 export default connect(
   mapStateToProps, {}
 )(Notifications);
+
+const styles = {
+  container: {
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    display: 'flex',
+    zIndex: notificationsZIndex
+  }
+};

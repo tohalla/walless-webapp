@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
+import color from 'color';
 
+import {minimal, minor, normal, content} from 'styles/spacing';
+import colors from 'styles/colors';
+
+@Radium
 export default class Tabbed extends React.Component {
   static propTypes = {
     tabs: PropTypes.shape({tab: PropTypes.shape({
@@ -14,24 +20,58 @@ export default class Tabbed extends React.Component {
   render() {
     const {tabs, tab = Object.keys(tabs)[0]} = this.props;
     return (
-      <div className="tab-container">
-        <div className="tab-container__tabs">
+      <div style={styles.container}>
+        <div style={styles.tabs}>
           {Object.keys(tabs).map(key => (
             <div
-                className={`tab-container__tab${key === tab ? ' tab-container__tab--active' : ''}`}
                 key={key}
                 onClick={this.handleTabChange(key)}
+                style={[].concat(styles.tab, key === tab ? styles.tabActive : [])}
             >
               {tabs[key].label}
             </div>
           ))}
         </div>
-        <div className="tab-container__content">
+        <div style={styles.content}>
           {tabs[tab] && tabs[tab].content ?
             tabs[tab].content : null
           }
         </div>
       </div>
     );
+  }
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    alignSelf: 'stretch',
+    alignItems: 'stretch',
+    marginBottom: content
+  },
+  tabs: {
+    flex: '0 1 auto',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  tab: {
+    fontSize: '0.9rem',
+    margin: '0 1px',
+    padding: `${minimal} ${minor}`,
+    color: colors.foregroundDark,
+    background: color(colors.background).darken(.1).hex()
+  },
+  tabActive: {
+    background: colors.background,
+    textDecoration: 'underline'
+  },
+  content: {
+    padding: normal,
+    display: 'flex',
+    flexDirection: 'column',
+    border: `1px solid ${colors.border}`
   }
 };

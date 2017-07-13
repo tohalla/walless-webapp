@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {get} from 'lodash/fp';
 import {connect} from 'react-redux';
+import Radium from 'radium';
 
+import {major} from 'styles/spacing';
+import containers from 'styles/containers';
 import Button from 'components/Button.component';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t
 });
 
+@Radium
 class WithActions extends React.Component {
   static propTypes = {
     action: PropTypes.string,
@@ -20,7 +24,6 @@ class WithActions extends React.Component {
       item: PropTypes.node,
       onClick: PropTypes.func
     })}),
-    containerClass: PropTypes.string,
     defaultAction: PropTypes.string,
     hideActions: PropTypes.bool,
     forceDefaultAction: PropTypes.bool,
@@ -28,72 +31,88 @@ class WithActions extends React.Component {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
-    ]).isRequired
+    ]).isRequired,
+    plain: PropTypes.bool,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ])
   };
-  static defaultProps = {
-    containerClass: 'container container--padded container--distinct'
-  };
-  handleActionChange = ({key, action}) => event => {
+  handleActionChange = action => event => {
     if (event && typeof event.preventDefault === 'function') {
       event.preventDefault();
       event.stopPropagation();
     }
-    if (typeof action.onClick === 'function') {
-      action.onClick();
-    }
-    if (typeof this.props.onActionChange === 'function') {
-      this.props.onActionChange({key, action})(event);
-    }
+    return typeof get(['action', 'onClick'])(action) === 'function' ?
+      action.action.onClick() : this.props.onActionChange(action);
   }
   render() {
     const {
-      containerClass,
       actions,
       forceDefaultAction,
       t,
       action,
-      onActionChange,
-      hideActions
+      plain,
+      hideActions,
+      style,
+      children
     } = this.props;
     return (
-      <div className="container">
-        {action ? (
-            <div className={containerClass}>
+      <div style={[styles.container, style]}>
+        {
+          action ? (
+            <div
+                style={[
+                  containers.contentContainer,
+                  styles.actionContainer,
+                  plain ? styles.plain : {}
+                ]}
+            >
               {forceDefaultAction || actions[action].hideReturn ? null : (
-                <Button
-                    className="block"
-                    colored
-                    onClick={onActionChange()}
-                    type="button"
-                >
+                <Button onClick={this.handleActionChange()}>
                   {t('return')}
                 </Button>
               )}
               {actions[action].item}
             </div>
           )
-        : !hideActions && typeof onActionChange === 'function' && actions && Object.keys(actions).length && !action ?
-              <div className={containerClass}>
-                <div>
-                  {Object.keys(actions)
-                    .filter(key => !actions[key].hide)
-                    .map(key => (
-                      <Button
-                          colored
-                          key={key}
-                          onClick={this.handleActionChange({key, action: actions[key]})}
-                          type="button"
-                      >
-                        {actions[key].label}
-                      </Button>
-                    ))
-                  }
-                </div>
-              </div>
+          : !hideActions && actions && Object.keys(actions).length && !action ?
+            <div
+                style={[
+                  containers.contentContainer,
+                  styles.actionContainer,
+                  plain ? styles.plain : {}
+                ]}
+            >
+              {Object.keys(actions)
+                .filter(key => !actions[key].hide)
+                .map(key => (
+                  <Button
+                      disabled={actions[key].disabled}
+                      key={key}
+                      loading={actions[key].loading}
+                      onClick={this.handleActionChange({key, action: actions[key]})}
+                  >
+                    {actions[key].label}
+                  </Button>
+                ))
+              }
+            </div>
           : null
         }
-        {get([action, 'hideItems'])(actions) ? null :
-          <div className={containerClass}>{this.props.children}</div>
+        {
+          get([action, 'hideItems'])(actions) ||
+          !children ||
+          (Array.isArray(children) && !children.length) ?
+          null :
+          <div
+              style={[
+                containers.contentContainer,
+                plain ? styles.plain : {}
+              ]}
+          >
+            {children}
+          </div>
         }
       </div>
     );
@@ -101,3 +120,20 @@ class WithActions extends React.Component {
 };
 
 export default connect(mapStateToProps)(WithActions);
+
+
+const styles = {
+  actionContainer: {marginBottom: major, flexDirection: 'row', flexWrap: 'wrap'},
+  container: {
+    display: 'flex',
+    alignSelf: 'stretch',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  },
+  plain: {
+    backgroundColor: 'transparent',
+    border: 0,
+    boxShadow: 'none',
+    marginBottom: 0
+  }
+};

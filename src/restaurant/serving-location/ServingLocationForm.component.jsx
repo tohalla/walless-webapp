@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {equals} from 'lodash/fp';
 
 import Input from 'components/Input.component';
-import Button from 'components/Button.component';
+import Form from 'components/Form.component';
 import {
   createServingLocation,
   updateServingLocation
@@ -84,24 +84,14 @@ class ServingLocationForm extends React.Component {
     const {t} = this.props;
     const {name} = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
         <Input
-            className="block"
             id="name"
             label={t('restaurant.servingLocations.name')}
             onChange={this.handleInputChange}
-            type="text"
             value={name}
         />
-        <div>
-          <Button colored onClick={this.handleSubmit} raised type="submit">
-            {t('submit')}
-          </Button>
-          <Button accent onClick={this.handleCancel} raised type="reset">
-            {t('cancel')}
-          </Button>
-        </div>
-      </form>
+      </Form>
     );
   }
 }
