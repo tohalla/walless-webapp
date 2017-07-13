@@ -23,7 +23,7 @@ import {
   getMenuItem,
   getMenuItemTypes
 } from 'graphql/restaurant/menuItem.queries';
-import {getImagesForRestaurant} from 'graphql/restaurant/restaurant.queries';
+import {getImagesForRestaurant} from 'graphql/file.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';

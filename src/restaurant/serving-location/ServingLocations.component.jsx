@@ -13,7 +13,7 @@ import config from 'config';
 import WithActions from 'components/WithActions.component';
 import {
   getServingLocationsByRestaurant
-} from 'graphql/restaurant/restaurant.queries';
+} from 'graphql/restaurant/servingLocation.queries';
 import ServingLocationForm from
   'restaurant/serving-location/ServingLocationForm.component';
 import loadable from 'decorators/loadable';

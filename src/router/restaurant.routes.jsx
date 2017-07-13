@@ -8,6 +8,7 @@ import routeParamWrapper from 'util/routeParamWrapper';
 import {requireAuthentication} from 'util/auth';
 import RestaurantPage from 'pages/Restaurant.component';
 import Menus from 'restaurant/menu/Menus.component';
+import Dashboard from 'restaurant/dashboard/Dashboard.component';
 import Orders from 'restaurant/order/Orders.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import ServingLocations from 'restaurant/serving-location/ServingLocations.component';
@@ -38,6 +39,11 @@ export default (
     <Route path="servinglocations">
       <IndexRoute component={ServingLocations} />
     </Route>
-    <Route component={AccountManagement} path="users" />
+    <Route path="dashboard">
+      <IndexRoute component={Dashboard} />
+    </Route>
+    <Route path="users">
+      <IndexRoute component={AccountManagement} />
+    </Route>
   </Route>
 );

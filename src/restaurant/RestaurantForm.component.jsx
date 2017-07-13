@@ -21,10 +21,8 @@ import {
 } from 'graphql/restaurant/restaurant.mutations';
 import {getCurrencies} from 'graphql/misc.queries';
 import {createAddress} from 'graphql/misc.mutations';
-import {
-  getRestaurant,
-  getImagesForRestaurant
-} from 'graphql/restaurant/restaurant.queries';
+import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
+import {getImagesForRestaurant} from 'graphql/file.queries';
 import Tabbed from 'components/Tabbed.component';
 import LocationInput from 'components/LocationInput.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
@@ -290,6 +288,3 @@ export default compose(
   createAddress
 )(RestaurantForm);
 
-const styles = {
-
-};

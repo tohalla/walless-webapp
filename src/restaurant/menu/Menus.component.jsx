@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {get} from 'lodash/fp';
 
 import MenuForm from 'restaurant/menu/MenuForm.component';
-import {getMenusByRestaurant} from 'graphql/restaurant/restaurant.queries';
+import {getMenusByRestaurant} from 'graphql/restaurant/menu.queries';
 import Button from 'components/Button.component';
 import Table from 'components/Table.component';
 import WithActions from 'components/WithActions.component';

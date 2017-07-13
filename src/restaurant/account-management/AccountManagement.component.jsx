@@ -6,7 +6,7 @@ import Table from 'components/Table.component';
 import {
   getAccountsByRestaurant,
   getAccountRolesForRestaurant
-} from 'graphql/restaurant/restaurant.queries';
+} from 'graphql/account/account.queries';
 import loadable from 'decorators/loadable';
 
 const mapStateToProps = state => ({t: state.util.translation.t});

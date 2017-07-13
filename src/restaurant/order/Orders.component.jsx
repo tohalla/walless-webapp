@@ -7,7 +7,7 @@ import {uniqBy, get, set} from 'lodash/fp';
 
 import Table from 'components/Table.component';
 import Button from 'components/Button.component';
-import {getOrdersByRestaurant} from 'walless-graphql/restaurant/restaurant.queries';
+import {getOrdersByRestaurant} from 'walless-graphql/restaurant/order.queries';
 import loadable from 'decorators/loadable';
 import {updateOrder} from 'graphql/restaurant/order.mutations';
 import {normal} from 'styles/spacing';

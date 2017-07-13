@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
-import {getMenuItemsByRestaurant} from 'graphql/restaurant/restaurant.queries';
+import {getMenuItemsByRestaurant} from 'graphql/restaurant/menuItem.queries';
 import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
 import Table from 'components/Table.component';
 import Button from 'components/Button.component';
