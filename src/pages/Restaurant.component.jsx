@@ -183,11 +183,11 @@ const menuItems = [
   },
   {
     path: 'orders',
-    translationKey: 'restaurant.orders.orders'
+    translationKey: 'restaurant.order.orders'
   },
   {
     path: 'menuitems',
-    translationKey: 'restaurant.menuItems.menuItems'
+    translationKey: 'restaurant.menuItem.menuItems'
   },
   {
     path: 'users',
@@ -195,7 +195,7 @@ const menuItems = [
   },
   {
     path: 'servinglocations',
-    translationKey: 'restaurant.servingLocations.servingLocations'
+    translationKey: 'restaurant.servingLocation.servingLocations'
   },
   {
     path: 'dashboard',

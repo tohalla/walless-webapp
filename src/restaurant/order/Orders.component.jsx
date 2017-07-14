@@ -48,14 +48,14 @@ class Orders extends React.Component {
               show: false
             },
             {
-              Header: t('restaurant.menuItems.quantity'),
+              Header: t('restaurant.menuItem.quantity'),
               id: 'quantity',
               accessor: 'id',
               aggregate: values => values.length,
               width: 80
             },
             {
-              Header: t('restaurant.menuItems.name'),
+              Header: t('restaurant.menuItem.name'),
               id: 'name',
               accessor: data => get(['information', language, 'name'])(data),
               aggregate: ([value]) => value
@@ -76,47 +76,47 @@ class Orders extends React.Component {
           SubComponent={this.handleRenderMenuItems}
           columns={[
             {
-              Header: t('restaurant.orders.servingLocation'),
+              Header: t('restaurant.order.servingLocation'),
               id: 'servingLocation',
               accessor: data =>
                 data.servingLocation.name
             },
             {
-              Header: t('restaurant.orders.createdAt'),
+              Header: t('restaurant.order.createdAt'),
               id: 'createdAt',
               accessor: data => new Date(data.createdAt).toString()
             },
             {
-              Header: t('restaurant.orders.createdBy'),
+              Header: t('restaurant.order.createdBy'),
               id: 'createdBy',
               minWidth: 140,
               accessor: data => `${data.createdBy.firstName} ${data.createdBy.lastName}`
             },
             {
-              Header: t('restaurant.orders.acceptedAt'),
+              Header: t('restaurant.order.acceptedAt'),
               accessor: data => data.accepted ? new Date(data.accepted).toString() : (
                 <Button onClick={this.handleAcceptOrder(data)} plain>
-                  {t('restaurant.orders.accept')}
+                  {t('restaurant.order.accept')}
                 </Button>
               ),
               id: 'acceptedAt'
             },
             {
-              Header: t('restaurant.orders.paidAt'),
+              Header: t('restaurant.order.paidAt'),
               accessor: 'paid'
             },
             {
-              Header: t('restaurant.orders.completedAt'),
+              Header: t('restaurant.order.completedAt'),
               accessor: data => data.completed ?
                 new Date(data.completed).toString() : (
                   <Button onClick={this.handleCompleteOrder(data)} plain>
-                    {t('restaurant.orders.complete')}
+                    {t('restaurant.order.complete')}
                   </Button>
                 ),
               id: 'completed'
             },
             {
-              Header: t('restaurant.orders.items'),
+              Header: t('restaurant.order.items'),
               id: 'items',
               accessor: data => (data.items || []).length
             }

@@ -186,13 +186,13 @@ class MenuItemForm extends React.Component {
         content: (
           <div>
             <Input
-                label={t('restaurant.menuItems.name')}
+                label={t('restaurant.menuItem.name')}
                 onChange={this.handleInputChange(['information', value.locale, 'name'])}
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={TextArea}
-                label={t('restaurant.menuItems.description')}
+                label={t('restaurant.menuItem.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}
                 rows={3}
                 value={get(['information', value.locale, 'description'])(this.state) || ''}
@@ -214,7 +214,7 @@ class MenuItemForm extends React.Component {
                 item: (
                   <Input
                       afterInput={get(['currency', 'symbol'])(restaurant)}
-                      label={t('restaurant.menuItems.price')}
+                      label={t('restaurant.menuItem.price')}
                       onChange={this.handleInputChange('price')}
                       pattern="^\d+(\.\d{0,2})?$|^$"
                       required
@@ -223,7 +223,7 @@ class MenuItemForm extends React.Component {
                 )
               },
               {
-                label: t('restaurant.menuItems.type'),
+                label: t('restaurant.menuItem.type'),
                 item: (
                   <Select
                       autoBlur
@@ -241,7 +241,7 @@ class MenuItemForm extends React.Component {
                 )
               },
               categories.length ? {
-                label: t('restaurant.menuItems.category'),
+                label: t('restaurant.menuItem.category'),
                 item: (
                   <Select
                       autoBlur
@@ -256,7 +256,7 @@ class MenuItemForm extends React.Component {
                   />
                 )
               } : null, {
-                label: t('restaurant.menuItems.images'),
+                label: t('restaurant.menuItem.images'),
                 item: (
                   <SelectItems
                       dropzone={{

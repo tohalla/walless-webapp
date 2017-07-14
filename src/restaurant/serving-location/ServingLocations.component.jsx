@@ -102,7 +102,7 @@ class ServingLocations extends React.Component {
     const {action, selectedItems, downloadingQR} = this.state;
     const actions = {
       filter: {
-        label: t('restaurant.servingLocations.action.filter'),
+        label: t('restaurant.servingLocation.action.filter'),
         item: (
           <div />
         )
@@ -121,7 +121,7 @@ class ServingLocations extends React.Component {
         )
       },
       new: {
-        label: t('restaurant.servingLocations.action.create'),
+        label: t('restaurant.servingLocation.action.create'),
         hideReturn: true,
         hideItems: true,
         item: (
@@ -133,7 +133,7 @@ class ServingLocations extends React.Component {
         )
       },
       downloadQR: {
-        label: t('restaurant.servingLocations.action.downloadQR'),
+        label: t('restaurant.servingLocation.action.downloadQR'),
         onClick: this.handleDownloadQR,
         disabled: !size(selectedItems),
         loading: downloadingQR
@@ -149,11 +149,11 @@ class ServingLocations extends React.Component {
           <Table
               columns={[
                 {
-                  Header: t('restaurant.servingLocations.actions'),
+                  Header: t('restaurant.servingLocation.actions'),
                   id: 'actions',
                   accessor: servingLocation => (
                     <Button onClick={this.handleActionSelect({key: 'edit', servingLocation})} plain>
-                      {t('restaurant.servingLocations.action.edit')}
+                      {t('restaurant.servingLocation.action.edit')}
                     </Button>
                   ),
                   maxWidth: 100,
@@ -161,7 +161,7 @@ class ServingLocations extends React.Component {
                   resizable: false
                 },
                 {
-                  Header: t('restaurant.servingLocations.name'),
+                  Header: t('restaurant.servingLocation.name'),
                   accessor: 'name'
                 }
               ]}

@@ -87,7 +87,7 @@ class ServingLocationForm extends React.Component {
       <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
         <Input
             id="name"
-            label={t('restaurant.servingLocations.name')}
+            label={t('restaurant.servingLocation.name')}
             onChange={this.handleInputChange}
             value={name}
         />
