@@ -7,7 +7,6 @@ import {get} from 'lodash/fp';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
 import {getMenuItemsByRestaurant} from 'graphql/restaurant/menuItem.queries';
-import FilterMenuItems from 'restaurant/menu/FilterMenuItems.component';
 import Table from 'components/Table.component';
 import Button from 'components/Button.component';
 import WithActions from 'components/WithActions.component';
@@ -15,8 +14,7 @@ import loadable from 'decorators/loadable';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
-  language: state.util.translation.language,
-  filter: get(['form', 'menuItemFilter', 'values'])(state) || {}
+  language: state.util.translation.language
 });
 
 @loadable()
@@ -54,10 +52,7 @@ class MenuItems extends React.Component {
     this.setState({action: null});
     this.props.getMenuItemsByRestaurant.refetch();
   };
-  filterItems = item =>
-    !this.props.filter.name ||
-    get(['information', this.props.language, 'name'])(item).toLowerCase()
-      .indexOf(this.props.filter.name.toLowerCase()) > -1;
+  filterItems = item => true;
   render() {
     const {
       menuItems,
@@ -73,7 +68,7 @@ class MenuItems extends React.Component {
       filter: {
         label: t('restaurant.menuItem.action.filter'),
         item: (
-          <FilterMenuItems />
+          <div />
         )
       },
       edit: {

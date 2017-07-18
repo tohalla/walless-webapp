@@ -15,8 +15,7 @@ import colors from 'styles/colors';
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
-  language: state.util.translation.language,
-  filter: get(['form', 'orderFilter', 'values'])(state)
+  language: state.util.translation.language
 });
 
 @loadable()

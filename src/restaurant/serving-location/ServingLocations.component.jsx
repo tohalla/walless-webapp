@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import Cookie from 'js-cookie';
 import PropTypes from 'prop-types';
-import {hasIn, size} from 'lodash/fp';
+import {size} from 'lodash/fp';
 import {saveAs} from 'file-saver';
 
 import {addNotification} from 'notifications/notification';
@@ -19,9 +19,7 @@ import ServingLocationForm from
 import loadable from 'decorators/loadable';
 
 const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  filter: hasIn(['form', 'servingLocationFilter', 'values'])(state) ?
-    state.form.servingLocationFilter.values : {}
+  t: state.util.translation.t
 });
 
 @loadable()
@@ -48,9 +46,7 @@ class ServingLocations extends React.Component {
     this.setState({action: null});
     this.props.getServingLocationsByRestaurant.refetch();
   };
-  filterItems = item =>
-    !this.props.filter.name ||
-    item.name.toLowerCase().indexOf(this.props.filter.name.toLowerCase()) > -1;
+  filterItems = item => true;
   toggleSelect = item => {
     const selectedItems = new Set([...this.state.selectedItems]);
     if (selectedItems.has(item.id)) {

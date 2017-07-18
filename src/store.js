@@ -1,7 +1,6 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import {routerReducer} from 'react-router-redux';
-import {reducer as form} from 'redux-form';
 
 import apolloClient from 'apolloClient';
 import DevTools from 'DevTools';
@@ -19,8 +18,7 @@ const store = createStore(
   combineReducers({
     apollo: apolloClient.reducer(),
     notifications,
-    util,
-    form
+    util
   }),
   {},
   compose(
