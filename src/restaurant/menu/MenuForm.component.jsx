@@ -140,13 +140,13 @@ class MenuForm extends React.Component {
         content: (
           <div>
             <Input
-                label={t('restaurant.menus.name')}
+                label={t('restaurant.menu.name')}
                 onChange={this.handleInputChange(['information', value.locale, 'name'])}
                 value={get(['information', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={TextArea}
-                label={t('restaurant.menus.description')}
+                label={t('restaurant.menu.description')}
                 onChange={this.handleInputChange(['information', value.locale, 'description'])}
                 rows={3}
                 value={get(['information', value.locale, 'description'])(this.state) || ''}
@@ -177,7 +177,7 @@ class MenuForm extends React.Component {
          ) : (
           <div>
             <Button onClick={this.handleToggle('manageMenuItems')}>
-              {t('restaurant.menus.manageMenuItems')}
+              {t('restaurant.menu.manageMenuItems')}
             </Button>
           </div>
         )}

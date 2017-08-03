@@ -11,16 +11,13 @@ import Table from 'components/Table.component';
 import Button from 'components/Button.component';
 import config from 'config';
 import WithActions from 'components/WithActions.component';
-import {
-  getServingLocationsByRestaurant
-} from 'graphql/restaurant/servingLocation.queries';
+import {getServingLocationsByRestaurant} from
+  'graphql/restaurant/servingLocation.queries';
 import ServingLocationForm from
   'restaurant/serving-location/ServingLocationForm.component';
 import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t
-});
+const mapStateToProps = state => ({t: state.util.translation.t});
 
 @loadable()
 class ServingLocations extends React.Component {
@@ -174,6 +171,7 @@ class ServingLocations extends React.Component {
   }
 }
 
-export default compose(getServingLocationsByRestaurant)(
-  connect(mapStateToProps, {addNotification})(ServingLocations)
-);
+export default compose(
+  connect(mapStateToProps, {addNotification}),
+  getServingLocationsByRestaurant
+)(ServingLocations);

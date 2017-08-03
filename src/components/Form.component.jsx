@@ -18,7 +18,13 @@ class Form extends React.Component {
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
-    ])
+    ]),
+    submitText: PropTypes.string,
+    cancelText: PropTypes.string,
+    isValid: PropTypes.bool
+  };
+  static defaultProps = {
+    isValid: true
   };
   handleSubmit = event => {
     event.preventDefault();
@@ -33,19 +39,31 @@ class Form extends React.Component {
     }
   };
   render() {
-    const {children, t, onCancel, style} = this.props;
+    const {
+      children,
+      t,
+      onCancel,
+      style,
+      submitText,
+      cancelText,
+      isValid
+    } = this.props;
     return (
       <form onSubmit={this.handleSubmit} style={[styles.container, style]}>
         {children}
         <div style={styles.actions}>
           {typeof onCancel === 'function' ?
             <Button accent onClick={this.handleCancel} type="reset">
-              {t('cancel')}
+              {cancelText || t('cancel')}
             </Button>
             : null
           }
-          <Button onClick={this.handleSubmit} type="submit">
-            {t('submit')}
+          <Button
+              disabled={!isValid}
+              onClick={this.handleSubmit}
+              type="submit"
+          >
+            {submitText || t('submit')}
           </Button>
         </div>
       </form>

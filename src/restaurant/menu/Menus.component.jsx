@@ -52,7 +52,7 @@ class Menus extends React.Component {
     const {action} = this.state;
     const actions = {
       new: {
-        label: t('restaurant.menus.action.create'),
+        label: t('restaurant.menu.action.create'),
         hideReturn: true,
         hideItems: true,
         item: (
@@ -83,35 +83,33 @@ class Menus extends React.Component {
           actions={actions}
           onActionChange={this.handleActionChange}
       >
-        {menus.length ?
-          <Table
-              columns={[
-                {
-                  Header: t('restaurant.menus.actions'),
-                  id: 'actions',
-                  accessor: menu => (
-                    <Button onClick={this.handleActionSelect({key: 'edit', menu})} plain>
-                      {t('restaurant.menus.action.edit')}
-                    </Button>
-                  ),
-                  maxWidth: 100,
-                  resizable: false,
-                  sortable: false
-                },
-                {
-                  Header: t('restaurant.menus.name'),
-                  accessor: menu => get(['information', language, 'name'])(menu),
-                  id: 'name'
-                },
-                {
-                  Header: t('restaurant.menus.description'),
-                  accessor: menu => get(['information', language, 'description'])(menu),
-                  id: 'description'
-                }
-              ]}
-              data={menus}
-          />
-        : ''}
+        <Table
+            columns={[
+              {
+                Header: t('restaurant.menu.actions'),
+                id: 'actions',
+                accessor: menu => (
+                  <Button onClick={this.handleActionSelect({key: 'edit', menu})} plain>
+                    {t('restaurant.menu.action.edit')}
+                  </Button>
+                ),
+                maxWidth: 100,
+                resizable: false,
+                sortable: false
+              },
+              {
+                Header: t('restaurant.menu.name'),
+                accessor: menu => get(['information', language, 'name'])(menu),
+                id: 'name'
+              },
+              {
+                Header: t('restaurant.menu.description'),
+                accessor: menu => get(['information', language, 'description'])(menu),
+                id: 'description'
+              }
+            ]}
+            data={menus}
+        />
       </WithActions>
     );
   }

@@ -179,7 +179,7 @@ const menuItems = [
   },
   {
     path: 'menus',
-    translationKey: 'restaurant.menus.menus'
+    translationKey: 'restaurant.menu.menus'
   },
   {
     path: 'orders',

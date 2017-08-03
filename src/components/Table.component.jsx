@@ -56,9 +56,9 @@ export default class Table extends React.Component {
       <ReactTable
           columnStyle={styles.column}
           columns={finalColumns}
-          defaultPageSize={finalPageSize}
           headerColumnStyle={styles.headerColumn}
           headerStyle={styles.header}
+          pageSize={finalPageSize}
           rowGroupStyle={styles.rowGroup}
           showPageJump={false}
           showPageSizeOptions={false}

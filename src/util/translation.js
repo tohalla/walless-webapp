@@ -15,7 +15,9 @@ const SET_LANGUAGES = 'SET_LANGUAGES';
 
 const initialState = {
  t: () => '',
- language: 'en'
+ language: 'en',
+ dateFormat: 'DD.MM.YYYY',
+ timeFormat: 'HH:mm'
 };
 
 export default (state: Object = initialState, action: Object) =>

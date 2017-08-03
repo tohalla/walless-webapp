@@ -43,3 +43,7 @@ h6 {
     margin: 0.67em 0 0.67em 0;
     font-weight: 900;
 }
+
+.Select-multi-value-wrapper {
+  padding-left: 10px;
+}
