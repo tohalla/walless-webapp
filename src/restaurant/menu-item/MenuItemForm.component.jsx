@@ -7,6 +7,7 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import {reduce, set, get, pick, equals} from 'lodash/fp';
 
+import Checkbox from 'components/Checkbox.component';
 import Select from 'components/Select.component';
 import config from 'config';
 import Input from 'components/Input.component';
@@ -17,12 +18,14 @@ import {
   updateMenuItem,
   updateMenuItemImages,
   createMenuItemInformation,
+  updateMenuItemDiets,
   updateMenuItemInformation
 } from 'graphql/restaurant/menuItem.mutations';
 import {
   getMenuItem,
   getMenuItemTypes
 } from 'graphql/restaurant/menuItem.queries';
+import {getDiets} from 'graphql/misc.queries';
 import {getImagesForRestaurant} from 'graphql/file.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
@@ -33,7 +36,8 @@ const TextArea = props => <textarea {...props} />;
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
-  languages: state.util.translation.languages
+  languages: state.util.translation.languages,
+  language: state.util.translation.language
 });
 
 @loadable()
@@ -69,6 +73,7 @@ class MenuItemForm extends React.Component {
         information,
         menuItemCategory,
         menuItemType,
+        diets = [],
         price = '',
         images = []
       } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}
@@ -80,6 +85,9 @@ class MenuItemForm extends React.Component {
       newImages: [],
       selectedFiles: images ? new Set(
         images.map(item => item.id)
+      ) : new Set(),
+      diets: diets ? new Set(
+        diets.map(item => item.id)
       ) : new Set(),
       type: get(['id'])(menuItemType),
       category: get(['id'])(menuItemCategory)
@@ -93,6 +101,7 @@ class MenuItemForm extends React.Component {
       createMenuItem,
       updateMenuItem,
       updateMenuItemImages,
+      updateMenuItemDiets,
       createMenuItemInformation,
       updateMenuItemInformation,
       getImagesForRestaurant,
@@ -101,8 +110,9 @@ class MenuItemForm extends React.Component {
       onError,
       menuItem: originalMenuItem = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
     } = this.props;
-    const {newImages, selectedFiles, information} = this.state;
-    const files = Array.from(selectedFiles);
+    const {newImages, information} = this.state;
+    const diets = Array.from(this.state.diets);
+    const files = Array.from(this.state.selectedFiles);
     try {
       const formData = new FormData();
       formData.append('restaurant', restaurant);
@@ -132,7 +142,11 @@ class MenuItemForm extends React.Component {
       );
       const [mutation] = Object.keys(data);
       const {[mutation]: {menuItem: {id: menuItemId}}} = data;
-      await Promise.all([updateMenuItemImages(menuItemId, allFiles)].concat(
+      await Promise.all([].concat(
+        equals(allFiles)(originalMenuItem.images && originalMenuItem.images.map(i => i.id)) ?
+          [] : updateMenuItemImages(menuItemId, allFiles),
+        equals(diets)(originalMenuItem.diets && originalMenuItem.diets.map(i => i.id)) ?
+          [] : updateMenuItemDiets(menuItemId, diets),
         Object.keys(information).map(key =>
           mutation !== 'createMenuItem' && get(['information', key])(originalMenuItem) ?
             updateMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
@@ -151,12 +165,19 @@ class MenuItemForm extends React.Component {
   handleDropzoneDelete = image => () => this.setState({
     newImages: this.state.newImages.filter(i => !equals(i)(image))
   });
-  toggleImageSelect = image => {
+  toggleImage = image => {
     const selectedFiles = this.state.selectedFiles;
     if (!selectedFiles.delete(image.id)) {
       selectedFiles.add(image.id);
     }
     this.setState({selectedFiles});
+  };
+  toggleDiet = diet => () => {
+    const diets = this.state.diets;
+    if (!diets.delete(diet.id)) {
+      diets.add(diet.id);
+    }
+    this.setState({diets});
   };
   handleDrop = accepted =>
     this.setState({newImages: this.state.newImages.concat(accepted)});
@@ -168,7 +189,9 @@ class MenuItemForm extends React.Component {
       images,
       restaurant,
       languages,
-      menuItemTypes
+      menuItemTypes,
+      diets,
+      language
     } = this.props;
     const {
       selectedFiles,
@@ -176,7 +199,8 @@ class MenuItemForm extends React.Component {
       activeLanguage,
       price,
       type,
-      category
+      category,
+      diets: selectedDiets
     } = this.state;
     const categories = type && menuItemTypes.length ?
       (menuItemTypes.find(i => i.id === type).menuItemCategories || []) : [];
@@ -267,11 +291,22 @@ class MenuItemForm extends React.Component {
                       select={{
                         items: images,
                         selected: selectedFiles,
-                        onToggleSelect: this.toggleImageSelect
+                        onToggleSelect: this.toggleImage
                       }}
                   />
                 )
-              }
+              },
+              diets.length ? {
+                label: t('restaurant.menuItem.diets'),
+                item: diets.map((diet, index) => (
+                  <Checkbox
+                      checked={selectedDiets.has(diet.id)}
+                      key={index}
+                      label={get(['i18n', language, 'name'])(diet)}
+                      onClick={this.toggleDiet(diet)}
+                  />
+                ))
+              } : null
           ]}
         />
       </Form>
@@ -288,5 +323,7 @@ export default compose(
   getImagesForRestaurant,
   createMenuItemInformation,
   updateMenuItemInformation,
-  getMenuItemTypes
+  updateMenuItemDiets,
+  getMenuItemTypes,
+  getDiets
 )(connect(mapStateToProps, {})(MenuItemForm));

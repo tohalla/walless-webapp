@@ -31,7 +31,6 @@ export default class Checkbox extends React.Component {
             style={[
               styles.checkbox,
               disabled ? styles.disabled
-              : checked ? {color: colors.default}
               : {color: colors.gray}
             ]}
         >
