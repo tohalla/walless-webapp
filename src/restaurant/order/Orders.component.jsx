@@ -44,7 +44,7 @@ class Orders extends React.Component {
   handleRenderMenuItems = ({original}) => {
     const {t, language} = this.props;
     const items = original.items.map(item => item.menuItem);
-    return (
+    return items.length ? (
       <Table
           columns={[
             {
@@ -71,7 +71,7 @@ class Orders extends React.Component {
           pivotBy={['id']}
           style={{padding: normal, background: colors.background}}
       />
-    );
+    ) : null;
   };
   handleFiltersChange = filters => this.setState({filters});
   handleActionChange = action => this.setState({action});

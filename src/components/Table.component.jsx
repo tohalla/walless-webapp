@@ -52,7 +52,7 @@ export default class Table extends React.Component {
       } : [],
       columns
     );
-    return (
+    return data.length ? (
       <ReactTable
           columnStyle={styles.column}
           columns={finalColumns}
@@ -69,7 +69,7 @@ export default class Table extends React.Component {
           style={[styles.container, style]}
           tableStyle={styles.table}
       />
-    );
+    ) : null;
   }
 };
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 import color from 'color';
 
-import {normal, minor} from 'styles/spacing';
+import {normal, minor, minimal} from 'styles/spacing';
 import colors from 'styles/colors';
 import shadow from 'styles/shadow';
 import Loading from 'components/Loading.component';
@@ -125,7 +125,7 @@ const styles = {
     fontSize: 'initial',
     cursor: 'pointer',
     background: 'none',
-    padding: 0,
+    padding: `0 ${minimal}`,
     color: colors.foregroundDark
   },
   plainText: {
