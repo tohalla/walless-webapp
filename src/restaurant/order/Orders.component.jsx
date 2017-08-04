@@ -28,7 +28,7 @@ class Orders extends React.Component {
   static PropTypes = {
     restaurant: PropTypes.object.isRequired
   };
-  state = {action: {key: 'filter'}, filters: {}};
+  state = {action: {key: 'filter'}, filters: {state: 'pending'}};
   handleAcceptOrder = order => () => this.props.updateOrder(
     set('accepted')(new Date())(order)
   );
@@ -74,14 +74,21 @@ class Orders extends React.Component {
     ) : null;
   };
   handleFiltersChange = filters => this.setState({filters});
+  setFilterValue = (filter, value) => () =>
+    this.setState(set(['filters', filter])(value)(this.state));
   handleActionChange = action => this.setState({action});
-  handleActionSelect = action => () => this.handleActionChange(action);
   render() {
     const {orders, t, restaurant, timeFormat, ...props} = this.props;
     const {action, filters} = this.state;
     const data = orders.filter(order =>
-      !get(['servingLocations', 'length'])(filters) ||
-      filters.servingLocations.indexOf(get(['servingLocation', 'id'])(order)) > -1
+      (
+        !get(['servingLocations', 'length'])(filters) ||
+        filters.servingLocations.indexOf(get(['servingLocation', 'id'])(order)) > -1
+      ) && (
+        filters.state === 'all' ||
+        (filters.state === 'completed' && order.completed) ||
+        (filters.state === 'pending' && !order.completed)
+      )
     );
     return (
       <WithActions
@@ -109,11 +116,18 @@ class Orders extends React.Component {
                 {
                   Header: t('restaurant.order.servingLocation'),
                   id: 'servingLocation',
-                  accessor: data =>
-                    data.servingLocation.name
+                  accessor: data => (
+                    <Button
+                        onClick={this.setFilterValue('servingLocations', [data.servingLocation.id])}
+                        plain
+                    >
+                      {data.servingLocation.name}
+                    </Button>
+                  )
                 },
                 {
                   Header: t('restaurant.order.createdAt'),
+                  width: 10 + t('restaurant.order.createdAt').length*10,
                   id: 'createdAt',
                   accessor: data => moment(data.createdAt).format(timeFormat)
                 },
@@ -133,10 +147,6 @@ class Orders extends React.Component {
                   id: 'acceptedAt'
                 },
                 {
-                  Header: t('restaurant.order.paidAt'),
-                  accessor: 'paid'
-                },
-                {
                   Header: t('restaurant.order.completedAt'),
                   accessor: data => data.completed ?
                     moment(data.completed).format(timeFormat): (
@@ -149,6 +159,7 @@ class Orders extends React.Component {
                 {
                   Header: t('restaurant.order.items'),
                   id: 'items',
+                  width: 10 + t('restaurant.order.items').length*10,
                   accessor: data => (data.items || []).length
                 }
               ]}

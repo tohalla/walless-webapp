@@ -65,6 +65,22 @@ class OrdersFilter extends React.Component {
                       value={this.state.servingLocations}
                   />
                 )
+              },
+              {
+                label: t('restaurant.order.state.state'),
+                item: (
+                  <Select
+                      autoBlur
+                      clearable={false}
+                      onChange={this.handleStateChange('state')}
+                      options={[
+                        {value: 'all', label: t('showAll')},
+                        {value: 'completed', label: t('restaurant.order.state.completed')},
+                        {value: 'pending', label: t('restaurant.order.state.pending')}
+                      ]}
+                      value={this.state.state}
+                  />
+                )
               }
             ]}
         />

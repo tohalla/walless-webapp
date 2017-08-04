@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {compose, withApollo} from 'react-apollo';
 import Radium from 'radium';
 
-import {minor} from 'styles/spacing';
+import {minimal} from 'styles/spacing';
 import Button from 'components/Button.component';
 import Authenticate from 'account/Authenticate.component';
 import authenticationHandler from 'util/auth';
@@ -23,7 +23,7 @@ class UserNavigation extends React.Component {
     return loading ? null
       : account ? (
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <div style={{padding: minor}}>
+          <div style={{padding: minimal}}>
             {t('account.authenticated', {
               name: account.firstName
             })}

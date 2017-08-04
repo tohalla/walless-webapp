@@ -28,10 +28,7 @@ class WithActions extends React.Component {
     hideActions: PropTypes.bool,
     forceDefaultAction: PropTypes.bool,
     onActionChange: PropTypes.func.isRequired,
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node
-    ]).isRequired,
+    children: PropTypes.node,
     plain: PropTypes.bool,
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
