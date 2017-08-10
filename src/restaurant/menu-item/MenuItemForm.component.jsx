@@ -26,6 +26,7 @@ import {
   getMenuItemTypes
 } from 'graphql/restaurant/menuItem.queries';
 import {getDiets} from 'graphql/misc.queries';
+import {getIngredients} from 'graphql/restaurant/ingredient.queries';
 import {getImagesForRestaurant} from 'graphql/file.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
@@ -191,7 +192,8 @@ class MenuItemForm extends React.Component {
       languages,
       menuItemTypes,
       diets,
-      language
+      language,
+      ingredients
     } = this.props;
     const {
       selectedFiles,
@@ -306,6 +308,10 @@ class MenuItemForm extends React.Component {
                       onClick={this.toggleDiet(diet)}
                   />
                 ))
+              } : null,
+              ingredients.length ? {
+                label: t('restaurant.menuItem.ingredients'),
+                item: <div />
               } : null
           ]}
         />
@@ -325,5 +331,6 @@ export default compose(
   updateMenuItemInformation,
   updateMenuItemDiets,
   getMenuItemTypes,
-  getDiets
+  getDiets,
+  getIngredients
 )(connect(mapStateToProps, {})(MenuItemForm));

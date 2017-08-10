@@ -73,7 +73,10 @@ class Restaurant extends React.Component {
             <h2>{name}</h2>
             <PopOverMenu
                 items={[
-                  {label: 'edit', onClick: this.handleActionSelect({key: 'edit'})}
+                  {
+                    label: t('restaurant.action.edit'),
+                    onClick: this.handleActionSelect({key: 'edit'})
+                  }
                 ]}
                 label={<i className="material-icons">{'more_vert'}</i>}
             />
