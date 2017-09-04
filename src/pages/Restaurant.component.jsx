@@ -46,6 +46,8 @@ class Restaurant extends React.Component {
       router.push('/restaurant/');
     }
   };
+  handleRestaurantChange = ({value}) =>
+    this.props.router.push(`/restaurant/${value}`);
   render() {
     const {
       restaurants,
@@ -120,9 +122,10 @@ class Restaurant extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   getActiveAccount,
   getRestaurantsByAccount
-)(connect(mapStateToProps, {})(Restaurant));
+)(Restaurant);
 
 const styles = {
   container: {

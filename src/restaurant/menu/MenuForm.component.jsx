@@ -187,6 +187,7 @@ class MenuForm extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   createMenu,
   updateMenu,
   updateMenuItems,
@@ -194,4 +195,4 @@ export default compose(
   getMenu,
   createMenuInformation,
   updateMenuInformation
-)(connect(mapStateToProps, {})(MenuForm));
+)(MenuForm);

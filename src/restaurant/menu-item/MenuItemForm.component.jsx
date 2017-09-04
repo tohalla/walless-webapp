@@ -321,6 +321,7 @@ class MenuItemForm extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   createMenuItem,
   updateMenuItem,
   updateMenuItemImages,
@@ -333,4 +334,4 @@ export default compose(
   getMenuItemTypes,
   getDiets,
   getIngredients
-)(connect(mapStateToProps, {})(MenuItemForm));
+)(MenuItemForm);

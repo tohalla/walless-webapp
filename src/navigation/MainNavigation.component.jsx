@@ -79,8 +79,9 @@ class MainNavigation extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   getActiveAccount
-)(connect(mapStateToProps, {})(MainNavigation));
+)(MainNavigation);
 
 const styles = {
   container: {

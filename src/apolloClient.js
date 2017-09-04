@@ -9,7 +9,8 @@ const networkInterface = createNetworkInterface({
 });
 
 const dataIdFromObject = result =>
-  result.nodeId;
+  result.__typename && result.id ?
+    `${result.__typename}_${result.id}` : result.nodeId;
 
 const apolloClient = new ApolloClient({
   networkInterface,

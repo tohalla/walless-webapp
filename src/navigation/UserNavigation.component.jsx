@@ -38,6 +38,7 @@ class UserNavigation extends React.Component {
 
 export default withApollo(
   compose(
+    connect(mapStateToProps, {}),
     getActiveAccount
-  )(connect(mapStateToProps, {})(UserNavigation))
+  )(UserNavigation)
 );

@@ -91,7 +91,10 @@ class Restaurant extends React.Component {
   }
 }
 
-export default compose(getRestaurant)(connect(mapStateToProps)(Restaurant));
+export default compose(
+  connect(mapStateToProps),
+  getRestaurant
+)(Restaurant);
 
 const styles = {
   titleContainer: {

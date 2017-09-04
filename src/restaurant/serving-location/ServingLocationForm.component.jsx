@@ -97,7 +97,8 @@ class ServingLocationForm extends React.Component {
 }
 
 export default compose(
+  connect(mapStateToProps, {}),
   createServingLocation,
   updateServingLocation,
   getServingLocation
-)(connect(mapStateToProps, {})(ServingLocationForm));
+)(ServingLocationForm);
