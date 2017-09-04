@@ -4,7 +4,6 @@ import {
   IndexRoute
 } from 'react-router';
 
-import routeParamWrapper from 'util/routeParamWrapper';
 import {requireAuthentication} from 'util/auth';
 import RestaurantPage from 'pages/Restaurant.component';
 import Menus from 'restaurant/menu/Menus.component';
@@ -21,12 +20,7 @@ export default (
       onEnter={requireAuthentication}
       path="restaurant(/:restaurant)"
   >
-    <IndexRoute
-        component={routeParamWrapper(Restaurant, [{
-          key: 'restaurant',
-          transform: value => Number(value)
-        }])}
-    />
+    <IndexRoute component={Restaurant} />
     <Route path="menus">
       <IndexRoute component={Menus} />
     </Route>
