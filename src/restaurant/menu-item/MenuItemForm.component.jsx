@@ -17,9 +17,9 @@ import {
   createMenuItem,
   updateMenuItem,
   updateMenuItemImages,
-  createMenuItemInformation,
+  createMenuItemI18n,
   updateMenuItemDiets,
-  updateMenuItemInformation
+  updateMenuItemI18n
 } from 'graphql/restaurant/menuItem.mutations';
 import {
   getMenuItem,
@@ -58,7 +58,7 @@ class MenuItemForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.resetForm(props, state => this.state = state);
+    this.resetForm(props, state => this.state = state); // eslint-disable-line
   }
   componentWillReceiveProps(newProps) {
     if (
@@ -71,7 +71,7 @@ class MenuItemForm extends React.Component {
   resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       menuItem: {
-        information,
+        i18n,
         menuItemCategory,
         menuItemType,
         diets = [],
@@ -82,7 +82,7 @@ class MenuItemForm extends React.Component {
     updateState({
       activeLanguage: 'en',
       price,
-      information,
+      i18n,
       newImages: [],
       selectedFiles: images ? new Set(
         images.map(item => item.id)
@@ -103,15 +103,15 @@ class MenuItemForm extends React.Component {
       updateMenuItem,
       updateMenuItemImages,
       updateMenuItemDiets,
-      createMenuItemInformation,
-      updateMenuItemInformation,
+      createMenuItemI18n,
+      updateMenuItemI18n,
       getImagesForRestaurant,
       restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
       menuItem: originalMenuItem = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
     } = this.props;
-    const {newImages, information} = this.state;
+    const {newImages, i18n} = this.state;
     const diets = Array.from(this.state.diets);
     const files = Array.from(this.state.selectedFiles);
     try {
@@ -148,10 +148,10 @@ class MenuItemForm extends React.Component {
           [] : updateMenuItemImages(menuItemId, allFiles),
         equals(diets)(originalMenuItem.diets && originalMenuItem.diets.map(i => i.id)) ?
           [] : updateMenuItemDiets(menuItemId, diets),
-        Object.keys(information).map(key =>
-          mutation !== 'createMenuItem' && get(['information', key])(originalMenuItem) ?
-            updateMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
-          : createMenuItemInformation(Object.assign({language: key, menuItem: menuItemId}, information[key]))
+        Object.keys(i18n).map(key =>
+          mutation !== 'createMenuItem' && get(['i18n', key])(originalMenuItem) ?
+            updateMenuItemI18n(Object.assign({language: key, menuItem: menuItemId}, i18n[key]))
+          : createMenuItemI18n(Object.assign({language: key, menuItem: menuItemId}, i18n[key]))
         )
       ));
       onSubmit();
@@ -213,15 +213,15 @@ class MenuItemForm extends React.Component {
           <div>
             <Input
                 label={t('restaurant.menuItem.name')}
-                onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                value={get(['information', value.locale, 'name'])(this.state) || ''}
+                onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
+                value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={TextArea}
                 label={t('restaurant.menuItem.description')}
-                onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                 rows={3}
-                value={get(['information', value.locale, 'description'])(this.state) || ''}
+                value={get(['i18n', value.locale, 'description'])(this.state) || ''}
             />
           </div>
         )
@@ -328,8 +328,8 @@ export default compose(
   getMenuItem,
   getActiveAccount,
   getImagesForRestaurant,
-  createMenuItemInformation,
-  updateMenuItemInformation,
+  createMenuItemI18n,
+  updateMenuItemI18n,
   updateMenuItemDiets,
   getMenuItemTypes,
   getDiets,

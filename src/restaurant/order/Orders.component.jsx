@@ -61,7 +61,7 @@ class Orders extends React.Component {
             {
               Header: t('restaurant.menuItem.name'),
               id: 'name',
-              accessor: data => get(['information', language, 'name'])(data),
+              accessor: data => get(['i18n', language, 'name'])(data),
               aggregate: ([value]) => value
             }
           ]}

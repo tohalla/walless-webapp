@@ -125,7 +125,7 @@ class MenuItems extends React.Component {
           <ConfirmationModal
               message={
                 t('confirmDelete', {
-                  name: get(['information', language, 'name'])(deleteModal.item)
+                  name: get(['i18n', language, 'name'])(deleteModal.item)
                 })
               }
               onCancel={this.handleDelete()}
@@ -163,12 +163,12 @@ class MenuItems extends React.Component {
               },
               {
                 Header: t('restaurant.menuItem.name'),
-                accessor: menuItem => get(['information', language, 'name'])(menuItem),
+                accessor: menuItem => get(['i18n', language, 'name'])(menuItem),
                 id: 'name'
               },
               {
                 Header: t('restaurant.menuItem.description'),
-                accessor: menuItem => get(['information', language, 'description'])(menuItem),
+                accessor: menuItem => get(['i18n', language, 'description'])(menuItem),
                 id: 'description'
               }
             ]}

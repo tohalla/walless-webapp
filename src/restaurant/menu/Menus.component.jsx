@@ -52,7 +52,7 @@ class Menus extends React.Component {
       },
       item
     }) : undefined
-  })
+  });
   handleMenuSubmit = () => {
     this.setState({action: undefined});
     this.props.getMenusByRestaurant.refetch();
@@ -102,7 +102,7 @@ class Menus extends React.Component {
           <ConfirmationModal
               message={
                 t('confirmDelete', {
-                  name: get(['information', language, 'name'])(deleteModal.item)
+                  name: get(['i18n', language, 'name'])(deleteModal.item)
                 })
               }
               onCancel={this.handleDelete()}
@@ -131,12 +131,12 @@ class Menus extends React.Component {
               },
               {
                 Header: t('restaurant.menu.name'),
-                accessor: menu => get(['information', language, 'name'])(menu),
+                accessor: menu => get(['i18n', language, 'name'])(menu),
                 id: 'name'
               },
               {
                 Header: t('restaurant.menu.description'),
-                accessor: menu => get(['information', language, 'description'])(menu),
+                accessor: menu => get(['i18n', language, 'description'])(menu),
                 id: 'description'
               }
             ]}

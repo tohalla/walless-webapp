@@ -3,14 +3,11 @@ import Cookie from 'js-cookie';
 
 import authenticationHandler from 'util/auth';
 import config from 'config';
+import {dataIdFromObject} from 'walless-graphql/util';
 
 const networkInterface = createNetworkInterface({
   uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
 });
-
-const dataIdFromObject = result =>
-  result.__typename && result.id ?
-    `${result.__typename}_${result.id}` : result.nodeId;
 
 const apolloClient = new ApolloClient({
   networkInterface,

@@ -15,8 +15,8 @@ import Input from 'components/Input.component';
 import {
   createRestaurant,
   updateRestaurant,
-  createRestaurantInformation,
-  updateRestaurantInformation,
+  createRestaurantI18n,
+  updateRestaurantI18n,
   updateRestaurantImages
 } from 'graphql/restaurant/restaurant.mutations';
 import {getCurrencies} from 'graphql/misc.queries';
@@ -53,7 +53,7 @@ class RestaurantForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.resetForm(props, state => this.state = state);
+    this.resetForm(props, state => this.state = state); // eslint-disable-line
   }
   componentWillReceiveProps(newProps) {
     if (
@@ -67,13 +67,13 @@ class RestaurantForm extends React.Component {
     const {
       restaurant: {
         address = {},
-        information,
+        i18n,
         images: selectedFiles
       } = typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}
     } = props;
     updateState({
       address,
-      information,
+      i18n,
       activeLanguage: 'en',
       currency: 'EUR',
       newImages: [],
@@ -91,8 +91,8 @@ class RestaurantForm extends React.Component {
       createRestaurant,
       updateRestaurant,
       getImagesForRestaurant,
-      createRestaurantInformation,
-      updateRestaurantInformation,
+      createRestaurantI18n,
+      updateRestaurantI18n,
       updateRestaurantImages,
       createAddress,
       onSubmit,
@@ -103,7 +103,7 @@ class RestaurantForm extends React.Component {
     const {
       newImages = [],
       selectedFiles,
-      information,
+      i18n,
       address = {}
     } = this.state;
     try {
@@ -144,10 +144,10 @@ class RestaurantForm extends React.Component {
       )).json()) : files;
       await Promise.all(
         [updateRestaurantImages(restaurantId, allFiles)].concat(
-          Object.keys(information).map(key =>
-            mutation !== 'createRestaurant' && get(['information', key])(originalRestaurant) ?
-              updateRestaurantInformation(Object.assign({language: key, restaurant: restaurantId}, information[key]))
-            : createRestaurantInformation(Object.assign({language: key, restaurant: restaurantId}, information[key]))
+          Object.keys(i18n).map(key =>
+            mutation !== 'createRestaurant' && get(['i18n', key])(originalRestaurant) ?
+              updateRestaurantI18n(Object.assign({language: key, restaurant: restaurantId}, i18n[key]))
+            : createRestaurantI18n(Object.assign({language: key, restaurant: restaurantId}, i18n[key]))
           )
         )
       );
@@ -207,15 +207,15 @@ class RestaurantForm extends React.Component {
                   <div>
                     <Input
                         label={this.props.t('restaurant.name')}
-                        onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                        value={get(['information', value.locale, 'name'])(this.state) || ''}
+                        onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
+                        value={get(['i18n', value.locale, 'name'])(this.state) || ''}
                     />
                     <Input
                         Input={TextArea}
                         label={this.props.t('restaurant.description')}
-                        onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                        onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                         rows={3}
-                        value={get(['information', value.locale, 'description'])(this.state) || ''}
+                        value={get(['i18n', value.locale, 'description'])(this.state) || ''}
                     />
                   </div>
                 )
@@ -280,8 +280,8 @@ export default compose(
   updateRestaurant,
   getActiveAccount,
   getRestaurant,
-  createRestaurantInformation,
-  updateRestaurantInformation,
+  createRestaurantI18n,
+  updateRestaurantI18n,
   getCurrencies,
   getImagesForRestaurant,
   updateRestaurantImages,

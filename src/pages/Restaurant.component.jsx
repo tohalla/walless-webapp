@@ -1,4 +1,5 @@
 import React from 'react';
+import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {find, get} from 'lodash/fp';
 import {connect} from 'react-redux';
@@ -25,6 +26,7 @@ const mapStateToProps = state => ({
 });
 
 @loadable()
+@Radium
 class Restaurant extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
@@ -76,7 +78,7 @@ class Restaurant extends React.Component {
                 options={
                   restaurants.map(value => ({
                     value: value.id,
-                    label: get(['information', language, 'name'])(value)
+                    label: get(['i18n', language, 'name'])(value)
                   }))
                 }
                 resetValue={restaurant.id}
@@ -111,7 +113,7 @@ class Restaurant extends React.Component {
         </div>
       );
     }
-    return (
+    return null && (
       <div style={styles.container}>
         <PageContent>
           <RestaurantForm onSubmit={this.handleRestaurantSubmit} style={styles.contentContainer} />

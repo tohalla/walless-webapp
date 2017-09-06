@@ -13,8 +13,8 @@ import {
   createMenu,
   updateMenu,
   updateMenuItems,
-  createMenuInformation,
-  updateMenuInformation
+  createMenuI18n,
+  updateMenuI18n
 } from 'graphql/restaurant/menu.mutations';
 import {getMenu} from 'graphql/restaurant/menu.queries';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
@@ -43,7 +43,7 @@ class MenuForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.resetForm(props, state => this.state = state);
+    this.resetForm(props, state => this.state = state); // eslint-disable-line
   }
   componentWillReceiveProps(newProps) {
     if (
@@ -56,14 +56,14 @@ class MenuForm extends React.Component {
   resetForm = (props, updateState = state => this.setState(state)) => {
     const {
       menu: {
-        information,
+        i18n,
         menuItems
       } = typeof props.menu === 'object' && props.menu ? props.menu : {}
     } = props;
     updateState({
       activeLanguage: 'en',
       manageMenuItems: false,
-      information,
+      i18n,
       menuItems: menuItems ? new Set(
         menuItems.map(item => item.id)
       ) : new Set()
@@ -79,13 +79,13 @@ class MenuForm extends React.Component {
       restaurant,
       onSubmit,
       onError,
-      createMenuInformation,
-      updateMenuInformation,
+      createMenuI18n,
+      updateMenuI18n,
       account,
       menu: originalMenu = typeof this.props.menu === 'object' ? this.props.menu : {},
       updateMenuItems
     } = this.props;
-    const {information, menuItems} = this.state;
+    const {i18n, menuItems} = this.state;
     const finalMenu = Object.assign({},
       originalMenu ? {id: originalMenu.id} : null,
       {
@@ -100,10 +100,10 @@ class MenuForm extends React.Component {
       await Promise.all([
           updateMenuItems(menuId, menuItems)
         ].concat(
-          Object.keys(information).map(key =>
-            mutation !== 'createMenu' && get(['information', key])(originalMenu) ?
-              updateMenuInformation(Object.assign({language: key, menu: menuId}, information[key]))
-            : createMenuInformation(Object.assign({language: key, menu: menuId}, information[key]))
+          Object.keys(i18n).map(key =>
+            mutation !== 'createMenu' && get(['i18n', key])(originalMenu) ?
+              updateMenuI18n(Object.assign({language: key, menu: menuId}, i18n[key]))
+            : createMenuI18n(Object.assign({language: key, menu: menuId}, i18n[key]))
           )
         )
       );
@@ -141,15 +141,15 @@ class MenuForm extends React.Component {
           <div>
             <Input
                 label={t('restaurant.menu.name')}
-                onChange={this.handleInputChange(['information', value.locale, 'name'])}
-                value={get(['information', value.locale, 'name'])(this.state) || ''}
+                onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
+                value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={TextArea}
                 label={t('restaurant.menu.description')}
-                onChange={this.handleInputChange(['information', value.locale, 'description'])}
+                onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                 rows={3}
-                value={get(['information', value.locale, 'description'])(this.state) || ''}
+                value={get(['i18n', value.locale, 'description'])(this.state) || ''}
             />
           </div>
         )
@@ -193,6 +193,6 @@ export default compose(
   updateMenuItems,
   getActiveAccount,
   getMenu,
-  createMenuInformation,
-  updateMenuInformation
+  createMenuI18n,
+  updateMenuI18n
 )(MenuForm);

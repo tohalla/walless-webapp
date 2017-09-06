@@ -5,6 +5,10 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 
 import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
+import {
+  getActiveAccount,
+  getRestaurantsByAccount
+} from 'graphql/account/account.queries';
 import PopOverMenu from 'components/PopOverMenu.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'components/WithActions.component';
@@ -28,10 +32,8 @@ class Restaurant extends React.Component {
   state = {
     action: null
   };
-  handleRestaurantSubmit = () => {
-    this.props.getRestaurant.refetch();
+  handleRestaurantSubmit = () =>
     this.setState({action: null});
-  };
   handleActionChange = action => this.setState({action});
   handleActionSelect = action => () => this.handleActionChange(action);
   render() {
@@ -39,7 +41,7 @@ class Restaurant extends React.Component {
       const {
         restaurant,
         restaurant: {
-          information: {
+          i18n: {
             [this.props.language]: {
               name, description
             } = {}
@@ -56,7 +58,7 @@ class Restaurant extends React.Component {
             <RestaurantForm
                 onCancel={this.handleActionChange}
                 onSubmit={this.handleRestaurantSubmit}
-                restaurant={restaurant}
+                restaurant={action ? action.restaurant : restaurant}
             />
           )
         }
@@ -75,7 +77,7 @@ class Restaurant extends React.Component {
                 items={[
                   {
                     label: t('restaurant.action.edit'),
-                    onClick: this.handleActionSelect({key: 'edit'})
+                    onClick: this.handleActionSelect({key: 'edit', restaurant})
                   }
                 ]}
                 label={<i className="material-icons">{'more_vert'}</i>}
@@ -93,7 +95,9 @@ class Restaurant extends React.Component {
 
 export default compose(
   connect(mapStateToProps),
-  getRestaurant
+  getActiveAccount,
+  getRestaurant,
+  getRestaurantsByAccount
 )(Restaurant);
 
 const styles = {
