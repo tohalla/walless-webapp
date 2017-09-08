@@ -1,11 +1,12 @@
 import React from 'react';
 import Radium from 'radium';
 import {compose} from 'react-apollo';
-import {find, get} from 'lodash/fp';
+import {find, get, equals} from 'lodash/fp';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import color from 'color';
 
+import {initializeNotificationHandler} from 'util/wsNotificationHandler';
 import {minor, normal} from 'styles/spacing';
 import Select from 'components/Select.component';
 import shadow from 'styles/shadow';
@@ -35,18 +36,42 @@ class Restaurant extends React.Component {
     ])
   };
   componentWillMount() {
-    this.checkRestaurant(this.props);
+    if (this.checkRestaurant(this.props)) {
+      this.initializeNotificationHandler({}, this.props);
+    }
   }
   componentWillReceiveProps(newProps) {
-    this.checkRestaurant(newProps);
+    if (this.checkRestaurant(newProps)) {
+      this.initializeNotificationHandler(this.props, newProps);
+    }
+  };
+  initializeNotificationHandler = (props, newProps) => {
+    if (
+      newProps.account &&
+      !get(['getActiveAccount', 'loading'])(newProps) && (
+        !equals(newProps.account)(props.account) ||
+        !equals(get(['routeParams', 'restaurant'])(props))(
+          get(['routeParams', 'restaurant'])(newProps)
+        )
+      )
+    ) {
+      initializeNotificationHandler({
+        headers: {
+          restaurant: get(['routeParams', 'restaurant'])(newProps)
+        }
+      });
+    }
   };
   checkRestaurant = props => {
     const {restaurants, routeParams: {restaurant}, router} = props;
     if (!restaurant && Array.isArray(restaurants) && restaurants.length) {
       router.push(`/restaurant/${restaurants[0].id}`);
+      return false;
     } else if (!find(r => r.id === Number(restaurant))(restaurants)) {
       router.push('/restaurant/');
+      return false;
     }
+    return true;
   };
   handleRestaurantChange = ({value}) =>
     this.props.router.push(`/restaurant/${value}`);

@@ -28,6 +28,7 @@ export default class Root extends React.Component {
   };
 }
 
+
 const styles = {
   root: {
     backgroundColor: colors.gallery,

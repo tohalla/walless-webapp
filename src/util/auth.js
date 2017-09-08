@@ -26,18 +26,22 @@ const authenticationHandler = {
   isAuthenticated: Boolean(Cookie.get('Authorization')),
   authenticate: async(email: string, password: string) => {
     Cookie.remove('Authorization');
+    Cookie.remove('ws-token');
     Cookie.remove('Expiration');
     const authorization = await authenticate({email, password});
     Cookie.set('Authorization', authorization.token);
+    Cookie.set('ws-token', authorization.wsToken);
     Cookie.set('Expiration', authorization.expiresAt);
   },
   renew: async(token: string) => {
     const authorization = await authenticate({token});
     Cookie.set('Authorization', authorization.token);
+    Cookie.set('ws-token', authorization.wsToken);
     Cookie.set('Expiration', authorization.expiresAt);
   },
   logout: async() => {
     Cookie.remove('Authorization');
+    Cookie.remove('ws-token');
     Cookie.remove('Expiration');
   }
 };
