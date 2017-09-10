@@ -96,7 +96,7 @@ class Orders extends React.Component {
           action={action ? action.key : undefined}
           actions={{
             filter: {
-              label: t('restaurant.menuItem.action.filter'),
+              label: t('restaurant.order.action.filter'),
               item: (
                 <OrdersFilter
                     filters={filters}
