@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
 
+import Input from 'components/Input.component';
 import {getAccountRolesForRestaurant} from 'graphql/account/account.queries';
 import Form from 'components/Form.component';
 import loadable from 'decorators/loadable';
@@ -41,6 +42,7 @@ class UsersFilter extends React.Component {
   };
   render() {
     const {t, roles = [], filters} = this.props;
+    const {name = ''} = this.state;
     return (
       <Form
           isValid={!equals(this.state)(filters)}
@@ -48,6 +50,14 @@ class UsersFilter extends React.Component {
       >
         <ItemsWithLabels
             items={[
+              (
+                <Input
+                    key="name"
+                    label={t('account.name')}
+                    onChange={this.handleStateChange('name')}
+                    value={name}
+                />
+              ),
               {
                 label: t('account.role'),
                 item: (

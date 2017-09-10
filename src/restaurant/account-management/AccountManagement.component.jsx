@@ -30,6 +30,11 @@ class AccountManagement extends React.Component {
       (
         !get(['roles', 'length'])(filters) ||
         filters.roles.indexOf(get(['role', 'id'])(account)) > -1
+      ) &&
+      (
+        !filters.name ||
+        `${account.account.firstName} ${account.account.lastName}`
+          .toLowerCase().indexOf(filters.name.toLowerCase()) !== -1
       )
     );
     return (

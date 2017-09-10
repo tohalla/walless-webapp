@@ -10,9 +10,9 @@ export default class ItemsWithLabels extends React.Component {
     items: PropTypes.arrayOf(PropTypes.oneOfType([
       PropTypes.shape({
         label: PropTypes.string,
-        item: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.number])
+        item: PropTypes.node
       }),
-      PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.number])
+      PropTypes.node
     ]))
   };
   constructor(props) {
@@ -29,16 +29,22 @@ export default class ItemsWithLabels extends React.Component {
     const {items} = this.props;
     return (
       <div style={styles.container}>
-        {items.filter(item => item).map((item, index) => (
-          <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
-            {item.label ?
-              <div style={[].concat(styles.header, {flexBasis: this.state.headerWidth})}>
-                {item.label}
-              </div> : null
-            }
-            {item.item}
-          </div>
-        ))}
+        {items.map((item, index) =>
+          item.item || item.label ? (
+            <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
+              {item.label ?
+                <div style={[].concat(styles.header, {flexBasis: this.state.headerWidth})}>
+                  {item.label}
+                </div> : null
+              }
+              {item.item}
+            </div>
+          ) : (
+            <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
+              {item}
+            </div>
+          )
+        )}
       </div>
     );
   }
