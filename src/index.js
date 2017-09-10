@@ -1,8 +1,12 @@
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
-import router from 'router/router';
+import apolloProvider from 'router/apolloProvider';
 
-ReactDOM.render(router, document.getElementById('app'));
+ReactDOM.render(apolloProvider, document.getElementById('app'));
+
+if (module.hot) {
+  module.hot.accept();
+}
 
 import 'styles/main.css';
 import 'styles/font.css';
