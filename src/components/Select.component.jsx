@@ -161,6 +161,7 @@ const styles = {
   menuContainerDark: {backgroundColor: color(colors.backgroundDark).darken(0.3).hex()},
   input: {
     margin: 0,
+    padding: 0,
     background: 'none',
     border: 'none'
   },

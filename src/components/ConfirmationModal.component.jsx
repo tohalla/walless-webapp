@@ -23,7 +23,8 @@ class ConfirmationModal extends React.Component {
     onConfirm: PropTypes.func.isRequired,
     message: PropTypes.string.isRequired,
     confirmText: PropTypes.string,
-    cancelText: PropTypes.string
+    cancelText: PropTypes.string,
+    accent: PropTypes.bool
   };
   static defaultProps = {
     isOpen: false
@@ -33,6 +34,7 @@ class ConfirmationModal extends React.Component {
       onCancel,
       onConfirm,
       message,
+      accent,
       t,
       confirmText,
       cancelText
@@ -45,10 +47,10 @@ class ConfirmationModal extends React.Component {
               {message}
             </div>
             <div style={styles.actions}>
-              <Button accent onClick={onCancel} type="reset">
+              <Button onClick={onCancel} simple type="reset">
                 {cancelText || t('cancel')}
               </Button>
-              <Button onClick={onConfirm} type="submit">
+              <Button accent={accent} onClick={onConfirm} type="submit">
                 {confirmText || t('confirm')}
               </Button>
             </div>

@@ -15,16 +15,27 @@ class Form extends React.Component {
     children: PropTypes.node.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
+    onClose: PropTypes.func,
+    fieldStyle: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
+    contentStyle: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
     ]),
     submitText: PropTypes.string,
     cancelText: PropTypes.string,
-    isValid: PropTypes.bool
+    isValid: PropTypes.bool,
+    FormComponent: PropTypes.func
   };
   static defaultProps = {
-    isValid: true
+    isValid: true,
+    FormComponent: new Radium(props => <form {...props} />)
   };
   handleSubmit = event => {
     event.preventDefault();
@@ -38,22 +49,39 @@ class Form extends React.Component {
       this.props.onCancel(event);
     }
   };
+  handleClose = event => {
+    event.preventDefault();
+    if (typeof this.props.onClose === 'function') {
+      this.props.onClose(event);
+    }
+  };
   render() {
     const {
       children,
       t,
       onCancel,
+      onClose,
       style,
       submitText,
       cancelText,
-      isValid
+      isValid,
+      FormComponent,
+      contentStyle,
+      fieldStyle
     } = this.props;
     return (
-      <form onSubmit={this.handleSubmit} style={[styles.container, style]}>
-        {children}
+      <FormComponent onSubmit={this.handleSubmit} style={[styles.container, style]}>
+        <div style={[].concat(styles.container, style, contentStyle)}>
+          {fieldStyle ?
+            children.map((child, index) =>
+              <div key={index} style={fieldStyle}>{child}</div>
+            ) :
+            children
+          }
+        </div>
         <div style={styles.actions}>
           {typeof onCancel === 'function' ?
-            <Button accent onClick={this.handleCancel} type="reset">
+            <Button onClick={this.handleCancel} simple type="reset">
               {cancelText || t('cancel')}
             </Button>
             : null
@@ -66,7 +94,13 @@ class Form extends React.Component {
             {submitText || t('submit')}
           </Button>
         </div>
-      </form>
+        {typeof onClose === 'function' ?
+          <Button onClick={this.handleClose} plain>
+            <i className="material-icons">{'close'}</i>
+          </Button>
+          : null
+        }
+      </FormComponent>
     );
   }
 };

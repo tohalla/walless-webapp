@@ -30,7 +30,7 @@ export default class ItemsWithLabels extends React.Component {
     return (
       <div style={styles.container}>
         {items.map((item, index) =>
-          item.item || item.label ? (
+          item && (item.item || item.label) ? (
             <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
               {item.label ?
                 <div style={[].concat(styles.header, {flexBasis: this.state.headerWidth})}>
