@@ -15,6 +15,7 @@ const colors = {
 export default Object.assign({
   danger: colors.red,
   neutral: colors.lightGray,
+  neutralDark: colors.gray,
   alert: colors.orange,
   success: colors.green,
   default: colors.green,
