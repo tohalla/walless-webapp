@@ -84,6 +84,7 @@
     "webpack-dev-server": "^2.4.1",
     "webpack-hot-middleware": "^2.12.2"
   },
+  "eslintIgnore": ["node_modules"],
   "babel": {
     "presets": [
       "stage-0",

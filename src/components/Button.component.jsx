@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import color from 'color';
 
 import {normal, minor, minimal} from 'styles/spacing';
 import colors from 'styles/colors';
-import shadow from 'styles/shadow';
 import Loading from 'components/Loading.component';
 
 @Radium
@@ -53,7 +51,7 @@ export default class Button extends React.Component {
                 styles.buttonLoading
               : disabled ?
                 styles.disabled
-              : shadow.small
+              : styles.shadow
             ],
             style
           )}
@@ -75,14 +73,20 @@ export default class Button extends React.Component {
 }
 
 const styles = {
+  shadow: {
+    boxShadow: '0 3px 6px rgba(0,0,0,0.14), 0 3px 6px rgba(0,0,0,0.2)',
+    [':hover']: {
+      boxShadow: '0 2px 4px rgba(0,0,0,0.14), 0 2px 4px rgba(0,0,0,0.2)'
+    }
+  },
   button: {
     flex: '0 0 auto',
     textTransform: 'uppercase',
     cursor: 'pointer',
     margin: minor,
     fontSize: '0.9rem',
-    border: 0,
-    borderRadius: 0,
+    border: 'none',
+    background: 'none',
     display: 'flex',
     padding: `${minor} ${normal}`,
     flexDirection: 'row',
@@ -109,24 +113,24 @@ const styles = {
     transform: 'translate(-50%, -50%)'
   },
   color: {
+    background: colors.defaultDarken,
     [':hover']: {
-      backgroundColor: colors.default
-    },
-    backgroundColor: color(colors.default).darken(.1).hex()
+      background: colors.default
+    }
+  },
+  accent: {
+    background: colors.accentDarken,
+    [':hover']: {
+      background: colors.accent
+    }
   },
   disabled: {
     cursor: 'initial',
-    backgroundColor: colors.disabled,
+    background: colors.disabled,
     opacity: .5,
     [':hover']: {
       opacity: .5
     }
-  },
-  accent: {
-    [':hover']: {
-      backgroundColor: colors.accent
-    },
-    backgroundColor: color(colors.accent).darken(.1).hex()
   },
   plain: {
     textTransform: 'none',

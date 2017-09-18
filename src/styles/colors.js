@@ -1,3 +1,5 @@
+import color from 'color';
+
 const colors = {
   red: '#e74c3c',
   white: '#FFFFFF',
@@ -12,10 +14,9 @@ const colors = {
   green: '#2ecc71'
 };
 
-export default Object.assign({
+const labelled = {
   danger: colors.red,
   neutral: colors.lightGray,
-  neutralDark: colors.gray,
   alert: colors.orange,
   success: colors.green,
   default: colors.green,
@@ -31,4 +32,11 @@ export default Object.assign({
   headerForeground: colors.darkGray,
   inputBackground: colors.carrara,
   inputBackgroundDark: colors.gray
-}, colors);
+};
+
+export default Object.assign({
+  backgroundDarken: color(labelled.background).darken(.1).hex(),
+  neutralDarken: color(labelled.neutral).darken(.3).hex(),
+  defaultDarken: color(labelled.default).darken(.1).hex(),
+  accentDarken: color(labelled.accent).darken(.2).hex()
+}, labelled, colors);

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import color from 'color';
 
 import {minimal, minor, normal, content} from 'styles/spacing';
 import colors from 'styles/colors';
@@ -62,7 +61,7 @@ const styles = {
     margin: '0 1px',
     padding: `${minimal} ${minor}`,
     color: colors.foregroundDark,
-    background: color(colors.background).darken(.1).hex()
+    background: colors.backgroundDarken
   },
   tabActive: {
     background: colors.background,
