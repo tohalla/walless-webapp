@@ -16,6 +16,7 @@ export default class Button extends React.Component {
     type: PropTypes.string,
     plain: PropTypes.bool,
     accent: PropTypes.bool,
+    simple: PropTypes.bool,
     disabled: PropTypes.bool
   };
   static defaultProps = {
@@ -35,6 +36,7 @@ export default class Button extends React.Component {
       disabled,
       loading,
       style,
+      simple,
       ...props
     } = this.props;
     return (
@@ -44,6 +46,7 @@ export default class Button extends React.Component {
           onClick={this.handleClick}
           style={[].concat(styles.button,
             plain ? [styles.plain, disabled ? {opacity: .5} : {opacity: 1}]
+            : simple ? [styles.simple, disabled ? {opacity: .5} : {opacity: 1}]
             : [
               accent ? styles.accent : styles.color,
               loading ?
@@ -88,6 +91,12 @@ const styles = {
     color: colors.foregroundLight,
     position: 'relative',
     userSelect: 'none'
+  },
+  simple: {
+    [':hover']: {color: colors.neutralDark},
+    color: colors.neutral,
+    background: 'none',
+    boxShadow: 'none'
   },
   buttonLoading: {
     cursor: 'initial',
