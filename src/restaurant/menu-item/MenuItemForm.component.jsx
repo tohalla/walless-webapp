@@ -5,11 +5,20 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import {reduce, set, get, pick, equals} from 'lodash/fp';
+import {
+  reduce,
+  set,
+  get,
+  pick,
+  equals,
+  findIndex
+} from 'lodash/fp';
 
 import Checkbox from 'components/Checkbox.component';
 import Select from 'components/Select.component';
 import config from 'config';
+import OptionForm from 'restaurant/menu-item/OptionForm.component';
+import Option from 'restaurant/menu-item/Option.component';
 import Input from 'components/Input.component';
 import Form from 'components/Form.component';
 import SelectItems from 'components/SelectItems.component';
@@ -19,14 +28,14 @@ import {
   updateMenuItemImages,
   createMenuItemI18n,
   updateMenuItemDiets,
-  updateMenuItemI18n
+  updateMenuItemI18n,
+  updateMenuItemOptions
 } from 'graphql/restaurant/menuItem.mutations';
 import {
   getMenuItem,
   getMenuItemTypes
 } from 'graphql/restaurant/menuItem.queries';
 import {getDiets} from 'graphql/misc.queries';
-import {getIngredients} from 'graphql/restaurant/ingredient.queries';
 import {getImagesForRestaurant} from 'graphql/file.queries';
 import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
@@ -76,7 +85,8 @@ class MenuItemForm extends React.Component {
         menuItemType,
         diets = [],
         price = '',
-        images = []
+        images = [],
+        options = []
       } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}
     } = props;
     updateState({
@@ -91,7 +101,8 @@ class MenuItemForm extends React.Component {
         diets.map(item => item.id)
       ) : new Set(),
       type: get(['id'])(menuItemType),
-      category: get(['id'])(menuItemCategory)
+      category: get(['id'])(menuItemCategory),
+      options
     });
   };
   handleInputChange = (path, getValue = item => item.target.value) => item =>
@@ -105,13 +116,14 @@ class MenuItemForm extends React.Component {
       updateMenuItemDiets,
       createMenuItemI18n,
       updateMenuItemI18n,
+      updateMenuItemOptions,
       getImagesForRestaurant,
       restaurant: {id: restaurant, currency: {code: currency}},
       onSubmit,
       onError,
       menuItem: originalMenuItem = typeof this.props.menuItem === 'object' ? this.props.menuItem : {}
     } = this.props;
-    const {newImages, i18n} = this.state;
+    const {newImages, options, i18n} = this.state;
     const diets = Array.from(this.state.diets);
     const files = Array.from(this.state.selectedFiles);
     try {
@@ -148,6 +160,10 @@ class MenuItemForm extends React.Component {
           [] : updateMenuItemImages(menuItemId, allFiles),
         equals(diets)(originalMenuItem.diets && originalMenuItem.diets.map(i => i.id)) ?
           [] : updateMenuItemDiets(menuItemId, diets),
+        equals(options.map(i => i.id))(originalMenuItem.options && originalMenuItem.options.map(i => i.id)) ?
+          [] : updateMenuItemOptions(menuItemId, options.map(option =>
+            set('menuItem')(menuItemId)(option)
+          )),
         Object.keys(i18n).map(key =>
           mutation !== 'createMenuItem' && get(['i18n', key])(originalMenuItem) ?
             updateMenuItemI18n(Object.assign({language: key, menuItem: menuItemId}, i18n[key]))
@@ -162,6 +178,16 @@ class MenuItemForm extends React.Component {
       }
       throw new Error(error);
     };
+  };
+  handleAddOption = option =>
+    this.setState({options: [].concat(this.state.options, option)});
+  handleEditOption = (option, oldOption) => {
+    const index = findIndex(o => oldOption.id === o.id)(this.state.options);
+    if (index !== -1) {
+      const options = this.state.options.slice();
+      options[index] = option;
+      this.setState({options});
+    }
   };
   handleDropzoneDelete = image => () => this.setState({
     newImages: this.state.newImages.filter(i => !equals(i)(image))
@@ -192,12 +218,12 @@ class MenuItemForm extends React.Component {
       languages,
       menuItemTypes,
       diets,
-      language,
-      ingredients
+      language
     } = this.props;
     const {
       selectedFiles,
       newImages = [],
+      options = [],
       activeLanguage,
       price,
       type,
@@ -309,10 +335,25 @@ class MenuItemForm extends React.Component {
                   />
                 ))
               } : null,
-              ingredients.length ? {
-                label: t('restaurant.menuItem.ingredients'),
-                item: <div />
-              } : null
+              {
+                label: t('restaurant.menuItem.options'),
+                item: (
+                  <div>
+                    {options.map((option, index) => (
+                      <Option
+                          disabledOptions={options}
+                          key={index}
+                          onEdit={this.handleEditOption}
+                          option={option}
+                      />
+                    ))}
+                    <OptionForm
+                        disabledOptions={options}
+                        onSubmit={this.handleAddOption}
+                    />
+                  </div>
+                )
+              }
           ]}
         />
       </Form>
@@ -333,5 +374,5 @@ export default compose(
   updateMenuItemDiets,
   getMenuItemTypes,
   getDiets,
-  getIngredients
+  updateMenuItemOptions
 )(MenuItemForm);
