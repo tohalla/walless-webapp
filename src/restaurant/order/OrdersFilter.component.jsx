@@ -24,7 +24,7 @@ class OrdersFilter extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.resetFilter(props, state => this.state = state);
+    this.resetFilter(props, state => this.state = state); // eslint-disable-line
   }
   componentWillReceiveProps(newProps) {
     this.resetFilter(newProps);

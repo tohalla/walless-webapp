@@ -100,6 +100,8 @@ class Menus extends React.Component {
       >
         {typeof get('handleDelete')(deleteModal) === 'function' ? (
           <ConfirmationModal
+              accent
+              confirmText={t('delete')}
               message={
                 t('confirmDelete', {
                   name: get(['i18n', language, 'name'])(deleteModal.item)
