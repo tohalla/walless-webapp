@@ -47,18 +47,20 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'space-between',
-    alignSelf: 'flex-start',
     userSelect: 'none',
     cursor: 'default',
     flex: 0
   },
   label: {
     flex: 0,
-    margin: `0 ${minor}`
+    margin: `0 ${minor}`,
+    whiteSpace: 'nowrap',
+    alignSelf: 'center'
   },
   checkbox: {
     flex: 0,
-    fontSize: '20px'
+    fontSize: '20px',
+    alignSelf: 'center'
   },
   disabled: {
     color: colors.lightGray
