@@ -77,6 +77,7 @@ class RestaurantForm extends React.Component {
       activeLanguage: 'en',
       currency: 'EUR',
       newImages: [],
+      loading: false,
       selectedFiles: selectedFiles ? new Set(
         selectedFiles.map(item => item.id)
       ) : new Set()
@@ -87,6 +88,7 @@ class RestaurantForm extends React.Component {
     this.setState(set(path)(value)(this.state));
   };
   handleSubmit = async() => {
+    this.setState({loading: true});
     const {
       createRestaurant,
       updateRestaurant,
@@ -193,10 +195,16 @@ class RestaurantForm extends React.Component {
     const {
       activeLanguage,
       selectedFiles = new Set(),
-      newImages = []
+      newImages = [],
+      loading
     } = this.state;
     return (
-      <Form onCancel={onCancel} onSubmit={this.handleSubmit} style={style}>
+      <Form
+          loading={loading}
+          onCancel={onCancel}
+          onSubmit={this.handleSubmit}
+          style={style}
+      >
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}

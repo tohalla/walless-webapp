@@ -79,7 +79,7 @@ class SelectImages extends React.Component {
             {items}
           </div>
           <div style={styles.actions}>
-            <Button accent onClick={this.handleResetAction}>
+            <Button onClick={this.handleResetAction} simple>
               {t('cancel')}
             </Button>
           </div>

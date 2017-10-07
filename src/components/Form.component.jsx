@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 import {connect} from 'react-redux';
 
+import Loading from 'components/Loading.component';
 import Button from 'components/Button.component';
 
 const mapStateToProps = state => ({
@@ -67,9 +68,12 @@ class Form extends React.Component {
       isValid,
       FormComponent,
       contentStyle,
-      fieldStyle
+      fieldStyle,
+      loading
     } = this.props;
-    return (
+    return loading ?
+      <div style={[styles.container, style]}><Loading /></div>
+    : (
       <FormComponent onSubmit={this.handleSubmit} style={[styles.container, style]}>
         <div style={[].concat(styles.container, style, contentStyle)}>
           {fieldStyle ?
