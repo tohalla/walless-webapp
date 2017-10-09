@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 import {routerReducer} from 'react-router-redux';
 
 import apolloClient from 'apolloClient';
-import DevTools from 'DevTools';
 import notifications from 'notifications/notification';
 import translation, {fetchLanguages, setLanguage} from 'util/translation';
 import location, {updateLocation} from 'util/location';
@@ -22,9 +21,7 @@ const store = createStore(
   }),
   {},
   compose(
-    applyMiddleware(apolloClient.middleware(), thunk),
-    process.env.NODE_ENV === 'production' ?
-      f => f : DevTools.instrument()
+    applyMiddleware(apolloClient.middleware(), thunk)
   )
 );
 

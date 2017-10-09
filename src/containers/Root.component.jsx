@@ -4,7 +4,6 @@ import {StyleRoot} from 'radium';
 
 import MainNavigation from 'navigation/MainNavigation.component';
 import Notifications from 'notifications/Notifications.component';
-import DevTools from 'DevTools';
 import colors from 'styles/colors';
 
 export default class Root extends React.Component {
@@ -22,7 +21,6 @@ export default class Root extends React.Component {
         <div style={styles.content}>
           {this.props.children}
         </div>
-        {process.env.NODE_ENV === 'production' ? null : <DevTools />}
       </StyleRoot>
     );
   };
