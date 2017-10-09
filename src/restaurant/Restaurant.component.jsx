@@ -32,8 +32,10 @@ class Restaurant extends React.Component {
   state = {
     action: null
   };
+  componentWillMount = () => this._mounted = true;
+  componentWillUnmount = () => this._mounted = false;
   handleRestaurantSubmit = () =>
-    this.setState({action: null});
+    this._mounted && this.setState({action: null});
   handleActionChange = action => this.setState({action});
   handleActionSelect = action => () => this.handleActionChange(action);
   render() {

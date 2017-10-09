@@ -28,7 +28,7 @@ class ServingLocationForm extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.resetForm(props, state => this.state = state);
+    this.resetForm(props, state => this.state = state); // eslint-disable-line
   }
   componentWillReceiveProps(newProps) {
     if (
@@ -45,7 +45,8 @@ class ServingLocationForm extends React.Component {
       } = typeof props.servingLocation === 'object' && props.servingLocation ? props.servingLocation : {}
     } = props;
     updateState({
-      name
+      name,
+      loading: false
     });
   }
   handleInputChange = e => {
@@ -53,6 +54,7 @@ class ServingLocationForm extends React.Component {
     this.setState({[id]: value});
   };
   handleSubmit = e => {
+    this.setState({loading: true});
     e.preventDefault();
     const {
       createServingLocation,
@@ -82,9 +84,13 @@ class ServingLocationForm extends React.Component {
   };
   render() {
     const {t} = this.props;
-    const {name} = this.state;
+    const {name, loading} = this.state;
     return (
-      <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
+      <Form
+          loading={loading}
+          onCancel={this.handleCancel}
+          onSubmit={this.handleSubmit}
+      >
         <Input
             id="name"
             label={t('restaurant.servingLocation.name')}

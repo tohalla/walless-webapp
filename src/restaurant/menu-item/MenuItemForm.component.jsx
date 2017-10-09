@@ -93,6 +93,7 @@ class MenuItemForm extends React.Component {
       activeLanguage: 'en',
       price,
       i18n,
+      loading: false,
       newImages: [],
       selectedFiles: images ? new Set(
         images.map(item => item.id)
@@ -108,6 +109,7 @@ class MenuItemForm extends React.Component {
   handleInputChange = (path, getValue = item => item.target.value) => item =>
     this.setState(set(path)(getValue(item))(this.state));
   handleSubmit = async(e) => {
+    this.setState({loading: true});
     e.preventDefault();
     const {
       createMenuItem,
@@ -228,7 +230,8 @@ class MenuItemForm extends React.Component {
       price,
       type,
       category,
-      diets: selectedDiets
+      diets: selectedDiets,
+      loading
     } = this.state;
     const categories = type && menuItemTypes.length ?
       (menuItemTypes.find(i => i.id === type).menuItemCategories || []) : [];
@@ -254,7 +257,11 @@ class MenuItemForm extends React.Component {
       }
     }), {})(languages);
     return (
-      <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
+      <Form
+          loading={loading}
+          onCancel={this.handleCancel}
+          onSubmit={this.handleSubmit}
+      >
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}

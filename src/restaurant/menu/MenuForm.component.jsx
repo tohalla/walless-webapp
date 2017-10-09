@@ -63,6 +63,7 @@ class MenuForm extends React.Component {
     updateState({
       activeLanguage: 'en',
       manageMenuItems: false,
+      loading: false,
       i18n,
       menuItems: menuItems ? new Set(
         menuItems.map(item => item.id)
@@ -73,6 +74,7 @@ class MenuForm extends React.Component {
     this.setState(set(path)(event.target.value)(this.state));
   handleSubmit = async event => {
     event.preventDefault();
+    this.setState({loading: true});
     const {
       createMenu,
       updateMenu,
@@ -132,7 +134,8 @@ class MenuForm extends React.Component {
     const {
       manageMenuItems,
       menuItems,
-      activeLanguage
+      activeLanguage,
+      loading
     } = this.state;
     const tabs = reduce((prev, value) => Object.assign({}, prev, {
       [value.locale]: {
@@ -156,7 +159,11 @@ class MenuForm extends React.Component {
       }
     }), {})(languages);
     return (
-      <Form onCancel={this.handleCancel} onSubmit={this.handleSubmit}>
+      <Form
+          loading={loading}
+          onCancel={this.handleCancel}
+          onSubmit={this.handleSubmit}
+      >
         <Tabbed
             onTabChange={this.handleTabChange}
             tab={activeLanguage}

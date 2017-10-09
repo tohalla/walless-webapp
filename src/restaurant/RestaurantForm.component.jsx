@@ -37,7 +37,7 @@ const mapStateToProps = state => ({
 @Radium
 class RestaurantForm extends React.Component {
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
     onError: PropTypes.func,
     onCancel: PropTypes.func,
     createRestaurant: PropTypes.func.isRequired,
@@ -153,7 +153,7 @@ class RestaurantForm extends React.Component {
           )
         )
       );
-      onSubmit();
+      if (typeof onSubmit === 'function') onSubmit();
       if (getImagesForRestaurant) {
         getImagesForRestaurant.refetch();
       }
