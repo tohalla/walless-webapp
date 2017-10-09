@@ -39,8 +39,7 @@ const menuItems = [
 ];
 
 const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  routing: state.util.routing
+  t: state.util.translation.t
 });
 
 @Radium
@@ -49,8 +48,7 @@ class MainNavigation extends React.Component {
     router: PropTypes.object.isRequired
   }
   render() {
-    const {router: {location}} = this.context;
-    const {t, account} = this.props;
+    const {t, account, location} = this.props;
     return (
       <div style={[styles.container, shadow.small]}>
         <Logo />

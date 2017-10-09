@@ -82,7 +82,6 @@ export default class Input extends React.Component {
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
                 onFocus={this.handleFocus}
-                ref={c => this.input = c}
                 style={Object.assign({}, styles.input, isFocused ? styles.inputFocus : {})}
                 value={currentValue}
             />

@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {StyleRoot} from 'radium';
+import {
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 
+import {requireAuthentication} from 'util/auth';
+import Home from 'pages/Home.component';
+import Restaurant from 'pages/Restaurant.component';
 import MainNavigation from 'navigation/MainNavigation.component';
 import Notifications from 'notifications/Notifications.component';
 import colors from 'styles/colors';
@@ -17,9 +25,20 @@ export default class Root extends React.Component {
     return (
       <StyleRoot style={styles.root}>
         <Notifications />
-        <MainNavigation />
+        <MainNavigation {...this.props} />
         <div style={styles.content}>
-          {this.props.children}
+          <Switch>
+            <Route component={Home} exact path="/" />
+            <Route
+                component={Restaurant}
+                onEnter={requireAuthentication}
+                path="/restaurant/:restaurant?"
+            />
+            <Route path="/documentation" />
+            <Route path="/contact" />
+            <Route path="/settings" />
+            <Redirect path="*" to="/" />
+          </Switch>
         </div>
       </StyleRoot>
     );

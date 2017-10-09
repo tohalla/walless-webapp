@@ -1,6 +1,5 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
-import {routerReducer} from 'react-router-redux';
 
 import apolloClient from 'apolloClient';
 import notifications from 'notifications/notification';
@@ -9,8 +8,7 @@ import location, {updateLocation} from 'util/location';
 
 const util = combineReducers({
   translation,
-  location,
-  routing: routerReducer
+  location
 });
 
 const store = createStore(
