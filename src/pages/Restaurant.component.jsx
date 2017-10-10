@@ -236,7 +236,10 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'stretch'
   },
-  select: {backgroundColor: colors.gallery},
+  select: {
+    backgroundColor: colors.gallery,
+    border: 'none'
+  },
   navigationItem: {
     color: color(colors.foregroundDark).lighten(0.2).hex(),
     textOverflow: 'ellipsis',

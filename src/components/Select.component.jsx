@@ -11,7 +11,6 @@ import shadow from 'styles/shadow';
 @Radium
 export default class Select extends React.Component {
   static propTypes = {
-    dark: PropTypes.bool,
     clearable: PropTypes.bool,
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
@@ -19,38 +18,29 @@ export default class Select extends React.Component {
     ]),
     options: PropTypes.arrayOf(PropTypes.object).isRequired
   };
-  handleRenderValue = value => (
-    <div style={Object.assign({}, styles.value, this.props.dark ? styles.valueDark : {})}>
-      {value.label}
-    </div>
-  );
-  handleRenderInput = props => (
-    <input
-        {...props}
-        style={Object.assign({}, styles.input, this.props.dark ? styles.inputDark : {})}
-    />
-  );
+  handleRenderValue = value => <div style={styles.value}>{value.label}</div>;
+  handleRenderInput = props => <input {...props} style={styles.input} />;
   render() {
-    const {dark, style, options, ...props} = this.props;
-    const OptionComponent = props => <Option {...props} dark={dark} />;
+    const {style, options, ...props} = this.props;
     return (
       <div
-          style={{
-            minWidth: `${.6 * (1 + (this.props.clearable ? 1 : 0) + options.reduce((length, option) =>
-              option.label && option.label.length > length ? option.label.length : length,
-              0
-            ))}rem`
-          }}
+          style={[
+            {
+              minWidth: `${.6 * (1 + (this.props.clearable ? 1 : 0) + options.reduce((length, option) =>
+                option.label && option.label.length > length ? option.label.length : length,
+                0
+              ))}rem`,
+              border: `1px solid ${colors.border}`
+            },
+            style
+          ]}
       >
         <ReactSelect
             inputRenderer={this.handleRenderInput}
-            menuContainerStyle={Object.assign({}, styles.menuContainer, dark ? styles.menuContainerDark : {})}
-            optionComponent={OptionComponent}
+            menuContainerStyle={Object.assign({}, styles.menuContainer)}
+            optionComponent={Option}
             options={options}
-            style={Object.assign(
-              {boxShadow: 'none', borderRadius: 0},
-              style || styles.select, dark ? styles.selectDark : {}
-            )}
+            style={styles.select}
             valueRenderer={this.handleRenderValue}
             {...props}
         />
@@ -61,9 +51,6 @@ export default class Select extends React.Component {
 
 @Radium
 class Option extends React.Component {
-  static propTypes = {
-    dark: PropTypes.bool
-  };
   blockEvent = event => {
     event.preventDefault();
     event.stopPropagation();
@@ -99,7 +86,6 @@ class Option extends React.Component {
       option,
       instancePrefix,
       optionIndex,
-      dark,
       children
     } = this.props;
     return option.disabled ? (
@@ -116,7 +102,7 @@ class Option extends React.Component {
           onTouchMove={this.handleTouchMove}
           onTouchStart={this.handleTouchStart}
           role="option"
-          style={Object.assign({}, styles.option, dark ? styles.optionDark : {})}
+          style={styles.option}
           title={option.title}
       >
         {children}
@@ -127,14 +113,16 @@ class Option extends React.Component {
 
 const styles = {
   select: {
-    border: `1px solid ${colors.border}`,
+    background: 'none',
+    boxShadow: 'none',
     borderRadius: 0,
-    backgroundColor: colors.inputBackground
+    border: 'none'
   },
-  selectDark: {
-    border: 0,
-    backgroundColor: colors.inputBackgroundDark
-  },
+  menuContainer: Object.assign({
+    borderRadius: 0,
+    border: `1px solid ${colors.border}`,
+    backgroundColor: colors.backgroundLight
+  }, shadow.small),
   option: {
     color: colors.foregroundDark,
     padding: `${minor} ${normal}`,
@@ -144,26 +132,11 @@ const styles = {
       backgroundColor: color(colors.background).darken(0.05).hex()
     }
   },
-  optionDark: {
-    color: color(colors.foregroundLight).darken(0.1).hex(),
-    [':hover']: {
-      color: colors.foregroundLight,
-      backgroundColor: color(colors.backgroundDark).darken(0.15).hex()
-    }
-  },
   value: {color: colors.foregroundDark},
-  valueDark: {color: colors.gallery},
-  menuContainer: Object.assign({
-    borderRadius: 0,
-    border: 0,
-    backgroundColor: colors.backgroundLight
-  }, shadow.small),
-  menuContainerDark: {backgroundColor: color(colors.backgroundDark).darken(0.3).hex()},
   input: {
     margin: 0,
     padding: 0,
     background: 'none',
     border: 'none'
-  },
-  inputDark: {color: color(colors.foregroundLight).darken(0.1).hex()}
+  }
 };

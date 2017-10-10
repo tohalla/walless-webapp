@@ -6,8 +6,8 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
+import Cookie from 'js-cookie';
 
-import {requireAuthentication} from 'util/auth';
 import Home from 'pages/Home.component';
 import Restaurant from 'pages/Restaurant.component';
 import MainNavigation from 'navigation/MainNavigation.component';
@@ -29,11 +29,10 @@ export default class Root extends React.Component {
         <div style={styles.content}>
           <Switch>
             <Route component={Home} exact path="/" />
-            <Route
-                component={Restaurant}
-                onEnter={requireAuthentication}
-                path="/restaurant/:restaurant?"
-            />
+            {
+              Cookie.get('Authorization') &&
+              <Route component={Restaurant} path="/restaurant/:restaurant?" />
+            }
             <Route path="/documentation" />
             <Route path="/contact" />
             <Route path="/settings" />

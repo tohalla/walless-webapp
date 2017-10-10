@@ -62,8 +62,3 @@ setInterval(() => {
 
 export default authenticationHandler;
 
-export const requireAuthentication = (nextState: Object, replace: Function) => {
-  if (!Cookie.get('Authorization')) {
-    replace('/');
-  }
-};
