@@ -19,8 +19,7 @@ const apolloClient = new ApolloClient({
 networkInterface.use([{
   async applyMiddleware(req, next) {
     if (Cookie.get('Expiration') < Date.now() / 1000) {
-      await authenticationHandler.logout();
-      await apolloClient.resetStore();
+      authenticationHandler.logout();
     } else {
       if (!req.options.headers) {
         req.options.headers = {};
