@@ -22,7 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('./webpack')({
     before: app => {
       app.use(require('cookie-parser')());
-      app.get(/^((?!assets).)*$/, async (req, res, next) => {
+      app.get(/^((?!(assets|favicon.ico)).)*$/, async (req, res, next) => {
         const token = req.cookies['Authorization'];
         const {role} = token ? await jwt.verify(
           token.replace('Bearer ', ''),

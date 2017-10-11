@@ -52,7 +52,7 @@ module.exports = {
         })
       },
       {
-        test: /\.png$/,
+        test: /\.(png|ico)$/,
         loader: 'url-loader',
         options: {
           limit: 100000
@@ -93,12 +93,14 @@ module.exports = {
       template: path.resolve(__dirname, 'html', 'default.html'),
       inject: 'body',
       chunks: ['app', 'vendor'],
+      favicon: 'assets/images/favicon.ico',
       filename: './index.html'
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'html', 'authentication.html'),
       inject: 'body',
       chunks: ['authentication'],
+      favicon: 'assets/images/favicon.ico',
       filename: './authentication.html'
     })
   ]
