@@ -12,6 +12,7 @@ module.exports = {
       'react-hot-loader/patch',
       path.resolve(__dirname, 'src', 'index')
     ],
+    authentication: path.resolve(__dirname, 'src', 'authentication'),
     vendor: [
       'material-design-icons/iconfont/material-icons.css',
       'normalize.css/normalize.css',
@@ -25,9 +26,9 @@ module.exports = {
     }
   },
   output: {
-    path: path.resolve(__dirname, 'dist', 'assets'),
+    path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: '[name].js'
+    filename: 'assets/js/[name].js'
   },
   module: {
     rules: [
@@ -39,7 +40,15 @@ module.exports = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          use: 'css-loader'
+          use: [
+            {loader: 'css-loader', options: {importLoaders: 1}},
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [require('autoprefixer')()]
+              }
+            }
+          ]
         })
       },
       {
@@ -54,7 +63,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 50000,
-          name: 'fonts/[name].[ext]',
+          name: 'assets/fonts/[name].[ext]',
           mimetype: 'application/font-woff'
         }
       },
@@ -76,14 +85,21 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('development')
     }),
     new ExtractTextPlugin({
-      filename: '[name].css',
+      filename: 'assets/css/[name].css',
       disable: false,
       allChunks: true
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'html', 'default.html'),
       inject: 'body',
+      chunks: ['app', 'vendor'],
       filename: './index.html'
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'html', 'authentication.html'),
+      inject: 'body',
+      chunks: ['authentication'],
+      filename: './authentication.html'
     })
   ]
 };
