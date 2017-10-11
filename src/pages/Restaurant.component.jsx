@@ -78,16 +78,16 @@ class Restaurant extends React.Component {
   checkRestaurant = props => {
     const {restaurants, match: {params: {restaurant}}, history} = props;
     if (!restaurant && Array.isArray(restaurants) && restaurants.length) {
-      history.push(`/restaurant/${restaurants[0].id}`);
+      history.push(`/${restaurants[0].id}`);
       return false;
     } else if (!find(r => r.id === Number(restaurant))(restaurants)) {
-      history.push('/restaurant/');
+      history.push('/');
       return false;
     }
     return true;
   };
   handleRestaurantChange = ({value}) =>
-    this.props.history.push(`/restaurant/${value}`);
+    this.props.history.push(`/${value}`);
   renderRouteComponentWithProps = (Component, props) => routeProps =>
     <Component {...props} {...routeProps} />;
   render() {
@@ -107,7 +107,7 @@ class Restaurant extends React.Component {
         find(restaurant =>
           restaurant.id === Number(match.params.restaurant)
       )(restaurants) : restaurants[0];
-      return (
+      return restaurant ? (
         <div style={styles.container}>
           <Navigation style={[styles.navigation, shadow.right]}>
             <Select
@@ -129,16 +129,16 @@ class Restaurant extends React.Component {
               <NavigationItem
                   active={
                     item.path &&
-                    location.pathname.indexOf(`/restaurant/${restaurant.id}/${item.path}`) === 0 ||
+                    location.pathname.indexOf(`/${restaurant.id}/${item.path}`) === 0 ||
                     (!item.path && (
-                      location.pathname === `/restaurant/${restaurant.id}/` ||
-                      location.pathname === `/restaurant/${restaurant.id}`
+                      location.pathname === `/${restaurant.id}/` ||
+                      location.pathname === `/${restaurant.id}`
                     ))
                   }
                   activeStyle={styles.navigationItemActive}
                   chevron
                   key={index}
-                  path={`/restaurant/${restaurant.id}/${item.path}`}
+                  path={`/${restaurant.id}/${item.path}`}
                   style={styles.navigationItem}
               >
                 {t(item.translationKey)}
@@ -156,63 +156,62 @@ class Restaurant extends React.Component {
                     RestaurantComponent,
                     {restaurant}
                   )}
-                  exact path="/restaurant/:restaurant?"
+                  exact path="/:restaurant?"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
                     Menus,
                     {restaurant}
                   )}
-                  path="/restaurant/:restaurant/menus"
+                  path="/:restaurant/menus"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
                     MenuItems,
                     {restaurant}
                   )}
-                  path="/restaurant/:restaurant/menuitems"
+                  path="/:restaurant/menuitems"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
                     Orders,
                     {restaurant}
                   )}
-                  path="/restaurant/:restaurant/orders"
+                  path="/:restaurant/orders"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
                     ServingLocations,
                     {restaurant}
                   )}
-                  path="/restaurant/:restaurant/servinglocations"
+                  path="/:restaurant/servinglocations"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
                     Dashboard,
                     {restaurant}
                   )}
-                  path="/restaurant/:restaurant/dashboard"
+                  path="/:restaurant/dashboard"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
                     AccountManagement,
                     {restaurant}
                   )}
-                  path="/restaurant/:restaurant/users"
+                  path="/:restaurant/users"
               />
-              <Redirect path="*" to="/restaurant" />
+              <Redirect path="*" to="/" />
             </Switch>
+          </PageContent>
+        </div>
+      ) : (
+        <div style={styles.container}>
+          <PageContent>
+            <RestaurantForm onSubmit={this.handleRestaurantSubmit} style={styles.contentContainer} />
           </PageContent>
         </div>
       );
     }
-    return null && (
-      <div style={styles.container}>
-        <PageContent>
-          <RestaurantForm onSubmit={this.handleRestaurantSubmit} style={styles.contentContainer} />
-        </PageContent>
-      </div>
-    );
   }
 }
 

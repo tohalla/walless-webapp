@@ -16,21 +16,11 @@ import {getActiveAccount} from 'graphql/account/account.queries';
 const menuItems = [
   {
     path: '/',
-    translationKey: 'navigation.home'
-  },
-  {
-    path: '/restaurant',
-    translationKey: 'navigation.restaurant',
-    requireAuthentication: true
+    translationKey: 'navigation.restaurant'
   },
   {
     path: '/documentation',
     translationKey: 'navigation.documentation'
-  },
-  {
-    path: '/settings',
-    translationKey: 'navigation.settings.settings',
-    requireAuthentication: true
   },
   {
     path: '/contact',
@@ -48,13 +38,12 @@ class MainNavigation extends React.Component {
     router: PropTypes.object.isRequired
   }
   render() {
-    const {t, account, location} = this.props;
+    const {t, location} = this.props;
     return (
       <div style={[styles.container, shadow.small]}>
         <Logo />
         <Navigation style={styles.navigation}>
           {menuItems
-            .filter(item => !item.requireAuthentication || account)
             .map((item, index) => (
               <NavigationItem
                   active={

@@ -6,9 +6,7 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
-import Cookie from 'js-cookie';
 
-import Home from 'pages/Home.component';
 import Restaurant from 'pages/Restaurant.component';
 import MainNavigation from 'navigation/MainNavigation.component';
 import Notifications from 'notifications/Notifications.component';
@@ -28,14 +26,9 @@ export default class Root extends React.Component {
         <MainNavigation {...this.props} />
         <div style={styles.content}>
           <Switch>
-            <Route component={Home} exact path="/" />
-            {
-              Cookie.get('Authorization') &&
-              <Route component={Restaurant} path="/restaurant/:restaurant?" />
-            }
             <Route path="/documentation" />
             <Route path="/contact" />
-            <Route path="/settings" />
+            <Route component={Restaurant} path="/:restaurant?" />
             <Redirect path="*" to="/" />
           </Switch>
         </div>
@@ -43,7 +36,6 @@ export default class Root extends React.Component {
     );
   };
 }
-
 
 const styles = {
   root: {
