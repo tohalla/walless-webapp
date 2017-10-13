@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
-import apolloProvider from 'router/apolloProvider';
+import apolloProvider from 'apolloProvider';
 
 ReactDOM.render(apolloProvider, document.getElementById('app'));
 

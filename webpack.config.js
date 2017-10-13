@@ -16,7 +16,7 @@ module.exports = merge(
     },
     resolve: {
       extensions: ['.js', '.jsx'],
-      alias: {radium: path.join(__dirname, 'node_modules', 'radium')}
+      alias: {radium: path.resolve(__dirname, 'node_modules', 'radium')}
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -49,11 +49,21 @@ module.exports = merge(
           })
         },
         {
-          test: /\.(png|ico)$/,
-          loader: 'url-loader',
-          options: {
-            limit: 100000
-          }
+          test: /\.(gif|png|jpe?g|svg)$/i,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: 'assets/images/[name].[ext]'
+              }
+            },
+            {
+              loader: 'image-webpack-loader',
+              options: {
+                bypassOnDebug: true
+              }
+            }
+          ]
         },
         {
           test: /\.(ttf|eot|woff|woff2)?(\?v=[0-9]+\.[0-9]+\.[0-9]+)?$/,
@@ -63,11 +73,6 @@ module.exports = merge(
             name: 'assets/fonts/[name].[ext]',
             mimetype: 'application/font-woff'
           }
-        },
-        {
-          test: /\.svg$/,
-          exclude: /node_modules/,
-          loader: 'svg-react-loader'
         }
       ]
     },

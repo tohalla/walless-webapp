@@ -3,7 +3,7 @@ import Radium from 'radium';
 import {connect} from 'react-redux';
 
 import {notificationsZIndex} from 'styles/zIndex';
-import Notification from 'notifications/Notification.Component';
+import Notification from 'notifications/Notification.component';
 
 const mapStateToProps = state => ({
   notifications: state.notifications

@@ -1,5 +1,6 @@
 /* eslint-disable import/no-commonjs */
 const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   plugins: [
@@ -8,8 +9,9 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /se|fi|en/),
     new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /se|fi|en/),
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       compress: {
@@ -28,7 +30,13 @@ module.exports = {
         comments: false
       }
     }),
-    new webpack.HashedModuleIdsPlugin()
+    new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
   ]
 };
 

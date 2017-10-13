@@ -5,8 +5,8 @@
   transform: translate(-50%, -50%);
   display: flex;
   align-items: stretch;
-  width: 40%;
-  min-width: 30rem;
+  width: 90%;
+  max-width: 30rem;
 }
 
 .left {
@@ -41,6 +41,7 @@
   border-bottom: 1px solid #9E9E9E;
   margin-bottom: 0.5rem;
   resize: none;
+  border-radius: 0;
 }
 
 .actions {
@@ -56,8 +57,26 @@
   padding: 0.5rem 1rem;
   background: #26AE53;
   color: #F2F1EF;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.14), 0 3px 6px rgba(0,0,0,0.2);
 }
 
 .button:hover {
   background: #2ecc71;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.14), 0 3px 6px rgba(0,0,0,0.2);
+}
+
+@media only screen and (max-width : 320px) {
+  .authentication {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form {
+    padding: 0.5rem;
+  }
+
+  .right {
+    border: none;
+  }
 }
