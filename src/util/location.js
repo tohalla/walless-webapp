@@ -8,7 +8,7 @@ export default (state: Object = initialState, action: Object) =>
     Object.assign({}, state, action.payload)
   : state;
 
-export const updateLocation = async(dispatch: Function) =>
+export const updateLocation = async (dispatch: Function) =>
   navigator.geolocation ? navigator.geolocation.getCurrentPosition(position =>
     dispatch({
       type: SET_LOCATION,

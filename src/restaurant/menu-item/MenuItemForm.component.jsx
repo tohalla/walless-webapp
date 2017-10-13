@@ -93,9 +93,9 @@ class MenuItemForm extends React.Component {
   };
   handleInputChange = (path, getValue = item => item.target.value) => item =>
     this.setState(set(path)(getValue(item))(this.state));
-  handleSubmit = async(e) => {
+  handleSubmit = () => async (event) => {
     this.setState({loading: true});
-    e.preventDefault();
+    event.preventDefault();
     const {
       createMenuItem,
       updateMenuItem,
@@ -117,7 +117,7 @@ class MenuItemForm extends React.Component {
       const formData = new FormData();
       formData.append('restaurant', restaurant);
       const allFiles = newImages.length ? files.concat(await (await fetch(
-        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}/image`,
+        `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.upload.endpoint}/image`,
         {
           method: 'POST',
           body: newImages.reduce(
@@ -245,7 +245,7 @@ class MenuItemForm extends React.Component {
       <Form
           loading={loading}
           onCancel={this.handleCancel}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.handleSubmit()}
       >
         <Tabbed
             onTabChange={this.handleTabChange}

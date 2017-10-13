@@ -19,7 +19,7 @@ const prod = process.env.NODE_ENV === 'production';
 const handleRequests = app => {
   app
     .use(require('cookie-parser')())
-    .get('*.js', (req, res, next) => {
+    .get('/assets/app.js', (req, res, next) => {
       if (prod) {
         req.url = req.url + '.gz';
         res.set('Content-Encoding', 'gzip');
@@ -30,24 +30,29 @@ const handleRequests = app => {
       filter: (req, res) =>
         (prod && !req.url.endsWith('.gz')) || compression.filter(req, res)
     }))
-    .get(/^((?!(assets|favicon.ico)).)*$/, async (req, res, next) => {
-      const token = req.cookies['Authorization'];
-      const {role} = token ? await jwt.verify(
-        token.replace('Bearer ', ''),
-        process.env.JWT_SECRET || 'd'
-      ) : 'guest';
-      if (
-        req.path !== '/authentication.html' &&
-        allowedRoles.indexOf(role) === -1
-      ) {
-        res.redirect('/authentication.html');
-      } else if (
-        req.path === '/authentication.html' &&
-        allowedRoles.indexOf(role) !== -1
-      ) {
-        res.redirect('/');
-      } else {
-        next();
+    .get(/^(.*\.(?!(png|jpg|svg|js|gz|pdf|css|zip|ttf)$))?[^.]*$/, async (req, res, next) => {
+      try {
+        const token = req.cookies['Authorization'];
+        const {role} = token ? await jwt.verify(
+          token.replace('Bearer ', ''),
+          process.env.JWT_SECRET || 'd'
+        ) : 'guest';
+        const authorized = allowedRoles.indexOf(role) !== -1;
+        if (req.path !== '/authentication.html' && !authorized) {
+          res.redirect('/authentication.html');
+        } else if (req.path === '/authentication.html' && authorized) {
+          res.redirect('/');
+        } else if (prod && authorized) {
+          res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+        } else {
+          next();
+        }
+      } catch (error) {
+        if (req.path !== '/authentication.html') {
+          res.redirect('/authentication.html');
+        } else {
+          next();
+        }
       }
     })
     .use(prod ?
@@ -73,8 +78,10 @@ if (prod) {
   });
 }
 
-app
-  .listen(3000)
-  .on('upgrade', (req, socket, head) => prod ?
-    undefined : proxy.ws(req, socket, head, {target: 'http://localhost:3001'})
+const server = app.listen(3000);
+
+if (!prod) {
+  server.on('upgrade', (req, socket, head) =>
+    proxy.ws(req, socket, head, {target: 'http://localhost:3001'})
   );
+}

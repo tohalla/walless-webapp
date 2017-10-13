@@ -21,7 +21,7 @@ module.exports = merge(
     output: {
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
-      filename: 'assets/js/[name].js'
+      filename: 'assets/js/[name].[hash].js'
     },
     module: {
       rules: [
@@ -49,12 +49,12 @@ module.exports = merge(
           })
         },
         {
-          test: /\.(gif|png|jpe?g|svg)$/i,
+          test: /\.(svg|gif|png|jpe?g)$/i,
           use: [
             {
               loader: 'file-loader',
               options: {
-                name: 'assets/images/[name].[ext]'
+                name: 'assets/images/[name].[hash:8].[ext]'
               }
             },
             {
@@ -70,7 +70,7 @@ module.exports = merge(
           loader: 'url-loader',
           options: {
             limit: 50000,
-            name: 'assets/fonts/[name].[ext]',
+            name: 'assets/fonts/[name].[hash:8].[ext]',
             mimetype: 'application/font-woff'
           }
         }
@@ -78,7 +78,7 @@ module.exports = merge(
     },
     plugins: [
       new ExtractTextPlugin({
-        filename: 'assets/css/[name].css',
+        filename: 'assets/css/[name].[contenthash:8].css',
         disable: false,
         allChunks: true
       }),

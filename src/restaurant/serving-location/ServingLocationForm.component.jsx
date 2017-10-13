@@ -2,7 +2,7 @@ import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {equals} from 'lodash/fp';
+import {equals, omit} from 'lodash/fp';
 
 import Input from 'components/Input.component';
 import Form from 'components/Form.component';
@@ -59,7 +59,8 @@ class ServingLocationForm extends React.Component {
       onSubmit,
       servingLocation = typeof this.props.servingLocation === 'object' ? this.props.servingLocation : {}
     } = this.props;
-    const finalServingLocation = Object.assign({}, this.state,
+    const finalServingLocation = Object.assign(
+      omit(['loading'])(this.state),
       servingLocation ? {id: servingLocation.id} : null,
       {
         restaurant: restaurant.id
@@ -91,6 +92,7 @@ class ServingLocationForm extends React.Component {
             id="name"
             label={t('restaurant.servingLocation.name')}
             onChange={this.handleInputChange}
+            required
             value={name}
         />
       </Form>

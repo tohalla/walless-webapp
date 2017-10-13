@@ -1,10 +1,8 @@
-const url = process.env.NODE_ENV === 'production' ? 'localhost' : 'localhost';
-const port = process.env.NODE_ENV === 'production' ? 8080 : 8080;
-
 export default {
   api: {
-    url,
-    port,
+    url: process.env.NODE_ENV === 'production' ?
+      'api.walless.fi' : 'localhost',
+    port: process.env.NODE_ENV === 'production' ? 80 : 8080,
     protocol: process.env.NODE_ENV === 'production' ? 'https' : 'http',
     graphQL: {
       endpoint: 'graphql'
@@ -23,8 +21,9 @@ export default {
     }
   },
   websocket: {
-    url,
-    port,
+    url: process.env.NODE_ENV === 'production' ?
+      'api.walless.fi' : 'localhost',
+    port: process.env.NODE_ENV === 'production' ? 80 : 8080,
     protocol: process.env.NODE_ENV === 'production' ? 'wss' : 'ws',
     endpoint: undefined
   }

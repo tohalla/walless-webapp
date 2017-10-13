@@ -6,7 +6,7 @@ import config from 'config';
 
 const {api: {protocol, port, url, translation: {endpoint}}} = config;
 
-const translationsUrl = `${protocol}://${url}:${port}/${endpoint}`;
+const translationsUrl = `${protocol}://${url}${port === 80 ? '' : `:${port}`}/${endpoint}`;
 
 const polyglot = new Polyglot();
 
@@ -25,7 +25,7 @@ export default (state: Object = initialState, action: Object) =>
     Object.assign({}, state, action.payload)
   : state;
 
-export const setLanguage = (langCode: string) => async(dispatch: Function) => {
+export const setLanguage = (langCode: string) => async (dispatch: Function) => {
   const translations = await (
     await fetch(`${translationsUrl}/${langCode}`)
   ).json();
@@ -38,7 +38,7 @@ export const setLanguage = (langCode: string) => async(dispatch: Function) => {
   });
 };
 
-export const fetchLanguages = async(dispatch: Function) => {
+export const fetchLanguages = async (dispatch: Function) => {
   const languages = await (await fetch(translationsUrl)).json();
   dispatch({
     type: SET_LANGUAGES,

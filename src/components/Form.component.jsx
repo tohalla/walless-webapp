@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import {connect} from 'react-redux';
+import {get} from 'lodash/fp';
 
 import Loading from 'components/Loading.component';
 import Button from 'components/Button.component';
@@ -9,6 +10,23 @@ import Button from 'components/Button.component';
 const mapStateToProps = state => ({
   t: state.util.translation.t
 });
+
+const findInvalidInputs = components => components ?
+  [].concat(components).reduce((prev, curr) =>
+    curr ?
+      get(['props', 'required'])(curr) && (
+        curr.props.value === '' || typeof curr.props.value === 'undefined'
+      ) ? prev.concat(curr)
+        : curr.props ?
+          curr.props.children ? prev.concat(findInvalidInputs(curr.props.children))
+          : curr.props.items ? prev.concat(findInvalidInputs(curr.props.items))
+          : prev
+        : curr.item ? prev.concat(findInvalidInputs(curr.item))
+        : prev
+      : prev,
+    []
+  )
+: [];
 
 @Radium
 class Form extends React.Component {
@@ -71,16 +89,16 @@ class Form extends React.Component {
       fieldStyle,
       loading
     } = this.props;
+    const invalid = findInvalidInputs(children);
     return loading ?
       <div style={[styles.container, style]}><Loading /></div>
     : (
       <FormComponent onSubmit={this.handleSubmit} style={[styles.container, style]}>
-        <div style={[].concat(styles.container, style, contentStyle)}>
+        <div style={[].concat(styles.container, contentStyle)}>
           {fieldStyle ?
             children.map((child, index) =>
               <div key={index} style={fieldStyle}>{child}</div>
-            ) :
-            children
+            ) : children
           }
         </div>
         <div style={styles.actions}>
@@ -91,7 +109,7 @@ class Form extends React.Component {
             : null
           }
           <Button
-              disabled={!isValid}
+              disabled={!!invalid.length || !isValid}
               onClick={this.handleSubmit}
               type="submit"
           >

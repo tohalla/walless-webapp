@@ -52,11 +52,14 @@ export default class Input extends React.Component {
     }
   };
   handleFocus = event => {
-    this.setState({isFocused: true});
+    this.setState({isFocused: true, error: undefined});
     this.props.onFocus(event);
   };
   handleBlur = event => {
-    this.setState({isFocused: false});
+    this.setState({
+      isFocused: false,
+      error: this.props.required && !this.props.value
+    });
     this.props.onBlur(event);
   };
   render() {
@@ -66,7 +69,7 @@ export default class Input extends React.Component {
       Input,
       ...props
     } = this.props;
-    const {currentValue, isFocused} = this.state;
+    const {currentValue, isFocused, error} = this.state;
     return (
       <div style={styles.container}>
         <label
@@ -85,7 +88,7 @@ export default class Input extends React.Component {
                 style={Object.assign({}, styles.input, isFocused ? styles.inputFocus : {})}
                 value={currentValue}
             />
-            <div style={styles.bottom}>
+            <div style={[].concat(styles.bottom, error ? styles.bottomError : {})}>
               {isFocused ? <div style={styles.bottomFocus} /> : null}
             </div>
           </div>
@@ -133,6 +136,9 @@ const styles = {
     justifyContent: 'center',
     height: '3px',
     backgroundColor: colors.lightGray
+  },
+  bottomError: {
+    backgroundColor: colors.red
   },
   bottomFocus: {
     animation: 'x 0.3s ease 0s forwards 1',

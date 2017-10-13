@@ -79,14 +79,14 @@ class LocationInput extends React.Component {
         : reject(status)
       ) : resolve({})
     );
-  handleChange = async(v) => {
+  handleChange = async (v) => {
     const {value} = v || {};
     this.setState({value, address: value ? await this.getAddressData(value) : {}});
     if (typeof this.props.onChange === 'function') {
       this.props.onChange({value, address: this.state.address});
     }
   };
-  handleLoadOptions = debounce(this.props.updateDelay)(async(input) => {
+  handleLoadOptions = debounce(this.props.updateDelay)(async (input) => {
     if (!input) {
       return this.setState({options: [], loading: false});
     }

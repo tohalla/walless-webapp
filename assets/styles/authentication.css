@@ -5,18 +5,18 @@
   transform: translate(-50%, -50%);
   display: flex;
   align-items: stretch;
-  width: 90%;
+  width: 100%;
   max-width: 30rem;
 }
 
-.left {
+.logo-container {
   padding: 1rem;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   flex-direction: column;
 }
 
-.right {
+.form-container {
   border-left: 1px solid #E1E1E1;
   color: #9E9E9E;
   display: flex;
@@ -68,15 +68,15 @@
 @media only screen and (max-width : 320px) {
   .authentication {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
   }
 
   .form {
-    padding: 0.5rem;
+    padding: 1rem;
   }
 
-  .right {
+  .form-container {
     border: none;
   }
 }

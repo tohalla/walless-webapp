@@ -14,7 +14,7 @@
     "watch": "node server.js",
     "start": "pm2 start ecosystem.config.js -i max",
     "prebuild": "rm -rf dist && mkdir dist",
-    "build": "NODE_ENV=production webpack -p --progress"
+    "build": "NODE_ENV=production webpack --progress"
   },
   "keywords": [],
   "author": "Touko Hallasmaa",
@@ -84,7 +84,6 @@
     "material-design-icons": "^3.0.1",
     "postcss-loader": "^2.0.6",
     "react-hot-loader": "next",
-    "svg-react-loader": "^0.4.4",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.0",
     "url-loader": "^0.6.2",
@@ -101,9 +100,7 @@
       [
         "env",
         {
-          "targets": {
-            "uglify": 2
-          }
+          "modules": false
         }
       ],
       "react"

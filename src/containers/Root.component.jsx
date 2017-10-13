@@ -28,7 +28,7 @@ export default class Root extends React.Component {
           <Switch>
             <Route path="/documentation" />
             <Route path="/contact" />
-            <Route component={Restaurant} path="/:restaurant?" />
+            <Route component={(Restaurant)} path="/:restaurant?" />
             <Redirect path="*" to="/" />
           </Switch>
         </div>

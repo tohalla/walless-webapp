@@ -9,7 +9,7 @@ export const initializeNotificationHandler = async ({headers}) =>
   subscribe(
     {
       socket: io(
-        `${config.websocket.protocol}://${config.websocket.url}:${config.websocket.port}/restaurant`,
+        `${config.websocket.protocol}://${config.websocket.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/restaurant`,
         {
           transportOptions: {
             polling: {

@@ -60,11 +60,11 @@ class ServingLocations extends React.Component {
     });
   };
   getSelectHeaderProps = () => ({onClick: this.handleSelectHeaderClick});
-  handleDownloadQR = async() => {
+  handleDownloadQR = () => async () => {
     this.setState({downloadingQR: true});
     const {restaurant, addNotification, t} = this.props;
     const response = await fetch(
-      `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.servingLocation.endpoint}/restaurant/${restaurant.id}/` +
+      `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.servingLocation.endpoint}/restaurant/${restaurant.id}/` +
       `?servingLocations=[${[...this.state.selectedItems].toString()}]`,
       {
         method: 'GET',
@@ -126,7 +126,7 @@ class ServingLocations extends React.Component {
       },
       downloadQR: {
         label: t('restaurant.servingLocation.action.downloadQR'),
-        onClick: this.handleDownloadQR,
+        onClick: this.handleDownloadQR(),
         disabled: !size(selectedItems),
         loading: downloadingQR
       }

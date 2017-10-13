@@ -23,7 +23,7 @@ const store = createStore(
   )
 );
 
-(async() => {
+(async () => {
   await Promise.all([
     store.dispatch(fetchLanguages),
     store.dispatch(updateLocation)

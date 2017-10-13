@@ -56,18 +56,19 @@ class Restaurant extends React.Component {
     }
   };
   initializeNotificationHandler = (props, newProps) => {
+    const restaurant = get(['match', 'params', 'restaurant'])(newProps);
     if (
-      newProps.account &&
+      newProps.account && restaurant &&
       !get(['getActiveAccount', 'loading'])(newProps) && (
         !equals(newProps.account)(props.account) ||
         !equals(get(['match', 'params', 'restaurant'])(props))(
-          get(['match', 'params', 'restaurant'])(newProps)
+          restaurant
         )
       )
     ) {
       initializeNotificationHandler({
         headers: {
-          restaurant: get(['match', 'params', 'restaurant'])(newProps)
+          restaurant
         }
       });
     }
@@ -78,11 +79,12 @@ class Restaurant extends React.Component {
       history.push(`/${restaurants[0].id}`);
       return false;
     } else if (!find(r => r.id === Number(restaurant))(restaurants)) {
-      history.push('/');
+      if (location.pathname !== '/') history.push('/');
       return false;
     }
     return true;
   };
+  handleRestaurantSubmit = () => this.props.getRestaurantsByAccount.refetch();
   handleRestaurantChange = ({value}) =>
     this.props.history.push(`/${value}`);
   renderRouteComponentWithProps = (Component, props) => routeProps =>
@@ -201,14 +203,16 @@ class Restaurant extends React.Component {
             </Switch>
           </PageContent>
         </div>
-      ) : (
-        <div style={styles.container}>
-          <PageContent>
-            <RestaurantForm onSubmit={this.handleRestaurantSubmit} style={styles.contentContainer} />
-          </PageContent>
-        </div>
-      );
+      ) : null;
     }
+    return (
+      <PageContent>
+        <RestaurantForm
+            onSubmit={this.handleRestaurantSubmit}
+            style={styles.contentContainer}
+        />
+      </PageContent>
+    );
   }
 }
 

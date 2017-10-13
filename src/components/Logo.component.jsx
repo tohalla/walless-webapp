@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 
-import Walless from 'images/walless.svg';
+import walless from 'images/walless.svg';
+import wallessPng from 'images/walless.svg';
 
 @Radium
 export default class Logo extends React.Component {
@@ -16,7 +17,13 @@ export default class Logo extends React.Component {
   }
   render() {
     return (
-      <Walless {...this.props}/>
+      <svg {...this.props}>
+        <image
+            src={walless}
+            xlinkHref={wallessPng}
+            {...this.props}
+        />
+      </svg>
     );
   }
 };

@@ -6,7 +6,7 @@ import config from 'config';
 import {util} from 'walless-graphql';
 
 const networkInterface = createNetworkInterface({
-  uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
+  uri: `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.graphQL.endpoint}`
 });
 
 const apolloClient = new ApolloClient({

@@ -64,7 +64,7 @@ class MenuForm extends React.Component {
   };
   handleInputChange = path => event =>
     this.setState(set(path)(event.target.value)(this.state));
-  handleSubmit = async event => {
+  handleSubmit = () => async event => {
     event.preventDefault();
     this.setState({loading: true});
     const {
@@ -154,7 +154,7 @@ class MenuForm extends React.Component {
       <Form
           loading={loading}
           onCancel={this.handleCancel}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.handleSubmit()}
       >
         <Tabbed
             onTabChange={this.handleTabChange}

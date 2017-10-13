@@ -76,7 +76,7 @@ class RestaurantForm extends React.Component {
     const {value} = event.target;
     this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = async() => {
+  handleSubmit = () => async () => {
     this.setState({loading: true});
     const {
       createRestaurant,
@@ -118,7 +118,7 @@ class RestaurantForm extends React.Component {
       const formData = new FormData();
       formData.append('restaurant', restaurantId);
       const allFiles = newImages.length ? files.concat(await (await fetch(
-        `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.upload.endpoint}/image`,
+        `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.upload.endpoint}/image`,
         {
           method: 'POST',
           body: newImages.reduce(
@@ -142,8 +142,10 @@ class RestaurantForm extends React.Component {
           )
         )
       );
-      if (typeof onSubmit === 'function') onSubmit();
-      if (getImagesForRestaurant) {
+      if (typeof onSubmit === 'function') {
+        await onSubmit({shouldRefresh: mutation === 'createRestaurant'});
+      }
+      if (mutation !== 'createRestaurant' && getImagesForRestaurant) {
         getImagesForRestaurant.refetch();
       }
     } catch (error) {
@@ -191,7 +193,7 @@ class RestaurantForm extends React.Component {
       <Form
           loading={loading}
           onCancel={onCancel}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.handleSubmit()}
           style={style}
       >
         <Tabbed
@@ -276,6 +278,7 @@ export default compose(
   restaurant.createRestaurant,
   restaurant.updateRestaurant,
   account.getActiveAccount,
+  account.getRestaurantsByAccount,
   restaurant.getRestaurant,
   restaurant.createRestaurantI18n,
   restaurant.updateRestaurantI18n,
