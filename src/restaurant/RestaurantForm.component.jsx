@@ -5,24 +5,13 @@ import Cookie from 'js-cookie';
 import PropTypes from 'prop-types';
 import {set, get, equals, pick} from 'lodash/fp';
 import Radium from 'radium';
+import {file, misc, restaurant, account} from 'walless-graphql';
 
+import Input from 'components/Input.component';
 import Form from 'components/Form.component';
 import Select from 'components/Select.component';
 import config from 'config';
 import SelectItems from 'components/SelectItems.component';
-import {getActiveAccount} from 'graphql/account/account.queries';
-import Input from 'components/Input.component';
-import {
-  createRestaurant,
-  updateRestaurant,
-  createRestaurantI18n,
-  updateRestaurantI18n,
-  updateRestaurantImages
-} from 'graphql/restaurant/restaurant.mutations';
-import {getCurrencies} from 'graphql/misc.queries';
-import {createAddress} from 'graphql/misc.mutations';
-import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
-import {getImagesForRestaurant} from 'graphql/file.queries';
 import Tabbed from 'components/Tabbed.component';
 import LocationInput from 'components/LocationInput.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
@@ -284,15 +273,15 @@ class RestaurantForm extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  createRestaurant,
-  updateRestaurant,
-  getActiveAccount,
-  getRestaurant,
-  createRestaurantI18n,
-  updateRestaurantI18n,
-  getCurrencies,
-  getImagesForRestaurant,
-  updateRestaurantImages,
-  createAddress
+  restaurant.createRestaurant,
+  restaurant.updateRestaurant,
+  account.getActiveAccount,
+  restaurant.getRestaurant,
+  restaurant.createRestaurantI18n,
+  restaurant.updateRestaurantI18n,
+  misc.getCurrencies,
+  file.getImagesForRestaurant,
+  restaurant.updateRestaurantImages,
+  misc.createAddress
 )(RestaurantForm);
 

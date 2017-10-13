@@ -4,10 +4,9 @@ import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
+import {menuItem} from 'walless-graphql';
 
 import MenuItemForm from 'restaurant/menu-item/MenuItemForm.component';
-import {getMenuItemsByRestaurant} from 'graphql/restaurant/menuItem.queries';
-import {deleteMenuItem} from 'graphql/restaurant/menuItem.mutations';
 import ConfirmationModal from 'components/ConfirmationModal.component';
 import Table from 'components/Table.component';
 import Button from 'components/Button.component';
@@ -184,8 +183,8 @@ class MenuItems extends React.Component {
 
 export default compose(
   connect(mapStateToProps),
-  getMenuItemsByRestaurant,
-  deleteMenuItem
+  menuItem.getMenuItemsByRestaurant,
+  menuItem.deleteMenuItem
 )(MenuItems);
 
 const styles = {

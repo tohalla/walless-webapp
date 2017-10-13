@@ -13,6 +13,7 @@ import {
   equals,
   findIndex
 } from 'lodash/fp';
+import {account, menuItem, misc, file} from 'walless-graphql';
 
 import Checkbox from 'components/Checkbox.component';
 import Select from 'components/Select.component';
@@ -22,22 +23,6 @@ import Option from 'restaurant/menu-item/Option.component';
 import Input from 'components/Input.component';
 import Form from 'components/Form.component';
 import SelectItems from 'components/SelectItems.component';
-import {
-  createMenuItem,
-  updateMenuItem,
-  updateMenuItemImages,
-  createMenuItemI18n,
-  updateMenuItemDiets,
-  updateMenuItemI18n,
-  updateMenuItemOptions
-} from 'graphql/restaurant/menuItem.mutations';
-import {
-  getMenuItem,
-  getMenuItemTypes
-} from 'graphql/restaurant/menuItem.queries';
-import {getDiets} from 'graphql/misc.queries';
-import {getImagesForRestaurant} from 'graphql/file.queries';
-import {getActiveAccount} from 'graphql/account/account.queries';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import loadable from 'decorators/loadable';
@@ -370,16 +355,16 @@ class MenuItemForm extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  createMenuItem,
-  updateMenuItem,
-  updateMenuItemImages,
-  getMenuItem,
-  getActiveAccount,
-  getImagesForRestaurant,
-  createMenuItemI18n,
-  updateMenuItemI18n,
-  updateMenuItemDiets,
-  getMenuItemTypes,
-  getDiets,
-  updateMenuItemOptions
+  menuItem.createMenuItem,
+  menuItem.updateMenuItem,
+  menuItem.updateMenuItemImages,
+  menuItem.getMenuItem,
+  account.getActiveAccount,
+  file.getImagesForRestaurant,
+  menuItem.createMenuItemI18n,
+  menuItem.updateMenuItemI18n,
+  menuItem.updateMenuItemDiets,
+  menuItem.getMenuItemTypes,
+  misc.getDiets,
+  menuItem.updateMenuItemOptions
 )(MenuItemForm);

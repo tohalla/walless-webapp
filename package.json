@@ -6,26 +6,23 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/tohalla/mehut-webapp"
+    "url": "git://github.com/tohalla/walless-graphql"
   },
   "scripts": {
     "lint": "eslint ./src/*",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "prebuild": "rm -rf dist && mkdir dist",
-    "build": "NODE_ENV=production webpack -p --progress --json"
+    "build": "NODE_ENV=production webpack -p --progress"
   },
   "keywords": [],
   "author": "Touko Hallasmaa",
   "dependencies": {
     "apollo-client": "^1.9.0-1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "color": "^2.0.0",
     "express": "^4.16.2",
     "file-loader": "^0.11.1",
     "file-saver": "^1.3.3",
-    "graphql": "^0.11.2",
-    "graphql-tag": "^2.0.0",
     "http-proxy": "^1.16.2",
     "humps": "^2.0.1",
     "immutable": "^3.8.1",
@@ -49,8 +46,8 @@
     "react-table": "tohalla/react-table",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
-    "walless-graphql": "tohalla/walless-graphql",
-    "webpack-merge": "^4.1.0"
+    "socket.io-client": "^2.0.3",
+    "walless-graphql": "tohalla/walless-graphql"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.5",
@@ -61,12 +58,14 @@
     "babel-plugin-syntax-class-properties": "^6.13.0",
     "babel-plugin-syntax-decorators": "^6.13.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-es2015-classes": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-polyfill": "^6.13.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-minify": "^0.2.0",
     "babel-preset-react": "^6.11.1",
+    "compression-webpack-plugin": "^1.0.1",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.4",
     "eslint": "^4.0.0",
@@ -82,17 +81,14 @@
     "material-design-icons": "^3.0.1",
     "postcss-loader": "^2.0.6",
     "react-hot-loader": "next",
-    "redux-devtools": "^3.3.1",
-    "redux-devtools-dock-monitor": "^1.1.1",
-    "redux-devtools-log-monitor": "^1.1.1",
     "svg-react-loader": "^0.4.4",
-    "sync-request": "^4.0.1",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.0",
     "url-loader": "^0.6.2",
-    "webpack": "^3.0.0",
+    "webpack": "^3.7.1",
     "webpack-dev-server": "^2.4.1",
-    "webpack-hot-middleware": "^2.12.2"
+    "webpack-hot-middleware": "^2.12.2",
+    "webpack-merge": "^4.1.0"
   },
   "eslintIgnore": [
     "node_modules"
@@ -102,7 +98,7 @@
       [
         "env",
         {
-          "useBuiltIns": "usage",
+          "useBuiltIns": "true",
           "targets": {
             "uglify": 2
           }
@@ -124,10 +120,7 @@
           "root": [
             "./src",
             "./assets"
-          ],
-          "alias": {
-            "walless-graphql": "./src/graphql"
-          }
+          ]
         }
       ]
     ]

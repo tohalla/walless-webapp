@@ -5,14 +5,13 @@ import Cookie from 'js-cookie';
 import PropTypes from 'prop-types';
 import {size} from 'lodash/fp';
 import {saveAs} from 'file-saver';
+import {servingLocation} from 'walless-graphql';
 
 import {addNotification} from 'notifications/notification';
 import Table from 'components/Table.component';
 import Button from 'components/Button.component';
 import config from 'config';
 import WithActions from 'components/WithActions.component';
-import {getServingLocationsByRestaurant} from
-  'graphql/restaurant/servingLocation.queries';
 import ServingLocationForm from
   'restaurant/serving-location/ServingLocationForm.component';
 import loadable from 'decorators/loadable';
@@ -173,5 +172,5 @@ class ServingLocations extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {addNotification}),
-  getServingLocationsByRestaurant
+  servingLocation.getServingLocationsByRestaurant
 )(ServingLocations);

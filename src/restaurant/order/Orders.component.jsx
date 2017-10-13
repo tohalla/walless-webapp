@@ -5,13 +5,12 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {uniqBy, get, set} from 'lodash/fp';
 import moment from 'moment';
+import {order} from 'walless-graphql';
 
 import OrdersFilter from 'restaurant/order/OrdersFilter.component';
 import Table from 'components/Table.component';
 import Button from 'components/Button.component';
-import {getOrdersByRestaurant} from 'walless-graphql/restaurant/order.queries';
 import loadable from 'decorators/loadable';
-import {updateOrder} from 'graphql/restaurant/order.mutations';
 import WithActions from 'components/WithActions.component';
 import {normal} from 'styles/spacing';
 import colors from 'styles/colors';
@@ -178,6 +177,6 @@ class Orders extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  getOrdersByRestaurant,
-  updateOrder
+  order.getOrdersByRestaurant,
+  order.updateOrder
 )(Orders);

@@ -4,19 +4,11 @@ import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {reduce, set, get, equals} from 'lodash/fp';
+import {account, menu} from 'walless-graphql';
+import Input from 'components/Input.component';
 
 import Form from 'components/Form.component';
 import Button from 'components/Button.component';
-import {getActiveAccount} from 'graphql/account/account.queries';
-import Input from 'components/Input.component';
-import {
-  createMenu,
-  updateMenu,
-  updateMenuItems,
-  createMenuI18n,
-  updateMenuI18n
-} from 'graphql/restaurant/menu.mutations';
-import {getMenu} from 'graphql/restaurant/menu.queries';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import Tabbed from 'components/Tabbed.component';
 
@@ -195,11 +187,11 @@ class MenuForm extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  createMenu,
-  updateMenu,
-  updateMenuItems,
-  getActiveAccount,
-  getMenu,
-  createMenuI18n,
-  updateMenuI18n
+  menu.createMenu,
+  menu.updateMenu,
+  menu.updateMenuItems,
+  account.getActiveAccount,
+  menu.getMenu,
+  menu.createMenuI18n,
+  menu.updateMenuI18n
 )(MenuForm);

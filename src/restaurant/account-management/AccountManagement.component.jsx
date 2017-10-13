@@ -3,14 +3,11 @@ import PropTypes from 'prop-types';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
+import {account} from 'walless-graphql';
 
 import UsersFilter from 'restaurant/account-management/UsersFilter.component';
 import WithActions from 'components/WithActions.component';
 import Table from 'components/Table.component';
-import {
-  getAccountsByRestaurant,
-  getAccountRolesForRestaurant
-} from 'graphql/account/account.queries';
 import loadable from 'decorators/loadable';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
@@ -86,5 +83,5 @@ class AccountManagement extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  getAccountsByRestaurant, getAccountRolesForRestaurant
+  account.getAccountsByRestaurant, account.getAccountRolesForRestaurant
 )(AccountManagement);

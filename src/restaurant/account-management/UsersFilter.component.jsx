@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
+import {account} from 'walless-graphql';
 
 import Input from 'components/Input.component';
-import {getAccountRolesForRestaurant} from 'graphql/account/account.queries';
 import Form from 'components/Form.component';
 import loadable from 'decorators/loadable';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
@@ -84,5 +84,5 @@ class UsersFilter extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  getAccountRolesForRestaurant
+  account.getAccountRolesForRestaurant
 )(UsersFilter);

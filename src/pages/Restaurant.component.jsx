@@ -10,6 +10,7 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
+import {account} from 'walless-graphql';
 
 import {initializeNotificationHandler} from 'util/wsNotificationHandler';
 import {minor, normal} from 'styles/spacing';
@@ -20,10 +21,6 @@ import loadable from 'decorators/loadable';
 import PageContent from 'containers/PageContent.component';
 import Navigation from 'navigation/Navigation.component';
 import NavigationItem from 'navigation/NavigationItem.component';
-import {
-  getActiveAccount,
-  getRestaurantsByAccount
-} from 'graphql/account/account.queries';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import Menus from 'restaurant/menu/Menus.component';
 import Dashboard from 'restaurant/dashboard/Dashboard.component';
@@ -217,8 +214,8 @@ class Restaurant extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  getActiveAccount,
-  getRestaurantsByAccount
+  account.getActiveAccount,
+  account.getRestaurantsByAccount
 )(Restaurant);
 
 const styles = {

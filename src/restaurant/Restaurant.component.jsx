@@ -3,12 +3,8 @@ import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
+import {restaurant, account} from 'walless-graphql';
 
-import {getRestaurant} from 'graphql/restaurant/restaurant.queries';
-import {
-  getActiveAccount,
-  getRestaurantsByAccount
-} from 'graphql/account/account.queries';
 import PopOverMenu from 'components/PopOverMenu.component';
 import RestaurantForm from 'restaurant/RestaurantForm.component';
 import WithActions from 'components/WithActions.component';
@@ -97,9 +93,9 @@ class Restaurant extends React.Component {
 
 export default compose(
   connect(mapStateToProps),
-  getActiveAccount,
-  getRestaurant,
-  getRestaurantsByAccount
+  account.getActiveAccount,
+  restaurant.getRestaurant,
+  account.getRestaurantsByAccount
 )(Restaurant);
 
 const styles = {

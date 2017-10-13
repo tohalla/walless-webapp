@@ -4,10 +4,9 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 import {get} from 'lodash/fp';
+import {menu} from 'walless-graphql';
 
 import MenuForm from 'restaurant/menu/MenuForm.component';
-import {getMenusByRestaurant} from 'graphql/restaurant/menu.queries';
-import {deleteMenu} from 'graphql/restaurant/menu.mutations';
 import Button from 'components/Button.component';
 import ConfirmationModal from 'components/ConfirmationModal.component';
 import Table from 'components/Table.component';
@@ -151,8 +150,8 @@ class Menus extends React.Component {
 
 export default compose(
   connect(mapStateToProps),
-  getMenusByRestaurant,
-  deleteMenu
+  menu.getMenusByRestaurant,
+  menu.deleteMenu
 )(Menus);
 
 const styles = {

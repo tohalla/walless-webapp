@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
+import {servingLocation} from 'walless-graphql';
 
 import Form from 'components/Form.component';
 import loadable from 'decorators/loadable';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import Select from 'components/Select.component';
-import {getServingLocationsByRestaurant} from
-  'graphql/restaurant/servingLocation.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -91,5 +90,5 @@ class OrdersFilter extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  getServingLocationsByRestaurant
+  servingLocation.getServingLocationsByRestaurant
 )(OrdersFilter);

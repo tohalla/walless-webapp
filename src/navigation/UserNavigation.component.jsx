@@ -2,11 +2,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {compose, withApollo} from 'react-apollo';
 import Radium from 'radium';
+import {account} from 'walless-graphql';
 
 import {minimal} from 'styles/spacing';
 import Button from 'components/Button.component';
 import authenticationHandler from 'util/auth';
-import {getActiveAccount} from 'graphql/account/account.queries';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -36,6 +36,6 @@ class UserNavigation extends React.Component {
 export default withApollo(
   compose(
     connect(mapStateToProps, {}),
-    getActiveAccount
+    account.getActiveAccount
   )(UserNavigation)
 );

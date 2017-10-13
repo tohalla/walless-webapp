@@ -3,7 +3,7 @@ import Cookie from 'js-cookie';
 
 import authenticationHandler from 'util/auth';
 import config from 'config';
-import {dataIdFromObject} from 'walless-graphql/util';
+import {util} from 'walless-graphql';
 
 const networkInterface = createNetworkInterface({
   uri: `${config.api.protocol}://${config.api.url}:${config.api.port}/${config.api.graphQL.endpoint}`
@@ -12,7 +12,7 @@ const networkInterface = createNetworkInterface({
 const apolloClient = new ApolloClient({
   networkInterface,
   shouldBatch: true,
-  dataIdFromObject,
+  dataIdFromObject: util.dataIdFromObject,
   queryDeduplication: true
 });
 

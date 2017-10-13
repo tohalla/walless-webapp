@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
+import {account} from 'walless-graphql';
 
 import Logo from 'components/Logo.component';
 import Navigation from 'navigation/Navigation.component';
@@ -11,7 +12,6 @@ import colors from 'styles/colors';
 import shadow from 'styles/shadow';
 import {normal} from 'styles/spacing';
 import UserNavigation from 'navigation/UserNavigation.component';
-import {getActiveAccount} from 'graphql/account/account.queries';
 
 const menuItems = [
   {
@@ -67,7 +67,7 @@ class MainNavigation extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  getActiveAccount
+  account.getActiveAccount
 )(MainNavigation);
 
 const styles = {

@@ -6,11 +6,7 @@ import {equals} from 'lodash/fp';
 
 import Input from 'components/Input.component';
 import Form from 'components/Form.component';
-import {
-  createServingLocation,
-  updateServingLocation
-} from 'graphql/restaurant/servingLocation.mutations';
-import {getServingLocation} from 'graphql/restaurant/servingLocation.queries';
+import {servingLocation} from 'walless-graphql';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
@@ -104,7 +100,7 @@ class ServingLocationForm extends React.Component {
 
 export default compose(
   connect(mapStateToProps, {}),
-  createServingLocation,
-  updateServingLocation,
-  getServingLocation
+  servingLocation.createServingLocation,
+  servingLocation.updateServingLocation,
+  servingLocation.getServingLocation
 )(ServingLocationForm);

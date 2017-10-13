@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {get, find, set, differenceWith} from 'lodash/fp';
+import {option} from 'walless-graphql';
 
-import {getOptions} from 'graphql/restaurant/option.queries';
 import {content} from 'styles/spacing';
 import Checkbox from 'components/Checkbox.component';
 import Button from 'components/Button.component';
@@ -116,5 +116,5 @@ class OptionForm extends React.Component {
 
 export default compose(
   connect(mapStateToProps),
-  getOptions
+  option.getOptions
 )(OptionForm);
