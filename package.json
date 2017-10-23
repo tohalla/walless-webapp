@@ -83,7 +83,7 @@
     "image-webpack-loader": "^3.4.2",
     "material-design-icons": "^3.0.1",
     "postcss-loader": "^2.0.6",
-    "react-hot-loader": "next",
+    "react-hot-loader": "^3.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.0",
     "url-loader": "^0.6.2",
