@@ -32,9 +32,9 @@ const authenticationHandler = {
    },
   renew: async (token: string) => await authenticate({token}),
   logout: () => {
-    Cookie.remove('Authorization');
-    Cookie.remove('ws-token');
-    Cookie.remove('Expiration');
+    Cookie.remove('Authorization', {path: ''});
+    Cookie.remove('ws-token', {path: ''});
+    Cookie.remove('Expiration', {path: ''});
     window.location.replace('/');
   }
 };

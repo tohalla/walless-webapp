@@ -33,11 +33,11 @@ export default class NavigationItem extends React.Component {
     } = this.props;
     return (
       <Link
-          style={[].concat(styles.container, style, active ? activeStyle : [])}
+          style={[].concat(styles.container, style)}
           to={path}
           {...props}
       >
-        {children}
+        <span style={active ? activeStyle : {}}>{children}</span>
         {chevron ?
           <i className="material-icons" style={[].concat(styles.chevron, active ? styles.chevronActive : [])}>
             {'chevron_right'}

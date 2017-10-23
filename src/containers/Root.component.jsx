@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Restaurant from 'pages/Restaurant.component';
+import Profile from 'pages/Profile.component';
 import MainNavigation from 'navigation/MainNavigation.component';
 import Notifications from 'notifications/Notifications.component';
 import colors from 'styles/colors';
@@ -28,7 +29,8 @@ export default class Root extends React.Component {
           <Switch>
             <Route path="/documentation" />
             <Route path="/contact" />
-            <Route component={(Restaurant)} path="/:restaurant?" />
+            <Route component={Profile} path="/profile" />
+            <Route component={Restaurant} path="/:restaurant?" />
             <Redirect path="*" to="/" />
           </Switch>
         </div>

@@ -10,7 +10,7 @@ import Navigation from 'navigation/Navigation.component';
 import NavigationItem from 'navigation/NavigationItem.component';
 import colors from 'styles/colors';
 import shadow from 'styles/shadow';
-import {normal} from 'styles/spacing';
+import {normal, minor} from 'styles/spacing';
 import UserNavigation from 'navigation/UserNavigation.component';
 
 const menuItems = [
@@ -25,6 +25,10 @@ const menuItems = [
   {
     path: '/contact',
     translationKey: 'navigation.contactUs'
+  },
+  {
+    path: '/profile',
+    translationKey: 'navigation.profile'
   }
 ];
 
@@ -75,7 +79,7 @@ const styles = {
     display: 'flex',
     alignSelf: 'stretch',
     alignItems: 'center',
-    padding: `0 ${normal}`,
+    padding: `0 ${minor}`,
     backgroundColor: colors.headerBackground,
     color: colors.headerForeground
   },
