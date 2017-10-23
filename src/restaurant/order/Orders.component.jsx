@@ -4,7 +4,6 @@ import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {uniqBy, get, set} from 'lodash/fp';
-import moment from 'moment';
 import {order} from 'walless-graphql';
 
 import OrdersFilter from 'restaurant/order/OrdersFilter.component';
@@ -77,7 +76,7 @@ class Orders extends React.Component {
     this.setState(set(['filters', filter])(value)(this.state));
   handleActionChange = action => this.setState({action});
   render() {
-    const {orders, t, restaurant, timeFormat, ...props} = this.props;
+    const {orders, t, restaurant, ...props} = this.props;
     const {action, filters} = this.state;
     const data = orders.filter(order =>
       (
@@ -128,7 +127,7 @@ class Orders extends React.Component {
                   Header: t('restaurant.order.createdAt'),
                   width: 10 + t('restaurant.order.createdAt').length*10,
                   id: 'createdAt',
-                  accessor: data => moment(data.createdAt).format(timeFormat)
+                  accessor: data => data.createdAt.toLocaleTimeString()
                 },
                 {
                   Header: t('restaurant.order.createdBy'),
@@ -138,7 +137,7 @@ class Orders extends React.Component {
                 },
                 {
                   Header: t('restaurant.order.acceptedAt'),
-                  accessor: data => data.accepted ? moment(data.accepted).format(timeFormat) : (
+                  accessor: data => data.accepted ? data.accepted.toLocaleTimeString() : (
                     <Button onClick={this.handleAcceptOrder(data)} plain>
                       {t('restaurant.order.accept')}
                     </Button>
@@ -148,7 +147,7 @@ class Orders extends React.Component {
                 {
                   Header: t('restaurant.order.completedAt'),
                   accessor: data => data.completed ?
-                    moment(data.completed).format(timeFormat): (
+                    data.completed.toLocaleTimeString() : (
                       <Button onClick={this.handleCompleteOrder(data)} plain>
                         {t('restaurant.order.complete')}
                       </Button>

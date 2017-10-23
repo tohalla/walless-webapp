@@ -11,7 +11,6 @@ module.exports = {
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.HashedModuleIdsPlugin(),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /se|fi|en/),
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       compress: {
