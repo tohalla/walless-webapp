@@ -61,7 +61,7 @@ const styles = {
   menuItems: {
     minWidth: '8rem',
     margin: 0,
-    padding: 0,
+    padding: 1,
     display: 'flex',
     flexDirection: 'column'
   },

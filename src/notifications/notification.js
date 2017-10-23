@@ -1,30 +1,30 @@
-// @flow
-import {List, Map} from 'immutable';
+import {equals} from 'lodash/fp';
 
 const ADD_NOTIFICATION = 'ADD_NOTIFICATION';
 const DELETE_NOTIFICATION = 'DELETE_NOTIFICATION';
 const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
 
-export default (state: List<Map<string, *>> = new List(), action: Object) =>
-  action.type === ADD_NOTIFICATION ? state.push(action.payload)
+export default (state = [], action) =>
+  action.type === ADD_NOTIFICATION ? state.concat(action.payload)
   : action.type === DELETE_NOTIFICATION ?
-    state.filterNot((notification: Map<string, *> ) =>
-      action.payload === notification
-    )
-  : action.type === CLEAR_NOTIFICATIONS ? state.clear()
+    state.filter((notification) => !equals(action.payload)(notification))
+  : action.type === CLEAR_NOTIFICATIONS ? []
   : state;
 
-export const addNotification = (payload: Map<string, *> | Object) => ({
+export const addNotification = (payload) => ({
   type: ADD_NOTIFICATION,
-  payload: (payload instanceof Map ? payload : new Map(payload))
-    .set('time', Date.now())
+  payload: Object.assign(
+    {},
+    payload,
+    {time: Date.now()}
+  )
 });
 
 export const clearNotifications = () => ({
   type: CLEAR_NOTIFICATIONS
 });
 
-export const deleteNotification = (payload: Map<string, *> ) => ({
+export const deleteNotification = (payload) => ({
   type: DELETE_NOTIFICATION,
   payload
 });
