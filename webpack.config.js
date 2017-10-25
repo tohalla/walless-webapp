@@ -11,7 +11,7 @@ const production = require('./webpack-production.config');
 module.exports = merge(
   {
     entry: {
-      app: [path.resolve(__dirname, 'src', 'index')],
+      app: ['babel-polyfill', path.resolve(__dirname, 'src', 'index')],
       authentication: path.resolve(__dirname, 'src', 'authentication')
     },
     resolve: {

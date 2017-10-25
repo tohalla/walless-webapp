@@ -1,7 +1,6 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 
-import apolloClient from 'apolloClient';
 import notifications from 'notifications/notification';
 import translation, {fetchLanguages, setLanguage} from 'util/translation';
 import location, {updateLocation} from 'util/location';
@@ -13,13 +12,12 @@ const util = combineReducers({
 
 const store = createStore(
   combineReducers({
-    apollo: apolloClient.reducer(),
     notifications,
     util
   }),
   {},
   compose(
-    applyMiddleware(apolloClient.middleware(), thunk)
+    applyMiddleware(thunk)
   )
 );
 

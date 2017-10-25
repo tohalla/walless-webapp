@@ -1,13 +1,15 @@
 import React from 'react';
+import {Provider} from 'react-redux';
 import {ApolloProvider} from 'react-apollo';
 
 import apolloClient from 'apolloClient';
 import Router from 'Router';
 import store from 'store';
 
-
 export default (
-  <ApolloProvider client={apolloClient} store={store}>
-    <Router />
-  </ApolloProvider>
+  <Provider store={store}>
+    <ApolloProvider client={apolloClient}>
+      <Router />
+    </ApolloProvider>
+  </Provider>
 );
