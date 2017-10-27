@@ -127,7 +127,7 @@ class Orders extends React.Component {
                   Header: t('restaurant.order.createdAt'),
                   width: 10 + t('restaurant.order.createdAt').length*10,
                   id: 'createdAt',
-                  accessor: data => data.createdAt.toLocaleTimeString()
+                  accessor: data => new Date(data.createdAt).toLocaleTimeString()
                 },
                 {
                   Header: t('restaurant.order.createdBy'),
@@ -137,7 +137,9 @@ class Orders extends React.Component {
                 },
                 {
                   Header: t('restaurant.order.acceptedAt'),
-                  accessor: data => data.accepted ? data.accepted.toLocaleTimeString() : (
+                  accessor: data => data.accepted ?
+                    new Date(data.accepted).toLocaleTimeString()
+                  : (
                     <Button onClick={this.handleAcceptOrder(data)} plain>
                       {t('restaurant.order.accept')}
                     </Button>
@@ -147,7 +149,8 @@ class Orders extends React.Component {
                 {
                   Header: t('restaurant.order.completedAt'),
                   accessor: data => data.completed ?
-                    data.completed.toLocaleTimeString() : (
+                    new Date(data.completed).toLocaleTimeString()
+                  : (
                       <Button onClick={this.handleCompleteOrder(data)} plain>
                         {t('restaurant.order.complete')}
                       </Button>
