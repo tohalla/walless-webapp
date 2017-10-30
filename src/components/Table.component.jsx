@@ -6,7 +6,7 @@ import ReactTable from 'react-table';
 import Checkbox from 'components/Checkbox.component';
 import Loading from 'components/Loading.component';
 import colors from 'styles/colors';
-import {minimal, normal} from 'styles/spacing';
+import {minimal, minor} from 'styles/spacing';
 
 @Radium
 export default class Table extends React.Component {
@@ -64,6 +64,11 @@ export default class Table extends React.Component {
           showPageSizeOptions={false}
           showPagination={finalPageSize < data.length}
           {...props}
+          ExpanderComponent={
+            <i className="material-icons" style={styles.expander}>
+              {'arrow_drop_down'}
+            </i>
+          }
           LoadingComponent={Loading}
           data={data}
           style={[styles.container, style]}
@@ -74,6 +79,14 @@ export default class Table extends React.Component {
 };
 
 const styles = {
+  expander: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer'
+  },
   table: {
     background: colors.backgroundLight,
     borderStyle: 'solid',
@@ -84,13 +97,13 @@ const styles = {
     flex: 1
   },
   column: {
-    padding: `${minimal} ${normal}`,
+    padding: `${minimal} ${minor}`,
     display: 'flex',
     alignItems: 'center',
     borderRight: `1px solid ${colors.gallery}`
   },
   headerColumn: {
-    padding: `${minimal} ${normal}`,
+    padding: `${minimal} ${minor}`,
     color: colors.foregroundLight,
     display: 'flex',
     justifyContent: 'center',
