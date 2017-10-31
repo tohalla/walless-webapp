@@ -3,10 +3,10 @@ import {createHttpLink} from 'apollo-link-http';
 import {ApolloLink} from 'apollo-link';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import Cookie from 'js-cookie';
+import {util} from 'walless-graphql';
 
 import authenticationHandler from 'util/auth';
 import config from 'config';
-import {util} from 'walless-graphql';
 
 const httpLink = createHttpLink({
   uri: `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.graphQL.endpoint}`
@@ -25,13 +25,10 @@ const link = new ApolloLink((operation, forward) => {
   }
 }).concat(httpLink);
 
-
-const apolloClient = new ApolloClient({
+export default new ApolloClient({
   shouldBatch: true,
   dataIdFromObject: util.dataIdFromObject,
   queryDeduplication: true,
   link,
   cache: new InMemoryCache().restore(window.__APOLLO_STATE__)
 });
-
-export default apolloClient;

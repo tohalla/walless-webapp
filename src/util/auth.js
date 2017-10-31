@@ -9,28 +9,23 @@ export const authenticate = async (payload: Object) => {
     `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.authentication.endpoint}/${payload.token ? 'renewToken' : ''}`,
     {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'authorization': payload.token
       },
-      body: payload.token ? null : JSON.stringify(payload)
+      body: payload.token ? undefined : JSON.stringify(payload)
     }
   );
   if (response.status === 200) {
-    return (await response.json());
+    return response;
   }
   throw new Error(await response.json());
 };
 
 const authenticationHandler = {
   isAuthenticated: Boolean(Cookie.get('Authorization')),
-  renew: async (token: string) => {
-    const authorization = await authenticate({token});
-    Cookie.set('Authorization', authorization.token);
-    Cookie.set('ws-token', authorization.wsToken);
-    Cookie.set('Expiration', authorization.expiresAt);
-   },
-  renew: async (token: string) => await authenticate({token}),
+  renew: (token: string) => authenticate({token}),
   logout: () => {
     Cookie.remove('Authorization', {path: ''});
     Cookie.remove('ws-token', {path: ''});
