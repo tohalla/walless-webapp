@@ -10,6 +10,7 @@ import {
   set,
   get,
   pick,
+  pullAt,
   equals,
   findIndex
 } from 'lodash/fp';
@@ -19,15 +20,13 @@ import Checkbox from 'components/Checkbox.component';
 import Select from 'components/Select.component';
 import config from 'config';
 import OptionForm from 'restaurant/menu-item/OptionForm.component';
-import Option from 'restaurant/menu-item/Option.component';
+import Editable from 'components/Editable.component';
 import Input from 'components/Input.component';
 import Form from 'components/Form.component';
 import SelectItems from 'components/SelectItems.component';
 import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import loadable from 'decorators/loadable';
-
-const TextArea = props => <textarea {...props} />;
 
 const mapStateToProps = state => ({
   t: state.util.translation.t,
@@ -176,6 +175,11 @@ class MenuItemForm extends React.Component {
       this.setState({options});
     }
   };
+  handleDeleteOption = option => this.setState({
+    options: pullAt(
+      findIndex(o => option.id === o.id)(this.state.options)
+    )(this.state.options)
+  });
   handleDropzoneDelete = image => () => this.setState({
     newImages: this.state.newImages.filter(i => !equals(i)(image))
   });
@@ -231,7 +235,7 @@ class MenuItemForm extends React.Component {
                 value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
-                Input={TextArea}
+                Input={'textarea'}
                 label={t('restaurant.menuItem.description')}
                 onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                 rows={3}
@@ -332,12 +336,16 @@ class MenuItemForm extends React.Component {
                 item: (
                   <div>
                     {options.map((option, index) => (
-                      <Option
+                      <Editable
+                          Form={OptionForm}
                           disabledOptions={options}
                           key={index}
+                          onDelete={this.handleDeleteOption}
                           onEdit={this.handleEditOption}
                           option={option}
-                      />
+                      >
+                        {get(['i18n', language, 'name'])(option)}
+                      </Editable>
                     ))}
                     <OptionForm
                         disabledOptions={options}

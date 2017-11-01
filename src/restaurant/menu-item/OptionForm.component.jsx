@@ -1,5 +1,4 @@
 import React from 'react';
-import Radium from 'radium';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
@@ -16,8 +15,6 @@ const mapStateToProps = state => ({
   t: state.util.translation.t,
   language: state.util.translation.language
 });
-
-const FormComponent = new Radium(props => <div {...props} />);
 
 class OptionForm extends React.Component {
   static propTypes = {
@@ -78,7 +75,7 @@ class OptionForm extends React.Component {
     return availableOptions.length ?
       this.state.isOpen || forceOpen ? (
         <Form
-            FormComponent={FormComponent}
+            FormComponent="div"
             fieldStyle={{marginRight: content}}
             onClose={this.handleClose}
             onSubmit={this.handleSubmit}

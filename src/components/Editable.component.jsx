@@ -1,22 +1,15 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import {get} from 'lodash/fp';
 
 import Button from 'components/Button.component';
-import OptionForm from 'restaurant/menu-item/OptionForm.component';
-
-const mapStateToProps = state => ({
-  language: state.util.translation.language
-});
 
 @Radium
-class Option extends React.Component {
+export default class Editable extends React.Component {
   static propTypes = {
-    disabledOptions: PropTypes.arrayOf(PropTypes.object),
-    option: PropTypes.object.isRequired,
-    onEdit: PropTypes.func
+    onEdit: PropTypes.func,
+    onDelete: PropTypes.func,
+    Form: PropTypes.func
   };
   state = {edit: false};
   toggleEdit = () => this.setState({
@@ -28,30 +21,34 @@ class Option extends React.Component {
       this.props.onEdit(option, this.props.option);
     }
   };
+  handleDelete = () => typeof this.props.onDelete === 'function' &&
+    this.props.onDelete(this.props.option);
   render() {
-    const {option, language, disabledOptions, onEdit} = this.props;
+    const {onEdit, onDelete, children, Form, ...props} = this.props;
     return this.state.edit ? (
-      <OptionForm
-          disabledOptions={disabledOptions}
+      <Form
+          {...props}
           forceOpen
           onClose={this.toggleEdit}
           onSubmit={this.handleEdit}
-          option={option}
       />
     ) : (
       <div style={styles.container}>
-        {typeof onEdit === 'function' ?
+        {children}
+        {typeof onEdit === 'function' &&
           <Button onClick={this.toggleEdit} plain>
             <i className="material-icons">{'edit'}</i>
           </Button>
-        : null}
-        {get(['i18n', language, 'name'])(option)}
+        }
+        {typeof onDelete === 'function' &&
+          <Button onClick={this.handleDelete} plain>
+            <i className="material-icons">{'delete'}</i>
+          </Button>
+        }
       </div>
     );
   }
 }
-
-export default connect(mapStateToProps)(Option);
 
 const styles = {
   container: {
