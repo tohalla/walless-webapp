@@ -13,17 +13,19 @@ export default class Input extends React.Component {
       PropTypes.string,
       PropTypes.number
     ]),
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
     id: PropTypes.string,
     type: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func,
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func,
     Input: PropTypes.any,
+    size: PropTypes.number,
+    inputStyle: PropTypes.any,
     disabled: PropTypes.bool,
     required: PropTypes.bool,
-    rows: PropTypes.number
+    rows: PropTypes.number,
+    plain: PropTypes.bool
   };
   static defaultProps = {
     type: 'text',
@@ -31,18 +33,17 @@ export default class Input extends React.Component {
     onChange: () => {},
     onFocus: () => {},
     required: false,
+    plain: false,
     disabled: false,
     rows: 1,
-    Input: props => <input {...props} />
+    Input: 'input'
   };
   state = {
     currentValue: this.props.value,
     isFocused: false
   };
   componentWillReceiveProps(nextProps) {
-    if (!this.state.isFocused) {
-      this.setState({currentValue: nextProps.value});
-    }
+    if (!this.state.isFocused) this.setState({currentValue: nextProps.value});
   }
   handleChange = event => {
     const {pattern} = this.props;
@@ -62,32 +63,48 @@ export default class Input extends React.Component {
     });
     this.props.onBlur(event);
   };
+  focus = () => this.input && this.input.focus();
   render() {
     const {
       afterInput,
       label,
       Input,
+      plain,
+      inputStyle,
+      size,
       ...props
     } = this.props;
     const {currentValue, isFocused, error} = this.state;
-    return (
+    const input = (
+      <Input
+          {...props}
+          onBlur={this.handleBlur}
+          onChange={this.handleChange}
+          onFocus={this.handleFocus}
+          ref={c => this.input = c}
+          style={Object.assign(
+            {},
+            styles.input,
+            inputStyle,
+            typeof size === 'number' ? {width: `${size * 1.2}rem`} : {},
+            isFocused ? styles.inputFocus : {}
+          )}
+          value={currentValue}
+      />
+    );
+    return plain ? (input) : (
       <div style={styles.container}>
-        <label
-            htmlFor={this.props.id}
-            style={[].concat(styles.label, isFocused ? styles.labelFocus : [])}
-        >
+        {label &&
+          <label
+              htmlFor={this.props.id}
+              style={[].concat(styles.label, isFocused ? styles.labelFocus : [])}
+          >
           {label}
-        </label>
+          </label>
+        }
         <div style={{display: 'flex', alignItems: 'center', paddingBottom: minor}}>
           <div style={styles.inputContainer}>
-            <Input
-                {...props}
-                onBlur={this.handleBlur}
-                onChange={this.handleChange}
-                onFocus={this.handleFocus}
-                style={Object.assign({}, styles.input, isFocused ? styles.inputFocus : {})}
-                value={currentValue}
-            />
+            {input}
             <div style={[].concat(styles.bottom, error ? styles.bottomError : {})}>
               {isFocused ? <div style={styles.bottomFocus} /> : null}
             </div>
