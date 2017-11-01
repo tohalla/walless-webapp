@@ -9,6 +9,7 @@ if (module.hot) {
 
 import 'styles/main.css';
 import 'styles/font.css';
+import 'styles/day-picker.css';
 import 'material-design-icons/iconfont/material-icons.css';
 import 'normalize.css/normalize.css';
 import 'react-select/dist/react-select.css';

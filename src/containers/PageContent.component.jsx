@@ -1,6 +1,3 @@
-import React from 'react';
-import Radium from 'radium';
-
 import Footer from 'containers/Footer.component';
 import {major} from 'styles/spacing';
 

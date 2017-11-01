@@ -1,8 +1,5 @@
-import React from 'react';
-import Radium from 'radium';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
-import PropTypes from 'prop-types';
 import {get} from 'lodash/fp';
 import {menu} from 'walless-graphql';
 
@@ -19,7 +16,6 @@ const mapStateToProps = state => ({
 });
 
 @loadable()
-@Radium
 class Menus extends React.Component {
   static PropTypes = {
     restaurant: PropTypes.object.isRequired,
@@ -97,7 +93,7 @@ class Menus extends React.Component {
           actions={actions}
           onActionChange={this.handleActionChange}
       >
-        {typeof get('handleDelete')(deleteModal) === 'function' ? (
+        {typeof get('handleDelete')(deleteModal) === 'function' && (
           <ConfirmationModal
               accent
               confirmText={t('delete')}
@@ -109,7 +105,7 @@ class Menus extends React.Component {
               onCancel={this.handleDelete()}
               onConfirm={deleteModal.handleDelete}
           />
-        ) : null}
+        )}
         <Table
             columns={[
               {

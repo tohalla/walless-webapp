@@ -2047,6 +2047,10 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+date-fns@^1.29.0:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.29.0.tgz#12e609cdcb935127311d04d33334e2960a2a54e6"
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
@@ -5645,6 +5649,13 @@ react-apollo@^2.0.0-rc.0:
   version "1.1.1"
   resolved "https://codeload.github.com/tj/react-click-outside/tar.gz/32c16f09318dff8701cacc4ea73655e1f393f2c7"
 
+react-day-picker@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-6.2.1.tgz#fc22b809db792386d1468d3f46d725ad91e04db9"
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
+
 react-deep-force-update@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-2.1.1.tgz#8ea4263cd6455a050b37445b3f08fd839d86e909"
@@ -5731,8 +5742,8 @@ react-select@^1.0.0-rc.2:
     react-input-autosize "^2.0.1"
 
 react-table@tohalla/react-table:
-  version "7.0.4"
-  resolved "git+ssh://git@github.com/tohalla/react-table.git#98580e6c246aa1c8b85f1115080ec8af975c6ef9"
+  version "7.1.0"
+  resolved "git+ssh://git@github.com/tohalla/react-table.git#de557b930c4e8eca2de440d840f72f2d0b2d351c"
   dependencies:
     radium "^0.19.5"
     react "^16.0.0"

@@ -1,11 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import colors from 'styles/colors';
 
 @Radium
-export default class Loading extends React.Component {
+export default class Loading extends React.PureComponent {
   static propTypes = {
     color: PropTypes.oneOf(Object.values(colors)),
     small: PropTypes.bool,

@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {get} from 'lodash/fp';

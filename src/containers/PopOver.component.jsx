@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import ReactClickOutside from 'react-click-outside';
 
 const ClickOutside = new Radium(ReactClickOutside);

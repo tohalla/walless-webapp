@@ -1,7 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import PopOver from 'containers/PopOver.component';
 import Button from 'components/Button.component';
 import {minor} from 'styles/spacing';

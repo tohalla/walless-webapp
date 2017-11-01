@@ -1,7 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import {minimal, minor, normal, content} from 'styles/spacing';
 import colors from 'styles/colors';
 

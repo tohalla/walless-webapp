@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {Link as RouterLink} from 'react-router-dom';
 
 const Link = new Radium(RouterLink);

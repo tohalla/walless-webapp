@@ -1,7 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import ReactSelect from 'react-select';
-import Radium from 'radium';
 import color from 'color';
 
 import {normal, minor} from 'styles/spacing';

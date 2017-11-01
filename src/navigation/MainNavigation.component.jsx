@@ -1,8 +1,5 @@
-import React from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {account} from 'walless-graphql';
 
 import Logo from 'components/Logo.component';

@@ -1,12 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import colors from 'styles/colors';
-import {minimal, minor, normal} from 'styles/spacing';
+import {minor} from 'styles/spacing';
 
 @Radium
-export default class Input extends React.Component {
+export default class Input extends React.PureComponent {
   static propTypes = {
     afterInput: PropTypes.node,
     value: PropTypes.oneOfType([
@@ -25,7 +21,12 @@ export default class Input extends React.Component {
     disabled: PropTypes.bool,
     required: PropTypes.bool,
     rows: PropTypes.number,
-    plain: PropTypes.bool
+    plain: PropTypes.bool,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
+    labelLocation: PropTypes.oneOf(['top', 'left'])
   };
   static defaultProps = {
     type: 'text',
@@ -63,7 +64,7 @@ export default class Input extends React.Component {
     });
     this.props.onBlur(event);
   };
-  focus = () => this.input && this.input.focus();
+  focus = () => this.input && !this.state.isFocused && this.input.focus();
   render() {
     const {
       afterInput,
@@ -71,7 +72,9 @@ export default class Input extends React.Component {
       Input,
       plain,
       inputStyle,
+      labelLocation,
       size,
+      style,
       ...props
     } = this.props;
     const {currentValue, isFocused, error} = this.state;
@@ -93,23 +96,37 @@ export default class Input extends React.Component {
       />
     );
     return plain ? (input) : (
-      <div style={styles.container}>
+      <div
+          onClick={this.focus}
+          style={[
+            styles.container,
+            style,
+            labelLocation === 'left' ?
+              {flexDirection: 'row', alignItems: 'center'}
+            : {flexDirection: 'column'}
+          ]}
+      >
         {label &&
           <label
               htmlFor={this.props.id}
-              style={[].concat(styles.label, isFocused ? styles.labelFocus : [])}
+              style={[].concat(
+                styles.label,
+                isFocused ? styles.labelFocus : [],
+                labelLocation === 'left' ?
+                  {paddingRight: minor} : []
+              )}
           >
           {label}
           </label>
         }
-        <div style={{display: 'flex', alignItems: 'center', paddingBottom: minor}}>
+        <div style={{display: 'flex', alignItems: 'center'}}>
           <div style={styles.inputContainer}>
             {input}
             <div style={[].concat(styles.bottom, error ? styles.bottomError : {})}>
               {isFocused ? <div style={styles.bottomFocus} /> : null}
             </div>
           </div>
-          <div style={{marginLeft: normal}}>{afterInput}</div>
+          <div style={{marginLeft: minor}}>{afterInput}</div>
         </div>
       </div>
     );
@@ -120,10 +137,10 @@ export default class Input extends React.Component {
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column',
     maxWidth: '30rem'
   },
   inputContainer: {
+    position: 'relative',
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -136,22 +153,20 @@ const styles = {
   labelFocus: {opacity: 1},
   input: {
     border: 0,
-    padding: minimal,
+    padding: minor,
     backgroundColor: colors.inputBackground,
-    minHeight: '1.55rem',
-    maxHeight: '1.55rem',
-    transition: 'max-height 0.3s ease-in-out 0s',
     resize: 'none'
   },
   inputFocus: {
-    maxHeight: '10rem',
     height: 'auto'
   },
   bottom: {
+    position: 'absolute',
+    bottom: 3, left: 0, right: 0,
+    height: 3,
     display: 'flex',
     alignItems: 'stretch',
     justifyContent: 'center',
-    height: '3px',
     backgroundColor: colors.lightGray
   },
   bottomError: {

@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import ReactTable from 'react-table';
 
 import Checkbox from 'components/Checkbox.component';

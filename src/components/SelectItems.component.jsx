@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import ReactDropzone from 'react-dropzone';
 import {connect} from 'react-redux';
 import {get} from 'lodash/fp';

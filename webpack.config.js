@@ -1,6 +1,7 @@
 /* eslint-disable import/no-commonjs */
 // const production = require('./webpack.production.config');
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
@@ -77,6 +78,11 @@ module.exports = merge(
       ]
     },
     plugins: [
+      new webpack.ProvidePlugin({
+        React: 'react',
+        Radium: 'radium',
+        PropTypes: 'prop-types'
+      }),
       new ExtractTextPlugin({
         filename: 'assets/css/[name].[contenthash:8].css',
         disable: false,

@@ -1,13 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import {normal, minor, minimal} from 'styles/spacing';
 import colors from 'styles/colors';
 import Loading from 'components/Loading.component';
 
 @Radium
-export default class Button extends React.Component {
+export default class Button extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node,
     onClick: PropTypes.func,
@@ -22,9 +18,7 @@ export default class Button extends React.Component {
   }
   handleClick = event => {
     event.stopPropagation();
-    if (typeof this.props.onClick === 'function') {
-      this.props.onClick(event);
-    }
+    if (typeof this.props.onClick === 'function') this.props.onClick(event);
   }
   render() {
     const {
@@ -74,9 +68,9 @@ export default class Button extends React.Component {
 
 const styles = {
   shadow: {
-    boxShadow: '0 3px 6px rgba(0,0,0,0.14), 0 3px 6px rgba(0,0,0,0.2)',
+    boxShadow: '0 3px 6px rgba(0,0,0,0.14), 0 2px 4px rgba(0,0,0,0.2)',
     [':hover']: {
-      boxShadow: '0 2px 4px rgba(0,0,0,0.14), 0 2px 4px rgba(0,0,0,0.2)'
+      boxShadow: '0 2px 4px rgba(0,0,0,0.14), 0 1px 2px rgba(0,0,0,0.2)'
     }
   },
   button: {

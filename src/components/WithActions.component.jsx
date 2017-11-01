@@ -1,8 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {get} from 'lodash/fp';
 import {connect} from 'react-redux';
-import Radium from 'radium';
 
 import {major} from 'styles/spacing';
 import containers from 'styles/containers';
@@ -61,7 +58,6 @@ class WithActions extends React.Component {
             <div
                 style={[
                   containers.contentContainer,
-                  styles.actionContainer,
                   plain ? styles.plain : {}
                 ]}
             >
@@ -120,7 +116,11 @@ export default connect(mapStateToProps)(WithActions);
 
 
 const styles = {
-  actionContainer: {marginBottom: major, flexDirection: 'row', flexWrap: 'wrap'},
+  actionContainer: {
+    marginBottom: major,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
   container: {
     display: 'flex',
     alignSelf: 'stretch',

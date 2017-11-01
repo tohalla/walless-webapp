@@ -1,6 +1,3 @@
-import React from 'react';
-import Radium from 'radium';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ReactClickOutside from 'react-click-outside';
 

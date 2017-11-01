@@ -8,7 +8,10 @@ module.exports = {
     'plugin:flowtype/recommended'
   ],
   globals: {
-    google: true
+    google: true,
+    React: true,
+    PropTypes: true,
+    Radium: true
   },
   parserOptions: {
     ecmaVersion: 6,

@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {get, find, set, differenceWith} from 'lodash/fp';
@@ -19,7 +17,7 @@ const mapStateToProps = state => ({
 class OptionForm extends React.Component {
   static propTypes = {
     disabledOptions: PropTypes.arrayOf(PropTypes.object),
-    option: PropTypes.object,
+    value: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     submitText: PropTypes.string,
@@ -29,8 +27,8 @@ class OptionForm extends React.Component {
     super(props);
     this.state = Object.assign(
       {isOpen: false},
-      props.option ?
-        {isOpen: false, option: props.option.id, ...props.option}
+      props.value ?
+        {isOpen: false, option: props.value.id, ...props.value}
       : {option: undefined, defaultValue: false}
     );
   }

@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {pickBy, debounce} from 'lodash/fp';
 import {camelizeKeys} from 'humps';
 import {connect} from 'react-redux';

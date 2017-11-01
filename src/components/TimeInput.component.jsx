@@ -1,45 +1,63 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import Input from 'components/Input.component';
 import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class TimeInput extends React.Component {
+export default class TimeInput extends React.PureComponent {
   static propTypes = {
+    afterInput: PropTypes.node,
     value: PropTypes.string,
     label: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     disabled: PropTypes.bool,
-    required: PropTypes.bool
+    isValid: PropTypes.func,
+    required: PropTypes.bool,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
+    labelLocation: PropTypes.oneOf(['top', 'left'])
   };
   static defaultProps = {
     onBlur: () => {},
     onChange: () => {},
+    isValid: value => /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(value),
     onFocus: () => {},
     required: false,
     disabled: false
   };
-  state = {
-    currentValue: this.props.value,
-    isFocused: false,
-    hours: '',
-    minutes: ''
-  };
+  constructor(props) {
+    super(props);
+    const [hours = '', minutes = ''] = this.props.value ?
+      this.props.value.split(':') : [];
+    this.state = {
+      isFocused: false,
+      hours,
+      minutes
+    };
+    this.handleHoursChange = this.handleHoursChange.bind(this);
+    this.handleMinutesChange = this.handleMinutesChange.bind(this);
+  }
   componentWillReceiveProps(nextProps) {
     if (!this.state.isFocused) {
-      this.setState({currentValue: nextProps.value});
+      const [hours = '', minutes = ''] = nextProps.value ?
+        nextProps.value.split(':') : [];
+      this.setState({hours, minutes});
     }
   }
+  handleChange = () => typeof this.props.onChange === 'function' &&
+    this.props.onChange(
+      `${this.state.hours || ''}:${this.state.minutes || ''}`
+    );
   handleHoursChange = event => {
-    this.setState({hours: event.target.value});
+    this.setState({hours: event.target.value}, this.handleChange);
     if (event.target.value.length >= 2) this.minutes.focus();
   };
-  handleMinutesChange = event => this.setState({minutes: event.target.value});
+  handleMinutesChange = event => {
+    this.setState({minutes: event.target.value}, this.handleChange);
+  };
   handleMinutesKeyUp = event =>
     event.keyCode === 8 && !this.state.minutes.length && this.hours.focus();
   handleFocus = event => {
@@ -49,52 +67,73 @@ export default class TimeInput extends React.Component {
   handleBlur = event => {
     this.setState({
       isFocused: false,
-      error: this.props.required && !(this.props.hours || this.minutes)
+      error: this.props.required && !(this.props.isValid(this.props.value))
     });
     this.props.onBlur(event);
   };
+  focus = () => this.hours && !this.state.isFocused && this.hours.focus();
   render() {
-    const {label, ...props} = this.props;
+    const {
+      label,
+      afterInput,
+      labelLocation,
+      isValid, // eslint-disable-line no-unused-vars
+      style,
+      ...props
+    } = this.props;
     const {hours, minutes, isFocused, error} = this.state;
+    const inputProps = {
+      maxLength: 2,
+      plain: true,
+      inputStyle: {width: '3rem'},
+      onFocus: this.handleFocus,
+      onBlur: this.handleBlur
+    };
     return (
-      <div style={styles.container}>
+      <div
+          onClick={this.focus}
+          style={[
+            styles.container,
+            style,
+            labelLocation === 'left' ?
+              {flexDirection: 'row', alignItems: 'center'}
+            : {flexDirection: 'column'}
+          ]}
+      >
         {label &&
           <label
               htmlFor={this.props.id}
-              style={[].concat(styles.label, isFocused ? styles.labelFocus : [])}
+              style={[].concat(
+                styles.label,
+                isFocused ? styles.labelFocus : [],
+                labelLocation === 'left' ?
+                  {paddingRight: minor} : []
+              )}
           >
           {label}
           </label>
         }
-        <div style={{display: 'flex', alignSelf: 'flex-start', paddingBottom: minor}}>
+        <div style={{display: 'flex', alignSelf: 'flex-start'}}>
           <div style={styles.inputContainer}>
             <div style={styles.hhmm}>
               <Input
                   {...props}
-                  maxLength={2}
-                  onBlur={this.handleBlur}
+                  {...inputProps}
                   onChange={this.handleHoursChange}
-                  onFocus={this.handleFocus}
                   pattern={/^$|^([0-9]|0[0-9]|1[0-9]|2[0-3])$/}
                   placeholder="hh"
-                  plain
                   ref={c => this.hours = c}
-                  size={2}
                   value={hours}
               />
               {':'}
               <Input
                   {...props}
-                  maxLength={2}
-                  onBlur={this.handleBlur}
+                  {...inputProps}
                   onChange={this.handleMinutesChange}
-                  onFocus={this.handleFocus}
                   onKeyUp={this.handleMinutesKeyUp}
                   pattern={/^$|^([0-9]|[0-5][0-9])$/}
                   placeholder="mm"
-                  plain
                   ref={c => this.minutes = c}
-                  size={2}
                   value={minutes}
               />
             </div>
@@ -103,6 +142,7 @@ export default class TimeInput extends React.Component {
             </div>
           </div>
         </div>
+        {afterInput && <div style={{marginLeft: minor}}>{afterInput}</div>}
       </div>
     );
   }
@@ -112,10 +152,10 @@ export default class TimeInput extends React.Component {
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column',
     maxWidth: '30rem'
   },
   inputContainer: {
+    position: 'relative',
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -129,10 +169,12 @@ const styles = {
   },
   labelFocus: {opacity: 1},
   bottom: {
+    position: 'absolute',
+    bottom: 3, left: 0, right: 0,
+    height: 3,
     display: 'flex',
     alignItems: 'stretch',
     justifyContent: 'center',
-    height: '3px',
     backgroundColor: colors.lightGray
   },
   bottomError: {

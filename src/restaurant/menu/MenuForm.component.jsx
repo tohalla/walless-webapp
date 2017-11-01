@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import {reduce, set, get, equals} from 'lodash/fp';
@@ -11,8 +8,6 @@ import Form from 'components/Form.component';
 import Button from 'components/Button.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import Tabbed from 'components/Tabbed.component';
-
-const TextArea = props => <textarea {...props} />;
 
 const mapStateToProps = state => ({
   languages: state.util.translation.languages,
@@ -140,7 +135,7 @@ class MenuForm extends React.Component {
                 value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
-                Input={TextArea}
+                Input={'textarea'}
                 label={t('restaurant.menu.description')}
                 onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                 rows={3}

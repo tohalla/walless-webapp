@@ -45,6 +45,12 @@ h6 {
     font-weight: 900;
 }
 
+abbr {
+  font-variant: none !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
 .Select-multi-value-wrapper {
   padding-left: 10px;
 }

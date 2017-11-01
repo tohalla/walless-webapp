@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
@@ -167,12 +164,10 @@ class MenuItemForm extends React.Component {
   };
   handleAddOption = option =>
     this.setState({options: [].concat(this.state.options, option)});
-  handleEditOption = (option, oldOption) => {
-    const index = findIndex(o => oldOption.id === o.id)(this.state.options);
+  handleEditOption = ({value: option, oldValue}) => {
+    const index = findIndex(o => oldValue.id === o.id)(this.state.options);
     if (index !== -1) {
-      const options = this.state.options.slice();
-      options[index] = option;
-      this.setState({options});
+      this.setState({options: set(index)(option)(this.state.options)});
     }
   };
   handleDeleteOption = option => this.setState({
@@ -342,7 +337,7 @@ class MenuItemForm extends React.Component {
                           key={index}
                           onDelete={this.handleDeleteOption}
                           onEdit={this.handleEditOption}
-                          option={option}
+                          value={option}
                       >
                         {get(['i18n', language, 'name'])(option)}
                       </Editable>

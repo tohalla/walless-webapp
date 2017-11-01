@@ -1,8 +1,5 @@
-import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {restaurant, account} from 'walless-graphql';
 
 import PopOverMenu from 'components/PopOverMenu.component';

@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {connect} from 'react-redux';
 
 import Button from 'components/Button.component';

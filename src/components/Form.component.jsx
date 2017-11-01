@@ -1,21 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 
 import Loading from 'components/Loading.component';
 import Button from 'components/Button.component';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t
-});
-
 const findInvalidInputs = components => components ?
   [].concat(components).reduce((prev, curr) =>
     curr ?
       get(['props', 'required'])(curr) && (
-        curr.props.value === '' || typeof curr.props.value === 'undefined'
+        curr.props.value === ''
+        || typeof curr.props.value === 'undefined'
+        || !(
+          typeof curr.props.isValid === 'function'
+          && curr.props.isValid(curr.props.value)
+        )
       ) ? prev.concat(curr)
         : curr.props ?
           curr.props.children ? prev.concat(findInvalidInputs(curr.props.children))
@@ -29,7 +27,7 @@ const findInvalidInputs = components => components ?
 : [];
 
 @Radium
-class Form extends React.Component {
+class Form extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -50,11 +48,11 @@ class Form extends React.Component {
     submitText: PropTypes.string,
     cancelText: PropTypes.string,
     isValid: PropTypes.bool,
-    FormComponent: PropTypes.func
+    FormComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
   };
   static defaultProps = {
     isValid: true,
-    FormComponent: new Radium(props => <form {...props} />)
+    FormComponent: 'form'
   };
   handleSubmit = event => {
     event.preventDefault();
@@ -130,7 +128,6 @@ class Form extends React.Component {
 const styles = {
   container: {
     display: 'flex',
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'stretch'
   },
@@ -141,4 +138,4 @@ const styles = {
   }
 };
 
-export default connect(mapStateToProps, {})(Form);
+export default connect(state => ({t: state.util.translation.t}), {})(Form);

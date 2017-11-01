@@ -1,10 +1,7 @@
-import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
 import Cookie from 'js-cookie';
-import PropTypes from 'prop-types';
 import {set, get, equals, pick} from 'lodash/fp';
-import Radium from 'radium';
 import {file, misc, restaurant, account} from 'walless-graphql';
 
 import Input from 'components/Input.component';
@@ -15,8 +12,6 @@ import SelectItems from 'components/SelectItems.component';
 import Tabbed from 'components/Tabbed.component';
 import LocationInput from 'components/LocationInput.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
-
-const TextArea = props => <textarea {...props} />;
 
 const mapStateToProps = state => ({
   languages: state.util.translation.languages,
@@ -210,7 +205,7 @@ class RestaurantForm extends React.Component {
                         value={get(['i18n', value.locale, 'name'])(this.state) || ''}
                     />
                     <Input
-                        Input={TextArea}
+                        Input={'textarea'}
                         label={this.props.t('restaurant.description')}
                         onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                         rows={3}

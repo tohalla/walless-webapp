@@ -1,12 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Radium from 'radium';
-
 import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class Checkbox extends React.Component {
+export default class Checkbox extends React.PureComponent {
   static propTypes = {
     checked: PropTypes.bool,
     disabled: PropTypes.bool,
@@ -19,7 +15,8 @@ export default class Checkbox extends React.Component {
   };
   handleClick = event => {
     event.stopPropagation();
-    this.props.onClick(event);
+    const {checked, label, onClick} = this.props;
+    if (typeof onClick === 'function') onClick(event, {checked, label});
   };
   render() {
     const {checked, disabled, label} = this.props;
@@ -27,7 +24,6 @@ export default class Checkbox extends React.Component {
       <div onClick={this.handleClick} style={styles.container}>
         <i
             className="material-icons"
-            onClick={this.handleClick}
             style={[
               styles.checkbox,
               disabled ? styles.disabled

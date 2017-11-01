@@ -1,6 +1,3 @@
-import React from 'react';
-import Radium from 'radium';
-
 import {major} from 'styles/spacing';
 import colors from 'styles/colors';
 

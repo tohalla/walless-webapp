@@ -1,5 +1,3 @@
-import React from 'react';
-import Radium from 'radium';
 import {compose} from 'react-apollo';
 import {account} from 'walless-graphql';
 

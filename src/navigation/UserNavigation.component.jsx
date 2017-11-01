@@ -1,7 +1,5 @@
-import React from 'react';
 import {connect} from 'react-redux';
 import {compose, withApollo} from 'react-apollo';
-import Radium from 'radium';
 import {account} from 'walless-graphql';
 
 import {minimal} from 'styles/spacing';

@@ -1,5 +1,3 @@
-import React from 'react';
-import Radium from 'radium';
 import {connect} from 'react-redux';
 
 import {notificationsZIndex} from 'styles/zIndex';

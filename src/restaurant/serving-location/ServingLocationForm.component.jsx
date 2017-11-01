@@ -1,7 +1,5 @@
-import React from 'react';
 import {compose} from 'react-apollo';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import {equals, omit} from 'lodash/fp';
 
 import Input from 'components/Input.component';
