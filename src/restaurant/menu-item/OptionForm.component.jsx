@@ -102,7 +102,7 @@ class OptionForm extends React.Component {
         </Form>
       ) : (
         <Button onClick={this.toggleOpen}>
-          {t('restaurant.menuItem.addNewOption')}
+          {t('restaurant.item.addNewOption')}
         </Button>
       )
     : null;

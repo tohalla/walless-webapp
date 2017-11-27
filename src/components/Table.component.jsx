@@ -88,7 +88,8 @@ const styles = {
     background: colors.backgroundLight,
     borderStyle: 'solid',
     borderColor: colors.border,
-    borderWidth: '1px 1px 0'
+    borderWidth: '1px 1px 0',
+    overflow: 'none'
   },
   container: {
     flex: 1

@@ -128,6 +128,7 @@ class Form extends React.PureComponent {
 const styles = {
   container: {
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'stretch'
   },

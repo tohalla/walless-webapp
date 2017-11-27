@@ -166,7 +166,7 @@ class Restaurant extends React.Component {
                     MenuItems,
                     {restaurant}
                   )}
-                  path="/:restaurant/menuitems"
+                  path="/:restaurant/items"
               />
               <Route
                   component={this.renderRouteComponentWithProps(
@@ -284,8 +284,8 @@ const menuItems = [
     translationKey: 'restaurant.order.orders'
   },
   {
-    path: 'menuitems',
-    translationKey: 'restaurant.menuItem.menuItems'
+    path: 'items',
+    translationKey: 'restaurant.item.items'
   },
   {
     path: 'users',

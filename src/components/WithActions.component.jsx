@@ -58,6 +58,7 @@ class WithActions extends React.Component {
             <div
                 style={[
                   containers.contentContainer,
+                  styles.actionContainer,
                   plain ? styles.plain : {}
                 ]}
             >

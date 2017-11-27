@@ -225,13 +225,13 @@ class MenuItemForm extends React.Component {
         content: (
           <div>
             <Input
-                label={t('restaurant.menuItem.name')}
+                label={t('restaurant.item.name')}
                 onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
                 value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
                 Input={'textarea'}
-                label={t('restaurant.menuItem.description')}
+                label={t('restaurant.item.description')}
                 onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
                 rows={3}
                 value={get(['i18n', value.locale, 'description'])(this.state) || ''}
@@ -257,7 +257,7 @@ class MenuItemForm extends React.Component {
                 item: (
                   <Input
                       afterInput={get(['currency', 'symbol'])(restaurant)}
-                      label={t('restaurant.menuItem.price')}
+                      label={t('restaurant.item.price')}
                       onChange={this.handleInputChange('price')}
                       pattern="^\d+(\.\d{0,2})?$|^$"
                       required
@@ -266,7 +266,7 @@ class MenuItemForm extends React.Component {
                 )
               },
               {
-                label: t('restaurant.menuItem.type'),
+                label: t('restaurant.item.type'),
                 item: (
                   <Select
                       autoBlur
@@ -284,7 +284,7 @@ class MenuItemForm extends React.Component {
                 )
               },
               categories.length ? {
-                label: t('restaurant.menuItem.category'),
+                label: t('restaurant.item.category'),
                 item: (
                   <Select
                       autoBlur
@@ -299,7 +299,7 @@ class MenuItemForm extends React.Component {
                   />
                 )
               } : null, {
-                label: t('restaurant.menuItem.images'),
+                label: t('restaurant.item.images'),
                 item: (
                   <SelectItems
                       dropzone={{
@@ -316,7 +316,7 @@ class MenuItemForm extends React.Component {
                 )
               },
               diets.length ? {
-                label: t('restaurant.menuItem.diets'),
+                label: t('restaurant.item.diets'),
                 item: diets.map((diet, index) => (
                   <Checkbox
                       checked={selectedDiets.has(diet.id)}
@@ -327,7 +327,7 @@ class MenuItemForm extends React.Component {
                 ))
               } : null,
               {
-                label: t('restaurant.menuItem.options'),
+                label: t('restaurant.item.options'),
                 item: (
                   <div>
                     {options.map((option, index) => (

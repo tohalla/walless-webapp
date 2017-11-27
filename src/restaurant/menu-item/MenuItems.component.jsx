@@ -74,7 +74,7 @@ class MenuItems extends React.Component {
     const {action, deleteModal} = this.state;
     const defaultActions = {
       filter: {
-        label: t('restaurant.menuItem.action.filter'),
+        label: t('restaurant.item.action.filter'),
         item: (
           <div />
         )
@@ -93,7 +93,7 @@ class MenuItems extends React.Component {
         )
       },
       new: {
-        label: t('restaurant.menuItem.action.create'),
+        label: t('restaurant.item.action.create'),
         hideReturn: true,
         hideItems: true,
         item: (
@@ -133,7 +133,7 @@ class MenuItems extends React.Component {
         <Table
             columns={[
               {
-                Header: t('restaurant.menuItem.images'),
+                Header: t('restaurant.item.images'),
                 id: 'img',
                 accessor: menuItem => menuItem.images.length ? (
                   <img src={menuItem.images[0].uri} style={styles.image} />
@@ -142,15 +142,15 @@ class MenuItems extends React.Component {
                 width: 120
               },
               {
-                Header: t('restaurant.menuItem.actions'),
+                Header: t('restaurant.item.actions'),
                 id: 'actions',
                 accessor: menuItem => (
                   <div style={styles.actions}>
                     <Button onClick={this.handleActionSelect({key: 'edit', menuItem})} plain>
-                      {t('restaurant.menuItem.action.edit')}
+                      {t('restaurant.item.action.edit')}
                     </Button>
                     <Button onClick={this.handleDelete(menuItem)} plain>
-                      {t('restaurant.menuItem.action.delete')}
+                      {t('restaurant.item.action.delete')}
                     </Button>
                   </div>
                 ),
@@ -160,12 +160,12 @@ class MenuItems extends React.Component {
                 style: {padding: 0}
               },
               {
-                Header: t('restaurant.menuItem.name'),
+                Header: t('restaurant.item.name'),
                 accessor: menuItem => get(['i18n', language, 'name'])(menuItem),
                 id: 'name'
               },
               {
-                Header: t('restaurant.menuItem.description'),
+                Header: t('restaurant.item.description'),
                 accessor: menuItem => get(['i18n', language, 'description'])(menuItem),
                 id: 'description'
               }
