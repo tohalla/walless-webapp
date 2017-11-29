@@ -9,7 +9,11 @@ export default class ItemsWithLabels extends Component {
         item: PropTypes.node
       }),
       PropTypes.node
-    ]))
+    ])),
+    hideEmpty: PropTypes.bool
+  };
+  static defaultProps = {
+    hideEmpty: true
   };
   constructor(props) {
     super(props);
@@ -22,24 +26,27 @@ export default class ItemsWithLabels extends Component {
     };
   }
   render() {
-    const {items} = this.props;
+    const {items, hideEmpty} = this.props;
     return (
       <div style={styles.container}>
-        {items.map((item, index) =>
-          item && (item.item || item.label) ? (
-            <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
-              {item.label ?
+        {items.reduce((prev, curr) =>
+          !curr ? prev
+          : !curr.item && hideEmpty && curr.label ?
+            prev
+          : prev.concat(
+            <div
+                key={prev.length}
+                style={[].concat(styles.row, prev.length ? {paddingTop: content} : [])}
+            >
+              {curr.label &&
                 <div style={[].concat(styles.header, {flexBasis: this.state.headerWidth})}>
-                  {item.label}
-                </div> : null
+                  {curr.label}
+                </div>
               }
-              {item.item}
+              {curr.label || curr.item ? curr.item : curr}
             </div>
-          ) : (
-            <div key={index} style={[].concat(styles.row, index === items.length - 1 ? [] : {paddingBottom: content})}>
-              {item}
-            </div>
-          )
+          ),
+          []
         )}
       </div>
     );

@@ -34,7 +34,6 @@ class Restaurant extends Component {
   handleActionChange = action => this.setState({action});
   handleActionSelect = action => () => this.handleActionChange(action);
   render() {
-    console.log(this.props);
     const {restaurant, t, language} = this.props;
     const {action} = this.state;
     const {name, description} = pick([
