@@ -6,7 +6,7 @@ import TimeInput from 'components/TimeInput.component';
 import Form from 'components/Form.component';
 
 @Radium
-class ShiftForm extends React.PureComponent {
+class ShiftForm extends PureComponent {
   static propTypes = {
     value: PropTypes.shape(({
       startTime: PropTypes.string,

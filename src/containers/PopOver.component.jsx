@@ -16,7 +16,7 @@ const toPx = value => !value ? 0
   : value;
 
 @Radium
-export default class PopOver extends React.Component {
+export default class PopOver extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onClickOutside: PropTypes.func.isRequired

@@ -9,7 +9,7 @@ import authenticationHandler from 'util/auth';
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 @Radium
-class UserNavigation extends React.Component {
+class UserNavigation extends Component {
   handleLogout = async event => {
     event.preventDefault();
     await authenticationHandler.logout();

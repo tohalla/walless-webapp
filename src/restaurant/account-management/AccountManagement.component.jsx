@@ -11,8 +11,8 @@ import loadable from 'decorators/loadable';
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 @loadable()
-class AccountManagement extends React.Component {
-  static PropTypes = {
+class AccountManagement extends Component {
+  static propTypes = {
     restaurant: PropTypes.object.isRequired
   };
   state = {action: {key: 'filter'}, filters: {}};

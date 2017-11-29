@@ -4,7 +4,7 @@ import {minor} from 'styles/spacing';
 import colors from 'styles/colors';
 
 @Radium
-export default class PopOverMenu extends React.Component {
+export default class PopOverMenu extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired

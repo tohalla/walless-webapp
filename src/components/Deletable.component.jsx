@@ -1,7 +1,7 @@
 import Button from 'components/Button.component';
 
 @Radium
-export default class Deletable extends React.PureComponent {
+export default class Deletable extends PureComponent {
   static propTypes = {
     deleteText: PropTypes.oneOfType([
       PropTypes.node,

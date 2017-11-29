@@ -8,7 +8,7 @@ import {servingLocation} from 'walless-graphql';
 
 const mapStateToProps = state => ({t: state.util.translation.t});
 
-class ServingLocationForm extends React.Component {
+class ServingLocationForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,

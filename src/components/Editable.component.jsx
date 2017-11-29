@@ -1,7 +1,7 @@
 import Button from 'components/Button.component';
 
 @Radium
-export default class Editable extends React.PureComponent {
+export default class Editable extends PureComponent {
   static propTypes = {
     onEdit: PropTypes.func,
     onDelete: PropTypes.func,

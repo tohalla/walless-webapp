@@ -17,8 +17,8 @@ import loadable from 'decorators/loadable';
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 @loadable()
-class ServingLocations extends React.Component {
-  static PropTypes = {
+class ServingLocations extends Component {
+  static propTypes = {
     action: PropTypes.shape({
       name: PropTypes.string.isRequired,
       item: PropTypes.object

@@ -3,7 +3,7 @@ import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class TimeInput extends React.PureComponent {
+export default class TimeInput extends PureComponent {
   static propTypes = {
     afterInput: PropTypes.node,
     value: PropTypes.string,

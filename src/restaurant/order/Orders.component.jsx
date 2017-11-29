@@ -19,8 +19,8 @@ const mapStateToProps = state => ({
 
 @loadable()
 @Radium
-class Orders extends React.Component {
-  static PropTypes = {
+class Orders extends Component {
+  static propTypes = {
     restaurant: PropTypes.object.isRequired
   };
   state = {action: {key: 'filter'}, filters: {state: 'pending'}};

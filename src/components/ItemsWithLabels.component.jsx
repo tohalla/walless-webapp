@@ -1,7 +1,7 @@
 import {content, normal} from 'styles/spacing';
 
 @Radium
-export default class ItemsWithLabels extends React.Component {
+export default class ItemsWithLabels extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([
       PropTypes.shape({

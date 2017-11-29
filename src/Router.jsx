@@ -5,7 +5,7 @@ import {
 
 import Root from 'containers/Root.component';
 
-export default class extends React.Component {
+export default class extends Component {
   shouldComponentUpdate = () => false;
   render() {
     return (

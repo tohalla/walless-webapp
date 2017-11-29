@@ -10,7 +10,7 @@ const isLoading = props => {
     : false;
 };
 
-export default ({hideIndicator} = {}) => Component => class Loadable extends React.Component {
+export default ({hideIndicator} = {}) => Component => class Loadable extends Component {
   render() {
     return isLoading(this.props) ?
       hideIndicator ?

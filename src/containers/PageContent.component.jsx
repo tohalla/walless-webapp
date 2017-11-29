@@ -2,7 +2,7 @@ import Footer from 'containers/Footer.component';
 import {major} from 'styles/spacing';
 
 @Radium
-export default class PageContent extends React.Component {
+export default class PageContent extends Component {
   render() {
     const {children, style, ...props} = this.props;
     return (

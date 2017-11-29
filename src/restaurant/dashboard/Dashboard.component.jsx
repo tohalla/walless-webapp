@@ -1,5 +1,5 @@
 @Radium
-export default class Dashboard extends React.Component {
+export default class Dashboard extends Component {
   render() {
     return <div />;
   }

@@ -8,7 +8,7 @@ import ScheduleForm from 'availability/ScheduleForm.component';
 import Editable from 'components/Editable.component';
 
 @Radium
-class AvailabilityForm extends React.Component {
+class AvailabilityForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func

@@ -6,7 +6,7 @@ import colors from 'styles/colors';
 import shadow from 'styles/shadow';
 
 @Radium
-export default class Select extends React.Component {
+export default class Select extends Component {
   static propTypes = {
     clearable: PropTypes.bool,
     style: PropTypes.oneOfType([
@@ -47,7 +47,7 @@ export default class Select extends React.Component {
 }
 
 @Radium
-class Option extends React.Component {
+class Option extends Component {
   blockEvent = event => {
     event.preventDefault();
     event.stopPropagation();

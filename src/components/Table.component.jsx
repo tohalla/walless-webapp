@@ -6,7 +6,7 @@ import colors from 'styles/colors';
 import {minimal, minor} from 'styles/spacing';
 
 @Radium
-export default class Table extends React.Component {
+export default class Table extends Component {
   static propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape({
       Header: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),

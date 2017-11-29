@@ -11,7 +11,7 @@ import Select from 'components/Select.component';
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 @loadable()
-class OrdersFilter extends React.Component {
+class OrdersFilter extends Component {
   static propTypes = {
     filters: PropTypes.shape({
       servingLocations: PropTypes.array

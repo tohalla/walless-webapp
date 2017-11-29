@@ -2,7 +2,7 @@ import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class Checkbox extends React.PureComponent {
+export default class Checkbox extends PureComponent {
   static propTypes = {
     checked: PropTypes.bool,
     disabled: PropTypes.bool,

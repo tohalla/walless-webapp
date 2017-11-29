@@ -6,7 +6,7 @@ import colors from 'styles/colors';
 import {normal} from 'styles/spacing';
 
 @Radium
-class Notification extends React.Component {
+class Notification extends Component {
   static propTypes = {
     notification: PropTypes.object.isRequired
   };

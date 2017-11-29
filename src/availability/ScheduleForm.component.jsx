@@ -8,7 +8,7 @@ import ShiftForm from 'availability/ShiftForm.component';
 import DaySelect from 'availability/DaySelect.component';
 
 @Radium
-class ScheduleForm extends React.Component {
+class ScheduleForm extends Component {
   static propTypes = {
     schedules: PropTypes.object,
     value: PropTypes.shape(({

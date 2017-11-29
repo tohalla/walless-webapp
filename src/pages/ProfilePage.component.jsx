@@ -5,7 +5,7 @@ import loadable from 'decorators/loadable';
 
 @loadable()
 @Radium
-class Profile extends React.Component {
+class Profile extends Component {
   render() {
     return <div />;
   }

@@ -6,7 +6,7 @@ import Checkbox from 'components/Checkbox.component';
 import Button from 'components/Button.component';
 
 @Radium
-class DaySelect extends React.PureComponent {
+class DaySelect extends PureComponent {
   static propTypes = {
     allowSpecificDays: PropTypes.bool,
     onSelect: PropTypes.func.isRequired,
@@ -39,7 +39,7 @@ class DaySelect extends React.PureComponent {
     const weekdays = {
       1: t('time.weekday.monday'),
       2: t('time.weekday.tuesday'),
-      3: t('time.weekday.wensday'),
+      3: t('time.weekday.wednesday'),
       4: t('time.weekday.thursday'),
       5: t('time.weekday.friday'),
       6: t('time.weekday.saturday'),
@@ -69,7 +69,7 @@ class DaySelect extends React.PureComponent {
             weekdaysLong={[
               t('time.weekday.monday'),
               t('time.weekday.tuesday'),
-              t('time.weekday.wensday'),
+              t('time.weekday.wednesday'),
               t('time.weekday.thursday'),
               t('time.weekday.friday'),
               t('time.weekday.saturday'),

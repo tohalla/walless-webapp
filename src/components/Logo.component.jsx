@@ -2,7 +2,7 @@ import walless from 'images/walless.svg';
 import wallessPng from 'images/walless.svg';
 
 @Radium
-export default class Logo extends React.PureComponent {
+export default class Logo extends PureComponent {
   static propTypes = {
     width: PropTypes.number,
     height: PropTypes.number

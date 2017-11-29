@@ -12,7 +12,7 @@ import Select from 'components/Select.component';
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 @loadable()
-class UsersFilter extends React.Component {
+class UsersFilter extends Component {
   static propTypes = {
     filters: PropTypes.shape({
       roles: PropTypes.array

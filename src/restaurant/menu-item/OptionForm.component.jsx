@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
   language: state.util.translation.language
 });
 
-class OptionForm extends React.Component {
+class OptionForm extends Component {
   static propTypes = {
     disabledOptions: PropTypes.arrayOf(PropTypes.object),
     value: PropTypes.object,

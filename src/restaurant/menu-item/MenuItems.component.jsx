@@ -17,8 +17,8 @@ const mapStateToProps = state => ({
 
 @loadable()
 @Radium
-class MenuItems extends React.Component {
-  static PropTypes = {
+class MenuItems extends Component {
+  static propTypes = {
     restaurant: PropTypes.object.isRequired,
     action: PropTypes.shape({
       name: PropTypes.string.isRequired,

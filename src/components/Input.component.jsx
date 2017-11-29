@@ -2,7 +2,7 @@ import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class Input extends React.PureComponent {
+export default class Input extends PureComponent {
   static propTypes = {
     afterInput: PropTypes.node,
     value: PropTypes.oneOfType([
@@ -148,7 +148,7 @@ const styles = {
   },
   label: {
     colors: colors.foregroundDark,
-    opacity: 0.6
+    opacity: 0.8
   },
   labelFocus: {opacity: 1},
   input: {

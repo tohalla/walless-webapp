@@ -34,7 +34,7 @@ const mapStateToProps = state => ({
 });
 
 @Radium
-class MainNavigation extends React.Component {
+class MainNavigation extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired
   }

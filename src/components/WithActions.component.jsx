@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 });
 
 @Radium
-class WithActions extends React.Component {
+class WithActions extends Component {
   static propTypes = {
     action: PropTypes.string,
     actions: PropTypes.shape({action: PropTypes.shape({

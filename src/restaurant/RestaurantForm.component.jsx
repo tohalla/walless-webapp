@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
 });
 
 @Radium
-class RestaurantForm extends React.Component {
+class RestaurantForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
     onError: PropTypes.func,

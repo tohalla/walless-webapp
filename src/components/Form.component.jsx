@@ -10,9 +10,9 @@ const findInvalidInputs = components => components ?
       get(['props', 'required'])(curr) && (
         curr.props.value === ''
         || typeof curr.props.value === 'undefined'
-        || !(
+        || (
           typeof curr.props.isValid === 'function'
-          && curr.props.isValid(curr.props.value)
+          && !curr.props.isValid(curr.props.value)
         )
       ) ? prev.concat(curr)
         : curr.props ?
@@ -27,7 +27,7 @@ const findInvalidInputs = components => components ?
 : [];
 
 @Radium
-class Form extends React.PureComponent {
+class Form extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onSubmit: PropTypes.func.isRequired,

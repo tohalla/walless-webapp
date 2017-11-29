@@ -1,5 +1,5 @@
 @Radium
-export default class Navigation extends React.Component {
+export default class Navigation extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     style: PropTypes.oneOfType([

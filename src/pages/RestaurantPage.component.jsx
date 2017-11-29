@@ -25,7 +25,7 @@ import Orders from 'restaurant/order/Orders.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import ServingLocations from 'restaurant/serving-location/ServingLocations.component';
 import AccountManagement from 'restaurant/account-management/AccountManagement.component';
-import RestaurantComponent from 'restaurant/Restaurant.component';
+import Restaurant from 'restaurant/Restaurant.component';
 
 
 const mapStateToProps = state => ({
@@ -35,7 +35,7 @@ const mapStateToProps = state => ({
 
 @loadable()
 @Radium
-class Restaurant extends React.Component {
+class RestaurantPage extends Component {
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -92,7 +92,6 @@ class Restaurant extends React.Component {
       match,
       getRestaurantsByAccount = {},
       getActiveAccount = {},
-      children,
       t,
       location,
       language
@@ -142,61 +141,19 @@ class Restaurant extends React.Component {
             ))}
           </Navigation>
           <PageContent>
-            {React.Children.map(children, child =>
-              React.cloneElement(child, {restaurant})
-            )}
-
             <Switch>
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    RestaurantComponent,
-                    {restaurant}
-                  )}
-                  exact path="/:restaurant?"
-              />
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    Menus,
-                    {restaurant}
-                  )}
-                  path="/:restaurant/menus"
-              />
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    MenuItems,
-                    {restaurant}
-                  )}
-                  path="/:restaurant/items"
-              />
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    Orders,
-                    {restaurant}
-                  )}
-                  path="/:restaurant/orders"
-              />
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    ServingLocations,
-                    {restaurant}
-                  )}
-                  path="/:restaurant/servinglocations"
-              />
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    Dashboard,
-                    {restaurant}
-                  )}
-                  path="/:restaurant/dashboard"
-              />
-              <Route
-                  component={this.renderRouteComponentWithProps(
-                    AccountManagement,
-                    {restaurant}
-                  )}
-                  path="/:restaurant/users"
-              />
-              <Redirect path="*" to="/" />
+              {menuItems.map(({path, Component}) => (
+                <Route
+                    component={this.renderRouteComponentWithProps(
+                      Component,
+                      {restaurant}
+                    )}
+                    exact
+                    key={path}
+                    path={`/:restaurant/${path}`}
+                />
+              ))}
+              <Redirect path="/:restaurant/*" to="/" />
             </Switch>
           </PageContent>
         </div>
@@ -217,7 +174,7 @@ export default compose(
   connect(mapStateToProps, {}),
   account.getActiveAccount,
   account.getRestaurantsByAccount
-)(Restaurant);
+)(RestaurantPage);
 
 const styles = {
   container: {
@@ -273,30 +230,37 @@ const styles = {
 const menuItems = [
   {
     path: '',
-    translationKey: 'restaurant.restaurant'
+    translationKey: 'restaurant.restaurant',
+    Component: Restaurant
   },
   {
     path: 'menus',
-    translationKey: 'restaurant.menu.menus'
+    translationKey: 'restaurant.menu.menus',
+    Component: Menus
   },
   {
     path: 'orders',
-    translationKey: 'restaurant.order.orders'
+    translationKey: 'restaurant.order.orders',
+    Component: Orders
   },
   {
     path: 'items',
-    translationKey: 'restaurant.item.items'
+    translationKey: 'restaurant.item.items',
+    Component: MenuItems
   },
   {
     path: 'users',
-    translationKey: 'restaurant.userManagement.userManagement'
+    translationKey: 'restaurant.userManagement.userManagement',
+    Component: AccountManagement
   },
   {
     path: 'servinglocations',
-    translationKey: 'restaurant.servingLocation.servingLocations'
+    translationKey: 'restaurant.servingLocation.servingLocations',
+    Component: ServingLocations
   },
   {
     path: 'dashboard',
-    translationKey: 'restaurant.dashboard.dashboard'
+    translationKey: 'restaurant.dashboard.dashboard',
+    Component: Dashboard
   }
 ];

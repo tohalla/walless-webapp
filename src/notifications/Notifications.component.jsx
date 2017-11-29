@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 });
 
 @Radium
-class Notifications extends React.Component {
+class Notifications extends Component {
   render() {
     const {notifications} = this.props;
     return (

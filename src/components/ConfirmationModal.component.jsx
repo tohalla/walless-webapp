@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 });
 
 @Radium
-class ConfirmationModal extends React.Component {
+class ConfirmationModal extends Component {
   static propTypes = {
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,

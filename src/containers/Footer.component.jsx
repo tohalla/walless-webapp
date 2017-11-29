@@ -2,7 +2,7 @@ import {major} from 'styles/spacing';
 import colors from 'styles/colors';
 
 @Radium
-export default class Footer extends React.Component {
+export default class Footer extends Component {
   render() {
     return (
       <div style={styles.footer}>

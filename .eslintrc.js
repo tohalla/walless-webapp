@@ -10,6 +10,9 @@ module.exports = {
   globals: {
     google: true,
     React: true,
+    Component: true,
+    PureComponent: true,
+    Fragment: true,
     PropTypes: true,
     Radium: true
   },

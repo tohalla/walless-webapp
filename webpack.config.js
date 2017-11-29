@@ -79,6 +79,9 @@ module.exports = merge(
     },
     plugins: [
       new webpack.ProvidePlugin({
+        PureComponent: ['react', 'PureComponent'],
+        Component: ['react', 'Component'],
+        Fragment: ['react', 'Fragment'],
         React: 'react',
         Radium: 'radium',
         PropTypes: 'prop-types'

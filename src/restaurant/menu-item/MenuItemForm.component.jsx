@@ -33,7 +33,7 @@ const mapStateToProps = state => ({
 
 @loadable()
 @Radium
-class MenuItemForm extends React.Component {
+class MenuItemForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onError: PropTypes.func,

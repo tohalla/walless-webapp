@@ -3,7 +3,7 @@ import colors from 'styles/colors';
 import Loading from 'components/Loading.component';
 
 @Radium
-export default class Button extends React.PureComponent {
+export default class Button extends PureComponent {
   static propTypes = {
     children: PropTypes.node,
     onClick: PropTypes.func,

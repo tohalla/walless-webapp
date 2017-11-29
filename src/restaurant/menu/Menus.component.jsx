@@ -16,8 +16,8 @@ const mapStateToProps = state => ({
 });
 
 @loadable()
-class Menus extends React.Component {
-  static PropTypes = {
+class Menus extends Component {
+  static propTypes = {
     restaurant: PropTypes.object.isRequired,
     action: PropTypes.shape({
       name: PropTypes.string.isRequired,

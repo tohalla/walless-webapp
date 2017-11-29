@@ -12,7 +12,7 @@ import Deletable from 'components/Deletable.component';
 const mapStateToProps = state => ({t: state.util.translation.t});
 
 @Radium
-class SelectImages extends React.Component {
+class SelectImages extends Component {
   static propTypes = {
     select: PropTypes.shape({
       items: PropTypes.arrayOf(PropTypes.object),

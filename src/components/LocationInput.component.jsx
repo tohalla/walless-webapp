@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
   location: state.util.location
 });
 
-class LocationInput extends React.Component {
+class LocationInput extends Component {
   static propTypes = {
     radius: PropTypes.oneOfType([
       PropTypes.string,

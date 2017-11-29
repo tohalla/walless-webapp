@@ -2,7 +2,7 @@ import {minimal, minor, normal, content} from 'styles/spacing';
 import colors from 'styles/colors';
 
 @Radium
-export default class Tabbed extends React.Component {
+export default class Tabbed extends Component {
   static propTypes = {
     tabs: PropTypes.shape({tab: PropTypes.shape({
       label: PropTypes.string.isRequired,
