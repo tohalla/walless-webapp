@@ -6,7 +6,11 @@ import config from 'config';
 
 export const authenticate = async (payload: Object) => {
   const response = await fetch(
-    `${config.api.protocol}://${config.api.url}${config.api.port === 80 ? '' : `:${config.api.port}`}/${config.api.authentication.endpoint}/${payload.token ? 'renewToken' : ''}`,
+    `${config.api.protocol}://${config.api.url}${
+      config.api.port === 80 ? '' : `:${config.api.port}`
+    }/${config.api.authentication.endpoint}/${
+      payload.token ? 'renewToken' : ''
+    }`,
     {
       method: 'POST',
       credentials: 'include',
@@ -35,10 +39,7 @@ const authenticationHandler = {
 };
 
 setInterval(() => {
-  if (
-    Cookie.get('Expiration') &&
-    Cookie.get('Authorization')
-  ) {
+  if (Cookie.get('Expiration') && Cookie.get('Authorization')) {
     const age = Cookie.get('Expiration') - Date.now() / 1000;
     if (age < 0) {
       authenticationHandler.logout();
@@ -49,4 +50,3 @@ setInterval(() => {
 }, 20000); // checks if authorization token should be renewed
 
 export default authenticationHandler;
-

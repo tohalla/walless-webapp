@@ -1,45 +1,26 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
 </head>
+
 <body>
   <div class="authentication">
     <div class="logo-container">
       <svg width=120 height=120>
-        <image
-            xlink:href="/assets/images/walless.svg"
-            src="/assets/images/walless.png"
-            width=120 height=120
-            id="logo"
-        />
+        <image xlink:href="/assets/images/walless.svg" src="/assets/images/walless.png" width=120 height=120 id="logo" />
       </svg>
     </div>
     <div class="form-container">
+      <h1 id="title"></h1>
       <form class="form" id="authentication" method="POST">
-        <input
-            class="input"
-            placeholder="Sähköposti"
-            id="email"
-            name="email"
-            required
-            type="text"
-        />
-        <input
-            class="input"
-            placeholder="Salasana"
-            id="password"
-            name="password"
-            required
-            type="password"
-        />
-        <div class="actions">
-          <div></div>
-          <button class="button" type="submit">Tunnistaudu</button>
+        <div class="actions" id="actions">
         </div>
       </form>
     </div>
   </div>
 </body>
+
 </html>
