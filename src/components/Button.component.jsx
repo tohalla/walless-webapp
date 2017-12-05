@@ -11,15 +11,20 @@ export default class Button extends PureComponent {
     plain: PropTypes.bool,
     accent: PropTypes.bool,
     simple: PropTypes.bool,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    loading: PropTypes.bool,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ])
   };
   static defaultProps = {
     type: 'button'
-  }
+  };
   handleClick = event => {
     event.stopPropagation();
     if (typeof this.props.onClick === 'function') this.props.onClick(event);
-  }
+  };
   render() {
     const {
       plain,
@@ -33,34 +38,34 @@ export default class Button extends PureComponent {
     } = this.props;
     return (
       <button
-          {...props}
-          disabled={loading || disabled}
-          onClick={this.handleClick}
-          style={[].concat(styles.button,
-            plain ? [styles.plain, disabled ? {opacity: .5} : {opacity: 1}]
-            : simple ? [styles.simple, disabled ? {opacity: .5} : {opacity: 1}]
-            : [
-              accent ? styles.accent : styles.color,
-              loading ?
-                styles.buttonLoading
-              : disabled ?
-                styles.disabled
-              : styles.shadow
-            ],
-            style
-          )}
+        {...props}
+        disabled={loading || disabled}
+        onClick={this.handleClick}
+        style={[].concat(styles.button,
+          plain ? [styles.plain, disabled ? {opacity: 0.5} : {opacity: 1}]
+            : simple ? [styles.simple, disabled ? {opacity: 0.5} : {opacity: 1}]
+              : [
+                accent ? styles.accent : styles.color,
+                loading ?
+                  styles.buttonLoading
+                  : disabled ?
+                    styles.disabled
+                    : styles.shadow
+              ],
+          style
+        )}
       >
         {loading ?
-          <Loading color={colors.foregroundLight} small style={styles.loading}/>
-        : null}
-        <div
-            style={[].concat(
-              plain ? styles.plainText : [],
-              loading ? {opacity: 0, color: 'transparent'} : []
-            )}
-        >
-          {children}
-        </div>
+          <Fragment>
+            <Loading color={colors.foregroundLight} small style={styles.loading} />
+            <div style={{opacity: 0, color: 'transparent'}}>
+              {children}
+            </div>
+          </Fragment>
+          : plain && typeof children === 'string' ?
+            <span style={styles.plainText}>{children}</span>
+            : children
+        }
       </button>
     );
   }
@@ -74,6 +79,7 @@ const styles = {
     }
   },
   button: {
+    borderRadius: 0,
     flex: '0 0 auto',
     textTransform: 'uppercase',
     cursor: 'pointer',
@@ -121,9 +127,9 @@ const styles = {
   disabled: {
     cursor: 'initial',
     background: colors.disabled,
-    opacity: .5,
+    opacity: 0.5,
     [':hover']: {
-      opacity: .5
+      opacity: 0.5
     }
   },
   plain: {
@@ -137,7 +143,7 @@ const styles = {
   },
   plainText: {
     textDecoration: 'underline',
-    opacity: .8,
+    opacity: 0.8,
     [':hover']: {opacity: 1}
   }
 };

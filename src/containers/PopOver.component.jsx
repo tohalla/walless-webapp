@@ -12,18 +12,22 @@ const fontSize = Number(getComputedStyle(document.getElementById('app')).fontSiz
 const toPx = value => !value ? 0
   : value.endsWith('rem') ?
     Number(value.replace('rem', '')) * fontSize
-  : value.endsWith('px') ? Number(value.replace('px', ''))
-  : value;
+    : value.endsWith('px') ? Number(value.replace('px', ''))
+      : value;
 
 @Radium
 export default class PopOver extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    onClickOutside: PropTypes.func.isRequired
+    onClickOutside: PropTypes.func.isRequired,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ])
   };
   state = {
     position: null
-  }
+  };
   componentDidMount = () => {
     const {container: {
       offsetWidth,
@@ -45,14 +49,14 @@ export default class PopOver extends Component {
       position: Object.assign(
         offsetLeft + offsetWidth > window.innerWidth ?
           {left: window.innerWidth - offsetWidth - right, marginLeft: 0, marginRight: 0}
-        : offsetLeft < 0 ?
-          {left, marginLeft: 0, marginRight: 0}
-        : {marginLeft, marginRight},
+          : offsetLeft < 0 ?
+            {left, marginLeft: 0, marginRight: 0}
+            : {marginLeft, marginRight},
         offsetTop + offsetHeight > window.innerHeight ?
           {top: window.innerHeight - offsetHeight - bottom, marginBottom: 0, marginTop: 0}
-        : offsetTop < 0 ?
-          {top, marginTop: 0, marginBottom: 0}
-        : {marginTop, marginBottom}
+          : offsetTop < 0 ?
+            {top, marginTop: 0, marginBottom: 0}
+            : {marginTop, marginBottom}
       )
     });
   };
@@ -65,10 +69,12 @@ export default class PopOver extends Component {
     return (
       <div style={{position: 'relative', flex: 0}}>
         <ClickOutside
-            {...props}
-            onClickOutside={this.handleClickOutside}
-            ref={c => this.popOver = c}
-            style={[styles.container, style, this.state.position]}
+          {...props}
+          onClickOutside={this.handleClickOutside}
+          ref={c => {
+            this.popOver = c;
+          }}
+          style={[styles.container, style, this.state.position]}
         >
           {children}
         </ClickOutside>

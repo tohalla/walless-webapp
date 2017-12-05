@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch';
 
 import config from 'config';
 
-export const authenticate = async (payload: Object) => {
+export const authenticate = async(payload: Object) => {
   const response = await fetch(
     `${config.api.protocol}://${config.api.url}${
       config.api.port === 80 ? '' : `:${config.api.port}`

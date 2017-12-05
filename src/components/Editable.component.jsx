@@ -7,6 +7,11 @@ export default class Editable extends PureComponent {
     onDelete: PropTypes.func,
     Form: PropTypes.func,
     value: PropTypes.object,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
+    children: PropTypes.node,
     exitType: PropTypes.oneOf(['cancel', 'close'])
   };
   static defaultProps = {
@@ -36,11 +41,11 @@ export default class Editable extends PureComponent {
     } = this.props;
     return this.state.edit ? (
       <Form
-          {...props}
-          forceOpen
-          onCancel={exitType === 'cancel' ? this.toggleEdit : undefined}
-          onClose={exitType === 'close' ? this.toggleEdit : undefined}
-          onSubmit={this.handleEdit}
+        {...props}
+        forceOpen
+        onCancel={exitType === 'cancel' ? this.toggleEdit : undefined}
+        onClose={exitType === 'close' ? this.toggleEdit : undefined}
+        onSubmit={this.handleEdit}
       />
     ) : (
       <div style={[styles.container, style]}>
@@ -48,12 +53,12 @@ export default class Editable extends PureComponent {
         <div style={styles.actions}>
           {typeof onEdit === 'function' &&
             <Button onClick={this.toggleEdit} plain>
-              <i className="material-icons">{'edit'}</i>
+              <i className='material-icons'>{'edit'}</i>
             </Button>
           }
           {typeof onDelete === 'function' &&
             <Button onClick={this.handleDelete} plain>
-              <i className="material-icons">{'delete'}</i>
+              <i className='material-icons'>{'delete'}</i>
             </Button>
           }
         </div>

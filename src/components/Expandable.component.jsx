@@ -15,7 +15,7 @@ export default class Expandable extends PureComponent {
   };
   static defaultProps = {
     expandDefault: false
-  }
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ export default class Expandable extends PureComponent {
     return (expand && typeof onContract === 'function' && onContract() === false)
       || (!expand && typeof onExpand === 'function' && onExpand() === false)
       || this.setState({expand: !this.state.expand});
-  }
+  };
   render() {
     const {expand} = this.state;
     const {title, children} = this.props;

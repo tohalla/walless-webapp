@@ -25,7 +25,7 @@ export default class PopOverMenu extends Component {
     if (typeof item.onClick === 'function') {
       item.onClick();
     }
-  }
+  };
   render() {
     const {label, items} = this.props;
     return (
@@ -36,9 +36,9 @@ export default class PopOverMenu extends Component {
             <div style={styles.menuItems}>
               {items.map((item, index) => (
                 <div
-                    key={index}
-                    onClick={this.handleItemClick(item)}
-                    style={styles.menuItem}
+                  key={index}
+                  onClick={this.handleItemClick(item)}
+                  style={styles.menuItem}
                 >
                   {item.label}
                 </div>

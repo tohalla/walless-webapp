@@ -3,6 +3,13 @@ import {major} from 'styles/spacing';
 
 @Radium
 export default class PageContent extends Component {
+  static propTypes = {
+    children: PropTypes.node,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ])
+  };
   render() {
     const {children, style, ...props} = this.props;
     return (

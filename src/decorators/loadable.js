@@ -15,7 +15,7 @@ export default ({hideIndicator} = {}) => Component => class Loadable extends Com
     return isLoading(this.props) ?
       hideIndicator ?
         null
-      : <Loading />
+        : <Loading />
       : <Component {...this.props} />;
   }
 };

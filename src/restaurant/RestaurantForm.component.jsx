@@ -23,6 +23,17 @@ class RestaurantForm extends Component {
     onCancel: PropTypes.func,
     createRestaurant: PropTypes.func.isRequired,
     updateRestaurant: PropTypes.func.isRequired,
+    getRestaurant: PropTypes.func.isRequired,
+    languages: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      locale: PropTypes.string
+    })),
+    currencies: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      code: PropTypes.string
+    })),
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
+    images: PropTypes.arrayOf(PropTypes.object),
     restaurant: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number
@@ -30,7 +41,8 @@ class RestaurantForm extends Component {
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
-    ])
+    ]),
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -69,7 +81,7 @@ class RestaurantForm extends Component {
     const {value} = event.target;
     this.setState(set(path)(value)(this.state));
   };
-  handleSubmit = () => async () => {
+  handleSubmit = () => async() => {
     this.setState({loading: true});
     const {
       createRestaurant,
@@ -94,7 +106,7 @@ class RestaurantForm extends Component {
       const addressId = !get('placeId')(address) ? null
         : get(['address', 'placeId'])(originalRestaurant) === address.placeId ?
           get(['address', 'id'])(originalRestaurant)
-        : get(['data', 'createAddress', 'address', 'id'])(await createAddress(address));
+          : get(['data', 'createAddress', 'address', 'id'])(await createAddress(address));
       const finalRestaurant = Object.assign({},
         pick([
           'currency'
@@ -122,7 +134,7 @@ class RestaurantForm extends Component {
             formData
           ),
           headers: {
-            'authorization': Cookie.get('Authorization')
+            authorization: Cookie.get('Authorization')
           }
         }
       )).json()) : files;
@@ -131,7 +143,7 @@ class RestaurantForm extends Component {
           Object.keys(i18n).map(key =>
             mutation !== 'createRestaurant' && get(['i18n', key])(originalRestaurant) ?
               updateRestaurantI18n(Object.assign({language: key, restaurant: restaurantId}, i18n[key]))
-            : createRestaurantI18n(Object.assign({language: key, restaurant: restaurantId}, i18n[key]))
+              : createRestaurantI18n(Object.assign({language: key, restaurant: restaurantId}, i18n[key]))
           )
         )
       );
@@ -143,7 +155,7 @@ class RestaurantForm extends Component {
       }
     } catch (error) {
       if (typeof onError === 'function') {
-       return onError(error);
+        return onError(error);
       }
       throw new Error(error);
     };
@@ -184,82 +196,82 @@ class RestaurantForm extends Component {
     } = this.state;
     return (
       <Form
-          loading={loading}
-          onCancel={onCancel}
-          onSubmit={this.handleSubmit()}
-          style={style}
+        loading={loading}
+        onCancel={onCancel}
+        onSubmit={this.handleSubmit()}
+        style={style}
       >
         <Tabbed
-            onTabChange={this.handleTabChange}
-            tab={activeLanguage}
-            tabs={languages.reduce((prev, value) => Object.assign({}, prev, {
-              [value.locale]: {
-                label: value.name,
-                content: (
-                  <div>
-                    <Input
-                        label={this.props.t('restaurant.name')}
-                        onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
-                        value={get(['i18n', value.locale, 'name'])(this.state) || ''}
-                    />
-                    <Input
-                        Input={'textarea'}
-                        label={this.props.t('restaurant.description')}
-                        onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
-                        rows={3}
-                        value={get(['i18n', value.locale, 'description'])(this.state) || ''}
-                    />
-                  </div>
-                )
-              }
-            }), {})}
+          onTabChange={this.handleTabChange}
+          tab={activeLanguage}
+          tabs={languages.reduce((prev, curr) => Object.assign({}, prev, {
+            [curr.locale]: {
+              label: curr.name,
+              content: (
+                <div>
+                  <Input
+                    label={this.props.t('restaurant.name')}
+                    onChange={this.handleInputChange(['i18n', curr.locale, 'name'])}
+                    value={get(['i18n', curr.locale, 'name'])(this.state) || ''}
+                  />
+                  <Input
+                    Input={'textarea'}
+                    label={this.props.t('restaurant.description')}
+                    onChange={this.handleInputChange(['i18n', curr.locale, 'description'])}
+                    rows={3}
+                    value={get(['i18n', curr.locale, 'description'])(this.state) || ''}
+                  />
+                </div>
+              )
+            }
+          }), {})}
         />
         <ItemsWithLabels
-            items={[
-              {
-                label: t('currency'),
-                item: (
-                  <Select
-                      autoBlur
-                      clearable={false}
-                      id="currency"
-                      onChange={this.handleCurrencyChange}
-                      options={
-                        currencies.map(value => ({
-                          value: value.code,
-                          label: `${value.code} (${value.symbol}) - ${value.name}`
-                        }))
-                      }
-                      value={this.state.currency}
-                  />
-                )
-              }, {
-                label: t('restaurant.images'),
-                item: (
-                  <SelectItems
-                      dropzone={{
-                        items: newImages,
-                        onDelete: this.handleDropzoneDelete,
-                        onDrop: this.handleDrop
-                      }}
-                      select={{
-                        items: images,
-                        selected: selectedFiles,
-                        onToggleSelect: this.toggleImageSelect
-                      }}
-                  />
-                )
-              }, {
-                label: t('restaurant.address'),
-                item: (
-                  <LocationInput
-                      onChange={this.handleLocationChange}
-                      placeholder={t('restaurant.placeholder.address')}
-                      value={get(['address', 'placeId'])(restaurant)}
-                  />
-                )
-              }
-            ]}
+          items={[
+            {
+              label: t('currency'),
+              item: (
+                <Select
+                  autoBlur
+                  clearable={false}
+                  id='currency'
+                  onChange={this.handleCurrencyChange}
+                  options={
+                    currencies.map(value => ({
+                      value: value.code,
+                      label: `${value.code} (${value.symbol}) - ${value.name}`
+                    }))
+                  }
+                  value={this.state.currency}
+                />
+              )
+            }, {
+              label: t('restaurant.images'),
+              item: (
+                <SelectItems
+                  dropzone={{
+                    items: newImages,
+                    onDelete: this.handleDropzoneDelete,
+                    onDrop: this.handleDrop
+                  }}
+                  select={{
+                    items: images,
+                    selected: selectedFiles,
+                    onToggleSelect: this.toggleImageSelect
+                  }}
+                />
+              )
+            }, {
+              label: t('restaurant.address'),
+              item: (
+                <LocationInput
+                  onChange={this.handleLocationChange}
+                  placeholder={t('restaurant.placeholder.address')}
+                  value={get(['address', 'placeId'])(restaurant)}
+                />
+              )
+            }
+          ]}
         />
       </Form>
     );

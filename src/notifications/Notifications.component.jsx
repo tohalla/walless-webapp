@@ -4,6 +4,11 @@ import Notification from 'notifications/Notification.component';
 
 @Radium
 class Notifications extends Component {
+  static propTypes = {
+    notifications: PropTypes.arrayOf(PropTypes.shape({
+      content: PropTypes.string
+    }))
+  };
   render() {
     const {notifications} = this.props;
     return (
@@ -20,7 +25,7 @@ class Notifications extends Component {
 
 export default connect(
   state => ({notifications: state.notifications})
-)(Notifications)
+)(Notifications);
 
 const styles = {
   container: {

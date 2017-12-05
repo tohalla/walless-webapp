@@ -18,11 +18,11 @@ class Menus extends Component {
       name: PropTypes.string.isRequired,
       item: PropTypes.object
     }),
-    selectedItems: PropTypes.instanceOf(Set),
-    menu: PropTypes.shape({
-      onClick: PropTypes.func
-    }),
-    plain: PropTypes.bool
+    getMenusByRestaurant: PropTypes.shape({refetch: PropTypes.func}),
+    deleteMenu: PropTypes.func,
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
+    menus: PropTypes.arrayOf(PropTypes.object),
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -35,7 +35,7 @@ class Menus extends Component {
   handleActionSelect = action => () => this.handleActionChange(action);
   handleDelete = item => () => this.setState({
     deleteModal: item ? ({
-      handleDelete: async () => {
+      handleDelete: async() => {
         this.setState({deleteModal: undefined});
         await this.props.deleteMenu(item);
         await this.props.getMenusByRestaurant.refetch();
@@ -62,9 +62,9 @@ class Menus extends Component {
         hideItems: true,
         item: (
           <MenuForm
-              onCancel={this.handleActionChange}
-              onSubmit={this.handleMenuSubmit}
-              restaurant={restaurant}
+            onCancel={this.handleActionChange}
+            onSubmit={this.handleMenuSubmit}
+            restaurant={restaurant}
           />
         )
       },
@@ -74,65 +74,66 @@ class Menus extends Component {
         hideItems: true,
         item: (
           <MenuForm
-              menu={action ? action.menu : undefined}
-              onCancel={this.handleActionChange}
-              onSubmit={this.handleMenuSubmit}
-              restaurant={restaurant}
+            menu={action ? action.menu : undefined}
+            onCancel={this.handleActionChange}
+            onSubmit={this.handleMenuSubmit}
+            restaurant={restaurant}
           />
         )
       }
     };
     return (
       <WithActions
-          action={action ? action.key : undefined}
-          actions={actions}
-          onActionChange={this.handleActionChange}
+        action={action ? action.key : undefined}
+        actions={actions}
+        hideContent={!(menus && menus.length)}
+        onActionChange={this.handleActionChange}
       >
         {typeof get('handleDelete')(deleteModal) === 'function' && (
           <ConfirmationModal
-              accent
-              confirmText={t('delete')}
-              message={
-                t('confirmDelete', {
-                  name: get(['i18n', language, 'name'])(deleteModal.item)
-                })
-              }
-              onCancel={this.handleDelete()}
-              onConfirm={deleteModal.handleDelete}
+            accent
+            confirmText={t('delete')}
+            message={
+              t('confirmDelete', {
+                name: get(['i18n', language, 'name'])(deleteModal.item)
+              })
+            }
+            onCancel={this.handleDelete()}
+            onConfirm={deleteModal.handleDelete}
           />
         )}
         <Table
-            columns={[
-              {
-                Header: t('restaurant.menu.actions'),
-                id: 'actions',
-                accessor: menu => (
-                  <div style={styles.actions}>
-                    <Button onClick={this.handleActionSelect({key: 'edit', menu})} plain>
-                      {t('restaurant.menu.action.edit')}
-                    </Button>
-                    <Button onClick={this.handleDelete(menu)} plain>
-                      {t('restaurant.menu.action.delete')}
-                    </Button>
-                  </div>
-                ),
-                maxWidth: 140,
-                resizable: false,
-                sortable: false,
-                style: {padding: 0}
-              },
-              {
-                Header: t('restaurant.menu.name'),
-                accessor: menu => get(['i18n', language, 'name'])(menu),
-                id: 'name'
-              },
-              {
-                Header: t('restaurant.menu.description'),
-                accessor: menu => get(['i18n', language, 'description'])(menu),
-                id: 'description'
-              }
-            ]}
-            data={menus}
+          columns={[
+            {
+              Header: t('restaurant.menu.actions'),
+              id: 'actions',
+              accessor: menu => (
+                <div style={styles.actions}>
+                  <Button onClick={this.handleActionSelect({key: 'edit', menu})} plain>
+                    {t('restaurant.menu.action.edit')}
+                  </Button>
+                  <Button onClick={this.handleDelete(menu)} plain>
+                    {t('restaurant.menu.action.delete')}
+                  </Button>
+                </div>
+              ),
+              maxWidth: 140,
+              resizable: false,
+              sortable: false,
+              style: {padding: 0}
+            },
+            {
+              Header: t('restaurant.menu.name'),
+              accessor: menu => get(['i18n', language, 'name'])(menu),
+              id: 'name'
+            },
+            {
+              Header: t('restaurant.menu.description'),
+              accessor: menu => get(['i18n', language, 'description'])(menu),
+              id: 'description'
+            }
+          ]}
+          data={menus}
         />
       </WithActions>
     );

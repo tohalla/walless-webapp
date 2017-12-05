@@ -23,7 +23,9 @@ class ServingLocations extends Component {
       item: PropTypes.object
     }),
     servingLocations: PropTypes.arrayOf(PropTypes.object),
-    restaurant: PropTypes.object.isRequired
+    getServingLocationsByRestaurant: PropTypes.shape({refetch: PropTypes.func}),
+    restaurant: PropTypes.object.isRequired,
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -57,7 +59,7 @@ class ServingLocations extends Component {
     });
   };
   getSelectHeaderProps = () => ({onClick: this.handleSelectHeaderClick});
-  handleDownloadQR = () => async () => {
+  handleDownloadQR = () => async() => {
     this.setState({downloadingQR: true});
     const {restaurant, addNotification, t} = this.props;
     const response = await fetch(
@@ -65,7 +67,7 @@ class ServingLocations extends Component {
       `?servingLocations=[${[...this.state.selectedItems].toString()}]`,
       {
         method: 'GET',
-        headers: {'authorization': Cookie.get('Authorization')}
+        headers: {authorization: Cookie.get('Authorization')}
       }
     );
     if (response.ok) {
@@ -102,10 +104,10 @@ class ServingLocations extends Component {
         hideItems: true,
         item: (
           <ServingLocationForm
-              onCancel={this.handleActionChange}
-              onSubmit={this.handleServingLocationSubmit}
-              restaurant={restaurant}
-              servingLocation={action ? action.servingLocation : null}
+            onCancel={this.handleActionChange}
+            onSubmit={this.handleServingLocationSubmit}
+            restaurant={restaurant}
+            servingLocation={action ? action.servingLocation : null}
           />
         )
       },
@@ -115,9 +117,9 @@ class ServingLocations extends Component {
         hideItems: true,
         item: (
           <ServingLocationForm
-              onCancel={this.handleActionChange}
-              onSubmit={this.handleServingLocationSubmit}
-              restaurant={restaurant}
+            onCancel={this.handleActionChange}
+            onSubmit={this.handleServingLocationSubmit}
+            restaurant={restaurant}
           />
         )
       },
@@ -130,38 +132,38 @@ class ServingLocations extends Component {
     };
     return (
       <WithActions
-          action={action ? action.key : undefined}
-          actions={actions}
-          onActionChange={this.handleActionChange}
+        action={action ? action.key : undefined}
+        actions={actions}
+        onActionChange={this.handleActionChange}
       >
         {servingLocations.length ?
           <Table
-              columns={[
-                {
-                  Header: t('restaurant.servingLocation.actions'),
-                  id: 'actions',
-                  accessor: servingLocation => (
-                    <Button onClick={this.handleActionSelect({key: 'edit', servingLocation})} plain>
-                      {t('restaurant.servingLocation.action.edit')}
-                    </Button>
-                  ),
-                  maxWidth: 100,
-                  sortable: false,
-                  resizable: false
-                },
-                {
-                  Header: t('restaurant.servingLocation.name'),
-                  accessor: 'name'
-                }
-              ]}
-              data={servingLocations}
-              select={{
-                selectedItems,
-                toggleSelect: this.toggleSelect,
-                onHeaderClick: this.handleSelectHeaderClick
-              }}
+            columns={[
+              {
+                Header: t('restaurant.servingLocation.actions'),
+                id: 'actions',
+                accessor: servingLocation => (
+                  <Button onClick={this.handleActionSelect({key: 'edit', servingLocation})} plain>
+                    {t('restaurant.servingLocation.action.edit')}
+                  </Button>
+                ),
+                maxWidth: 100,
+                sortable: false,
+                resizable: false
+              },
+              {
+                Header: t('restaurant.servingLocation.name'),
+                accessor: 'name'
+              }
+            ]}
+            data={servingLocations}
+            select={{
+              selectedItems,
+              toggleSelect: this.toggleSelect,
+              onHeaderClick: this.handleSelectHeaderClick
+            }}
           />
-        : ''}
+          : ''}
       </WithActions>
     );
   }

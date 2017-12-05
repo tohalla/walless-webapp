@@ -18,7 +18,11 @@ export default class Table extends Component {
       selectedItems: PropTypes.instanceOf(Set).isRequired,
       onHeaderClick: PropTypes.func
     }),
-    pageSize: PropTypes.number
+    pageSize: PropTypes.number,
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ])
   };
   static defaultProps = {
     pageSize: 10
@@ -36,8 +40,8 @@ export default class Table extends Component {
         id: 'select',
         accessor: data => (
           <Checkbox
-              checked={select.selectedItems.has(data.id)}
-              onClick={this.handleToggleSelect(data)}
+            checked={select.selectedItems.has(data.id)}
+            onClick={this.handleToggleSelect(data)}
           />
         ),
         maxWidth: 30,
@@ -51,25 +55,25 @@ export default class Table extends Component {
     );
     return data.length ? (
       <ReactTable
-          columnStyle={styles.column}
-          columns={finalColumns}
-          headerColumnStyle={styles.headerColumn}
-          headerStyle={styles.header}
-          pageSize={finalPageSize}
-          rowGroupStyle={styles.rowGroup}
-          showPageJump={false}
-          showPageSizeOptions={false}
-          showPagination={finalPageSize < data.length}
-          {...props}
-          ExpanderComponent={
-            <i className="material-icons" style={styles.expander}>
-              {'arrow_drop_down'}
-            </i>
-          }
-          LoadingComponent={Loading}
-          data={data}
-          style={[styles.container, style]}
-          tableStyle={styles.table}
+        columnStyle={styles.column}
+        columns={finalColumns}
+        headerColumnStyle={styles.headerColumn}
+        headerStyle={styles.header}
+        pageSize={finalPageSize}
+        rowGroupStyle={styles.rowGroup}
+        showPageJump={false}
+        showPageSizeOptions={false}
+        showPagination={finalPageSize < data.length}
+        {...props}
+        ExpanderComponent={
+          <i className='material-icons' style={styles.expander}>
+            {'arrow_drop_down'}
+          </i>
+        }
+        LoadingComponent={Loading}
+        data={data}
+        style={[styles.container, style]}
+        tableStyle={styles.table}
       />
     ) : null;
   }

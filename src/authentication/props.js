@@ -40,8 +40,8 @@ const props = {
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
               }
             )
-            .then(response => response.json())
-            .then(({message}) => setMessage(message));
+              .then(response => response.json())
+              .then(({message}) => setMessage(message));
           } else {
             addError(t('error.passwordsDoNotMatch'));
           }

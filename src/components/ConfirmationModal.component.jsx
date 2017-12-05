@@ -17,7 +17,8 @@ export default class ConfirmationModal extends Component {
     message: PropTypes.string.isRequired,
     confirmText: PropTypes.string,
     cancelText: PropTypes.string,
-    accent: PropTypes.bool
+    accent: PropTypes.bool,
+    t: PropTypes.func.isRequired
   };
   static defaultProps = {
     isOpen: false
@@ -40,10 +41,10 @@ export default class ConfirmationModal extends Component {
               {message}
             </div>
             <div style={styles.actions}>
-              <Button onClick={onCancel} simple type="reset">
+              <Button onClick={onCancel} simple type='reset'>
                 {cancelText || t('cancel')}
               </Button>
-              <Button accent={accent} onClick={onConfirm} type="submit">
+              <Button accent={accent} onClick={onConfirm} type='submit'>
                 {confirmText || t('confirm')}
               </Button>
             </div>

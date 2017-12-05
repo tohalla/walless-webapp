@@ -21,7 +21,8 @@ export default class SelectImages extends Component {
       items: PropTypes.arrayOf(PropTypes.object),
       onDelete: PropTypes.func.isRequired,
       onDrop: PropTypes.func.isRequired
-    })
+    }),
+    t: PropTypes.func.isRequired
   };
   state = {
     action: null
@@ -37,7 +38,7 @@ export default class SelectImages extends Component {
     if (typeof get(['select', 'onToggleSelect'])(this.props) === 'function') {
       this.props.select.onToggleSelect(item);
     }
-  }
+  };
   render() {
     const {
       dropzone: {items: dropzoneItems = [], onDrop, onDelete},
@@ -47,57 +48,57 @@ export default class SelectImages extends Component {
     const {action} = this.state;
     const items = selectItems.map((item, index) => (
       <img
-          key={index}
-          onClick={this.handleToggleSelect(item)}
-          src={item.src || item.uri}
-          style={[styles.preview, {opacity: selected.has(item.id) ? 1 : .6}]}
+        key={index}
+        onClick={this.handleToggleSelect(item)}
+        src={item.src || item.uri}
+        style={[styles.preview, {opacity: selected.has(item.id) ? 1 : 0.6}]}
       />
     ));
     return (action === 'selectImages' ? (
-        <div style={styles.container}>
-          <Dropzone
-              accept="image/*"
-              onDrop={onDrop}
-              style={styles.dropzone}
-          >
-            {dropzoneItems.length ?
-              dropzoneItems.map((item, index) => (
+      <div style={styles.container}>
+        <Dropzone
+          accept='image/*'
+          onDrop={onDrop}
+          style={styles.dropzone}
+        >
+          {dropzoneItems.length ?
+            dropzoneItems.map((item, index) => (
               <Deletable
-                  key={index}
-                  onDelete={onDelete(item)}
+                key={index}
+                onDelete={onDelete(item)}
               >
                 <img src={item.preview} style={styles.preview} />
               </Deletable>
             )) : <div>{t('dropImages')}</div>}
-          </Dropzone>
-          <div style={styles.items}>
-            {items}
-          </div>
-          <div style={styles.actions}>
-            <Button onClick={this.handleResetAction} simple>
-              {t('cancel')}
-            </Button>
-          </div>
+        </Dropzone>
+        <div style={styles.items}>
+          {items}
         </div>
-      ) : (
-        <div style={styles.container}>
-          <div style={styles.items}>
-            {selectItems.filter(item => selected.has(item.id)).map((item, index) => (
-              <Deletable
-                  key={index}
-                  onDelete={this.handleToggleSelect(item)}
-              >
-                <img src={item.src || item.uri} style={styles.preview} />
-              </Deletable>
-            ))}
-          </div>
-          <div style={styles.actions}>
-            <Button onClick={this.setAction('selectImages')}>
-              {t('selectImages')}
-            </Button>
-          </div>
+        <div style={styles.actions}>
+          <Button onClick={this.handleResetAction} simple>
+            {t('cancel')}
+          </Button>
         </div>
-      )
+      </div>
+    ) : (
+      <div style={styles.container}>
+        <div style={styles.items}>
+          {selectItems.filter(item => selected.has(item.id)).map((item, index) => (
+            <Deletable
+              key={index}
+              onDelete={this.handleToggleSelect(item)}
+            >
+              <img src={item.src || item.uri} style={styles.preview} />
+            </Deletable>
+          ))}
+        </div>
+        <div style={styles.actions}>
+          <Button onClick={this.setAction('selectImages')}>
+            {t('selectImages')}
+          </Button>
+        </div>
+      </div>
+    )
     );
   }
 }

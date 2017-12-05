@@ -13,10 +13,12 @@ class ServingLocationForm extends Component {
     createServingLocation: PropTypes.func.isRequired,
     updateServingLocation: PropTypes.func.isRequired,
     restaurant: PropTypes.object.isRequired,
+    getServingLocation: PropTypes.object,
     servingLocation: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number
-    ])
+    ]),
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -40,7 +42,7 @@ class ServingLocationForm extends Component {
       name,
       loading: false
     });
-  }
+  };
   handleInputChange = e => {
     const {id, value} = e.target;
     this.setState({[id]: value});
@@ -53,7 +55,6 @@ class ServingLocationForm extends Component {
       updateServingLocation,
       restaurant,
       onSubmit,
-      t,
       servingLocation = typeof this.props.servingLocation === 'object' ? this.props.servingLocation : {}
     } = this.props;
     const finalServingLocation = Object.assign(
@@ -81,16 +82,16 @@ class ServingLocationForm extends Component {
     const {name, loading} = this.state;
     return (
       <Form
-          loading={loading}
-          onCancel={this.handleCancel}
-          onSubmit={this.handleSubmit}
+        loading={loading}
+        onCancel={this.handleCancel}
+        onSubmit={this.handleSubmit}
       >
         <Input
-            id="name"
-            label={t('restaurant.servingLocation.name')}
-            onChange={this.handleInputChange}
-            required
-            value={name}
+          id='name'
+          label={t('restaurant.servingLocation.name')}
+          onChange={this.handleInputChange}
+          required
+          value={name}
         />
       </Form>
     );

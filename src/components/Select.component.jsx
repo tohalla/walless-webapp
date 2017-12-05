@@ -21,25 +21,25 @@ export default class Select extends Component {
     const {style, options, ...props} = this.props;
     return (
       <div
-          style={[
-            {
-              minWidth: `${.6 * (1 + (this.props.clearable ? 1 : 0) + options.reduce((length, option) =>
-                option.label && option.label.length > length ? option.label.length : length,
-                0
-              ))}rem`,
-              border: `1px solid ${colors.border}`
-            },
-            style
-          ]}
+        style={[
+          {
+            minWidth: `${0.6 * (1 + (this.props.clearable ? 1 : 0) + options.reduce((length, option) =>
+              option.label && option.label.length > length ? option.label.length : length,
+            0
+            ))}rem`,
+            border: `1px solid ${colors.border}`
+          },
+          style
+        ]}
       >
         <ReactSelect
-            inputRenderer={this.handleRenderInput}
-            menuContainerStyle={Object.assign({}, styles.menuContainer)}
-            optionComponent={Option}
-            options={options}
-            style={styles.select}
-            valueRenderer={this.handleRenderValue}
-            {...props}
+          inputRenderer={this.handleRenderInput}
+          menuContainerStyle={Object.assign({}, styles.menuContainer)}
+          optionComponent={Option}
+          options={options}
+          style={styles.select}
+          valueRenderer={this.handleRenderValue}
+          {...props}
         />
       </div>
     );
@@ -48,6 +48,15 @@ export default class Select extends Component {
 
 @Radium
 class Option extends Component {
+  static propTypes = {
+    onSelect: PropTypes.func.isRequired,
+    onFocus: PropTypes.func,
+    option: PropTypes.any,
+    children: PropTypes.node,
+    optionIndex: PropTypes.number,
+    instancePrefix: PropTypes.string,
+    isFocused: PropTypes.bool
+  };
   blockEvent = event => {
     event.preventDefault();
     event.stopPropagation();
@@ -71,8 +80,12 @@ class Option extends Component {
     if (this.dragging) return;
     this.handleMouseDown(event);
   };
-  handleTouchMove = event => this.dragging = true;
-  handleTouchStart = event => this.dragging = false;
+  handleTouchMove = event => {
+    this.dragging = true;
+  };
+  handleTouchStart = event => {
+    this.dragging = false;
+  };
   onFocus = event => {
     if (!this.props.isFocused) {
       this.props.onFocus(this.props.option, event);
@@ -91,16 +104,16 @@ class Option extends Component {
       </div>
     ) : (
       <div
-          id={instancePrefix + '-option-' + optionIndex}
-          onMouseDown={this.handleMouseDown}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseMove={this.handleMouseMove}
-          onTouchEnd={this.handleTouchEnd}
-          onTouchMove={this.handleTouchMove}
-          onTouchStart={this.handleTouchStart}
-          role="option"
-          style={styles.option}
-          title={option.title}
+        id={instancePrefix + '-option-' + optionIndex}
+        onMouseDown={this.handleMouseDown}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseMove={this.handleMouseMove}
+        onTouchEnd={this.handleTouchEnd}
+        onTouchMove={this.handleTouchMove}
+        onTouchStart={this.handleTouchStart}
+        role='option'
+        style={styles.option}
+        title={option.title}
       >
         {children}
       </div>

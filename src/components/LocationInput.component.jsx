@@ -13,9 +13,7 @@ export default class LocationInput extends Component {
       PropTypes.number
     ]),
     componentRestrictions: PropTypes.object,
-    bounds: PropTypes.object,
     types: PropTypes.array,
-    radius: PropTypes.number,
     onChange: PropTypes.func,
     placeholder: PropTypes.string,
     updateDelay: PropTypes.number,
@@ -32,12 +30,12 @@ export default class LocationInput extends Component {
     this.state = {
       address: {},
       options: props.value ? [{value: props.value}] : [],
-      loading: props.value ? true : false,
+      loading: !!props.value,
       value: props.value
     };
     this.autocompleteService = new google.maps.places.AutocompleteService();
     this.geocoder = new google.maps.Geocoder();
-    this.resetInput(props, props.value ? undefined : state => this.state = state);
+    this.resetInput(props, props.value ? undefined : state => this.state = state); // eslint-disable-line
   };
   componentWillReceiveProps(newProps) {
     if (
@@ -55,9 +53,9 @@ export default class LocationInput extends Component {
           options: [{label: result.formatted_address, value}],
           loading: false
         })
-      : updateState({value: null, options: [], loading: false})
+        : updateState({value: null, options: [], loading: false})
     )
-  : updateState({value, options: [], loading: false});
+    : updateState({value, options: [], loading: false});
   getAddressData = placeId =>
     new Promise((resolve, reject) => placeId || this.state.value ?
       this.geocoder.geocode({placeId: placeId || this.state.value.value}, ([result], status) =>
@@ -66,22 +64,22 @@ export default class LocationInput extends Component {
             Object.assign({}, prev, curr.types.reduce((types, type) =>
               Object.assign({}, types, {[type]: curr.long_name}), {})
             ), {
-              placeId: placeId || this.state.value.value,
-              lat: result.geometry.location.lat(),
-              lng: result.geometry.location.lng()
-            }
+            placeId: placeId || this.state.value.value,
+            lat: result.geometry.location.lat(),
+            lng: result.geometry.location.lng()
+          }
           )))
-        : reject(status)
+          : reject(status)
       ) : resolve({})
     );
-  handleChange = async (v) => {
+  handleChange = async(v) => {
     const {value} = v || {};
     this.setState({value, address: value ? await this.getAddressData(value) : {}});
     if (typeof this.props.onChange === 'function') {
       this.props.onChange({value, address: this.state.address});
     }
   };
-  handleLoadOptions = debounce(this.props.updateDelay)(async (input) => {
+  handleLoadOptions = debounce(this.props.updateDelay)(async(input) => {
     if (!input) {
       return this.setState({options: [], loading: false});
     }
@@ -122,21 +120,21 @@ export default class LocationInput extends Component {
       <div>
         <div>
           <Select
-              autoBlur
-              clearable
-              id="location"
-              isLoading={loading}
-              onChange={this.handleChange}
-              onInputChange={this.handleLoadOptions}
-              options={options}
-              placeholder={placeholder}
-              value={this.state.value}
+            autoBlur
+            clearable
+            id='location'
+            isLoading={loading}
+            onChange={this.handleChange}
+            onInputChange={this.handleLoadOptions}
+            options={options}
+            placeholder={placeholder}
+            value={this.state.value}
           />
         </div>
         <div style={containers.informationContainer}>
           {route ? `${route} ${streetNumber}` : null}
           {postalCode || locality ? `${postalCode} ${locality}`.trim() : null}
-          {country ? country : null}
+          {country || null}
         </div>
       </div>
     );

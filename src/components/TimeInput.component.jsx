@@ -13,6 +13,7 @@ export default class TimeInput extends PureComponent {
     onFocus: PropTypes.func,
     disabled: PropTypes.bool,
     isValid: PropTypes.func,
+    id: PropTypes.string,
     required: PropTypes.bool,
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
@@ -91,50 +92,54 @@ export default class TimeInput extends PureComponent {
     };
     return (
       <div
-          onClick={this.focus}
-          style={[
-            styles.container,
-            style,
-            labelLocation === 'left' ?
-              {flexDirection: 'row', alignItems: 'center'}
+        onClick={this.focus}
+        style={[
+          styles.container,
+          style,
+          labelLocation === 'left' ?
+            {flexDirection: 'row', alignItems: 'center'}
             : {flexDirection: 'column'}
-          ]}
+        ]}
       >
         {label &&
           <label
-              htmlFor={this.props.id}
-              style={[].concat(
-                styles.label,
-                isFocused ? styles.labelFocus : [],
-                labelLocation === 'left' ?
-                  {paddingRight: minor} : []
-              )}
+            htmlFor={this.props.id}
+            style={[].concat(
+              styles.label,
+              isFocused ? styles.labelFocus : [],
+              labelLocation === 'left' ?
+                {paddingRight: minor} : []
+            )}
           >
-          {label}
+            {label}
           </label>
         }
         <div style={{display: 'flex', alignSelf: 'flex-start'}}>
           <div style={styles.inputContainer}>
             <div style={styles.hhmm}>
               <Input
-                  {...props}
-                  {...inputProps}
-                  onChange={this.handleHoursChange}
-                  pattern={/^$|^([0-9]|0[0-9]|1[0-9]|2[0-3])$/}
-                  placeholder="hh"
-                  ref={c => this.hours = c}
-                  value={hours}
+                {...props}
+                {...inputProps}
+                onChange={this.handleHoursChange}
+                pattern={/^$|^([0-9]|0[0-9]|1[0-9]|2[0-3])$/}
+                placeholder='hh'
+                ref={c => {
+                  this.hours = c;
+                }}
+                value={hours}
               />
               {':'}
               <Input
-                  {...props}
-                  {...inputProps}
-                  onChange={this.handleMinutesChange}
-                  onKeyUp={this.handleMinutesKeyUp}
-                  pattern={/^$|^([0-9]|[0-5][0-9])$/}
-                  placeholder="mm"
-                  ref={c => this.minutes = c}
-                  value={minutes}
+                {...props}
+                {...inputProps}
+                onChange={this.handleMinutesChange}
+                onKeyUp={this.handleMinutesKeyUp}
+                pattern={/^$|^([0-9]|[0-5][0-9])$/}
+                placeholder='mm'
+                ref={c => {
+                  this.minutes = c;
+                }}
+                value={minutes}
               />
             </div>
             <div style={[].concat(styles.bottom, error ? styles.bottomError : {})}>

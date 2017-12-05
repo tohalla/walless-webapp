@@ -16,14 +16,14 @@ const findInvalidInputs = components => components ?
       ) ? prev.concat(curr)
         : curr.props ?
           curr.props.children ? prev.concat(findInvalidInputs(curr.props.children))
-          : curr.props.items ? prev.concat(findInvalidInputs(curr.props.items))
-          : prev
-        : curr.item ? prev.concat(findInvalidInputs(curr.item))
-        : prev
+            : curr.props.items ? prev.concat(findInvalidInputs(curr.props.items))
+              : prev
+          : curr.item ? prev.concat(findInvalidInputs(curr.item))
+            : prev
       : prev,
-    []
+  []
   )
-: [];
+  : [];
 
 @translate()
 @Radium
@@ -48,10 +48,13 @@ export default class Form extends PureComponent {
     submitText: PropTypes.string,
     cancelText: PropTypes.string,
     isValid: PropTypes.bool,
-    FormComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+    FormComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    t: PropTypes.func.isRequired,
+    loading: PropTypes.bool
   };
   static defaultProps = {
     isValid: true,
+    loading: false,
     FormComponent: 'form'
   };
   handleSubmit = event => {
@@ -90,38 +93,38 @@ export default class Form extends PureComponent {
     const invalid = findInvalidInputs(children);
     return loading ?
       <div style={[styles.container, style]}><Loading /></div>
-    : (
-      <FormComponent onSubmit={this.handleSubmit} style={[styles.container, style]}>
-        <div style={[].concat(styles.container, contentStyle)}>
-          {fieldStyle ?
-            children.map((child, index) =>
-              <div key={index} style={fieldStyle}>{child}</div>
-            ) : children
-          }
-        </div>
-        <div style={styles.actions}>
-          {typeof onCancel === 'function' ?
-            <Button onClick={this.handleCancel} simple type="reset">
-              {cancelText || t('cancel')}
+      : (
+        <FormComponent onSubmit={this.handleSubmit} style={[styles.container, style]}>
+          <div style={[].concat(styles.container, contentStyle)}>
+            {fieldStyle ?
+              children.map((child, index) =>
+                <div key={index} style={fieldStyle}>{child}</div>
+              ) : children
+            }
+          </div>
+          <div style={styles.actions}>
+            {typeof onCancel === 'function' ?
+              <Button onClick={this.handleCancel} simple type='reset'>
+                {cancelText || t('cancel')}
+              </Button>
+              : null
+            }
+            <Button
+              disabled={!!invalid.length || !isValid}
+              onClick={this.handleSubmit}
+              type='submit'
+            >
+              {submitText || t('submit')}
+            </Button>
+          </div>
+          {typeof onClose === 'function' ?
+            <Button onClick={this.handleClose} plain>
+              <i className='material-icons'>{'close'}</i>
             </Button>
             : null
           }
-          <Button
-              disabled={!!invalid.length || !isValid}
-              onClick={this.handleSubmit}
-              type="submit"
-          >
-            {submitText || t('submit')}
-          </Button>
-        </div>
-        {typeof onClose === 'function' ?
-          <Button onClick={this.handleClose} plain>
-            <i className="material-icons">{'close'}</i>
-          </Button>
-          : null
-        }
-      </FormComponent>
-    );
+        </FormComponent>
+      );
   }
 };
 

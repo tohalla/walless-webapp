@@ -8,7 +8,7 @@ import DaySelect from 'availability/DaySelect.component';
 
 @translate()
 @Radium
-class ScheduleForm extends Component {
+export default class ScheduleForm extends Component {
   static propTypes = {
     schedules: PropTypes.object,
     value: PropTypes.shape(({
@@ -23,7 +23,8 @@ class ScheduleForm extends Component {
     })),
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
-    submitText: PropTypes.string
+    submitText: PropTypes.string,
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -58,11 +59,11 @@ class ScheduleForm extends Component {
     const {shifts, days} = this.state;
     return (
       <Form
-          {...props}
-          FormComponent="div"
-          isValid={Boolean(shifts.length && days.length)}
-          onSubmit={this.handleSubmit}
-          style={{backgroundColor: colors.white}}
+        {...props}
+        FormComponent='div'
+        isValid={Boolean(shifts.length && days.length)}
+        onSubmit={this.handleSubmit}
+        style={{backgroundColor: colors.white}}
       >
         {
           (value && value.day)
@@ -71,21 +72,21 @@ class ScheduleForm extends Component {
         <div>
           {shifts.map((shift) => (
             <Editable
-                Form={ShiftForm}
-                key={JSON.stringify(shift)}
-                onDelete={this.handleDeleteShift}
-                onEdit={this.handleEditShift}
-                shifts={shifts}
-                submitText={t('availability.updateShift')}
-                value={shift}
+              Form={ShiftForm}
+              key={JSON.stringify(shift)}
+              onDelete={this.handleDeleteShift}
+              onEdit={this.handleEditShift}
+              shifts={shifts}
+              submitText={t('availability.updateShift')}
+              value={shift}
             >
               <div>{`${shift.startTime} – ${shift.endTime}`}</div>
             </Editable>
           ))}
           <ShiftForm
-              onSubmit={this.handleAddShift}
-              shifts={shifts}
-              submitText={t('availability.addShift')}
+            onSubmit={this.handleAddShift}
+            shifts={shifts}
+            submitText={t('availability.addShift')}
           />
         </div>
       </Form>

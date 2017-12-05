@@ -30,7 +30,7 @@ const handleRequests = app => {
       filter: (req, res) =>
         (prod && !req.url.endsWith('.gz')) || compression.filter(req, res)
     }))
-    .get(/^(.*\.(?!(png|jpg|svg|js|gz|pdf|css|zip|ttf)$))?[^.]*$/, async (req, res, next) => {
+    .get(/^(.*\.(?!(png|jpg|svg|js|gz|pdf|css|zip|ttf)$))?[^.]*$/, async(req, res, next) => {
       try {
         const token = req.cookies['Authorization'];
         const {role} = token ? await jwt.verify(

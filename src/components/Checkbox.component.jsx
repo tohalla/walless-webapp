@@ -23,12 +23,12 @@ export default class Checkbox extends PureComponent {
     return (
       <div onClick={this.handleClick} style={styles.container}>
         <i
-            className="material-icons"
-            style={[
-              styles.checkbox,
-              disabled ? styles.disabled
+          className='material-icons'
+          style={[
+            styles.checkbox,
+            disabled ? styles.disabled
               : {color: colors.gray}
-            ]}
+          ]}
         >
           {checked ? 'check_box' : 'check_box_outline_blank'}
         </i>

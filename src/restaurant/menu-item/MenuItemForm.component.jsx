@@ -1,3 +1,4 @@
+import React from 'react';
 import {compose} from 'react-apollo';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
@@ -27,18 +28,31 @@ import loadable from 'decorators/loadable';
 @loadable()
 @translate()
 @Radium
-class MenuItemForm extends Component {
+class MenuItemForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onError: PropTypes.func,
     onCancel: PropTypes.func.isRequired,
+    getMenuItem: PropTypes.object,
     createMenuItem: PropTypes.func.isRequired,
     updateMenuItem: PropTypes.func.isRequired,
     restaurant: PropTypes.object.isRequired,
+    images: PropTypes.arrayOf(PropTypes.shape({id: PropTypes.number})),
+    menuItemTypes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })),
+    diets: PropTypes.arrayOf(PropTypes.shape({id: PropTypes.number})),
+    languages: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      locale: PropTypes.string
+    })),
     menuItem: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number
-    ])
+    ]),
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -84,7 +98,7 @@ class MenuItemForm extends Component {
   };
   handleInputChange = (path, getValue = item => item.target.value) => item =>
     this.setState(set(path)(getValue(item))(this.state));
-  handleSubmit = () => async (event) => {
+  handleSubmit = () => async(event) => {
     this.setState({loading: true});
     event.preventDefault();
     const {
@@ -119,7 +133,7 @@ class MenuItemForm extends Component {
             formData
           ),
           headers: {
-            'authorization': Cookie.get('Authorization')
+            authorization: Cookie.get('Authorization')
           }
         }
       )).json()) : files;
@@ -145,14 +159,14 @@ class MenuItemForm extends Component {
         Object.keys(i18n).map(key =>
           mutation !== 'createMenuItem' && get(['i18n', key])(originalMenuItem) ?
             updateMenuItemI18n(Object.assign({language: key, menuItem: menuItemId}, i18n[key]))
-          : createMenuItemI18n(Object.assign({language: key, menuItem: menuItemId}, i18n[key]))
+            : createMenuItemI18n(Object.assign({language: key, menuItem: menuItemId}, i18n[key]))
         )
       ));
       onSubmit();
       getImagesForRestaurant.refetch();
     } catch (error) {
       if (typeof onError === 'function') {
-       return onError(error);
+        return onError(error);
       }
       throw new Error(error);
     };
@@ -220,16 +234,16 @@ class MenuItemForm extends Component {
         content: (
           <div>
             <Input
-                label={t('restaurant.item.name')}
-                onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
-                value={get(['i18n', value.locale, 'name'])(this.state) || ''}
+              label={t('restaurant.item.name')}
+              onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
+              value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
-                Input={'textarea'}
-                label={t('restaurant.item.description')}
-                onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
-                rows={3}
-                value={get(['i18n', value.locale, 'description'])(this.state) || ''}
+              Input={'textarea'}
+              label={t('restaurant.item.description')}
+              onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
+              rows={3}
+              value={get(['i18n', value.locale, 'description'])(this.state) || ''}
             />
           </div>
         )
@@ -237,113 +251,113 @@ class MenuItemForm extends Component {
     }), {})(languages);
     return (
       <Form
-          loading={loading}
-          onCancel={this.handleCancel}
-          onSubmit={this.handleSubmit()}
+        loading={loading}
+        onCancel={this.handleCancel}
+        onSubmit={this.handleSubmit()}
       >
         <Tabbed
-            onTabChange={this.handleTabChange}
-            tab={activeLanguage}
-            tabs={tabs}
+          onTabChange={this.handleTabChange}
+          tab={activeLanguage}
+          tabs={tabs}
         />
         <ItemsWithLabels
-            items={[
-              {
-                item: (
-                  <Input
-                      afterInput={get(['currency', 'symbol'])(restaurant)}
-                      label={t('restaurant.item.price')}
-                      onChange={this.handleInputChange('price')}
-                      pattern="^\d+(\.\d{0,2})?$|^$"
-                      required
-                      value={price}
-                  />
-                )
-              },
-              {
-                label: t('restaurant.item.type'),
-                item: (
-                  <Select
-                      autoBlur
-                      clearable={false}
-                      id="cateogry"
-                      onChange={this.handleInputChange('type', item => item.value)}
-                      options={
-                        menuItemTypes.map(type => ({
-                          value: type.id,
-                          label: type.name
-                        }))
-                      }
-                      value={type}
-                  />
-                )
-              },
-              categories.length ? {
-                label: t('restaurant.item.category'),
-                item: (
-                  <Select
-                      autoBlur
-                      clearable={false}
-                      id="cateogry"
-                      onChange={this.handleInputChange('category', item => item.value)}
-                      options={categories.map(category => ({
-                        value: category.id,
-                        label: category.name
-                      }))}
-                      value={category}
-                  />
-                )
-              } : null, {
-                label: t('restaurant.item.images'),
-                item: (
-                  <SelectItems
-                      dropzone={{
-                        items: newImages,
-                        onDelete: this.handleDropzoneDelete,
-                        onDrop: this.handleDrop
-                      }}
-                      select={{
-                        items: images,
-                        selected: selectedFiles,
-                        onToggleSelect: this.toggleImage
-                      }}
-                  />
-                )
-              },
-              diets.length ? {
-                label: t('restaurant.item.diets'),
-                item: diets.map((diet, index) => (
-                  <Checkbox
-                      checked={selectedDiets.has(diet.id)}
+          items={[
+            {
+              item: (
+                <Input
+                  afterInput={get(['currency', 'symbol'])(restaurant)}
+                  label={t('restaurant.item.price')}
+                  onChange={this.handleInputChange('price')}
+                  pattern='^\d+(\.\d{0,2})?$|^$'
+                  required
+                  value={price}
+                />
+              )
+            },
+            {
+              label: t('restaurant.item.type'),
+              item: (
+                <Select
+                  autoBlur
+                  clearable={false}
+                  id='cateogry'
+                  onChange={this.handleInputChange('type', item => item.value)}
+                  options={
+                    menuItemTypes.map(type => ({
+                      value: type.id,
+                      label: type.name
+                    }))
+                  }
+                  value={type}
+                />
+              )
+            },
+            categories.length ? {
+              label: t('restaurant.item.category'),
+              item: (
+                <Select
+                  autoBlur
+                  clearable={false}
+                  id='cateogry'
+                  onChange={this.handleInputChange('category', item => item.value)}
+                  options={categories.map(category => ({
+                    value: category.id,
+                    label: category.name
+                  }))}
+                  value={category}
+                />
+              )
+            } : null, {
+              label: t('restaurant.item.images'),
+              item: (
+                <SelectItems
+                  dropzone={{
+                    items: newImages,
+                    onDelete: this.handleDropzoneDelete,
+                    onDrop: this.handleDrop
+                  }}
+                  select={{
+                    items: images,
+                    selected: selectedFiles,
+                    onToggleSelect: this.toggleImage
+                  }}
+                />
+              )
+            },
+            diets.length ? {
+              label: t('restaurant.item.diets'),
+              item: diets.map((diet, index) => (
+                <Checkbox
+                  checked={selectedDiets.has(diet.id)}
+                  key={index}
+                  label={get(['i18n', language, 'name'])(diet)}
+                  onClick={this.toggleDiet(diet)}
+                />
+              ))
+            } : null,
+            {
+              label: t('restaurant.item.options'),
+              item: (
+                <div>
+                  {options.map((option, index) => (
+                    <Editable
+                      Form={OptionForm}
+                      disabledOptions={options}
                       key={index}
-                      label={get(['i18n', language, 'name'])(diet)}
-                      onClick={this.toggleDiet(diet)}
+                      onDelete={this.handleDeleteOption}
+                      onEdit={this.handleEditOption}
+                      value={option}
+                    >
+                      {get(['i18n', language, 'name'])(option)}
+                    </Editable>
+                  ))}
+                  <OptionForm
+                    disabledOptions={options}
+                    onSubmit={this.handleAddOption}
                   />
-                ))
-              } : null,
-              {
-                label: t('restaurant.item.options'),
-                item: (
-                  <div>
-                    {options.map((option, index) => (
-                      <Editable
-                          Form={OptionForm}
-                          disabledOptions={options}
-                          key={index}
-                          onDelete={this.handleDeleteOption}
-                          onEdit={this.handleEditOption}
-                          value={option}
-                      >
-                        {get(['i18n', language, 'name'])(option)}
-                      </Editable>
-                    ))}
-                    <OptionForm
-                        disabledOptions={options}
-                        onSubmit={this.handleAddOption}
-                    />
-                  </div>
-                )
-              }
+                </div>
+              )
+            }
           ]}
         />
       </Form>

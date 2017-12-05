@@ -8,7 +8,10 @@ import {normal} from 'styles/spacing';
 @Radium
 class Notification extends Component {
   static propTypes = {
-    notification: PropTypes.object.isRequired
+    notification: PropTypes.shape({
+      content: PropTypes.string
+    }).isRequired,
+    deleteNotification: PropTypes.func.isRequired
   };
   handleDelete = () => this.props.deleteNotification(this.props.notification);
   render() {
@@ -17,11 +20,11 @@ class Notification extends Component {
       <div style={styles.container}>
         <div style={[styles.indicator, styles[notification.get('type') || 'neutral']]} />
         <div style={styles.content}>
-          {notification.get('content')}
+          {notification.content}
         </div>
         <div style={styles.actions}>
           <Button onClick={this.handleDelete} plain>
-            <i className="material-icons">{'close'}</i>
+            <i className='material-icons'>{'close'}</i>
           </Button>
         </div>
       </div>

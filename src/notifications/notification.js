@@ -6,10 +6,10 @@ const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
 
 export default (state = [], action) =>
   action.type === ADD_NOTIFICATION ? state.concat(action.payload)
-  : action.type === DELETE_NOTIFICATION ?
-    state.filter((notification) => !equals(action.payload)(notification))
-  : action.type === CLEAR_NOTIFICATIONS ? []
-  : state;
+    : action.type === DELETE_NOTIFICATION ?
+      state.filter((notification) => !equals(action.payload)(notification))
+      : action.type === CLEAR_NOTIFICATIONS ? []
+        : state;
 
 export const addNotification = (payload) => ({
   type: ADD_NOTIFICATION,

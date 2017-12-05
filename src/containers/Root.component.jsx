@@ -21,17 +21,17 @@ export default class Root extends Component {
   render() {
     return (
       <StyleRoot style={styles.root}>
-          <Notifications />
-          <MainNavigation {...this.props} />
-          <div style={styles.content}>
-            <Switch>
-              <Route path="/documentation" />
-              <Route path="/contact" />
-              <Route component={Profile} path="/profile" />
-              <Route component={Restaurant} path="/:restaurant?" />
-              <Redirect path="*" to="/" />
-            </Switch>
-          </div>
+        <Notifications />
+        <MainNavigation {...this.props} />
+        <div style={styles.content}>
+          <Switch>
+            <Route path='/documentation' />
+            <Route path='/contact' />
+            <Route component={Profile} path='/profile' />
+            <Route component={Restaurant} path='/:restaurant?' />
+            <Redirect path='*' to='/' />
+          </Switch>
+        </div>
       </StyleRoot>
     );
   };

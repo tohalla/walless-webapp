@@ -11,7 +11,8 @@ import Editable from 'components/Editable.component';
 export default class AvailabilityForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
-    onCancel: PropTypes.func
+    onCancel: PropTypes.func,
+    t: PropTypes.func.isRequired
   };
   state = {
     schedules: {}
@@ -20,7 +21,7 @@ export default class AvailabilityForm extends Component {
     schedules: merge(this.state.schedules)(
       schedules.reduce((prev, {day, ...schedule}) =>
         Object.assign({}, prev, {[day]: schedule})
-      , {})
+        , {})
     )
   });
   handleEditSchedule = ({value, oldValue: {day}}) => {
@@ -34,35 +35,35 @@ export default class AvailabilityForm extends Component {
   });
   handleSubmit = () => {};
   render() {
-    const {t, props} = this.props;
+    const {t, ...props} = this.props;
     const {schedules} = this.state;
     return (
       <Form
-          {...props}
-          FormComponent="div"
-          isValid={!isEmpty(schedules)}
-          onSubmit={this.handleSubmit}
+        {...props}
+        FormComponent='div'
+        isValid={!isEmpty(schedules)}
+        onSubmit={this.handleSubmit}
       >
         {Object.keys(schedules).map(schedule => (
           <Editable
-              Form={ScheduleForm}
-              exitType="cancel"
-              key={schedule}
-              onDelete={this.handleDeleteSchedule}
-              onEdit={this.handleEditSchedule}
-              schedules={schedules}
-              style={styles.schedule}
-              submitText={t('availability.updateSchedule')}
-              value={{day: schedule, ...schedules[schedule]}}
+            Form={ScheduleForm}
+            exitType='cancel'
+            key={schedule}
+            onDelete={this.handleDeleteSchedule}
+            onEdit={this.handleEditSchedule}
+            schedules={schedules}
+            style={styles.schedule}
+            submitText={t('availability.updateSchedule')}
+            value={{day: schedule, ...schedules[schedule]}}
           >
             <div>{`${schedule}`}</div>
           </Editable>
         ))}
         <ScheduleForm
-            contentStyle={{padding: content}}
-            onSubmit={this.handleAddSchedules}
-            schedules={schedules}
-            submitText={t('availability.addSchedule')}
+          contentStyle={{padding: content}}
+          onSubmit={this.handleAddSchedules}
+          schedules={schedules}
+          submitText={t('availability.addSchedule')}
         />
       </Form>
     );

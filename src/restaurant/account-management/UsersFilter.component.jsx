@@ -16,7 +16,8 @@ class UsersFilter extends Component {
       roles: PropTypes.array
     }),
     onFiltersChange: PropTypes.func.isRequired,
-    restaurant: PropTypes.object.isRequired
+    roles: PropTypes.array,
+    t: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ class UsersFilter extends Component {
   handleStateChange = path => changed => {
     const value = Array.isArray(changed) ?
       changed.map(i => i.value || i)
-    : get(['target', 'value'])(changed) || get('value')(changed) || changed;
+      : get(['target', 'value'])(changed) || get('value')(changed) || changed;
     this.setState(set(path)(value)(this.state));
   };
   handleSubmit = () => {
@@ -41,37 +42,35 @@ class UsersFilter extends Component {
     const {name = ''} = this.state;
     return (
       <Form
-          isValid={!equals(this.state)(filters)}
-          onSubmit={this.handleSubmit}
+        isValid={!equals(this.state)(filters)}
+        onSubmit={this.handleSubmit}
       >
         <ItemsWithLabels
-            items={[
-              (
-                <Input
-                    key="name"
-                    label={t('account.name')}
-                    onChange={this.handleStateChange('name')}
-                    value={name}
+          items={[
+            <Input
+              key='name'
+              label={t('account.name')}
+              onChange={this.handleStateChange('name')}
+              value={name}
+            />,
+            {
+              label: t('account.role'),
+              item: (
+                <Select
+                  autoBlur
+                  multi
+                  onChange={this.handleStateChange('roles')}
+                  options={
+                    roles.map(role => ({
+                      value: role.id,
+                      label: role.name
+                    }))
+                  }
+                  value={this.state.roles}
                 />
-              ),
-              {
-                label: t('account.role'),
-                item: (
-                  <Select
-                      autoBlur
-                      multi
-                      onChange={this.handleStateChange('roles')}
-                      options={
-                        roles.map(role => ({
-                          value: role.id,
-                          label: role.name
-                        }))
-                      }
-                      value={this.state.roles}
-                  />
-                )
-              }
-            ]}
+              )
+            }
+          ]}
         />
       </Form>
     );

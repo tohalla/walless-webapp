@@ -10,7 +10,7 @@ export default class extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Route component={Root} path="/" />
+        <Route component={Root} path='/' />
       </BrowserRouter>
     );
   }

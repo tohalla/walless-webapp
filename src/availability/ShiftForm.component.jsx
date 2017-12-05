@@ -13,7 +13,18 @@ export default class ShiftForm extends PureComponent {
       endTime: PropTypes.string
     })),
     onSubmit: PropTypes.func,
-    submitText: PropTypes.string
+    submitText: PropTypes.string,
+    t: PropTypes.func.isRequired,
+    shift: PropTypes.shape({
+      endTime: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(Date)
+      ]),
+      startTime: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(Date)
+      ])
+    })
   };
   constructor(props) {
     super(props);
@@ -38,26 +49,26 @@ export default class ShiftForm extends PureComponent {
     const {t, ...props} = this.props;
     return (
       <Form
-          {...props}
-          FormComponent="div"
-          contentStyle={styles.container}
-          onSubmit={this.handleSubmit}
-          style={styles.container}
+        {...props}
+        FormComponent='div'
+        contentStyle={styles.container}
+        onSubmit={this.handleSubmit}
+        style={styles.container}
       >
         <TimeInput
-            label={t('time.timeFrom')}
-            labelLocation="left"
-            onChange={this.handleFromChange}
-            required
-            style={{paddingRight: minor}}
-            value={this.state.startTime}
+          label={t('time.timeFrom')}
+          labelLocation='left'
+          onChange={this.handleFromChange}
+          required
+          style={{paddingRight: minor}}
+          value={this.state.startTime}
         />
         <TimeInput
-            label={t('time.timeTo')}
-            labelLocation="left"
-            onChange={this.handleToChange}
-            required
-            value={this.state.endTime}
+          label={t('time.timeTo')}
+          labelLocation='left'
+          onChange={this.handleToChange}
+          required
+          value={this.state.endTime}
         />
       </Form>
     );

@@ -35,8 +35,8 @@ const labelled = {
 };
 
 export default Object.assign({
-  backgroundDarken: color(labelled.background).darken(.1).hex(),
-  neutralDarken: color(labelled.neutral).darken(.3).hex(),
-  defaultDarken: color(labelled.default).darken(.1).hex(),
-  accentDarken: color(labelled.accent).darken(.2).hex()
+  backgroundDarken: color(labelled.background).darken(0.1).hex(),
+  neutralDarken: color(labelled.neutral).darken(0.3).hex(),
+  defaultDarken: color(labelled.default).darken(0.1).hex(),
+  accentDarken: color(labelled.accent).darken(0.2).hex()
 }, labelled, colors);

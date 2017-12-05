@@ -31,9 +31,10 @@ const menuItems = [
 @translate()
 @Radium
 class MainNavigation extends Component {
-  static contextTypes = {
-    router: PropTypes.object.isRequired
-  }
+  static propTypes = {
+    t: PropTypes.func.isRequired,
+    location: PropTypes.shape({pathname: PropTypes.string})
+  };
   render() {
     const {location, t} = this.props;
     return (
@@ -43,18 +44,18 @@ class MainNavigation extends Component {
           {menuItems
             .map((item, index) => (
               <NavigationItem
-                  active={
-                    location.pathname.indexOf(item.path) === 0 &&
+                active={
+                  location.pathname.indexOf(item.path) === 0 &&
                     (item.path !== '/' || location.pathname === '/')
-                  }
-                  activeStyle={styles.itemActive}
-                  key={index}
-                  path={item.path}
-                  style={styles.item}
+                }
+                activeStyle={styles.itemActive}
+                key={index}
+                path={item.path}
+                style={styles.item}
               >
                 {t(item.translationKey)}
               </NavigationItem>
-          ))}
+            ))}
         </Navigation>
         <UserNavigation />
       </div>

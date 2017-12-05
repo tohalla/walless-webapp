@@ -39,4 +39,4 @@ Header.propTypes = {
   ])
 };
 
-export default Radium(Header);
+export default new Radium(Header);

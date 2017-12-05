@@ -1,10 +1,10 @@
 import {compose} from 'react-apollo';
 import {reduce, set, get, equals} from 'lodash/fp';
 import {account, menu, misc} from 'walless-graphql';
-import Input from 'components/Input.component';
 
+import Input from 'components/Input.component';
+import Expandable from 'components/Expandable.component';
 import Form from 'components/Form.component';
-import Button from 'components/Button.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import Tabbed from 'components/Tabbed.component';
 
@@ -18,10 +18,17 @@ class MenuForm extends Component {
     createMenu: PropTypes.func.isRequired,
     updateMenu: PropTypes.func.isRequired,
     restaurant: PropTypes.object.isRequired,
+    getMenu: PropTypes.shape({refetch: PropTypes.func}),
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
     menu: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number
-    ])
+    ]),
+    t: PropTypes.func.isRequired,
+    languages: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      locale: PropTypes.string
+    }))
   };
   constructor(props) {
     super(props);
@@ -83,19 +90,19 @@ class MenuForm extends Component {
       const [mutation] = Object.keys(data);
       const {[mutation]: {menu: {id: menuId}}} = data;
       await Promise.all([
-          updateMenuItems(menuId, menuItems)
-        ].concat(
-          Object.keys(i18n).map(key =>
-            mutation !== 'createMenu' && get(['i18n', key])(originalMenu) ?
-              updateMenuI18n(Object.assign({language: key, menu: menuId}, i18n[key]))
+        updateMenuItems(menuId, menuItems)
+      ].concat(
+        Object.keys(i18n).map(key =>
+          mutation !== 'createMenu' && get(['i18n', key])(originalMenu) ?
+            updateMenuI18n(Object.assign({language: key, menu: menuId}, i18n[key]))
             : createMenuI18n(Object.assign({language: key, menu: menuId}, i18n[key]))
-          )
         )
+      )
       );
       onSubmit();
     } catch (error) {
       if (typeof onError === 'function') {
-       return onError(error);
+        return onError(error);
       }
       throw new Error(error);
     };
@@ -111,11 +118,10 @@ class MenuForm extends Component {
       menuItems.add(item.id);
     }
     this.setState({menuItems});
-  }
+  };
   render() {
     const {restaurant, t, languages} = this.props;
     const {
-      manageMenuItems,
       menuItems,
       activeLanguage,
       loading
@@ -126,16 +132,16 @@ class MenuForm extends Component {
         content: (
           <div>
             <Input
-                label={t('restaurant.menu.name')}
-                onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
-                value={get(['i18n', value.locale, 'name'])(this.state) || ''}
+              label={t('restaurant.menu.name')}
+              onChange={this.handleInputChange(['i18n', value.locale, 'name'])}
+              value={get(['i18n', value.locale, 'name'])(this.state) || ''}
             />
             <Input
-                Input={'textarea'}
-                label={t('restaurant.menu.description')}
-                onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
-                rows={3}
-                value={get(['i18n', value.locale, 'description'])(this.state) || ''}
+              Input={'textarea'}
+              label={t('restaurant.menu.description')}
+              onChange={this.handleInputChange(['i18n', value.locale, 'description'])}
+              rows={3}
+              value={get(['i18n', value.locale, 'description'])(this.state) || ''}
             />
           </div>
         )
@@ -143,34 +149,28 @@ class MenuForm extends Component {
     }), {})(languages);
     return (
       <Form
-          loading={loading}
-          onCancel={this.handleCancel}
-          onSubmit={this.handleSubmit()}
+        loading={loading}
+        onCancel={this.handleCancel}
+        onSubmit={this.handleSubmit()}
       >
         <Tabbed
-            onTabChange={this.handleTabChange}
-            tab={activeLanguage}
-            tabs={tabs}
+          onTabChange={this.handleTabChange}
+          tab={activeLanguage}
+          tabs={tabs}
         />
-        {manageMenuItems ? (
+        <Expandable title={t('restaurant.menu.manageMenuItems')}>
           <MenuItems
-              action={{name: 'filter'}}
-              actions={['filter']}
-              forceDefaultAction
-              plain
-              restaurant={restaurant}
-              select={{
-                toggleSelect: this.handleMenuItemSelect,
-                selectedItems: menuItems
-              }}
+            action={{name: 'filter'}}
+            actions={['filter']}
+            forceDefaultAction
+            plain
+            restaurant={restaurant}
+            select={{
+              toggleSelect: this.handleMenuItemSelect,
+              selectedItems: menuItems
+            }}
           />
-         ) : (
-          <div>
-            <Button onClick={this.handleToggle('manageMenuItems')}>
-              {t('restaurant.menu.manageMenuItems')}
-            </Button>
-          </div>
-        )}
+        </Expandable>
       </Form>
     );
   }

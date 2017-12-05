@@ -28,4 +28,4 @@ export default (
         options
       ),
       (error, t) => typeof cb === 'function' && cb(error, t)
-  );
+    );

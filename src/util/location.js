@@ -6,9 +6,9 @@ const initialState = {latitude: null, longitude: null};
 export default (state: Object = initialState, action: Object) =>
   action.type === SET_LOCATION ?
     Object.assign({}, state, action.payload)
-  : state;
+    : state;
 
-export const updateLocation = async (dispatch: Function) =>
+export const updateLocation = async(dispatch: Function) =>
   navigator.geolocation ? navigator.geolocation.getCurrentPosition(position =>
     dispatch({
       type: SET_LOCATION,

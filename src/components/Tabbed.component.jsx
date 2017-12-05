@@ -10,7 +10,7 @@ export default class Tabbed extends Component {
     })}).isRequired,
     tab: PropTypes.string,
     onTabChange: PropTypes.func.isRequired
-  }
+  };
   handleTabChange = tab => event => this.props.onTabChange(tab);
   render() {
     const {tabs, tab = Object.keys(tabs)[0]} = this.props;
@@ -19,9 +19,9 @@ export default class Tabbed extends Component {
         <div style={styles.tabs}>
           {Object.keys(tabs).map(key => (
             <div
-                key={key}
-                onClick={this.handleTabChange(key)}
-                style={[].concat(styles.tab, key === tab ? styles.tabActive : [])}
+              key={key}
+              onClick={this.handleTabChange(key)}
+              style={[].concat(styles.tab, key === tab ? styles.tabActive : [])}
             >
               {tabs[key].label}
             </div>

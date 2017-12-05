@@ -8,13 +8,20 @@ import authenticationHandler from 'util/auth';
 @translate()
 @Radium
 class UserNavigation extends Component {
+  static propTypes = {
+    t: PropTypes.func.isRequired,
+    account: PropTypes.shape({
+      firstName: PropTypes.string
+    }),
+    getActiveAccount: PropTypes.shape({loading: PropTypes.bool})
+  };
   handleLogout = async event => {
     event.preventDefault();
     await authenticationHandler.logout();
-  }
+  };
   render() {
     const {t, account, getActiveAccount: {loading} = {}} = this.props;
-    return loading ? null : account && (
+    return !loading && account && (
       <div style={{display: 'flex', alignItems: 'center'}}>
         <div style={{padding: minimal}}>
           {t('account.authenticated', {

@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import config from 'config';
 import client from 'apolloClient';
 
-export const initializeNotificationHandler = async ({headers}) =>
+export const initializeNotificationHandler = async({headers}) =>
   subscribe(
     {
       socket: io(
@@ -25,5 +25,5 @@ export const initializeNotificationHandler = async ({headers}) =>
     ({newRecord, oldRecord, target, operations}) =>
       target.toLowerCase() === 'order' ?
         true
-      : null
+        : null
   );

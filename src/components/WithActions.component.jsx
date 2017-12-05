@@ -17,16 +17,23 @@ export default class WithActions extends Component {
       item: PropTypes.node,
       onClick: PropTypes.func
     })}),
-    defaultAction: PropTypes.string,
     hideActions: PropTypes.bool,
     forceDefaultAction: PropTypes.bool,
     onActionChange: PropTypes.func.isRequired,
     children: PropTypes.node,
     plain: PropTypes.bool,
+    hideContent: PropTypes.bool,
+    t: PropTypes.func.isRequired,
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
     ])
+  };
+  static defaultProps = {
+    hideContent: false,
+    plain: false,
+    forceDefaultAction: false,
+    hideActions: false
   };
   handleActionChange = action => event => {
     if (event && typeof event.preventDefault === 'function') {
@@ -35,7 +42,7 @@ export default class WithActions extends Component {
     }
     return typeof get(['action', 'onClick'])(action) === 'function' ?
       action.action.onClick() : this.props.onActionChange(action);
-  }
+  };
   render() {
     const {
       actions,
@@ -43,6 +50,7 @@ export default class WithActions extends Component {
       action,
       plain,
       hideActions,
+      hideContent,
       style,
       t,
       children
@@ -52,11 +60,11 @@ export default class WithActions extends Component {
         {
           action ? (
             <div
-                style={[
-                  containers.contentContainer,
-                  styles.actionContainer,
-                  plain ? styles.plain : {}
-                ]}
+              style={[
+                containers.contentContainer,
+                styles.actionContainer,
+                plain ? styles.plain : {}
+              ]}
             >
               {forceDefaultAction || actions[action].hideReturn ? null : (
                 <Button onClick={this.handleActionChange()}>
@@ -66,43 +74,45 @@ export default class WithActions extends Component {
               {actions[action].item}
             </div>
           )
-          : !hideActions && actions && Object.keys(actions).length && !action ?
-            <div
+            : !hideActions && actions && Object.keys(actions).length && !action ?
+              <div
                 style={[
                   containers.contentContainer,
                   styles.actionContainer,
                   plain ? styles.plain : {}
                 ]}
-            >
-              {Object.keys(actions)
-                .filter(key => !actions[key].hide)
-                .map(key => (
-                  <Button
+              >
+                {Object.keys(actions)
+                  .filter(key => !actions[key].hide)
+                  .map(key => (
+                    <Button
                       disabled={actions[key].disabled}
                       key={key}
                       loading={actions[key].loading}
                       onClick={this.handleActionChange({key, action: actions[key]})}
-                  >
-                    {actions[key].label}
-                  </Button>
-                ))
-              }
-            </div>
-          : null
+                    >
+                      {actions[key].label}
+                    </Button>
+                  ))
+                }
+              </div>
+              : null
         }
         {
-          get([action, 'hideItems'])(actions) ||
-          !children ||
-          (Array.isArray(children) && !children.length) ?
-          null :
-          <div
+          get([action, 'hideItems'])(actions)
+          || !children
+          || hideContent
+          || (Array.isArray(children) && !children.length)
+          || (
+            <div
               style={[
                 containers.contentContainer,
                 plain ? styles.plain : {}
               ]}
-          >
-            {children}
-          </div>
+            >
+              {children}
+            </div>
+          )
         }
       </div>
     );

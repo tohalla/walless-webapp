@@ -15,6 +15,8 @@ import loadable from 'decorators/loadable';
 class MenuItems extends Component {
   static propTypes = {
     restaurant: PropTypes.object.isRequired,
+    deleteMenuItem: PropTypes.func.isRequired,
+    getMenuItemsByRestaurant: PropTypes.shape({refetch: PropTypes.func}),
     action: PropTypes.shape({
       name: PropTypes.string.isRequired,
       item: PropTypes.object
@@ -26,7 +28,9 @@ class MenuItems extends Component {
       onHeaderClick: PropTypes.func
     }),
     menuItems: PropTypes.arrayOf(PropTypes.object),
-    forceDefaultAction: PropTypes.bool
+    forceDefaultAction: PropTypes.bool,
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
+    t: PropTypes.func.isRequired
   };
   static defaultProps = {
     actions: ['filter', 'edit', 'new'],
@@ -43,14 +47,14 @@ class MenuItems extends Component {
   handleActionSelect = action => () => this.handleActionChange(action);
   handleDelete = item => () => this.setState({
     deleteModal: item ? ({
-      handleDelete: async () => {
+      handleDelete: async() => {
         this.setState({deleteModal: undefined});
         await this.props.deleteMenuItem(item);
         await this.props.getMenuItemsByRestaurant.refetch();
       },
       item
     }) : undefined
-  })
+  });
   handleMenuItemSubmit = () => {
     this.setState({action: null});
     this.props.getMenuItemsByRestaurant.refetch();
@@ -80,10 +84,10 @@ class MenuItems extends Component {
         hideItems: true,
         item: (
           <MenuItemForm
-              menuItem={action ? action.menuItem : undefined}
-              onCancel={this.handleActionChange}
-              onSubmit={this.handleMenuItemSubmit}
-              restaurant={restaurant}
+            menuItem={action ? action.menuItem : undefined}
+            onCancel={this.handleActionChange}
+            onSubmit={this.handleMenuItemSubmit}
+            restaurant={restaurant}
           />
         )
       },
@@ -93,80 +97,81 @@ class MenuItems extends Component {
         hideItems: true,
         item: (
           <MenuItemForm
-              onCancel={this.handleActionChange}
-              onSubmit={this.handleMenuItemSubmit}
-              restaurant={restaurant}
+            onCancel={this.handleActionChange}
+            onSubmit={this.handleMenuItemSubmit}
+            restaurant={restaurant}
           />
         )
       }
     };
     return (
       <WithActions
-          {...props}
-          action={action ? action.key : undefined}
-          actions={actions &&
+        {...props}
+        action={action ? action.key : undefined}
+        actions={actions &&
             Object.keys(defaultActions).reduce((prev, key) =>
               actions.indexOf(key) === -1 ?
                 prev : Object.assign({}, prev, {[key]: defaultActions[key]})
-            , {})
-          }
-          onActionChange={this.handleActionChange}
+              , {})
+        }
+        hideContent={!(menuItems && menuItems.length)}
+        onActionChange={this.handleActionChange}
       >
         {typeof get('handleDelete')(deleteModal) === 'function' ? (
           <ConfirmationModal
-              accent
-              confirmText={t('delete')}
-              message={
-                t('confirmDelete', {
-                  name: get(['i18n', language, 'name'])(deleteModal.item)
-                })
-              }
-              onCancel={this.handleDelete()}
-              onConfirm={deleteModal.handleDelete}
+            accent
+            confirmText={t('delete')}
+            message={
+              t('confirmDelete', {
+                name: get(['i18n', language, 'name'])(deleteModal.item)
+              })
+            }
+            onCancel={this.handleDelete()}
+            onConfirm={deleteModal.handleDelete}
           />
         ) : null}
         <Table
-            columns={[
-              {
-                Header: t('restaurant.item.images'),
-                id: 'img',
-                accessor: menuItem => menuItem.images.length ? (
-                  <img src={menuItem.images[0].uri} style={styles.image} />
-                ) : null,
-                style: {padding: 0},
-                width: 120
-              },
-              {
-                Header: t('restaurant.item.actions'),
-                id: 'actions',
-                accessor: menuItem => (
-                  <div style={styles.actions}>
-                    <Button onClick={this.handleActionSelect({key: 'edit', menuItem})} plain>
-                      {t('restaurant.item.action.edit')}
-                    </Button>
-                    <Button onClick={this.handleDelete(menuItem)} plain>
-                      {t('restaurant.item.action.delete')}
-                    </Button>
-                  </div>
-                ),
-                maxWidth: 140,
-                resizable: false,
-                sortable: false,
-                style: {padding: 0}
-              },
-              {
-                Header: t('restaurant.item.name'),
-                accessor: menuItem => get(['i18n', language, 'name'])(menuItem),
-                id: 'name'
-              },
-              {
-                Header: t('restaurant.item.description'),
-                accessor: menuItem => get(['i18n', language, 'description'])(menuItem),
-                id: 'description'
-              }
-            ]}
-            data={menuItems}
-            select={select}
+          columns={[
+            {
+              Header: t('restaurant.item.images'),
+              id: 'img',
+              accessor: menuItem => menuItem.images.length ? (
+                <img src={menuItem.images[0].uri} style={styles.image} />
+              ) : null,
+              style: {padding: 0},
+              width: 120
+            },
+            {
+              Header: t('restaurant.item.actions'),
+              id: 'actions',
+              accessor: menuItem => (
+                <div style={styles.actions}>
+                  <Button onClick={this.handleActionSelect({key: 'edit', menuItem})} plain>
+                    {t('restaurant.item.action.edit')}
+                  </Button>
+                  <Button onClick={this.handleDelete(menuItem)} plain>
+                    {t('restaurant.item.action.delete')}
+                  </Button>
+                </div>
+              ),
+              maxWidth: 140,
+              resizable: false,
+              sortable: false,
+              style: {padding: 0}
+            },
+            {
+              Header: t('restaurant.item.name'),
+              accessor: menuItem => get(['i18n', language, 'name'])(menuItem),
+              id: 'name'
+            },
+            {
+              Header: t('restaurant.item.description'),
+              accessor: menuItem => get(['i18n', language, 'description'])(menuItem),
+              id: 'description'
+            }
+          ]}
+          data={menuItems}
+          select={select}
         />
       </WithActions>
     );

@@ -35,7 +35,18 @@ class RestaurantPage extends Component {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
-    ])
+    ]),
+    getActiveAccount: PropTypes.shape({loading: PropTypes.bool}),
+    getRestaurantsByAccount: PropTypes.shape({refetch: PropTypes.func}),
+    restaurants: PropTypes.arrayOf(
+      PropTypes.shape({id: PropTypes.number.isRequired})
+    ),
+    history: PropTypes.shape({push: PropTypes.func.isRequired}),
+    location: PropTypes.shape({pathname: PropTypes.string}),
+    match: PropTypes.shape({
+      params: PropTypes.shape({restaurant: PropTypes.string})
+    }),
+    t: PropTypes.func.isRequired
   };
   componentWillMount() {
     if (this.checkRestaurant(this.props)) {
@@ -95,40 +106,40 @@ class RestaurantPage extends Component {
       const restaurant = match.params.restaurant ?
         find(restaurant =>
           restaurant.id === Number(match.params.restaurant)
-      )(restaurants) : restaurants[0];
+        )(restaurants) : restaurants[0];
       return restaurant ? (
         <div style={styles.container}>
           <Navigation style={[styles.navigation, shadow.right]}>
             <Select
-                autoBlur
-                clearable={false}
-                name="activeRestaurant"
-                onChange={this.handleRestaurantChange}
-                options={
-                  restaurants.map(value => ({
-                    value: value.id,
-                    label: get(['i18n', i18next.languages[0], 'name'])(value)
-                  }))
-                }
-                resetValue={restaurant.id}
-                style={styles.select}
-                value={restaurant.id}
+              autoBlur
+              clearable={false}
+              name='activeRestaurant'
+              onChange={this.handleRestaurantChange}
+              options={
+                restaurants.map(value => ({
+                  value: value.id,
+                  label: get(['i18n', i18next.languages[0], 'name'])(value)
+                }))
+              }
+              resetValue={restaurant.id}
+              style={styles.select}
+              value={restaurant.id}
             />
             {menuItems.map((item, index) => (
               <NavigationItem
-                  active={
-                    item.path &&
+                active={
+                  item.path &&
                     location.pathname.indexOf(`/${restaurant.id}/${item.path}`) === 0 ||
                     (!item.path && (
                       location.pathname === `/${restaurant.id}/` ||
                       location.pathname === `/${restaurant.id}`
                     ))
-                  }
-                  activeStyle={styles.navigationItemActive}
-                  chevron
-                  key={index}
-                  path={`/${restaurant.id}/${item.path}`}
-                  style={styles.navigationItem}
+                }
+                activeStyle={styles.navigationItemActive}
+                chevron
+                key={index}
+                path={`/${restaurant.id}/${item.path}`}
+                style={styles.navigationItem}
               >
                 {t(item.translationKey)}
               </NavigationItem>
@@ -138,16 +149,16 @@ class RestaurantPage extends Component {
             <Switch>
               {menuItems.map(({path, Component}) => (
                 <Route
-                    component={this.renderRouteComponentWithProps(
-                      Component,
-                      {restaurant}
-                    )}
-                    exact
-                    key={path}
-                    path={`/:restaurant/${path}`}
+                  component={this.renderRouteComponentWithProps(
+                    Component,
+                    {restaurant}
+                  )}
+                  exact
+                  key={path}
+                  path={`/:restaurant/${path}`}
                 />
               ))}
-              <Redirect path="/:restaurant/*" to="/" />
+              <Redirect path='/:restaurant/*' to='/' />
             </Switch>
           </PageContent>
         </div>
@@ -156,8 +167,8 @@ class RestaurantPage extends Component {
     return (
       <PageContent>
         <RestaurantForm
-            onSubmit={this.handleRestaurantSubmit}
-            style={styles.contentContainer}
+          onSubmit={this.handleRestaurantSubmit}
+          style={styles.contentContainer}
         />
       </PageContent>
     );

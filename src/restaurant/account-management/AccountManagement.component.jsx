@@ -11,7 +11,12 @@ import loadable from 'decorators/loadable';
 @loadable()
 class AccountManagement extends Component {
   static propTypes = {
-    restaurant: PropTypes.object.isRequired
+    accounts: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      role: PropTypes.shape({id: PropTypes.number})
+    })),
+    restaurant: PropTypes.shape({id: PropTypes.number}),
+    t: PropTypes.func.isRequired
   };
   state = {action: {key: 'filter'}, filters: {}};
   handleActionChange = action => this.setState({action});
@@ -32,25 +37,25 @@ class AccountManagement extends Component {
     );
     return (
       <WithActions
-          {...props}
-          action={action ? action.key : undefined}
-          actions={{
-            filter: {
-              label: t('restaurant.userManagement.action.filter'),
-              item: (
-                <UsersFilter
-                    filters={filters}
-                    onFiltersChange={this.handleFiltersChange}
-                    restaurant={restaurant}
-                />
-              )
-            }
-          }}
-          forceDefaultAction
-          onActionChange={this.handleActionChange}
+        {...props}
+        action={action ? action.key : undefined}
+        actions={{
+          filter: {
+            label: t('restaurant.userManagement.action.filter'),
+            item: (
+              <UsersFilter
+                filters={filters}
+                onFiltersChange={this.handleFiltersChange}
+                restaurant={restaurant}
+              />
+            )
+          }
+        }}
+        forceDefaultAction
+        onActionChange={this.handleActionChange}
       >
-      {data.length ? (
-        <Table
+        {data.length ? (
+          <Table
             columns={[
               {
                 Header: 'Id',
@@ -70,8 +75,8 @@ class AccountManagement extends Component {
               }
             ]}
             data={data}
-        />
-      ) : null}
+          />
+        ) : null}
       </WithActions>
     );
   }

@@ -15,7 +15,11 @@ import colors from 'styles/colors';
 @Radium
 class Orders extends Component {
   static propTypes = {
-    restaurant: PropTypes.object.isRequired
+    restaurant: PropTypes.object.isRequired,
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
+    t: PropTypes.func.isRequired,
+    updateOrder: PropTypes.func.isRequired,
+    orders: PropTypes.arrayOf(PropTypes.shape({servingLocations: PropTypes.array}))
   };
   state = {action: {key: 'filter'}, filters: {state: 'pending'}};
   handleAcceptOrder = order => () => this.props.updateOrder(
@@ -35,30 +39,30 @@ class Orders extends Component {
     const items = original.items.map(item => item.menuItem);
     return items.length ? (
       <Table
-          columns={[
-            {
-              accessor: 'id',
-              show: false
-            },
-            {
-              Header: t('restaurant.item.quantity'),
-              id: 'quantity',
-              accessor: 'id',
-              aggregate: values => values.length,
-              width: 80
-            },
-            {
-              Header: t('restaurant.item.name'),
-              id: 'name',
-              accessor: data => get(['i18n', language, 'name'])(data),
-              aggregate: ([value]) => value
-            }
-          ]}
-          data={items}
-          defaultPageSize={uniqBy(item => item.id)(items).length
+        columns={[
+          {
+            accessor: 'id',
+            show: false
+          },
+          {
+            Header: t('restaurant.item.quantity'),
+            id: 'quantity',
+            accessor: 'id',
+            aggregate: values => values.length,
+            width: 80
+          },
+          {
+            Header: t('restaurant.item.name'),
+            id: 'name',
+            accessor: data => get(['i18n', language, 'name'])(data),
+            aggregate: ([value]) => value
           }
-          pivotBy={['id']}
-          style={{padding: normal, background: colors.background}}
+        ]}
+        data={items}
+        defaultPageSize={uniqBy(item => item.id)(items).length
+        }
+        pivotBy={['id']}
+        style={{padding: normal, background: colors.background}}
       />
     ) : null;
   };
@@ -81,85 +85,85 @@ class Orders extends Component {
     );
     return (
       <WithActions
-          {...props}
-          action={action ? action.key : undefined}
-          actions={{
-            filter: {
-              label: t('restaurant.order.action.filter'),
-              item: (
-                <OrdersFilter
-                    filters={filters}
-                    onFiltersChange={this.handleFiltersChange}
-                    restaurant={restaurant}
-                />
-              )
-            }
-          }}
-          forceDefaultAction
-          onActionChange={this.handleActionChange}
+        {...props}
+        action={action ? action.key : undefined}
+        actions={{
+          filter: {
+            label: t('restaurant.order.action.filter'),
+            item: (
+              <OrdersFilter
+                filters={filters}
+                onFiltersChange={this.handleFiltersChange}
+                restaurant={restaurant}
+              />
+            )
+          }
+        }}
+        forceDefaultAction
+        onActionChange={this.handleActionChange}
       >
         {data.length ?
           <Table
-              SubComponent={this.handleRenderMenuItems}
-              columns={[
-                {
-                  Header: t('restaurant.order.servingLocation'),
-                  id: 'servingLocation',
-                  accessor: data => (
-                    <Button
-                        onClick={this.setFilterValue('servingLocations', [data.servingLocation.id])}
-                        plain
-                    >
-                      {data.servingLocation.name}
-                    </Button>
-                  )
-                },
-                {
-                  Header: t('restaurant.order.createdAt'),
-                  width: 10 + t('restaurant.order.createdAt').length*10,
-                  id: 'createdAt',
-                  accessor: data => new Date(data.createdAt).toLocaleTimeString()
-                },
-                {
-                  Header: t('restaurant.order.createdBy'),
-                  id: 'createdBy',
-                  minWidth: 140,
-                  accessor: data => `${data.createdBy.firstName} ${data.createdBy.lastName}`
-                },
-                {
-                  Header: t('restaurant.order.acceptedAt'),
-                  accessor: data => data.accepted ?
-                    new Date(data.accepted).toLocaleTimeString()
+            SubComponent={this.handleRenderMenuItems}
+            columns={[
+              {
+                Header: t('restaurant.order.servingLocation'),
+                id: 'servingLocation',
+                accessor: data => (
+                  <Button
+                    onClick={this.setFilterValue('servingLocations', [data.servingLocation.id])}
+                    plain
+                  >
+                    {data.servingLocation.name}
+                  </Button>
+                )
+              },
+              {
+                Header: t('restaurant.order.createdAt'),
+                width: 10 + t('restaurant.order.createdAt').length * 10,
+                id: 'createdAt',
+                accessor: data => new Date(data.createdAt).toLocaleTimeString()
+              },
+              {
+                Header: t('restaurant.order.createdBy'),
+                id: 'createdBy',
+                minWidth: 140,
+                accessor: data => `${data.createdBy.firstName} ${data.createdBy.lastName}`
+              },
+              {
+                Header: t('restaurant.order.acceptedAt'),
+                accessor: data => data.accepted ?
+                  new Date(data.accepted).toLocaleTimeString()
                   : (
                     <Button onClick={this.handleAcceptOrder(data)} plain>
                       {t('restaurant.order.accept')}
                     </Button>
                   ),
-                  id: 'acceptedAt'
-                },
-                {
-                  Header: t('restaurant.order.completedAt'),
-                  accessor: data => data.completed ?
-                    new Date(data.completed).toLocaleTimeString()
+                id: 'acceptedAt'
+              },
+              {
+                Header: t('restaurant.order.completedAt'),
+                accessor: data => data.completed ?
+                  new Date(data.completed).toLocaleTimeString()
                   : (
-                      <Button onClick={this.handleCompleteOrder(data)} plain>
-                        {t('restaurant.order.complete')}
-                      </Button>
-                    ),
-                  id: 'completed'
-                },
-                {
-                  Header: t('restaurant.order.items'),
-                  id: 'items',
-                  width: 10 + t('restaurant.order.items').length*10,
-                  accessor: data => (data.items || []).length
-                }
-              ]}
-              data={data}
-              defaultPageSize={data.length}
-              showPageJump={false}
-              showPageSizeOptions={false}
-              showPagination={false}
+                    <Button onClick={this.handleCompleteOrder(data)} plain>
+                      {t('restaurant.order.complete')}
+                    </Button>
+                  ),
+                id: 'completed'
+              },
+              {
+                Header: t('restaurant.order.items'),
+                id: 'items',
+                width: 10 + t('restaurant.order.items').length * 10,
+                accessor: data => (data.items || []).length
+              }
+            ]}
+            data={data}
+            defaultPageSize={data.length}
+            showPageJump={false}
+            showPageSizeOptions={false}
+            showPagination={false}
           />
           : null
         }

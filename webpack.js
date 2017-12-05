@@ -28,4 +28,4 @@ module.exports = props =>
       }
       return true;
     }
-  );
+    );

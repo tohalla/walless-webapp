@@ -22,6 +22,10 @@ export default class Input extends PureComponent {
     required: PropTypes.bool,
     rows: PropTypes.number,
     plain: PropTypes.bool,
+    pattern: PropTypes.oneOfType([
+      PropTypes.instanceOf(RegExp),
+      PropTypes.string
+    ]),
     style: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
@@ -80,43 +84,45 @@ export default class Input extends PureComponent {
     const {currentValue, isFocused, error} = this.state;
     const input = (
       <Input
-          {...props}
-          onBlur={this.handleBlur}
-          onChange={this.handleChange}
-          onFocus={this.handleFocus}
-          ref={c => this.input = c}
-          style={Object.assign(
-            {},
-            styles.input,
-            inputStyle,
-            typeof size === 'number' ? {width: `${size * 1.2}rem`} : {},
-            isFocused ? styles.inputFocus : {}
-          )}
-          value={currentValue}
+        {...props}
+        onBlur={this.handleBlur}
+        onChange={this.handleChange}
+        onFocus={this.handleFocus}
+        ref={c => {
+          this.input = c;
+        }}
+        style={Object.assign(
+          {},
+          styles.input,
+          inputStyle,
+          typeof size === 'number' ? {width: `${size * 1.2}rem`} : {},
+          isFocused ? styles.inputFocus : {}
+        )}
+        value={currentValue}
       />
     );
     return plain ? (input) : (
       <div
-          onClick={this.focus}
-          style={[
-            styles.container,
-            style,
-            labelLocation === 'left' ?
-              {flexDirection: 'row', alignItems: 'center'}
+        onClick={this.focus}
+        style={[
+          styles.container,
+          style,
+          labelLocation === 'left' ?
+            {flexDirection: 'row', alignItems: 'center'}
             : {flexDirection: 'column'}
-          ]}
+        ]}
       >
         {label &&
           <label
-              htmlFor={this.props.id}
-              style={[].concat(
-                styles.label,
-                isFocused ? styles.labelFocus : [],
-                labelLocation === 'left' ?
-                  {paddingRight: minor} : []
-              )}
+            htmlFor={this.props.id}
+            style={[].concat(
+              styles.label,
+              isFocused ? styles.labelFocus : [],
+              labelLocation === 'left' ?
+                {paddingRight: minor} : []
+            )}
           >
-          {label}
+            {label}
           </label>
         }
         <div style={{display: 'flex', alignItems: 'center'}}>

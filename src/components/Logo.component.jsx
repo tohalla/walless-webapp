@@ -10,14 +10,14 @@ export default class Logo extends PureComponent {
   static defaultProps = {
     width: 30,
     height: 30
-  }
+  };
   render() {
     return (
       <svg {...this.props}>
         <image
-            src={walless}
-            xlinkHref={wallessPng}
-            {...this.props}
+          src={walless}
+          xlinkHref={wallessPng}
+          {...this.props}
         />
       </svg>
     );

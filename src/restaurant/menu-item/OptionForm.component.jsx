@@ -14,9 +14,12 @@ class OptionForm extends Component {
     disabledOptions: PropTypes.arrayOf(PropTypes.object),
     value: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     submitText: PropTypes.string,
-    forceOpen: PropTypes.bool
+    forceOpen: PropTypes.bool,
+    i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),
+    options: PropTypes.arrayOf(PropTypes.shape({id: PropTypes.number}))
   };
   constructor(props) {
     super(props);
@@ -24,7 +27,7 @@ class OptionForm extends Component {
       {isOpen: false},
       props.value ?
         {isOpen: false, option: props.value.id, ...props.value}
-      : {option: undefined, defaultValue: false}
+        : {option: undefined, defaultValue: false}
     );
   }
   handleSubmit = () => {
@@ -41,8 +44,8 @@ class OptionForm extends Component {
     const value = typeof forceValue === 'undefined' ?
       Array.isArray(changed) ?
         changed.map(i => i.value || i)
-      : get(['target', 'value'])(changed) || get('value')(changed) || changed
-    : forceValue;
+        : get(['target', 'value'])(changed) || get('value')(changed) || changed
+      : forceValue;
     this.setState(set(path)(value)(this.state));
   };
   handleClose = () => {
@@ -68,31 +71,31 @@ class OptionForm extends Component {
     return availableOptions.length ?
       this.state.isOpen || forceOpen ? (
         <Form
-            FormComponent="div"
-            fieldStyle={{marginRight: content}}
-            onClose={this.handleClose}
-            onSubmit={this.handleSubmit}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flex: 0
-            }}
-            submitText={submitText}
+          FormComponent='div'
+          fieldStyle={{marginRight: content}}
+          onClose={this.handleClose}
+          onSubmit={this.handleSubmit}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            flex: 0
+          }}
+          submitText={submitText}
         >
           <Select
-              autoBlur
-              clearable={false}
-              onChange={this.handleStateChange('option')}
-              options={availableOptions.map(option => ({
-                label: get(['i18n', language, 'name'])(option),
-                value: option.id
-              }))}
-              value={option}
+            autoBlur
+            clearable={false}
+            onChange={this.handleStateChange('option')}
+            options={availableOptions.map(option => ({
+              label: get(['i18n', language, 'name'])(option),
+              value: option.id
+            }))}
+            value={option}
           />
           <Checkbox
-              checked={defaultValue}
-              label={t('restaurant.option.enabledByDefault')}
-              onClick={this.handleStateChange('defaultValue', !defaultValue)}
+            checked={defaultValue}
+            label={t('restaurant.option.enabledByDefault')}
+            onClick={this.handleStateChange('defaultValue', !defaultValue)}
           />
         </Form>
       ) : (
@@ -100,7 +103,7 @@ class OptionForm extends Component {
           {t('restaurant.item.addNewOption')}
         </Button>
       )
-    : null;
+      : null;
   }
 };
 

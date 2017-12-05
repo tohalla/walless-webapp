@@ -19,7 +19,7 @@ const store = createStore(
   )
 );
 
-(async () => await Promise.all([
+(async() => await Promise.all([
   store.dispatch(updateLocation)
 ]))();
 

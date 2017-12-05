@@ -30,16 +30,16 @@ export default class NavigationItem extends Component {
     } = this.props;
     return (
       <Link
-          style={[].concat(styles.container, style)}
-          to={path}
-          {...props}
+        style={[].concat(styles.container, style)}
+        to={path}
+        {...props}
       >
         <span style={active ? activeStyle : {}}>{children}</span>
         {chevron ?
-          <i className="material-icons" style={[].concat(styles.chevron, active ? styles.chevronActive : [])}>
+          <i className='material-icons' style={[].concat(styles.chevron, active ? styles.chevronActive : [])}>
             {'chevron_right'}
           </i>
-        : null}
+          : null}
       </Link>
     );
   }
