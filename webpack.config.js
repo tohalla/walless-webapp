@@ -17,7 +17,11 @@ module.exports = merge(
     },
     resolve: {
       extensions: ['.js', '.jsx'],
-      alias: {radium: path.resolve(__dirname, 'node_modules', 'radium')}
+      modules: [
+        path.resolve(__dirname, 'src'),
+        path.resolve(__dirname, 'assets'),
+        'node_modules'
+      ]
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -84,8 +88,8 @@ module.exports = merge(
         Fragment: ['react', 'Fragment'],
         translate: ['react-i18next', 'translate'],
         React: 'react',
-        Radium: 'radium',
-        PropTypes: 'prop-types'
+        PropTypes: 'prop-types',
+        Radium: 'radium'
       }),
       new ExtractTextPlugin({
         filename: 'assets/css/[name].[contenthash:8].css',
