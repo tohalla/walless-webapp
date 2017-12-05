@@ -1,7 +1,19 @@
 import ReactDOM from 'react-dom';
-import apolloProvider from 'apolloProvider';
+import provider from 'provider';
+import {reactI18nextModule} from 'react-i18next';
 
-ReactDOM.render(apolloProvider, document.getElementById('app'));
+import i18n from 'util/i18n';
+
+i18n({
+  modules: [reactI18nextModule],
+  options: {
+    interpolation: {
+      escapeValue: false
+    }
+  }
+});
+
+ReactDOM.render(provider, document.getElementById('app'));
 
 if (module.hot) {
   module.hot.accept();

@@ -1,5 +1,4 @@
 import ReactDropzone from 'react-dropzone';
-import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 
 const Dropzone = new Radium(ReactDropzone);
@@ -9,10 +8,9 @@ import colors from 'styles/colors';
 import Button from 'components/Button.component';
 import Deletable from 'components/Deletable.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
+@translate()
 @Radium
-class SelectImages extends Component {
+export default class SelectImages extends Component {
   static propTypes = {
     select: PropTypes.shape({
       items: PropTypes.arrayOf(PropTypes.object),
@@ -42,9 +40,9 @@ class SelectImages extends Component {
   }
   render() {
     const {
-      t,
       dropzone: {items: dropzoneItems = [], onDrop, onDelete},
-      select: {items: selectItems = [], selected}
+      select: {items: selectItems = [], selected},
+      t
     } = this.props;
     const {action} = this.state;
     const items = selectItems.map((item, index) => (
@@ -103,8 +101,6 @@ class SelectImages extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, {})(SelectImages);
 
 const styles = {
   container: {

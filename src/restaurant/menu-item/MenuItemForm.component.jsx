@@ -1,5 +1,4 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import {
@@ -25,13 +24,8 @@ import Tabbed from 'components/Tabbed.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  languages: state.util.translation.languages,
-  language: state.util.translation.language
-});
-
 @loadable()
+@translate()
 @Radium
 class MenuItemForm extends Component {
   static propTypes = {
@@ -68,10 +62,11 @@ class MenuItemForm extends Component {
         price = '',
         images = [],
         options = []
-      } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {}
+      } = typeof props.menuItem === 'object' && props.menuItem ? props.menuItem : {},
+      i18n: {languages: [language]}
     } = props;
     updateState({
-      activeLanguage: 'en',
+      activeLanguage: language,
       price,
       i18n,
       loading: false,
@@ -202,9 +197,9 @@ class MenuItemForm extends Component {
       images,
       restaurant,
       languages,
+      i18n: {languages: [language]},
       menuItemTypes,
-      diets,
-      language
+      diets
     } = this.props;
     const {
       selectedFiles,
@@ -357,7 +352,6 @@ class MenuItemForm extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   menuItem.createMenuItem,
   menuItem.updateMenuItem,
   menuItem.updateMenuItemImages,
@@ -369,5 +363,6 @@ export default compose(
   menuItem.updateMenuItemDiets,
   menuItem.getMenuItemTypes,
   misc.getDiets,
-  menuItem.updateMenuItemOptions
+  menuItem.updateMenuItemOptions,
+  misc.getLanguages
 )(MenuItemForm);

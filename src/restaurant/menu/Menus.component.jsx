@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {get} from 'lodash/fp';
 import {menu} from 'walless-graphql';
@@ -10,12 +9,8 @@ import Table from 'components/Table.component';
 import WithActions from 'components/WithActions.component';
 import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({
-  language: state.util.translation.language,
-  t: state.util.translation.t
-});
-
 @loadable()
+@translate()
 class Menus extends Component {
   static propTypes = {
     restaurant: PropTypes.object.isRequired,
@@ -56,7 +51,7 @@ class Menus extends Component {
     const {
       menus,
       restaurant,
-      language,
+      i18n: {languages: [language]},
       t
     } = this.props;
     const {action, deleteModal} = this.state;
@@ -145,7 +140,6 @@ class Menus extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps),
   menu.getMenusByRestaurant,
   menu.deleteMenu
 )(Menus);

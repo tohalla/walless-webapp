@@ -14,9 +14,8 @@ import ServingLocationForm from
   'restaurant/serving-location/ServingLocationForm.component';
 import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
 @loadable()
+@translate()
 class ServingLocations extends Component {
   static propTypes = {
     action: PropTypes.shape({
@@ -169,6 +168,6 @@ class ServingLocations extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {addNotification}),
+  connect(undefined, {addNotification}),
   servingLocation.getServingLocationsByRestaurant
 )(ServingLocations);

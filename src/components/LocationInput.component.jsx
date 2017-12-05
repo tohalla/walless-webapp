@@ -5,11 +5,8 @@ import {connect} from 'react-redux';
 import containers from 'styles/containers';
 import Select from 'components/Select.component';
 
-const mapStateToProps = state => ({
-  location: state.util.location
-});
-
-class LocationInput extends Component {
+@connect(state => ({location: state.util.location}))
+export default class LocationInput extends Component {
   static propTypes = {
     radius: PropTypes.oneOfType([
       PropTypes.string,
@@ -145,6 +142,3 @@ class LocationInput extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps)(LocationInput);
-

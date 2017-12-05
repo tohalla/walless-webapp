@@ -1,6 +1,5 @@
 import {compose} from 'react-apollo';
 import {find, get, equals} from 'lodash/fp';
-import {connect} from 'react-redux';
 import color from 'color';
 import {
   Route,
@@ -8,6 +7,7 @@ import {
   Redirect
 } from 'react-router-dom';
 import {account} from 'walless-graphql';
+import i18next from 'i18next';
 
 import {initializeNotificationHandler} from 'util/wsNotificationHandler';
 import {minor, normal} from 'styles/spacing';
@@ -27,13 +27,8 @@ import ServingLocations from 'restaurant/serving-location/ServingLocations.compo
 import AccountManagement from 'restaurant/account-management/AccountManagement.component';
 import Restaurant from 'restaurant/Restaurant.component';
 
-
-const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  language: state.util.translation.language
-});
-
 @loadable()
+@translate()
 @Radium
 class RestaurantPage extends Component {
   static propTypes = {
@@ -92,9 +87,8 @@ class RestaurantPage extends Component {
       match,
       getRestaurantsByAccount = {},
       getActiveAccount = {},
-      t,
       location,
-      language
+      t
     } = this.props;
     const loading = getRestaurantsByAccount.loading || getActiveAccount.loading;
     if (!loading && restaurants && restaurants.length) {
@@ -113,7 +107,7 @@ class RestaurantPage extends Component {
                 options={
                   restaurants.map(value => ({
                     value: value.id,
-                    label: get(['i18n', language, 'name'])(value)
+                    label: get(['i18n', i18next.languages[0], 'name'])(value)
                   }))
                 }
                 resetValue={restaurant.id}
@@ -171,7 +165,6 @@ class RestaurantPage extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   account.getActiveAccount,
   account.getRestaurantsByAccount
 )(RestaurantPage);

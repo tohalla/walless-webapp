@@ -1,5 +1,4 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import Cookie from 'js-cookie';
 import {set, get, equals, pick} from 'lodash/fp';
 import {file, misc, restaurant, account} from 'walless-graphql';
@@ -12,12 +11,10 @@ import SelectItems from 'components/SelectItems.component';
 import Tabbed from 'components/Tabbed.component';
 import LocationInput from 'components/LocationInput.component';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
+import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({
-  languages: state.util.translation.languages,
-  t: state.util.translation.t
-});
-
+@loadable()
+@translate()
 @Radium
 class RestaurantForm extends Component {
   static propTypes = {
@@ -53,12 +50,13 @@ class RestaurantForm extends Component {
         address = {},
         i18n,
         images: selectedFiles
-      } = typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {}
+      } = typeof props.restaurant === 'object' && props.restaurant ? props.restaurant : {},
+      i18n: {languages: [language]}
     } = props;
     updateState({
       address,
       i18n,
-      activeLanguage: 'en',
+      activeLanguage: language,
       currency: 'EUR',
       newImages: [],
       loading: false,
@@ -170,13 +168,13 @@ class RestaurantForm extends Component {
   };
   render() {
     const {
-      t,
-      languages = [],
       images,
       restaurant,
       onCancel,
       currencies = [],
-      style
+      t,
+      style,
+      languages
     } = this.props;
     const {
       activeLanguage,
@@ -269,7 +267,6 @@ class RestaurantForm extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   restaurant.createRestaurant,
   restaurant.updateRestaurant,
   account.getActiveAccount,
@@ -280,6 +277,7 @@ export default compose(
   misc.getCurrencies,
   file.getImagesForRestaurant,
   restaurant.updateRestaurantImages,
-  misc.createAddress
+  misc.createAddress,
+  misc.getLanguages
 )(RestaurantForm);
 

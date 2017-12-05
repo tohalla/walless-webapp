@@ -1,12 +1,12 @@
-import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 
 import {minor} from 'styles/spacing';
 import TimeInput from 'components/TimeInput.component';
 import Form from 'components/Form.component';
 
+@translate()
 @Radium
-class ShiftForm extends PureComponent {
+export default class ShiftForm extends PureComponent {
   static propTypes = {
     value: PropTypes.shape(({
       startTime: PropTypes.string,
@@ -63,8 +63,6 @@ class ShiftForm extends PureComponent {
     );
   }
 }
-
-export default connect(state => ({t: state.util.translation.t}))(ShiftForm);
 
 const styles = {
   container: {

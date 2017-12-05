@@ -1,11 +1,6 @@
 import {connect} from 'react-redux';
-
 import {notificationsZIndex} from 'styles/zIndex';
 import Notification from 'notifications/Notification.component';
-
-const mapStateToProps = state => ({
-  notifications: state.notifications
-});
 
 @Radium
 class Notifications extends Component {
@@ -24,8 +19,8 @@ class Notifications extends Component {
 }
 
 export default connect(
-  mapStateToProps, {}
-)(Notifications);
+  state => ({notifications: state.notifications})
+)(Notifications)
 
 const styles = {
   container: {

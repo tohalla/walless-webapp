@@ -82,6 +82,7 @@ module.exports = merge(
         PureComponent: ['react', 'PureComponent'],
         Component: ['react', 'Component'],
         Fragment: ['react', 'Fragment'],
+        translate: ['react-i18next', 'translate'],
         React: 'react',
         Radium: 'radium',
         PropTypes: 'prop-types'

@@ -1,12 +1,12 @@
 import {pullAt, findIndex, isEqual} from 'lodash/fp';
 import DayPicker from 'react-day-picker';
-import {connect} from 'react-redux';
 
 import Checkbox from 'components/Checkbox.component';
 import Button from 'components/Button.component';
 
+@translate()
 @Radium
-class DaySelect extends PureComponent {
+export default class DaySelect extends PureComponent {
   static propTypes = {
     allowSpecificDays: PropTypes.bool,
     onSelect: PropTypes.func.isRequired,
@@ -120,5 +120,3 @@ const styles = {
     flexDirection: 'row'
   }
 };
-
-export default connect(state => ({t: state.util.translation.t}))(DaySelect);

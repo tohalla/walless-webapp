@@ -1,6 +1,5 @@
-import {connect} from 'react-redux';
-
-class OpeningHours extends Component {
+@translate()
+export default class ManageOpeningHours extends Component {
   static propTypes = {
     restaurant: PropTypes.oneOfType([
       PropTypes.number,
@@ -16,9 +15,9 @@ class OpeningHours extends Component {
     return Array.isArray(openingHours) && openingHours.length ? (
       <div />
     ) : (
-      <div>{''}</div>
+      <div>
+        {t('restaurant.openingHours.notSet')}
+      </div>
     );
   }
 }
-
-export default connect(state => ({t: state.util.translation.t}))(OpeningHours);

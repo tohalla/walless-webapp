@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
 import {servingLocation} from 'walless-graphql';
@@ -8,9 +7,8 @@ import loadable from 'decorators/loadable';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import Select from 'components/Select.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
 @loadable()
+@translate()
 class OrdersFilter extends Component {
   static propTypes = {
     filters: PropTypes.shape({
@@ -87,6 +85,5 @@ class OrdersFilter extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   servingLocation.getServingLocationsByRestaurant
 )(OrdersFilter);

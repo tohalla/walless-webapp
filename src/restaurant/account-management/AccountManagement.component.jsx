@@ -1,5 +1,4 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 import {account} from 'walless-graphql';
 
@@ -8,8 +7,7 @@ import WithActions from 'components/WithActions.component';
 import Table from 'components/Table.component';
 import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
+@translate()
 @loadable()
 class AccountManagement extends Component {
   static propTypes = {
@@ -19,7 +17,7 @@ class AccountManagement extends Component {
   handleActionChange = action => this.setState({action});
   handleFiltersChange = filters => this.setState({filters});
   render() {
-    const {accounts, t, restaurant, ...props} = this.props;
+    const {accounts, restaurant, t, ...props} = this.props;
     const {action, filters} = this.state;
     const data = accounts.filter(account =>
       (
@@ -80,6 +78,5 @@ class AccountManagement extends Component {
 };
 
 export default compose(
-  connect(mapStateToProps, {}),
   account.getAccountsByRestaurant, account.getAccountRolesForRestaurant
 )(AccountManagement);

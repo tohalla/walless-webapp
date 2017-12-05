@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 
 import Loading from 'components/Loading.component';
@@ -26,8 +25,9 @@ const findInvalidInputs = components => components ?
   )
 : [];
 
+@translate()
 @Radium
-class Form extends PureComponent {
+export default class Form extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -138,5 +138,3 @@ const styles = {
     justifyContent: 'flex-end'
   }
 };
-
-export default connect(state => ({t: state.util.translation.t}), {})(Form);

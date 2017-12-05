@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import ReactClickOutside from 'react-click-outside';
 
 import {modalZIndex} from 'styles/zIndex';
@@ -9,12 +8,9 @@ import {normal} from 'styles/spacing';
 
 const ClickOutside = new Radium(ReactClickOutside);
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t
-});
-
+@translate()
 @Radium
-class ConfirmationModal extends Component {
+export default class ConfirmationModal extends Component {
   static propTypes = {
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
@@ -57,8 +53,6 @@ class ConfirmationModal extends Component {
     );
   }
 };
-
-export default connect(mapStateToProps)(ConfirmationModal);
 
 const styles = {
   overlay: {

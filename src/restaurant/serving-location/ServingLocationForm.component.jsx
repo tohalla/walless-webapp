@@ -1,13 +1,11 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import {equals, omit} from 'lodash/fp';
 
 import Input from 'components/Input.component';
 import Form from 'components/Form.component';
 import {servingLocation} from 'walless-graphql';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
+@translate()
 class ServingLocationForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -55,6 +53,7 @@ class ServingLocationForm extends Component {
       updateServingLocation,
       restaurant,
       onSubmit,
+      t,
       servingLocation = typeof this.props.servingLocation === 'object' ? this.props.servingLocation : {}
     } = this.props;
     const finalServingLocation = Object.assign(
@@ -99,7 +98,6 @@ class ServingLocationForm extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   servingLocation.createServingLocation,
   servingLocation.updateServingLocation,
   servingLocation.getServingLocation

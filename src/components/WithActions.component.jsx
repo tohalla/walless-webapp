@@ -1,16 +1,12 @@
 import {get} from 'lodash/fp';
-import {connect} from 'react-redux';
 
 import {major} from 'styles/spacing';
 import containers from 'styles/containers';
 import Button from 'components/Button.component';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t
-});
-
+@translate()
 @Radium
-class WithActions extends Component {
+export default class WithActions extends Component {
   static propTypes = {
     action: PropTypes.string,
     actions: PropTypes.shape({action: PropTypes.shape({
@@ -44,11 +40,11 @@ class WithActions extends Component {
     const {
       actions,
       forceDefaultAction,
-      t,
       action,
       plain,
       hideActions,
       style,
+      t,
       children
     } = this.props;
     return (
@@ -112,9 +108,6 @@ class WithActions extends Component {
     );
   }
 };
-
-export default connect(mapStateToProps)(WithActions);
-
 
 const styles = {
   actionContainer: {

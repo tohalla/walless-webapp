@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {account} from 'walless-graphql';
 
@@ -29,17 +28,14 @@ const menuItems = [
   }
 ];
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t
-});
-
+@translate()
 @Radium
 class MainNavigation extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired
   }
   render() {
-    const {t, location} = this.props;
+    const {location, t} = this.props;
     return (
       <div style={[styles.container, shadow.small]}>
         <Logo />
@@ -67,7 +63,6 @@ class MainNavigation extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   account.getActiveAccount
 )(MainNavigation);
 

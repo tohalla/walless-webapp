@@ -1,5 +1,4 @@
 import {merge, set, omit, isEmpty} from 'lodash/fp';
-import {connect} from 'react-redux';
 
 import Form from 'components/Form.component';
 import {minor, content} from 'styles/spacing';
@@ -7,8 +6,9 @@ import colors from 'styles/colors';
 import ScheduleForm from 'availability/ScheduleForm.component';
 import Editable from 'components/Editable.component';
 
+@translate()
 @Radium
-class AvailabilityForm extends Component {
+export default class AvailabilityForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func
@@ -34,7 +34,7 @@ class AvailabilityForm extends Component {
   });
   handleSubmit = () => {};
   render() {
-    const {t, ...props} = this.props;
+    const {t, props} = this.props;
     const {schedules} = this.state;
     return (
       <Form
@@ -77,7 +77,3 @@ const styles = {
     padding: minor
   }
 };
-
-export default connect(
-  state => ({t: state.util.translation.t})
-)(AvailabilityForm);

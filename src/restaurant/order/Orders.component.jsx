@@ -1,5 +1,4 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import {uniqBy, get, set} from 'lodash/fp';
 import {order} from 'walless-graphql';
 
@@ -11,13 +10,8 @@ import WithActions from 'components/WithActions.component';
 import {normal} from 'styles/spacing';
 import colors from 'styles/colors';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  timeFormat: state.util.translation.timeFormat,
-  language: state.util.translation.language
-});
-
 @loadable()
+@translate()
 @Radium
 class Orders extends Component {
   static propTypes = {
@@ -37,7 +31,7 @@ class Orders extends Component {
       }
     ));
   handleRenderMenuItems = ({original}) => {
-    const {t, language} = this.props;
+    const {t, i18n: {languages: [language]}} = this.props;
     const items = original.items.map(item => item.menuItem);
     return items.length ? (
       <Table
@@ -175,7 +169,6 @@ class Orders extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   order.getOrdersByRestaurant,
   order.updateOrder
 )(Orders);

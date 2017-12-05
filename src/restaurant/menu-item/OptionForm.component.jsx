@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {get, find, set, differenceWith} from 'lodash/fp';
 import {option} from 'walless-graphql';
@@ -9,11 +8,7 @@ import Button from 'components/Button.component';
 import Form from 'components/Form.component';
 import Select from 'components/Select.component';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  language: state.util.translation.language
-});
-
+@translate()
 class OptionForm extends Component {
   static propTypes = {
     disabledOptions: PropTypes.arrayOf(PropTypes.object),
@@ -61,7 +56,7 @@ class OptionForm extends Component {
     const {
       t,
       options,
-      language,
+      i18n: {languages: [language]},
       forceOpen,
       submitText = t('add'),
       disabledOptions
@@ -110,6 +105,5 @@ class OptionForm extends Component {
 };
 
 export default compose(
-  connect(mapStateToProps),
   option.getOptions
 )(OptionForm);

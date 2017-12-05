@@ -1,26 +1,7 @@
-import i18next from 'i18next';
-import i18nextXHRBackend from 'i18next-xhr-backend';
-import i18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
+import {t} from 'i18next';
 
+import i18n from 'util/i18n';
 import props, {addError} from 'authentication/props';
-import config from 'config';
-
-i18next
-  .use(i18nextXHRBackend)
-  .use(i18nextBrowserLanguageDetector)
-  .init(
-    {
-      keySeparator: false,
-      fallbackLng: 'en',
-      debug: process.env.NODE_ENV === 'development',
-      backend: {
-        loadPath: `${config.api.protocol}://${config.api.url}${
-          config.api.port === 80 ? '' : `:${config.api.port}`
-        }/${config.api.translation.endpoint}/{{lng}}`
-      }
-    },
-    (err, t) => updateTranslations('init')
-  );
 
 let loaded = false;
 let initialized = false;
@@ -59,5 +40,7 @@ export const updateTranslations = caller => {
 
 const translateElement = (id, key, data, attribute = 'innerHTML') => {
   const element = document.getElementById(id);
-  if (element) element[attribute] = i18next.t(key, data);
+  if (element) element[attribute] = t(key, data);
 };
+
+i18n({}, () => updateTranslations('init'));

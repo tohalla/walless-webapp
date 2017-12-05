@@ -1,7 +1,6 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import {reduce, set, get, equals} from 'lodash/fp';
-import {account, menu} from 'walless-graphql';
+import {account, menu, misc} from 'walless-graphql';
 import Input from 'components/Input.component';
 
 import Form from 'components/Form.component';
@@ -9,11 +8,7 @@ import Button from 'components/Button.component';
 import MenuItems from 'restaurant/menu-item/MenuItems.component';
 import Tabbed from 'components/Tabbed.component';
 
-const mapStateToProps = state => ({
-  languages: state.util.translation.languages,
-  t: state.util.translation.t
-});
-
+@translate()
 @Radium
 class MenuForm extends Component {
   static propTypes = {
@@ -45,10 +40,11 @@ class MenuForm extends Component {
       menu: {
         i18n,
         menuItems
-      } = typeof props.menu === 'object' && props.menu ? props.menu : {}
+      } = typeof props.menu === 'object' && props.menu ? props.menu : {},
+      i18n: {languages: [language]}
     } = props;
     updateState({
-      activeLanguage: 'en',
+      activeLanguage: language,
       manageMenuItems: false,
       loading: false,
       i18n,
@@ -181,12 +177,12 @@ class MenuForm extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   menu.createMenu,
   menu.updateMenu,
   menu.updateMenuItems,
   account.getActiveAccount,
   menu.getMenu,
   menu.createMenuI18n,
-  menu.updateMenuI18n
+  menu.updateMenuI18n,
+  misc.getLanguages
 )(MenuForm);

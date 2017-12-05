@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
 import {account} from 'walless-graphql';
@@ -9,8 +8,7 @@ import loadable from 'decorators/loadable';
 import ItemsWithLabels from 'components/ItemsWithLabels.component';
 import Select from 'components/Select.component';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
+@translate()
 @loadable()
 class UsersFilter extends Component {
   static propTypes = {
@@ -81,6 +79,5 @@ class UsersFilter extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps, {}),
   account.getAccountRolesForRestaurant
 )(UsersFilter);

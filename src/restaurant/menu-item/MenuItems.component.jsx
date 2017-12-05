@@ -1,5 +1,4 @@
 import {compose} from 'react-apollo';
-import {connect} from 'react-redux';
 import {get} from 'lodash/fp';
 import {menuItem} from 'walless-graphql';
 
@@ -10,12 +9,8 @@ import Button from 'components/Button.component';
 import WithActions from 'components/WithActions.component';
 import loadable from 'decorators/loadable';
 
-const mapStateToProps = state => ({
-  t: state.util.translation.t,
-  language: state.util.translation.language
-});
-
 @loadable()
+@translate()
 @Radium
 class MenuItems extends Component {
   static propTypes = {
@@ -65,7 +60,7 @@ class MenuItems extends Component {
     const {
       menuItems,
       restaurant,
-      language,
+      i18n: {languages: [language]},
       t,
       actions,
       select,
@@ -179,7 +174,6 @@ class MenuItems extends Component {
 }
 
 export default compose(
-  connect(mapStateToProps),
   menuItem.getMenuItemsByRestaurant,
   menuItem.deleteMenuItem
 )(MenuItems);

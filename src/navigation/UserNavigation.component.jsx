@@ -1,4 +1,3 @@
-import {connect} from 'react-redux';
 import {compose, withApollo} from 'react-apollo';
 import {account} from 'walless-graphql';
 
@@ -6,8 +5,7 @@ import {minimal} from 'styles/spacing';
 import Button from 'components/Button.component';
 import authenticationHandler from 'util/auth';
 
-const mapStateToProps = state => ({t: state.util.translation.t});
-
+@translate()
 @Radium
 class UserNavigation extends Component {
   handleLogout = async event => {
@@ -31,9 +29,4 @@ class UserNavigation extends Component {
   }
 }
 
-export default withApollo(
-  compose(
-    connect(mapStateToProps, {}),
-    account.getActiveAccount
-  )(UserNavigation)
-);
+export default withApollo(compose(account.getActiveAccount)(UserNavigation));

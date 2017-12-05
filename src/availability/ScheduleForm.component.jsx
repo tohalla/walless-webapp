@@ -1,5 +1,4 @@
 import {pullAt, findIndex, get, set} from 'lodash/fp';
-import {connect} from 'react-redux';
 
 import colors from 'styles/colors';
 import Editable from 'components/Editable.component';
@@ -7,6 +6,7 @@ import Form from 'components/Form.component';
 import ShiftForm from 'availability/ShiftForm.component';
 import DaySelect from 'availability/DaySelect.component';
 
+@translate()
 @Radium
 class ScheduleForm extends Component {
   static propTypes = {
@@ -92,5 +92,3 @@ class ScheduleForm extends Component {
     );
   }
 };
-
-export default connect(state => ({t: state.util.translation.t}))(ScheduleForm);

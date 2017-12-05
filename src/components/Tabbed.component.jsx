@@ -55,13 +55,16 @@ const styles = {
   tab: {
     fontSize: '0.9rem',
     margin: '0 1px',
+    userSelect: 'none',
+    cursor: 'pointer',
     padding: `${minimal} ${minor}`,
     color: colors.foregroundDark,
     background: colors.backgroundDarken
   },
   tabActive: {
     background: colors.background,
-    textDecoration: 'underline'
+    textDecoration: 'underline',
+    cursor: 'default'
   },
   content: {
     padding: normal,
