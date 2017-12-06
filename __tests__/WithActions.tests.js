@@ -1,7 +1,7 @@
 import React from 'react';
 
-import WithActions from 'components/WithActions.component';
-import Button from 'components/Button.component';
+import WithActions from 'components/WithActions';
+import Button from 'components/Button';
 
 const props = {
   actions: {

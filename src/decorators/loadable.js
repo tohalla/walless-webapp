@@ -1,7 +1,7 @@
 import React from 'react';
 import {find} from 'lodash/fp';
 
-import Loading from 'components/Loading.component';
+import Loading from 'components/Loading';
 
 const isLoading = props => {
   return props && typeof props === 'object' ?

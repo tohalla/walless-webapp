@@ -4,7 +4,7 @@ import {
   BrowserRouter
 } from 'react-router-dom';
 
-import Root from 'containers/Root.component';
+import Root from 'containers/Root';
 
 export default class extends React.Component {
   shouldComponentUpdate = () => false;
