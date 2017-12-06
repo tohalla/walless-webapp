@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {get} from 'lodash/fp';
 
 import Loading from 'components/Loading.component';
@@ -27,7 +31,7 @@ const findInvalidInputs = components => components ?
 
 @translate()
 @Radium
-export default class Form extends PureComponent {
+export default class Form extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onSubmit: PropTypes.func.isRequired,

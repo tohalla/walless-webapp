@@ -4,16 +4,7 @@
     "import/resolver": { "node": { "extensions": [".js", ".jsx"] } }
   },
   "extends": ["google", "standard-react", "plugin:flowtype/recommended"],
-  "globals": {
-    "google": true,
-    "React": true,
-    "Component": true,
-    "PureComponent": true,
-    "Fragment": true,
-    "PropTypes": true,
-    "Radium": true,
-    "translate": true
-  },
+  "globals": {"google": true},
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
@@ -30,7 +21,7 @@
   "parser": "babel-eslint",
   "rules": {
     "require-jsdoc": 0,
-    "space-before-function-paren": 0,
+    "space-before-function-paren": [2, "never"],
     "arrow-parens": 0,
     "no-invalid-this": 0,
     "semi": 0,

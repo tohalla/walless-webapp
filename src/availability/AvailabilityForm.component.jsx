@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {merge, set, omit, isEmpty} from 'lodash/fp';
 
 import Form from 'components/Form.component';
@@ -8,7 +12,7 @@ import Editable from 'components/Editable.component';
 
 @translate()
 @Radium
-export default class AvailabilityForm extends Component {
+export default class AvailabilityForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
     onCancel: PropTypes.func,

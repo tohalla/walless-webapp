@@ -1,10 +1,13 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import PopOver from 'containers/PopOver.component';
 import Button from 'components/Button.component';
 import {minor} from 'styles/spacing';
 import colors from 'styles/colors';
 
 @Radium
-export default class PopOverMenu extends Component {
+export default class PopOverMenu extends React.Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired

@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import {pickBy, debounce} from 'lodash/fp';
 import {camelizeKeys} from 'humps';
 import {connect} from 'react-redux';
@@ -6,7 +8,7 @@ import containers from 'styles/containers';
 import Select from 'components/Select.component';
 
 @connect(state => ({location: state.util.location}))
-export default class LocationInput extends Component {
+export default class LocationInput extends React.Component {
   static propTypes = {
     radius: PropTypes.oneOfType([
       PropTypes.string,

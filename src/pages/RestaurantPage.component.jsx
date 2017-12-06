@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {find, get, equals} from 'lodash/fp';
 import color from 'color';
@@ -30,7 +34,7 @@ import Restaurant from 'restaurant/Restaurant.component';
 @loadable()
 @translate()
 @Radium
-class RestaurantPage extends Component {
+class RestaurantPage extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),

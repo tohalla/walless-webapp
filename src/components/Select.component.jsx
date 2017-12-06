@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import ReactSelect from 'react-select';
 import color from 'color';
 
@@ -6,7 +9,7 @@ import colors from 'styles/colors';
 import shadow from 'styles/shadow';
 
 @Radium
-export default class Select extends Component {
+export default class Select extends React.Component {
   static propTypes = {
     clearable: PropTypes.bool,
     style: PropTypes.oneOfType([
@@ -47,7 +50,7 @@ export default class Select extends Component {
 }
 
 @Radium
-class Option extends Component {
+class Option extends React.Component {
   static propTypes = {
     onSelect: PropTypes.func.isRequired,
     onFocus: PropTypes.func,

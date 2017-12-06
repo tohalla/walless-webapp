@@ -1,5 +1,9 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+
 @Radium
-export default class Navigation extends Component {
+export default class Navigation extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     style: PropTypes.oneOfType([

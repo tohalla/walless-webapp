@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {get} from 'lodash/fp';
 import {account} from 'walless-graphql';
@@ -9,7 +12,7 @@ import loadable from 'decorators/loadable';
 
 @translate()
 @loadable()
-class AccountManagement extends Component {
+class AccountManagement extends React.Component {
   static propTypes = {
     accounts: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number,

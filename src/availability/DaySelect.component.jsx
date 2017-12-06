@@ -1,4 +1,8 @@
-import {pullAt, findIndex, isEqual} from 'lodash/fp';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
+import {pullAt, findIndex, equals} from 'lodash/fp';
 import DayPicker from 'react-day-picker';
 
 import Checkbox from 'components/Checkbox.component';
@@ -6,7 +10,7 @@ import Button from 'components/Button.component';
 
 @translate()
 @Radium
-export default class DaySelect extends PureComponent {
+export default class DaySelect extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func.isRequired,
@@ -28,7 +32,7 @@ export default class DaySelect extends PureComponent {
   };
   handleWeekDayClick = day => () => this.toggleDay(day);
   toggleDay = day => {
-    const i = findIndex(d => isEqual(d)(day))(this.props.days);
+    const i = findIndex(d => equals(d)(day))(this.props.days);
     return this.props.onSelect(
       i === -1 ? this.props.days.concat(day) : pullAt(i)(this.props.days)
     );

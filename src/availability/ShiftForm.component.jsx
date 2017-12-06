@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {get} from 'lodash/fp';
 
 import {minor} from 'styles/spacing';
@@ -6,7 +10,7 @@ import Form from 'components/Form.component';
 
 @translate()
 @Radium
-export default class ShiftForm extends PureComponent {
+export default class ShiftForm extends React.PureComponent {
   static propTypes = {
     value: PropTypes.shape(({
       startTime: PropTypes.string,

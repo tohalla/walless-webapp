@@ -1,8 +1,11 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class Input extends PureComponent {
+export default class Input extends React.PureComponent {
   static propTypes = {
     afterInput: PropTypes.node,
     value: PropTypes.oneOfType([
@@ -47,8 +50,8 @@ export default class Input extends PureComponent {
     currentValue: this.props.value,
     isFocused: false
   };
-  componentWillReceiveProps(nextProps) {
-    if (!this.state.isFocused) this.setState({currentValue: nextProps.value});
+  componentWillReceiveProps(newProps) {
+    if (!this.state.isFocused) this.setState({currentValue: newProps.value});
   }
   handleChange = event => {
     const {pattern} = this.props;

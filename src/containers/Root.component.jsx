@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import {StyleRoot} from 'radium';
 import {
   Route,
@@ -5,13 +7,13 @@ import {
   Redirect
 } from 'react-router-dom';
 
-import Restaurant from 'pages/RestaurantPage.component';
-import Profile from 'pages/ProfilePage.component';
+import RestaurantPage from 'pages/RestaurantPage.component';
+import ProfilePage from 'pages/ProfilePage.component';
 import MainNavigation from 'navigation/MainNavigation.component';
 import Notifications from 'notifications/Notifications.component';
 import colors from 'styles/colors';
 
-export default class Root extends Component {
+export default class Root extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -27,8 +29,8 @@ export default class Root extends Component {
           <Switch>
             <Route path='/documentation' />
             <Route path='/contact' />
-            <Route component={Profile} path='/profile' />
-            <Route component={Restaurant} path='/:restaurant?' />
+            <Route component={ProfilePage} path='/profile' />
+            <Route component={RestaurantPage} path='/:restaurant?' />
             <Redirect path='*' to='/' />
           </Switch>
         </div>

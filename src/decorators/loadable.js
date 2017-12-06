@@ -1,3 +1,4 @@
+import React from 'react';
 import {find} from 'lodash/fp';
 
 import Loading from 'components/Loading.component';
@@ -10,7 +11,7 @@ const isLoading = props => {
     : false;
 };
 
-export default ({hideIndicator} = {}) => Component => class Loadable extends Component {
+export default ({hideIndicator} = {}) => Component => class Loadable extends React.Component {
   render() {
     return isLoading(this.props) ?
       hideIndicator ?

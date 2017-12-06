@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {equals, omit} from 'lodash/fp';
 
@@ -6,7 +9,7 @@ import Form from 'components/Form.component';
 import {servingLocation} from 'walless-graphql';
 
 @translate()
-class ServingLocationForm extends Component {
+class ServingLocationForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,

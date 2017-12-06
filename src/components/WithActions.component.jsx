@@ -1,4 +1,8 @@
-import {get} from 'lodash/fp';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
+import {get, isEmpty} from 'lodash/fp';
 
 import {major} from 'styles/spacing';
 import containers from 'styles/containers';
@@ -6,13 +10,12 @@ import Button from 'components/Button.component';
 
 @translate()
 @Radium
-export default class WithActions extends Component {
+export default class WithActions extends React.Component {
   static propTypes = {
     action: PropTypes.string,
     actions: PropTypes.shape({action: PropTypes.shape({
       label: PropTypes.string,
-      hide: PropTypes.bool,
-      hideItems: PropTypes.bool,
+      hideContent: PropTypes.bool,
       hideReturn: PropTypes.bool,
       item: PropTypes.node,
       onClick: PropTypes.func
@@ -43,14 +46,31 @@ export default class WithActions extends Component {
     return typeof get(['action', 'onClick'])(action) === 'function' ?
       action.action.onClick() : this.props.onActionChange(action);
   };
+  renderActions = ({action, actions, hideActions}, style) =>
+    !(hideActions || isEmpty(actions)) &&
+    <div style={style} data-test-id={'actions-container'}>
+      {Object.keys(actions)
+        .filter(key => !actions[key].hide)
+        .map(key => (
+          <Button
+            disabled={actions[key].disabled}
+            key={key}
+            loading={actions[key].loading}
+            onClick={this.handleActionChange({key, action: actions[key]})}
+          >
+            {actions[key].label}
+          </Button>
+        ))
+      }
+    </div>;
   render() {
     const {
       actions,
       forceDefaultAction,
       action,
       plain,
-      hideActions,
       hideContent,
+      hideActions,
       style,
       t,
       children
@@ -60,51 +80,37 @@ export default class WithActions extends Component {
         {
           action ? (
             <div
+              data-test-id={'action-container'}
               style={[
                 containers.contentContainer,
                 styles.actionContainer,
                 plain ? styles.plain : {}
               ]}
             >
-              {forceDefaultAction || actions[action].hideReturn ? null : (
-                <Button onClick={this.handleActionChange()}>
+              {!(forceDefaultAction || actions[action].hideReturn) && (
+                <Button
+                  data-test-id={'action-return'}
+                  onClick={this.handleActionChange()}
+                >
                   {t('return')}
                 </Button>
               )}
               {actions[action].item}
             </div>
+          ) : this.renderActions(
+            {actions, hideActions},
+            [containers.contentContainer, styles.actionContainer, plain ? styles.plain : {}]
           )
-            : !hideActions && actions && Object.keys(actions).length && !action ?
-              <div
-                style={[
-                  containers.contentContainer,
-                  styles.actionContainer,
-                  plain ? styles.plain : {}
-                ]}
-              >
-                {Object.keys(actions)
-                  .filter(key => !actions[key].hide)
-                  .map(key => (
-                    <Button
-                      disabled={actions[key].disabled}
-                      key={key}
-                      loading={actions[key].loading}
-                      onClick={this.handleActionChange({key, action: actions[key]})}
-                    >
-                      {actions[key].label}
-                    </Button>
-                  ))
-                }
-              </div>
-              : null
         }
         {
-          get([action, 'hideItems'])(actions)
-          || !children
-          || hideContent
-          || (Array.isArray(children) && !children.length)
-          || (
+          !(
+            get([action, 'hideContent'])(actions)
+            || !children
+            || hideContent
+            || (Array.isArray(children) && !children.length)
+          ) &&
             <div
+              data-test-id={'content-container'}
               style={[
                 containers.contentContainer,
                 plain ? styles.plain : {}
@@ -112,7 +118,6 @@ export default class WithActions extends Component {
             >
               {children}
             </div>
-          )
         }
       </div>
     );
@@ -126,6 +131,7 @@ const styles = {
     flexWrap: 'wrap'
   },
   container: {
+    flex: 1,
     display: 'flex',
     alignSelf: 'stretch',
     flexDirection: 'column',

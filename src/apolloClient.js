@@ -30,5 +30,7 @@ export default new ApolloClient({
   dataIdFromObject: util.dataIdFromObject,
   queryDeduplication: true,
   link,
-  cache: new InMemoryCache().restore(window.__APOLLO_STATE__)
+  cache: new InMemoryCache({
+    dataIdFromObject: util.dataIdFromObject
+  }).restore(window.__APOLLO_STATE__)
 });

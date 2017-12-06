@@ -1,7 +1,17 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {content, normal} from 'styles/spacing';
+import {equals} from 'lodash/fp';
+
+const getLabelsWidth = items => 0.6 * items.reduce((length, item) =>
+  item && item.label && item.label.length > length ?
+    item.label.length : length,
+  0
+  ) + 'rem';
 
 @Radium
-export default class ItemsWithLabels extends Component {
+export default class ItemsWithLabels extends React.Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([
       PropTypes.shape({
@@ -17,14 +27,10 @@ export default class ItemsWithLabels extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = {
-      headerWidth: 0.6 * props.items.reduce((length, item) =>
-        item && item.label && item.label.length > length ?
-          item.label.length : length,
-      0
-      ) + 'rem'
-    };
-  }
+    this.state = {labelWidth: getLabelsWidth(props.items)};
+  };
+  componentWillReceiveProps = ({items}) => equals(items === this.props.items) &&
+    this.setState({labelWidth: getLabelsWidth(items)});
   render() {
     const {items, hideEmpty} = this.props;
     return (
@@ -39,7 +45,7 @@ export default class ItemsWithLabels extends Component {
                   style={[].concat(styles.row, prev.length ? {paddingTop: content} : [])}
                 >
                   {curr.label &&
-                  <div style={[].concat(styles.header, {flexBasis: this.state.headerWidth})}>
+                  <div style={[styles.header, {flexBasis: this.state.labelWidth}]}>
                     {curr.label}
                   </div>
                   }

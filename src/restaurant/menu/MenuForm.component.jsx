@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {reduce, set, get, equals} from 'lodash/fp';
 import {account, menu, misc} from 'walless-graphql';
@@ -10,7 +14,7 @@ import Tabbed from 'components/Tabbed.component';
 
 @translate()
 @Radium
-class MenuForm extends Component {
+class MenuForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onError: PropTypes.func,

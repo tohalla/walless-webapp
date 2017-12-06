@@ -1,5 +1,9 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
+
 @translate()
-export default class ManageOpeningHours extends Component {
+export default class ManageOpeningHours extends React.Component {
   static propTypes = {
     restaurant: PropTypes.oneOfType([
       PropTypes.number,

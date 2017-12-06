@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {account} from 'walless-graphql';
 
@@ -30,7 +34,7 @@ const menuItems = [
 
 @translate()
 @Radium
-class MainNavigation extends Component {
+class MainNavigation extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     location: PropTypes.shape({pathname: PropTypes.string})

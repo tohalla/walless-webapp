@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {connect} from 'react-redux';
 
 import Button from 'components/Button.component';
@@ -6,7 +9,7 @@ import colors from 'styles/colors';
 import {normal} from 'styles/spacing';
 
 @Radium
-class Notification extends Component {
+class Notification extends React.Component {
   static propTypes = {
     notification: PropTypes.shape({
       content: PropTypes.string

@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
 import {servingLocation} from 'walless-graphql';
@@ -9,7 +12,7 @@ import Select from 'components/Select.component';
 
 @loadable()
 @translate()
-class OrdersFilter extends Component {
+class OrdersFilter extends React.Component {
   static propTypes = {
     filters: PropTypes.shape({
       servingLocations: PropTypes.array

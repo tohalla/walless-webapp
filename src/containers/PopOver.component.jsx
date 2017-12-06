@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import ReactClickOutside from 'react-click-outside';
 
 const ClickOutside = new Radium(ReactClickOutside);
@@ -16,7 +19,7 @@ const toPx = value => !value ? 0
       : value;
 
 @Radium
-export default class PopOver extends Component {
+export default class PopOver extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onClickOutside: PropTypes.func.isRequired,

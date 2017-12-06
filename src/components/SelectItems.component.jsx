@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import ReactDropzone from 'react-dropzone';
 import {get} from 'lodash/fp';
 
@@ -10,7 +14,7 @@ import Deletable from 'components/Deletable.component';
 
 @translate()
 @Radium
-export default class SelectImages extends Component {
+export default class SelectImages extends React.Component {
   static propTypes = {
     select: PropTypes.shape({
       items: PropTypes.arrayOf(PropTypes.object),

@@ -1,9 +1,13 @@
+import React, {Fragment} from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+
 import {normal, minor, minimal} from 'styles/spacing';
 import colors from 'styles/colors';
 import Loading from 'components/Loading.component';
 
 @Radium
-export default class Button extends PureComponent {
+export default class Button extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node,
     onClick: PropTypes.func,

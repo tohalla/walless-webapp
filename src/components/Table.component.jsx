@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import ReactTable from 'react-table';
 
 import Checkbox from 'components/Checkbox.component';
@@ -6,7 +9,7 @@ import colors from 'styles/colors';
 import {minimal, minor} from 'styles/spacing';
 
 @Radium
-export default class Table extends Component {
+export default class Table extends React.Component {
   static propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape({
       Header: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),

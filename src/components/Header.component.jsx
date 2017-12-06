@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {minor, minimal} from 'styles/spacing';
 import shadow from 'styles/shadow';
 import Button from 'components/Button.component';

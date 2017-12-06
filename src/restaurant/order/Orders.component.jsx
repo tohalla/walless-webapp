@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {uniqBy, get, set} from 'lodash/fp';
 import {order} from 'walless-graphql';
@@ -13,7 +17,7 @@ import colors from 'styles/colors';
 @loadable()
 @translate()
 @Radium
-class Orders extends Component {
+class Orders extends React.Component {
   static propTypes = {
     restaurant: PropTypes.object.isRequired,
     i18n: PropTypes.shape({languages: PropTypes.arrayOf(PropTypes.string)}),

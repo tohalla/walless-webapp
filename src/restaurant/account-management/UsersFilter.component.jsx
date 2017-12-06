@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {set, equals, get} from 'lodash/fp';
 import {account} from 'walless-graphql';
@@ -10,7 +13,7 @@ import Select from 'components/Select.component';
 
 @translate()
 @loadable()
-class UsersFilter extends Component {
+class UsersFilter extends React.Component {
   static propTypes = {
     filters: PropTypes.shape({
       roles: PropTypes.array

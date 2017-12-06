@@ -1,9 +1,12 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import {connect} from 'react-redux';
 import {notificationsZIndex} from 'styles/zIndex';
 import Notification from 'notifications/Notification.component';
 
 @Radium
-class Notifications extends Component {
+class Notifications extends React.Component {
   static propTypes = {
     notifications: PropTypes.arrayOf(PropTypes.shape({
       content: PropTypes.string

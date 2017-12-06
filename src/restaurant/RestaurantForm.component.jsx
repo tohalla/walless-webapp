@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import Cookie from 'js-cookie';
 import {set, get, equals, pick} from 'lodash/fp';
@@ -16,14 +20,14 @@ import loadable from 'decorators/loadable';
 @loadable()
 @translate()
 @Radium
-class RestaurantForm extends Component {
+class RestaurantForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
     onError: PropTypes.func,
     onCancel: PropTypes.func,
     createRestaurant: PropTypes.func.isRequired,
     updateRestaurant: PropTypes.func.isRequired,
-    getRestaurant: PropTypes.func.isRequired,
+    getRestaurant: PropTypes.object,
     languages: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string,
       locale: PropTypes.string

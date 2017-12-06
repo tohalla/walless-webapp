@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {pullAt, findIndex, get, set} from 'lodash/fp';
 
 import colors from 'styles/colors';
@@ -8,7 +12,7 @@ import DaySelect from 'availability/DaySelect.component';
 
 @translate()
 @Radium
-export default class ScheduleForm extends Component {
+export default class ScheduleForm extends React.Component {
   static propTypes = {
     schedules: PropTypes.object,
     value: PropTypes.shape(({

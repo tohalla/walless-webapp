@@ -1,7 +1,11 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+
 import Button from 'components/Button.component';
 
 @Radium
-export default class Deletable extends PureComponent {
+export default class Deletable extends React.PureComponent {
   static propTypes = {
     deleteText: PropTypes.node,
     children: PropTypes.node,

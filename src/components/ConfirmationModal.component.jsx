@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import ReactClickOutside from 'react-click-outside';
 
 import {modalZIndex} from 'styles/zIndex';
@@ -10,7 +14,7 @@ const ClickOutside = new Radium(ReactClickOutside);
 
 @translate()
 @Radium
-export default class ConfirmationModal extends Component {
+export default class ConfirmationModal extends React.Component {
   static propTypes = {
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,

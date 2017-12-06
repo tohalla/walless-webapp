@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose, withApollo} from 'react-apollo';
 import {account} from 'walless-graphql';
 
@@ -7,7 +11,7 @@ import authenticationHandler from 'util/auth';
 
 @translate()
 @Radium
-class UserNavigation extends Component {
+class UserNavigation extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     account: PropTypes.shape({

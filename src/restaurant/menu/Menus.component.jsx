@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {get} from 'lodash/fp';
 import {menu} from 'walless-graphql';
@@ -11,7 +14,7 @@ import loadable from 'decorators/loadable';
 
 @loadable()
 @translate()
-class Menus extends Component {
+class Menus extends React.Component {
   static propTypes = {
     restaurant: PropTypes.object.isRequired,
     action: PropTypes.shape({
@@ -59,7 +62,7 @@ class Menus extends Component {
       new: {
         label: t('restaurant.menu.action.create'),
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <MenuForm
             onCancel={this.handleActionChange}
@@ -71,7 +74,7 @@ class Menus extends Component {
       edit: {
         hide: true,
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <MenuForm
             menu={action ? action.menu : undefined}

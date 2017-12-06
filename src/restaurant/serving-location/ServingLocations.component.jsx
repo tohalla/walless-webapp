@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {connect} from 'react-redux';
 import {compose} from 'react-apollo';
 import Cookie from 'js-cookie';
@@ -16,7 +19,7 @@ import loadable from 'decorators/loadable';
 
 @loadable()
 @translate()
-class ServingLocations extends Component {
+class ServingLocations extends React.Component {
   static propTypes = {
     action: PropTypes.shape({
       name: PropTypes.string.isRequired,
@@ -101,7 +104,7 @@ class ServingLocations extends Component {
       edit: {
         hide: true,
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <ServingLocationForm
             onCancel={this.handleActionChange}
@@ -114,7 +117,7 @@ class ServingLocations extends Component {
       new: {
         label: t('restaurant.servingLocation.action.create'),
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <ServingLocationForm
             onCancel={this.handleActionChange}

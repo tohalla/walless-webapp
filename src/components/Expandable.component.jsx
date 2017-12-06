@@ -1,3 +1,8 @@
+import React, {Fragment} from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
+
 import Button from 'components/Button.component';
 import Header from 'components/Header.component';
 import colors from 'styles/colors';
@@ -5,7 +10,7 @@ import {normal} from 'styles/spacing';
 
 @translate()
 @Radium
-export default class Expandable extends PureComponent {
+export default class Expandable extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onExpand: PropTypes.func,

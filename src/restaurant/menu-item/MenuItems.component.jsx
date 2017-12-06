@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {get} from 'lodash/fp';
 import {menuItem} from 'walless-graphql';
@@ -12,7 +16,7 @@ import loadable from 'decorators/loadable';
 @loadable()
 @translate()
 @Radium
-class MenuItems extends Component {
+class MenuItems extends React.Component {
   static propTypes = {
     restaurant: PropTypes.object.isRequired,
     deleteMenuItem: PropTypes.func.isRequired,
@@ -81,7 +85,7 @@ class MenuItems extends Component {
       edit: {
         hide: true,
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <MenuItemForm
             menuItem={action ? action.menuItem : undefined}
@@ -94,7 +98,7 @@ class MenuItems extends Component {
       new: {
         label: t('restaurant.item.action.create'),
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <MenuItemForm
             onCancel={this.handleActionChange}

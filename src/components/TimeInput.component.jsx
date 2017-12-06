@@ -1,9 +1,12 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import Input from 'components/Input.component';
 import colors from 'styles/colors';
 import {minor} from 'styles/spacing';
 
 @Radium
-export default class TimeInput extends PureComponent {
+export default class TimeInput extends React.PureComponent {
   static propTypes = {
     afterInput: PropTypes.node,
     value: PropTypes.string,

@@ -1,8 +1,11 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
 import Footer from 'containers/Footer.component';
 import {major} from 'styles/spacing';
 
 @Radium
-export default class PageContent extends Component {
+export default class PageContent extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node,
     style: PropTypes.oneOfType([

@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {get, find, set, differenceWith} from 'lodash/fp';
 import {option} from 'walless-graphql';
@@ -9,7 +12,7 @@ import Form from 'components/Form.component';
 import Select from 'components/Select.component';
 
 @translate()
-class OptionForm extends Component {
+class OptionForm extends React.Component {
   static propTypes = {
     disabledOptions: PropTypes.arrayOf(PropTypes.object),
     value: PropTypes.object,

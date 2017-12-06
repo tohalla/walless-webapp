@@ -1,3 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Radium from 'radium';
+import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {pick, get} from 'lodash/fp';
 import {restaurant, account} from 'walless-graphql';
@@ -12,7 +16,7 @@ import loadable from 'decorators/loadable';
 @loadable()
 @translate()
 @Radium
-class Restaurant extends Component {
+class Restaurant extends React.Component {
   static propTypes = {
     restaurant: PropTypes.oneOfType([
       PropTypes.number,
@@ -49,7 +53,7 @@ class Restaurant extends Component {
       edit: {
         hide: true,
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <RestaurantForm
             onCancel={this.handleActionChange}
@@ -61,7 +65,7 @@ class Restaurant extends Component {
       manageOpeningHours: {
         hide: true,
         hideReturn: true,
-        hideItems: true,
+        hideContent: true,
         item: (
           <ManageOpeningHours
             onCancel={this.handleActionChange}
