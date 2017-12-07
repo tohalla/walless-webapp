@@ -7,7 +7,7 @@ import config from 'config';
 
 
 export default (
-  {modules = [], options}: { modules: Array<any>, options: {} },
+  {modules = [], options}: {modules: Array<any>, options: {}},
   cb: (error: any, t: () => string) => any
 ) =>
   [i18nextXHRBackend, i18nextBrowserLanguageDetector, ...modules]

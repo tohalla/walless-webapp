@@ -13,12 +13,12 @@ const httpLink = createHttpLink({
 });
 
 const link = new ApolloLink((operation, forward) => {
-  if (Cookie.get('Expiration') < Date.now() / 1000) {
+  if (Cookie.get('expiration') < Date.now() / 1000) {
     authenticationHandler.logout();
   } else {
     operation.setContext({
       headers: {
-        authorization: `Bearer ${Cookie.get('Authorization')}`
+        authorization: `Bearer ${Cookie.get('authorization')}`
       }
     });
     return forward(operation);

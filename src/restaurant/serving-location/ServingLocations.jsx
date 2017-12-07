@@ -8,7 +8,7 @@ import {size} from 'lodash/fp';
 import {saveAs} from 'file-saver';
 import {servingLocation} from 'walless-graphql';
 
-import {addNotification} from 'notifications/notification';
+import {addNotification} from 'notifications/notification.reducer';
 import Table from 'components/Table';
 import Button from 'components/Button';
 import config from 'config';
@@ -70,7 +70,7 @@ class ServingLocations extends React.Component {
       `?servingLocations=[${[...this.state.selectedItems].toString()}]`,
       {
         method: 'GET',
-        headers: {authorization: Cookie.get('Authorization')}
+        headers: {authorization: Cookie.get('authorization')}
       }
     );
     if (response.ok) {

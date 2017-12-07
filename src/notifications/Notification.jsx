@@ -4,7 +4,7 @@ import Radium from 'radium';
 import {connect} from 'react-redux';
 
 import Button from 'components/Button';
-import {deleteNotification} from 'notifications/notification';
+import {deleteNotification} from 'notifications/notification.reducer';
 import colors from 'styles/colors';
 import {normal} from 'styles/spacing';
 

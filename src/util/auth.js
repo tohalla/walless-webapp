@@ -28,23 +28,23 @@ export const authenticate = async(payload: Object) => {
 };
 
 const authenticationHandler = {
-  isAuthenticated: Boolean(Cookie.get('Authorization')),
+  isAuthenticated: Boolean(Cookie.get('authorization')),
   renew: (token: string) => authenticate({token}),
   logout: () => {
-    Cookie.remove('Authorization', {path: ''});
+    Cookie.remove('authorization', {path: ''});
     Cookie.remove('ws-token', {path: ''});
-    Cookie.remove('Expiration', {path: ''});
+    Cookie.remove('expiration', {path: ''});
     window.location.replace('/');
   }
 };
 
 setInterval(() => {
-  if (Cookie.get('Expiration') && Cookie.get('Authorization')) {
-    const age = Cookie.get('Expiration') - Date.now() / 1000;
+  if (Cookie.get('expiration') && Cookie.get('authorization')) {
+    const age = Cookie.get('expiration') - Date.now() / 1000;
     if (age < 0) {
       authenticationHandler.logout();
     } else if (age < 600) {
-      authenticationHandler.renew(Cookie.get('Authorization'));
+      authenticationHandler.renew(Cookie.get('authorization'));
     }
   }
 }, 20000); // checks if authorization token should be renewed

@@ -4,7 +4,7 @@
     "import/resolver": { "node": { "extensions": [".js", ".jsx"] } }
   },
   "extends": ["google", "standard-react", "plugin:flowtype/recommended"],
-  "globals": {"google": true},
+  "globals": {"google": true, "mount": true, "shallow": true},
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
@@ -16,6 +16,7 @@
   "env": {
     "browser": true,
     "node": true,
+    "jest": true,
     "es6": true
   },
   "parser": "babel-eslint",
@@ -25,6 +26,7 @@
     "arrow-parens": 0,
     "no-invalid-this": 0,
     "semi": 0,
+    "no-undef": 2,
     "new-cap": 0,
     "object-curly-spacing": 0,
     "babel/new-cap": 1,

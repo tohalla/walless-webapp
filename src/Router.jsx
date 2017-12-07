@@ -6,7 +6,7 @@ import {
 
 import Root from 'containers/Root';
 
-export default class extends React.Component {
+export default class Router extends React.Component {
   shouldComponentUpdate = () => false;
   render() {
     return (

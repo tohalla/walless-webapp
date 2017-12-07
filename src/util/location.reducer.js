@@ -3,12 +3,15 @@ const SET_LOCATION = 'SET_LOCATION';
 
 const initialState = {latitude: null, longitude: null};
 
-export default (state: Object = initialState, action: Object) =>
+export default (
+  state: {latitude: string, longitude: string} = initialState,
+  action: {type: string, payload: {latitude: string, longitude: string}}
+) =>
   action.type === SET_LOCATION ?
     Object.assign({}, state, action.payload)
     : state;
 
-export const updateLocation = async(dispatch: Function) =>
+export const updateLocation = async(dispatch: ({}) => any) =>
   navigator.geolocation ? navigator.geolocation.getCurrentPosition(position =>
     dispatch({
       type: SET_LOCATION,

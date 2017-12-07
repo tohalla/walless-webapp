@@ -136,7 +136,7 @@ class MenuItemForm extends React.Component {
             formData
           ),
           headers: {
-            authorization: Cookie.get('Authorization')
+            authorization: Cookie.get('authorization')
           }
         }
       )).json()) : files;

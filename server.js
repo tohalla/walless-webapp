@@ -22,7 +22,7 @@ const handleRequests = app => {
     .get('/assets/app.js', (req, res, next) => {
       if (prod) {
         req.url = req.url + '.gz';
-        res.set('Content-Encoding', 'gzip');
+        res.set('content-encoding', 'gzip');
       }
       next();
     })
@@ -32,7 +32,7 @@ const handleRequests = app => {
     }))
     .get(/^(.*\.(?!(png|jpg|svg|js|gz|pdf|css|zip|ttf)$))?[^.]*$/, async(req, res, next) => {
       try {
-        const token = req.cookies['Authorization'];
+        const token = req.cookies['authorization'];
         const {role} = token ? await jwt.verify(
           token.replace('Bearer ', ''),
           process.env.JWT_SECRET || 'd'

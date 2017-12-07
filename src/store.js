@@ -1,8 +1,8 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 
-import notifications from 'notifications/notification';
-import location, {updateLocation} from 'util/location';
+import notifications from 'notifications/notification.reducer';
+import location, {updateLocation} from 'util/location.reducer';
 
 const util = combineReducers({
   location
