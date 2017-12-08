@@ -103,6 +103,15 @@ a:hover {
     justify-content: center;
   }
 
+  .actions {
+    align-items: flex-end;
+    flex-direction: column-reverse;
+  }
+
+  .button {
+    margin: .5rem 0;
+  }
+
   .form {
     padding: 1rem;
   }
