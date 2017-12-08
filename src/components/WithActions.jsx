@@ -22,9 +22,8 @@ export default class WithActions extends React.Component {
     })}),
     hideActions: PropTypes.bool,
     forceDefaultAction: PropTypes.bool,
-    onActionChange: PropTypes.func.isRequired,
+    onActionChange: PropTypes.func,
     children: PropTypes.node,
-    plain: PropTypes.bool,
     hideContent: PropTypes.bool,
     t: PropTypes.func.isRequired,
     style: PropTypes.oneOfType([
@@ -34,7 +33,6 @@ export default class WithActions extends React.Component {
   };
   static defaultProps = {
     hideContent: false,
-    plain: false,
     forceDefaultAction: false,
     hideActions: false
   };
@@ -44,7 +42,9 @@ export default class WithActions extends React.Component {
       event.stopPropagation();
     }
     return typeof get(['action', 'onClick'])(action) === 'function' ?
-      action.action.onClick() : this.props.onActionChange(action);
+      action.action.onClick() :
+        typeof this.props.onActionChange === 'function'
+        && this.props.onActionChange(action);
   };
   renderActions = ({action, actions, hideActions}, style) =>
     !(hideActions || isEmpty(actions)) &&
@@ -68,7 +68,6 @@ export default class WithActions extends React.Component {
       actions,
       forceDefaultAction,
       action,
-      plain,
       hideContent,
       hideActions,
       style,
@@ -83,8 +82,7 @@ export default class WithActions extends React.Component {
               data-test-id={'action-container'}
               style={[
                 containers.contentContainer,
-                styles.actionContainer,
-                plain ? styles.plain : {}
+                styles.actionContainer
               ]}
             >
               {!(forceDefaultAction || actions[action].hideReturn) && (
@@ -99,7 +97,7 @@ export default class WithActions extends React.Component {
             </div>
           ) : this.renderActions(
             {actions, hideActions},
-            [containers.contentContainer, styles.actionContainer, plain ? styles.plain : {}]
+            [containers.contentContainer, styles.actionContainer]
           )
         }
         {
@@ -111,10 +109,7 @@ export default class WithActions extends React.Component {
           ) &&
             <div
               data-test-id={'content-container'}
-              style={[
-                containers.contentContainer,
-                plain ? styles.plain : {}
-              ]}
+              style={containers.contentContainer}
             >
               {children}
             </div>
@@ -136,11 +131,5 @@ const styles = {
     alignSelf: 'stretch',
     flexDirection: 'column',
     alignItems: 'stretch'
-  },
-  plain: {
-    backgroundColor: 'transparent',
-    border: 0,
-    boxShadow: 'none',
-    marginBottom: 0
   }
 };

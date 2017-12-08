@@ -6,6 +6,10 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
+import {compose} from 'react-apollo';
+import {account} from 'walless-graphql';
+import {translate} from 'react-i18next';
+import {get} from 'lodash/fp';
 
 import RestaurantPage from 'pages/RestaurantPage';
 import ProfilePage from 'pages/ProfilePage';
@@ -13,12 +17,28 @@ import MainNavigation from 'navigation/MainNavigation';
 import Notifications from 'notifications/Notifications';
 import colors from 'styles/colors';
 
+@translate()
+@compose(account.getActiveAccount)
 export default class Root extends React.Component {
   static propTypes = {
+    i18n: PropTypes.shape({
+      language: PropTypes.string
+    }),
+    account: PropTypes.shape({language: PropTypes.string}),
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
     ])
+  };
+  componentWillReceiveProps({i18n, account}) {
+    const language = get(['language'])(account);
+    if (
+      language &&
+      language !== i18n.language &&
+      language !== get(['account', 'language'])(this.props)
+    ) {
+      i18n.changeLanguage(language);
+    }
   };
   render() {
     return (

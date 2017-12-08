@@ -96,7 +96,7 @@ export const setMessage = message => {
 
 const actions = document.getElementById('actions');
 
-export const addError = (error = t(Cookie.get('Error'))) => {
+export const addError = (error = t(Cookie.get('error'))) => {
   [...document.getElementsByClassName('error')].forEach(element =>
     element.parentNode.removeChild(element)
   );
@@ -111,7 +111,7 @@ export const addError = (error = t(Cookie.get('Error'))) => {
       )
     );
   };
-  Cookie.remove('Error');
+  Cookie.remove('error');
 };
 
 export default Object.assign(
