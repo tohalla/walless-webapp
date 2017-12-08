@@ -64,4 +64,14 @@ describe('<WithActions />', () => {
     actions.find(Button).forEach(button => button.simulate('click'));
     expect(props.onActionChange.mock.calls.length).toBe(Object.keys(props.actions).length);
   });
+
+  it('should not render actions if action selected', () => {
+    const wrapper = shallow(<WithActions {...props} simpleActions />);
+    expect(wrapper
+      .dive()
+      .find('[data-test-id="content-container"]')
+      .find('[data-test-id="actions-container"]')
+      .length
+    ).toBe(1);
+  });
 });

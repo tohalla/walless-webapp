@@ -9,40 +9,30 @@
   outline: none;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0;
+  font-weight: 900;
+}
+
 h1 {
-    display: block;
-    font-size: 2em;
-    margin: 0.67em 0 0.67em 0;
-    font-weight: 900;
+    font-size: 2rem;
 }
 h2 {
-    display: block;
-    font-size: 1.5em;
-    margin: 0.67em 0 0.67em 0;
-    font-weight: 900;
+    font-size: 1.5rem;
 }
 h3 {
-    display: block;
-    font-size: 1.17em;
-    margin: 0.67em 0 0.67em 0;
-    font-weight: 900;
+    font-size: 1.17rem;
 }
 h4 {
-    display: block;
-    margin: 0.67em 0 0.67em 0;
-    font-weight: 900;
+  font-size: .1rem;
 }
 h5 {
-    display: block;
-    font-size: .83em;
-    margin: 0.67em 0 0.67em 0;
-    font-weight: 900;
+    font-size: .83rem;
 }
 h6 {
-    display: block;
-    font-size: .67em;
-    margin: 0.67em 0 0.67em 0;
-    font-weight: 900;
+    font-size: .67rem;
 }
 
 abbr {

@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Radium from 'radium';
 import {translate} from 'react-i18next';
 import {compose} from 'react-apollo';
 import {pick, get} from 'lodash/fp';
 import {restaurant, account} from 'walless-graphql';
 
-import PopOverMenu from 'components/PopOverMenu';
 import RestaurantForm from 'restaurant/RestaurantForm';
 import WithActions from 'components/WithActions';
 import ItemsWithLabels from 'components/ItemsWithLabels';
@@ -15,7 +13,6 @@ import loadable from 'decorators/loadable';
 
 @loadable()
 @translate()
-@Radium
 class Restaurant extends React.Component {
   static propTypes = {
     restaurant: PropTypes.oneOfType([
@@ -51,47 +48,38 @@ class Restaurant extends React.Component {
     ])(get(['i18n', language])(restaurant));
     const actions = {
       edit: {
-        hide: true,
+        label: t('restaurant.action.edit'),
         hideReturn: true,
         hideContent: true,
         item: (
           <RestaurantForm
             onCancel={this.handleActionChange}
             onSubmit={this.handleRestaurantSubmit}
-            restaurant={action ? action.restaurant : restaurant}
+            restaurant={restaurant}
           />
         )
       },
       manageOpeningHours: {
-        hide: true,
+        label: t('restaurant.action.manageOpeningHours'),
         hideReturn: true,
         hideContent: true,
         item: (
           <ManageOpeningHours
             onCancel={this.handleActionChange}
             onSubmit={this.handleRestaurantSubmit}
-            restaurant={action ? action.restaurant : restaurant}
+            restaurant={restaurant}
           />
         )
       }
     };
     return typeof restaurant === 'object' && (
       <WithActions
-        action={action ? action.key : null}
+        action={action ? action.key : undefined}
         actions={actions}
-        hideActions
+        simpleActions
+        title={name}
         onActionChange={this.handleActionChange}
       >
-        <div style={styles.titleContainer}>
-          <h2>{name}</h2>
-          <PopOverMenu
-            items={Object.keys(actions).map(key => ({
-              label: t(`restaurant.action.${key}`),
-              onClick: this.handleActionSelect({key, restaurant})
-            }))}
-            label={<i className='material-icons'>{'more_vert'}</i>}
-          />
-        </div>
         <ItemsWithLabels
           items={[
             {label: t('restaurant.description'), item: description}
@@ -107,11 +95,3 @@ export default compose(
   restaurant.getRestaurant,
   account.getRestaurantsByAccount
 )(Restaurant);
-
-const styles = {
-  titleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  }
-};
