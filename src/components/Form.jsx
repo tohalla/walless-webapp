@@ -41,6 +41,10 @@ export default class Form extends React.PureComponent {
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
     ]),
+    buttonStyle: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
     contentStyle: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.object),
       PropTypes.object
@@ -84,6 +88,7 @@ export default class Form extends React.PureComponent {
       children,
       t,
       onCancel,
+      buttonStyle,
       onClose,
       style,
       submitText,
@@ -108,7 +113,12 @@ export default class Form extends React.PureComponent {
           </div>
           <div style={styles.actions}>
             {typeof onCancel === 'function' ?
-              <Button onClick={this.handleCancel} simple type='reset'>
+              <Button
+                onClick={this.handleCancel}
+                simple
+                style={buttonStyle}
+                type='reset'
+              >
                 {cancelText || t('cancel')}
               </Button>
               : null
@@ -117,12 +127,13 @@ export default class Form extends React.PureComponent {
               disabled={!!invalid.length || !isValid}
               onClick={this.handleSubmit}
               type='submit'
+              style={buttonStyle}
             >
               {submitText || t('submit')}
             </Button>
           </div>
           {typeof onClose === 'function' ?
-            <Button onClick={this.handleClose} plain>
+            <Button onClick={this.handleClose} plain style={buttonStyle}>
               <i className='material-icons'>{'close'}</i>
             </Button>
             : null

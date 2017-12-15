@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {translate} from 'react-i18next';
+
+import AvailabilityForm from 'availability/AvailabilityForm';
 
 @translate()
 export default class ManageOpeningHours extends React.Component {
@@ -19,11 +21,12 @@ export default class ManageOpeningHours extends React.Component {
     const {t, restaurant, openingHours} = this.props;
     return restaurant && (
       Array.isArray(openingHours) && openingHours.length ? (
-        <div />
+        <Fragment />
       ) : (
-        <div>
-          {t('restaurant.openingHours.notSet')}
-        </div>
+        <Fragment>
+          <h2>{t('restaurant.openingHours.setOpeningHours')}</h2>
+          <AvailabilityForm />
+        </Fragment>
       )
     );
   }

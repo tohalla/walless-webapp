@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import {translate} from 'react-i18next';
 import {pullAt, findIndex, get, set} from 'lodash/fp';
 
+import {weekdays} from 'util/time';
 import colors from 'styles/colors';
 import Editable from 'components/Editable';
 import Form from 'components/Form';
@@ -25,6 +26,10 @@ export default class ScheduleForm extends React.Component {
         endTime: PropTypes.string
       })))
     })),
+    style: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object
+    ]),
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
     submitText: PropTypes.string,
@@ -34,15 +39,21 @@ export default class ScheduleForm extends React.Component {
     super(props);
     this.resetState(props, state => this.state = state); // eslint-disable-line
   }
-  resetState = (props, updateState = state => this.setState(state)) =>
+  resetState = (
+    props = this.props,
+    updateState = state => this.setState(state)
+  ) =>
     updateState({
       days: [].concat(get(['value', 'day'])(props) || []),
       shifts: get(['value', 'shifts'])(props) || []
     });
-  handleSubmit = () => this.props.onSubmit(this.state.days.map(day => ({
-    day,
-    shifts: this.state.shifts
-  })));
+  handleSubmit = () => {
+    this.props.onSubmit(this.state.days.map(day => ({
+      day,
+      shifts: this.state.shifts
+    })));
+    this.resetState();
+  };
   handleDaySelect = (days, callback) => this.setState({days}, callback);
   handleAddShift = (shift, callback) =>
     this.setState({shifts: this.state.shifts.concat(shift)}, callback);
@@ -59,7 +70,7 @@ export default class ScheduleForm extends React.Component {
     )(this.state.shifts)
   }, callback);
   render() {
-    const {value, t, ...props} = this.props;
+    const {value, t, style, ...props} = this.props;
     const {shifts, days} = this.state;
     return (
       <Form
@@ -67,13 +78,14 @@ export default class ScheduleForm extends React.Component {
         FormComponent='div'
         isValid={Boolean(shifts.length && days.length)}
         onSubmit={this.handleSubmit}
-        style={{backgroundColor: colors.white}}
+        style={[{backgroundColor: colors.white}, style]}
       >
         {
-          (value && value.day)
-          || <DaySelect days={this.state.days} onSelect={this.handleDaySelect} />
+          value && value.day ?
+            <h4>{isNaN(value.day) ? value.day : weekdays(t)[value.day]}</h4>
+          : <DaySelect days={this.state.days} onSelect={this.handleDaySelect} />
         }
-        <div>
+        <Fragment>
           {shifts.map((shift) => (
             <Editable
               Form={ShiftForm}
@@ -92,7 +104,7 @@ export default class ScheduleForm extends React.Component {
             shifts={shifts}
             submitText={t('availability.addShift')}
           />
-        </div>
+        </Fragment>
       </Form>
     );
   }

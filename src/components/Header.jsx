@@ -6,10 +6,10 @@ import shadow from 'styles/shadow';
 import Button from 'components/Button';
 import colors from 'styles/colors';
 
-const Header = ({children, style, actions}) =>
+const Header = ({children, style, actions, transparentBackground}) =>
   <div style={[{
     display: 'flex',
-    backgroundColor: colors.carrara,
+    backgroundColor: transparentBackground ? 'transparent' : colors.carrara,
     color: colors.foregroundDark,
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -32,6 +32,7 @@ const Header = ({children, style, actions}) =>
 
 Header.propTypes = {
   children: PropTypes.node,
+  transparentBackground: PropTypes.bool,
   actions: PropTypes.arrayOf(PropTypes.shape({
     onClick: PropTypes.func.isRequired,
     label: PropTypes.node.isRequired

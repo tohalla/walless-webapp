@@ -4,6 +4,7 @@ import Radium from 'radium';
 import {translate} from 'react-i18next';
 import {merge, set, omit, isEmpty} from 'lodash/fp';
 
+import {weekdays} from 'util/time';
 import Form from 'components/Form';
 import {minor, content} from 'styles/spacing';
 import colors from 'styles/colors';
@@ -41,6 +42,7 @@ export default class AvailabilityForm extends React.Component {
   render() {
     const {t, ...props} = this.props;
     const {schedules} = this.state;
+    const days = weekdays(t);
     return (
       <Form
         {...props}
@@ -48,7 +50,7 @@ export default class AvailabilityForm extends React.Component {
         isValid={!isEmpty(schedules)}
         onSubmit={this.handleSubmit}
       >
-        {Object.keys(schedules).map(schedule => (
+        {Object.keys(schedules).map((schedule, index) => (
           <Editable
             Form={ScheduleForm}
             exitType='cancel'
@@ -56,11 +58,14 @@ export default class AvailabilityForm extends React.Component {
             onDelete={this.handleDeleteSchedule}
             onEdit={this.handleEditSchedule}
             schedules={schedules}
-            style={styles.schedule}
+            style={[
+              styles.schedule,
+              index > 0 ? {borderTop: `1px solid ${colors.backgroundLight}`} : {}
+            ]}
             submitText={t('availability.updateSchedule')}
             value={{day: schedule, ...schedules[schedule]}}
           >
-            <div>{`${schedule}`}</div>
+            <div>{isNaN(schedule) ? schedule : days[schedule]}</div>
           </Editable>
         ))}
         <ScheduleForm
@@ -77,7 +82,6 @@ export default class AvailabilityForm extends React.Component {
 const styles = {
   schedule: {
     backgroundColor: colors.foregroundLight,
-    marginBottom: '1px',
     justifyContent: 'space-between',
     padding: minor
   }

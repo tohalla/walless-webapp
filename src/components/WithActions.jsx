@@ -94,10 +94,7 @@ export default class WithActions extends React.Component {
           action ? (
             <div
               data-test-id={'action-container'}
-              style={[
-                containers.contentContainer,
-                styles.actionContainer
-              ]}
+              style={[containers.contentContainer]}
             >
               {!(forceDefaultAction || actions[action].hideReturn) && (
                 <Button

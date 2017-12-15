@@ -19,7 +19,8 @@ export default class Editable extends React.PureComponent {
     exitType: PropTypes.oneOf(['cancel', 'close'])
   };
   static defaultProps = {
-    exitType: 'close'
+    exitType: 'close',
+    style: {}
   };
   state = {edit: false};
   toggleEdit = () => this.setState({
@@ -47,6 +48,7 @@ export default class Editable extends React.PureComponent {
       <Form
         {...props}
         forceOpen
+        style={style}
         onCancel={exitType === 'cancel' ? this.toggleEdit : undefined}
         onClose={exitType === 'close' ? this.toggleEdit : undefined}
         onSubmit={this.handleEdit}

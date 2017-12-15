@@ -4,7 +4,7 @@ import Radium from 'radium';
 import {translate} from 'react-i18next';
 import {get} from 'lodash/fp';
 
-import {minor} from 'styles/spacing';
+import {minor, minimal} from 'styles/spacing';
 import TimeInput from 'components/TimeInput';
 import Form from 'components/Form';
 
@@ -54,6 +54,7 @@ export default class ShiftForm extends React.PureComponent {
     return (
       <Form
         {...props}
+        buttonStyle={{margin: `0 ${minor}`}}
         FormComponent='div'
         contentStyle={styles.container}
         onSubmit={this.handleSubmit}
@@ -84,6 +85,7 @@ const styles = {
     flex: 0,
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: `${minimal} 0`
   }
 };

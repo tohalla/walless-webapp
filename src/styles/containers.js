@@ -1,5 +1,5 @@
 import shadow from 'styles/shadow';
-import {content, normal} from 'styles/spacing';
+import {content, normal, major} from 'styles/spacing';
 import colors from 'styles/colors';
 
 export default {
@@ -8,7 +8,8 @@ export default {
     flexDirection: 'column',
     alignItems: 'stretch',
     backgroundColor: colors.backgroundLight,
-    padding: content
+    padding: content,
+    marginBottom: major
   }, shadow.small),
   informationContainer: {
     fontSize: '0.9rem',

@@ -5,6 +5,8 @@ import {translate} from 'react-i18next';
 import {pullAt, findIndex, equals} from 'lodash/fp';
 import DayPicker from 'react-day-picker';
 
+import {months, weekdaysShort, weekdays} from 'util/time';
+import {minimal} from 'styles/spacing';
 import Checkbox from 'components/Checkbox';
 import Button from 'components/Button';
 
@@ -40,54 +42,16 @@ export default class DaySelect extends React.PureComponent {
   render() {
     const {days, t} = this.props;
     const {specific} = this.state;
-    const weekdays = {
-      1: t('time.weekday.monday'),
-      2: t('time.weekday.tuesday'),
-      3: t('time.weekday.wednesday'),
-      4: t('time.weekday.thursday'),
-      5: t('time.weekday.friday'),
-      6: t('time.weekday.saturday'),
-      7: t('time.weekday.sunday')
-    };
     return specific ? (
       <div>
         <DayPicker
           firstDayOfWeek={1}
           fixedWeeks
-          months={[
-            t('time.month.january'),
-            t('time.month.february'),
-            t('time.month.march'),
-            t('time.month.april'),
-            t('time.month.may'),
-            t('time.month.june'),
-            t('time.month.july'),
-            t('time.month.august'),
-            t('time.month.september'),
-            t('time.month.october'),
-            t('time.month.november'),
-            t('time.month.december')
-          ]}
+          months={months(t)}
           onDayClick={this.toggleDay}
           selectedDays={days}
-          weekdaysLong={[
-            t('time.weekday.monday'),
-            t('time.weekday.tuesday'),
-            t('time.weekday.wednesday'),
-            t('time.weekday.thursday'),
-            t('time.weekday.friday'),
-            t('time.weekday.saturday'),
-            t('time.weekday.sunday')
-          ]}
-          weekdaysShort={[
-            t('time.weekday.mo'),
-            t('time.weekday.tu'),
-            t('time.weekday.we'),
-            t('time.weekday.th'),
-            t('time.weekday.fr'),
-            t('time.weekday.sa'),
-            t('time.weekday.su')
-          ]}
+          weekdaysLong={weekdays(t)}
+          weekdaysShort={weekdaysShort(t)}
         />
         <Button onClick={this.toggleSpecific} simple>
           {t('availability.selectWeekdays')}
@@ -96,13 +60,12 @@ export default class DaySelect extends React.PureComponent {
     ) : (
       <div>
         <div style={styles.days}>
-          {Object.keys(weekdays).map(day => (
+          {weekdays(t).map((day, index) => (
             <Checkbox
-              checked={days.indexOf(day) > -1}
-              disabled={Object.hasOwnProperty(day)}
+              checked={days.indexOf(index) > -1}
               key={day}
-              label={weekdays[day]}
-              onClick={this.handleWeekDayClick(day)}
+              label={day}
+              onClick={this.handleWeekDayClick(index)}
             />
           ))}
         </div>
@@ -121,6 +84,7 @@ const styles = {
   },
   days: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    margin: `${minimal} 0`
   }
 };
