@@ -4,8 +4,8 @@ import Radium from 'radium';
 import {translate} from 'react-i18next';
 import {get, isEmpty} from 'lodash/fp';
 
-import {major, normal} from 'styles/spacing';
-import containers from 'styles/containers';
+import shadow from 'styles/shadow';
+import {major, normal, content} from 'styles/spacing';
 import colors from 'styles/colors';
 import Button from 'components/Button';
 
@@ -94,7 +94,7 @@ export default class WithActions extends React.Component {
           action ? (
             <div
               data-test-id={'action-container'}
-              style={[containers.contentContainer]}
+              style={[styles.content]}
             >
               {!(forceDefaultAction || actions[action].hideReturn) && (
                 <Button
@@ -108,7 +108,7 @@ export default class WithActions extends React.Component {
             </div>
           ) : !simpleActions && this.renderActions({
             ...this.props,
-            style: [containers.contentContainer, styles.actionContainer]
+            style: [styles.content, styles.actionContainer]
           })
         }
         {
@@ -120,7 +120,7 @@ export default class WithActions extends React.Component {
           ) &&
             <div
               data-test-id={'content-container'}
-              style={containers.contentContainer}
+              style={styles.content}
             >
               {((simpleActions && actions) || title) &&
                 <div style={styles.header}>
@@ -141,6 +141,14 @@ export default class WithActions extends React.Component {
 };
 
 const styles = {
+  content: Object.assign({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    backgroundColor: colors.backgroundLight,
+    padding: content,
+    marginBottom: major
+  }, shadow.small),
   actionContainer: {
     marginBottom: major,
     flexDirection: 'row',

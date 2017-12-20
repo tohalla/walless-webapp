@@ -172,7 +172,7 @@ class RestaurantPage extends React.Component {
       <PageContent>
         <RestaurantForm
           onSubmit={this.handleRestaurantSubmit}
-          style={styles.contentContainer}
+          style={styles.content}
         />
       </PageContent>
     );
@@ -225,7 +225,7 @@ const styles = {
       backgroundColor: colors.backgroundLight
     }
   },
-  contentContainer: [{
+  content: [{
     flex: '0 0 auto',
     display: 'flex',
     flexDirection: 'column',

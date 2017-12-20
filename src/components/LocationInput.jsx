@@ -1,12 +1,14 @@
 import React from 'react';
+import Radium from 'radium';
 import PropTypes from 'prop-types';
 import {pickBy, debounce} from 'lodash/fp';
 import {camelizeKeys} from 'humps';
 import {connect} from 'react-redux';
 
-import containers from 'styles/containers';
+import {normal} from 'styles/spacing';
 import Select from 'components/Select';
 
+@Radium
 @connect(state => ({location: state.util.location}))
 export default class LocationInput extends React.Component {
   static propTypes = {
@@ -133,7 +135,7 @@ export default class LocationInput extends React.Component {
             value={this.state.value}
           />
         </div>
-        <div style={containers.informationContainer}>
+        <div style={styles.information}>
           {route ? `${route} ${streetNumber}` : null}
           {postalCode || locality ? `${postalCode} ${locality}`.trim() : null}
           {country || null}
@@ -142,3 +144,13 @@ export default class LocationInput extends React.Component {
     );
   }
 }
+
+const styles = {
+  information: {
+    fontSize: '0.9rem',
+    paddingLeft: normal,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  }
+};
